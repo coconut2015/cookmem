@@ -1,0 +1,13 @@
+.cproject
+.project
+.vs
+.vagrant
+*.log
+/.settings
+CMakeCache.txt
+CMakeFiles
+/debug
+/release
+/profiler
+/doc
+Makefile
