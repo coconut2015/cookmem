@@ -1,7 +1,7 @@
 CookMem
 =======
 
-[![Apache License, Version 2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
+[![Build Status](https://travis-ci.org/coconut2015/cookmem.svg?branch=master)](https://travis-ci.org/coconut2015/cookmem)[![Apache License, Version 2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
 
 CookMem is a a memory context library written in C++11 that can be easily
