@@ -5,6 +5,11 @@ compiler:
   - gcc
   - clang
 
+addons:
+  apt:
+    packages:
+    - lcov
+
 script:
   - chmod 755 ./make.sh ; ./make.sh
 
