@@ -3,16 +3,11 @@ sudo: false
 dist: trusty
 compiler:
   - gcc
-  - clang
 
 addons:
   apt:
     packages:
     - lcov
-
-install:
-  - "[ $CXX = g++ ] && export CXX=g++ || true"
-  - "[ $CXX = clang++ ] && export CXX=clang++ || true"
 
 script:
   - chmod 755 ./make.sh ; ./make.sh
