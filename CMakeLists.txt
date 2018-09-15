@@ -17,16 +17,14 @@ add_custom_target(ctest COMMAND ${CMAKE_CTEST_COMMAND})
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR})
 
 if(COVERAGE)
-	if(CMAKE_COMPILER_IS_GNUCXX)
-		include(CodeCoverage)
-	
-		setup_target_for_coverage (
-			NAME test_coverage
-			EXECUTABLE ctest
-			DEPENDENCIES ctest
-		)
-	
-	endif()
+	include(CodeCoverage)
+
+	setup_target_for_coverage_lcov (
+		NAME test_coverage
+		EXECUTABLE ctest
+		DEPENDENCIES ctest
+	)
+
 	APPEND_COVERAGE_COMPILER_FLAGS()
 endif(COVERAGE)
 
