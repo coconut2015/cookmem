@@ -5,12 +5,8 @@ compiler:
   - gcc
   - clang
 
-install:
-- "[ $CXX = g++ ] && export CXX=g++-6 || true"
-- "[ $CXX = clang++ ] && export CXX=clang++-3.8 || true"
-
 script:
-  - ./make.sh
+  - chmod 755 ./make.sh ; ./make.sh
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
