@@ -119,7 +119,7 @@ test1 ()
 
 int main(int argc, const char* argv[])
 {
-/**
+/**/
     std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
     s_useLibMalloc = true;
 
@@ -130,7 +130,7 @@ int main(int argc, const char* argv[])
     s_useLibMalloc = false;
 
     test1 ();
-/**
+/**/
     std::chrono::high_resolution_clock::time_point t3 = std::chrono::high_resolution_clock::now();
 
     std::cout << std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1).count() << ","

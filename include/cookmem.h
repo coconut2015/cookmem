@@ -27,12 +27,6 @@
 namespace cookmem
 {
 
-#ifdef NDEBUG
-#define COOKMEM_ASSERT(b)
-#else /* NDEBUG */
-#define COOKMEM_ASSERT(b) do { if (!(b)) throw MemException("assertion failure."); } while (0)
-#endif /* NDEBUG */
-
 template<class T>
 T least_bit(T x)
 {

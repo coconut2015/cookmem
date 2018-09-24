@@ -65,4 +65,10 @@ using IntTypeSelector =
 
 }   // namespace cookmem
 
+#ifdef NDEBUG
+#define COOKMEM_ASSERT(b)
+#else /* NDEBUG */
+#define COOKMEM_ASSERT(b) do { if (!(b)) throw MemException("assertion failure."); } while (0)
+#endif /* NDEBUG */
+
 #endif  // COOK_UTILS_H

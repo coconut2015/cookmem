@@ -16,8 +16,8 @@
 #ifndef COOK_PTRAVLTREE_H_
 #define COOK_PTRAVLTREE_H_
 
-#include <cookutils.h>
 #include <cstdio>
+#include <cookutils.h>
 
 namespace cookmem
 {
@@ -42,8 +42,6 @@ private:
         Node*           left;
         /** right child */
         Node*           right;
-        /** parent node */
-        Node*           parent;
         /** DLL of same sized nodes.  The prev pointer if height is -1 is left.*/
         Node*           next;
         /** height of the node */
@@ -85,7 +83,7 @@ public:
     /**
      * Add a pointer to the search tree.
      *
-     * Note that the size of the pointer must be at least (7 * size_t).
+     * Note that the size of the pointer must be at least (7 * sizeof(size_t)).
      *
      * @param   ptr
      *          the pointer to be added to the AVL tree.
@@ -97,7 +95,72 @@ public:
         Node*   node = reinterpret_cast<Node*>(ptr);
         node->size = size;
 
-        m_root = insert (m_root, node);
+        if (m_root == nullptr)
+        {
+            node->left = nullptr;
+            node->right = nullptr;
+            node->next = nullptr;
+            node->height = 1;
+            m_root = node;
+
+            return;
+        }
+
+        Node* root;
+        Node* stack[sizeof(Node*) * 8 + 1];
+        std::int16_t depth;
+
+        root = stack[0] = m_root;
+
+        for (depth = 0; ; ++depth)
+        {
+            if (root == nullptr)
+            {
+                setParent (node, stack[depth - 1]);
+                node->left = nullptr;
+                node->right = nullptr;
+                node->next = nullptr;
+                node->height = 1;
+
+                root = balance (stack, depth);
+                if (root != nullptr)
+                {
+                    m_root = root;
+                }
+                return;
+            }
+
+            if (size < root->size)
+            {
+                root = stack[depth + 1] = root->left;
+                continue;
+            }
+            else if (size > root->size)
+            {
+                root = stack[depth + 1] = root->right;
+                continue;
+            }
+            else
+            {
+                // The current root matches the node's size.  In this case we
+                // just add node to the next pointer of the root.
+                //
+                Node* next = root->next;
+                root->next = node;
+                node->next = next;
+                node->left = root;
+                node->height = -1;      // indicating that this node is in a DLL
+                if (next)
+                {
+                    next->left = node;
+                }
+
+                // We can simply return since the tree structure is not
+                // changed.
+                return;
+            }
+        }
+        throw MemException("Invalid PtrAVLTree.");
     }
 
     /**
@@ -112,13 +175,156 @@ public:
      */
     void* remove(std::size_t& size)
     {
-        RemoveStruct rs (size);
-        m_root = remove (m_root, rs);
-        if (rs.node)
+        Node* root;
+        Node* stack[sizeof(Node*) * 8 + 1];
+        std::int16_t depth;
+
+        if (m_root == nullptr)
         {
-            size = rs.node->size;
+            return nullptr;
         }
-        return rs.node;
+
+        root = stack[0] = m_root;
+
+        for (depth = 0; ; ++depth)
+        {
+            if (root == nullptr)
+            {
+                --depth;
+                root = stack[depth];
+                if (size > root->size)
+                {
+                    // check if the parent is also smaller.
+                    if (depth == 0)
+                    {
+                        return nullptr;
+                    }
+
+                    --depth;
+                    root = stack[depth];
+                    if (size > root->size)
+                    {
+                        return nullptr;
+                    }
+                    break;
+                }
+                break;
+            }
+
+            if (size < root->size)
+            {
+                root = stack[depth + 1] = root->left;
+                continue;
+            }
+            else if (size > root->size)
+            {
+                root = stack[depth + 1] = root->right;
+                continue;
+            }
+
+            break;
+        }
+
+        // At this point, this node's size is the smallest size
+        // larger than or equal to rs.size.
+        if (root->next)
+        {
+            // This is a simple case of having SLL of similar sized nodes.
+            // just remove one from the SLL.
+            Node* next = root->next;
+            root->next = next->next;
+
+            size = next->size;
+            return next;
+        }
+
+        Node* left = root->left;
+        Node* right = root->right;
+
+        Node* newRoot;
+        if (left == nullptr)
+        {
+            newRoot = right;
+        }
+        else if (right == nullptr)
+        {
+            newRoot = left;
+        }
+        else
+        {
+            // this is a more complicated case.
+            // the solution is the move the smallest of the right branch
+            // here.
+            std::int16_t newDepth;
+            Node* newStack[sizeof(Node*) * 8 + 1];
+            newStack[0] = right;
+            for (newDepth = 0; newStack[newDepth]->left != nullptr; ++newDepth)
+            {
+                newStack[newDepth + 1] = newStack[newDepth]->left;
+            }
+            Node* min = newStack[newDepth];
+            if (min == right)
+            {
+                newRoot = right;
+                setLeftChild (newRoot, left);
+            }
+            else
+            {
+                // first detach min from the parent
+                Node* parent = newStack[newDepth - 1];
+                parent->left = nullptr;
+
+                // rebalance the right
+                Node* newRight = balance (newStack, newDepth);
+                if (newRight != nullptr)
+                {
+                    right = newRight;
+                }
+
+                setLeftChild (min, left);
+                setRightChild (min, right);
+
+                newRoot = min;
+            }
+        }
+
+        if (depth == 0)
+        {
+            m_root = newRoot;
+            size = root->size;
+            return root;
+        }
+        if (newRoot == nullptr)
+        {
+            // so root is the leaf.
+            if (root->size < stack[depth - 1]->size)
+            {
+                stack[depth - 1]->left = nullptr;
+            }
+            else
+            {
+                stack[depth - 1]->right = nullptr;
+            }
+            newRoot = balance (stack, depth);
+            if (newRoot != nullptr)
+            {
+                m_root = newRoot;
+            }
+            size = root->size;
+            return root;
+        }
+
+        setParent (newRoot, stack[depth - 1]);
+
+        stack[depth] = newRoot;
+        newRoot = balance (stack, depth);
+
+        if (newRoot != nullptr)
+        {
+            m_root = newRoot;
+        }
+        size = root->size;
+        return root;
     }
 
     /**
@@ -144,33 +350,124 @@ public:
             return;
         }
 
-        if (node->next)
+        // The node is not in a DLL.  So this is a more complicate case that
+        // need to do the removal from the root (since there is a potential
+        // need to balance the tree from root.
+
+        Node* root;
+        Node* stack[sizeof(Node*) * 8 + 1];
+        std::int16_t depth;
+
+        std::size_t size = node->size;
+
+        COOKMEM_ASSERT(m_root != nullptr);
+
+        root = stack[0] = m_root;
+
+        for (depth = 0; ; ++depth)
         {
-            // we have a DLL, but node to be removed the head of the DLL
-            Node* next = node->next;
-            Node* parent = node->parent;
-
-            next->left = node->left;
-            next->right = node->right;
-            next->parent = parent;
-            next->height = node->height;
-
-            if (parent->left == node)
+            if (root == nullptr)
             {
-                parent->left = next;
+                throw MemException("pointer not found.");
+            }
+
+            if (size < root->size)
+            {
+                root = stack[depth + 1] = root->left;
+                continue;
+            }
+            else if (size > root->size)
+            {
+                root = stack[depth + 1] = root->right;
+                continue;
+            }
+
+            break;
+        }
+
+        COOKMEM_ASSERT(root == node);
+
+        if (root->next)
+        {
+            // Just use the next node to replace the current node.
+
+            Node* next = root->next;
+            next->left = root->left;
+            next->right = root->right;
+            next->height = root->height;
+
+            if (depth == 0)
+            {
+                m_root = next;
             }
             else
             {
-                parent->right = next;
+                setParent (next, stack[depth - 1]);
             }
             return;
         }
 
-        // The node is not in a DLL.  So this is a more complicate case that
-        // need to do the removal from the root (since there is a potential
-        // need to balance the tree from root.
-        std::size_t size = node->size;
-        remove(size);
+        Node* left = root->left;
+        Node* right = root->right;
+
+        Node* newRoot;
+        if (left == nullptr)
+        {
+            newRoot = right;
+        }
+        else if (right == nullptr)
+        {
+            newRoot = left;
+        }
+        else
+        {
+            // this is a more complicated case.
+            // the solution is the move the smallest of the right branch
+            // here.
+            std::int16_t newDepth;
+            Node* newStack[sizeof(Node*) * 8 + 1];
+            newStack[0] = right;
+            for (newDepth = 0; newStack[newDepth]->left != nullptr; ++newDepth)
+            {
+                newStack[newDepth + 1] = newStack[newDepth]->left;
+            }
+            Node* min = newStack[newDepth];
+            if (min == right)
+            {
+                newRoot = right;
+                setLeftChild (newRoot, left);
+            }
+            else
+            {
+                // first detach min from the parent
+                Node* parent = newStack[newDepth - 1];
+                parent->left = nullptr;
+
+                // rebalance the right
+                Node* newRight = balance (newStack, newDepth - 1);
+                if (newRight != nullptr)
+                {
+                    right = newRight;
+                }
+
+                setLeftChild (min, left);
+                setRightChild (min, right);
+
+                newRoot = min;
+            }
+        }
+
+        if (depth == 0)
+        {
+            m_root = newRoot;
+        }
+        stack[depth] = newRoot;
+        newRoot = balance (stack, depth);
+
+        if (newRoot != nullptr)
+        {
+            m_root = newRoot;
+        }
     }
 
     /**
@@ -193,7 +490,7 @@ public:
         printf ("}\n");
     }
 private:
-    inline static std::uint16_t max (std::uint16_t a, std::uint16_t b)
+    inline static std::int16_t max (std::int16_t a, std::int16_t b)
     {
         return (a < b) ? b : a;
     }
@@ -208,193 +505,89 @@ private:
         node->height = max (getHeight (node->left), getHeight (node->right)) + 1;
     }
 
+    inline static void setParent (Node* node, Node* parent)
+    {
+        if (node->size < parent->size)
+        {
+            parent->left = node;
+        }
+        else
+        {
+            parent->right = node;
+        }
+    }
+
     inline static void setLeftChild (Node* root, Node* left)
     {
         root->left = left;
-        if (left)
-        {
-            left->parent = root;
-        }
     }
 
     inline static void setRightChild (Node* root, Node* right)
     {
         root->right = right;
-        if (right)
-        {
-            right->parent = root;
-        }
     }
 
-    inline static Node* insert (Node* root, Node* node)
+    inline static Node* balance (Node** stack, std::int16_t depth)
     {
-        if (root == nullptr)
+        for (;;)
         {
-            node->left = nullptr;
-            node->right = nullptr;
-            node->parent = nullptr;
-            node->next = nullptr;
-            node->height = 1;
-            return node;
-        }
-
-        if (node->size < root->size)
-        {
-            Node* left = insert (root->left, node);
-            setLeftChild (root, left);
-        }
-        else if (node->size > root->size)
-        {
-            Node* right = insert (root->right, node);
-            setRightChild (root, right);
-        }
-        else
-        {
-            // The current root matches the node's size.  In this case we
-            // just add node to the next pointer of the root.
-            //
-            Node* next = root->next;
-            root->next = node;
-            node->next = next;
-            node->left = root;
-            node->height = -1;      // indicating that this node is in a DLL
-            if (next)
-            {
-                next->left = node;
-            }
-            // We intentionally leave node->right, parent untouched
-            // since they will not be used.
-            return root;
-        }
-        return balance (root);
-    }
-
-    inline static Node* findMin (Node* root)
-    {
-        while (root->left)
-        {
-            root = root->left;
-        }
-        return root;
-    }
-
-    inline static Node* remove(Node* root, RemoveStruct& rs)
-    {
-        if (root == nullptr)
-        {
-            return nullptr;
-        }
-
-        if (rs.size < root->size)
-        {
-            setLeftChild (root, remove (root->left, rs));
-
-            if (rs.node)
-            {
-                goto REMOVE_BALANCE;
-            }
-        }
-        else if (rs.size > root->size)
-        {
-            setRightChild (root, remove (root->right, rs));
-
-            goto REMOVE_BALANCE;
-        }
-
-        // At this point, this node's size is the smallest size
-        // larger than or equal to rs.size.
-        if (root->next)
-        {
-            // This is a simple case of having SLL of similar sized nodes.
-            // just remove one from the SLL.
-            Node* next = root->next;
-            root->next = next->next;
-            rs.node = next;
-            return root;
-        }
-
-        {
+            --depth;
+            Node* root = stack[depth];
             Node* left = root->left;
             Node* right = root->right;
 
-            rs.node = root;
-
-            if (left == nullptr)
+            std::int16_t oldHeight = root->height;
+            int16_t diff = getHeight (left) - getHeight (right);
+            if (diff > 1)
             {
-                return right;
-            }
-            else if (right == nullptr)
-            {
-                return left;
-            }
-            else
-            {
-                // this is a more complicated case.
-                // the solution is the move the smallest of the right branch
-                // here.
-                Node* min = findMin (right);
-                if (min == right)
+                if (getHeight (left->left) >= getHeight (left->right))
                 {
-                    root = right;
-                    setLeftChild (root, left);
+                    root = rotateWithLeftChild (root);
                 }
                 else
                 {
-                    // first detach min from the parent
-                    Node* parent = min->parent;
-                    parent->left = nullptr;
-                    if (parent != right)
-                    {
-                        Node* grandParent = parent->parent;
-                        parent = balance (parent);
-                        setLeftChild (grandParent, parent);
-                    }
-                    else
-                    {
-                        right = balance (right);
-                    }
-
-                    root = min;
-                    root->parent = nullptr;
-                    setLeftChild (root, left);
-                    setRightChild (root, right);
+                    root = doubleWithLeftChild (root);
                 }
+                // update the parent
+                if (depth == 0)
+                {
+                    return root;
+                }
+                setParent (root, stack[depth - 1]);
+                continue;
             }
-        }
-
-REMOVE_BALANCE:
-        return balance (root);
-    }
-
-    inline static Node* balance (Node* root)
-    {
-        Node* left = root->left;
-        Node* right = root->right;
-        int16_t diff = getHeight (left) - getHeight (right);
-        if (diff > 1)
-        {
-            if (getHeight (left->left) >= getHeight (left->right))
+            else if (diff < -1)
             {
-                root = rotateWithLeftChild (root);
+                if (getHeight (right->right) >= getHeight (right->left))
+                {
+                    root = rotateWithRightChild (root);
+                }
+                else
+                {
+                    root = doubleWithRightChild (root);
+                }
+                // update the parent
+                if (depth == 0)
+                {
+                    return root;
+                }
+                setParent (root, stack[depth - 1]);
+                continue;
             }
             else
             {
-                root = doubleWithLeftChild (root);
+                updateHeight (root);
             }
-        }
-        else if (diff < -1)
-        {
-            if (getHeight (right->right) >= getHeight (right->left))
+
+            if (depth == 0)
             {
-                root = rotateWithRightChild (root);
+                return root;
             }
-            else
-            {
-                root = doubleWithRightChild (root);
-            }
+
+            if (oldHeight == root->height)
+                break;
         }
-        updateHeight (root);
-        return root;
+        return nullptr;
     }
 
     inline static Node* rotateWithLeftChild (Node* root)
