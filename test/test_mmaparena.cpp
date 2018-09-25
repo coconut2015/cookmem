@@ -53,9 +53,79 @@ test1 ()
     return 0;
 }
 
+static int
+test2 ()
+{
+    cookmem::MmapArena arena;
+    cookmem::MemPool<cookmem::MmapArena> pool (arena);
+
+    std::size_t size = 300;
+    void* ptr = pool.callocate(1, size);
+    for (std::size_t s = 0; s < size; ++s)
+    {
+        ASSERT_EQ(0, ((char*)ptr)[s]);
+    }
+    pool.deallocate(ptr);
+
+    ptr = pool.callocate(10, size);
+    for (std::size_t s = 0; s < 10 * size; ++s)
+    {
+        ASSERT_EQ(0, ((char*)ptr)[s]);
+    }
+    pool.deallocate(ptr);
+
+    return 0;
+}
+
+static int
+test3 ()
+{
+    cookmem::MmapArena arena;
+    cookmem::MemPool<cookmem::MmapArena> pool (arena);
+
+    std::size_t size = 300;
+    void* ptr = pool.callocate(1, size);
+    for (std::size_t s = 0; s < size; ++s)
+    {
+        ASSERT_EQ(0, ((char*)ptr)[s]);
+    }
+
+    ptr = pool.reallocate(ptr, 10 * size);
+    ASSERT_NE(nullptr, ptr);
+    pool.deallocate(ptr);
+
+    ptr = pool.reallocate(nullptr, 10 * size);
+    ASSERT_NE(nullptr, ptr);
+
+    void* ptr2 = pool.reallocate(ptr, size);
+    ASSERT_EQ(ptr, ptr2);
+    pool.deallocate(ptr);
+
+    return 0;
+}
+
+static int
+test4 ()
+{
+    cookmem::MmapArena arena;
+    cookmem::MemPool<cookmem::MmapArena> pool (arena);
+
+    pool.setFootprintLimit(1000000);
+
+    void* ptr = pool.allocate (800000);
+    ASSERT_NE(nullptr, ptr);
+
+    ASSERT_EQ(nullptr, pool.allocate (800000));
+    return 0;
+}
+
+
 int main(int argc, const char* argv[])
 {
     ASSERT_EQ(0, test1 ());
+    ASSERT_EQ(0, test2 ());
+    ASSERT_EQ(0, test3 ());
+    ASSERT_EQ(0, test4 ());
 
     return 0;
 }

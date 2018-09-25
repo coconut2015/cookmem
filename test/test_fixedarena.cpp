@@ -84,10 +84,28 @@ test2 ()
     return 0;
 }
 
+static int
+test3 ()
+{
+    char buffer[64000];
+    cookmem::FixedArena arena (buffer, sizeof(buffer));
+
+    std::size_t size = 3000;
+    void* ptr = arena.getSegment(size);
+    ASSERT_EQ(ptr, buffer);
+    ASSERT_EQ(size, sizeof(buffer));
+    ASSERT_EQ(nullptr, arena.getSegment(size));
+    ASSERT_EQ(false, arena.freeSegment(ptr, size));
+    ASSERT_EQ(true, arena.freeSegment(ptr, size));
+
+    return 0;
+}
+
 int main(int argc, const char* argv[])
 {
     ASSERT_EQ(0, test1 ());
     ASSERT_EQ(0, test2 ());
+    ASSERT_EQ(0, test3 ());
 
     return 0;
 }
