@@ -930,7 +930,6 @@ private:
 };
 
 #undef getLargeBinIndex
-#undef COOKMEM_ASSERT
 
 }   // namespace heng yuan
 

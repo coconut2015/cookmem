@@ -21,9 +21,6 @@
 namespace cookmem
 {
 
-#undef COOKASSERT
-#define COOKASSERT(b) do { if (!(b)) throw cookmem::MemException("Assertion failure."); } while (0)
-
 /**
  * A circular list maintenance logic.
  *
@@ -78,7 +75,7 @@ public:
 
         if (m_head == prev)
         {
-            COOKASSERT(m_head == next);
+            COOKMEM_ASSERT(m_head == next);
             m_head = nullptr;
         }
         else
@@ -105,7 +102,7 @@ public:
 
         if (prev == chunk)
         {
-            COOKASSERT(m_head == chunk && next == chunk);
+            COOKMEM_ASSERT(m_head == chunk && next == chunk);
             m_head = nullptr;
             return true;
         }
@@ -132,7 +129,6 @@ private:
     /** The first node in the list */
     Node*   m_head;
 };
-#undef COOKASSERT
 
 }   // namespace cookmem
 
