@@ -41,7 +41,7 @@ T left_bits(T x)
 
 /* assign tree index for size S to variable I. Use x86 asm if possible  */
 #if defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
-#define getLargeBinIndex(S, I)\
+#define cookmem_getLargeBinIndex(S, I)\
 {\
   unsigned int X = S >> TREEBIN_SHIFT;\
   if (X == 0)\
@@ -55,7 +55,7 @@ T left_bits(T x)
 }
 
 #elif defined (__INTEL_COMPILER)
-#define getLargeBinIndex(S, I)\
+#define cookmem_getLargeBinIndex(S, I)\
 {\
   std::size_t X = S >> TREEBIN_SHIFT;\
   if (X == 0)\
@@ -69,7 +69,7 @@ T left_bits(T x)
 }
 
 #elif defined(_MSC_VER) && _MSC_VER>=1300
-#define getLargeBinIndex(S, I)\
+#define cookmem_getLargeBinIndex(S, I)\
 {\
   std::size_t X = S >> TREEBIN_SHIFT;\
   if (X == 0)\
@@ -84,7 +84,7 @@ T left_bits(T x)
 }
 
 #else /* GNUC */
-#define getLargeBinIndex(S, I)\
+#define cookmem_getLargeBinIndex(S, I)\
 {\
   std::size_t X = S >> TREEBIN_SHIFT;\
   if (X == 0)\
@@ -104,7 +104,7 @@ T left_bits(T x)
 #endif /* GNUC */
 
 #if defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
-#define compute_bit2idx(X, I)\
+#define cookmem_bit2treeIndex(X, I)\
 {\
   unsigned int J;\
   J = __builtin_ctz(X); \
@@ -112,7 +112,7 @@ T left_bits(T x)
 }
 
 #elif defined (__INTEL_COMPILER)
-#define compute_bit2idx(X, I)\
+#define cookmem_bit2treeIndex(X, I)\
 {\
   unsigned int J;\
   J = _bit_scan_forward (X); \
@@ -120,7 +120,7 @@ T left_bits(T x)
 }
 
 #elif defined(_MSC_VER) && _MSC_VER>=1300
-#define compute_bit2idx(X, I)\
+#define cookmem_bit2treeIndex(X, I)\
 {\
   unsigned int J;\
   _BitScanForward((DWORD *) &J, X);\
@@ -128,10 +128,10 @@ T left_bits(T x)
 }
 
 #elif USE_BUILTIN_FFS
-#define compute_bit2idx(X, I) I = ffs(X)-1
+#define cookmem_bit2treeIndex(X, I) I = ffs(X)-1
 
 #else
-#define compute_bit2idx(X, I)\
+#define cookmem_bit2treeIndex(X, I)\
 {\
   unsigned int Y = X - 1;\
   unsigned int K = Y >> (16-4) & 16;\
@@ -441,7 +441,7 @@ public:
                     BinIndexType i;
                     BinIndexType leftbits = (smallBits << binIndex) & left_bits(idx2bit(binIndex));
                     BinIndexType leastbit = least_bit(leftbits);
-                    compute_bit2idx(leastbit, i);
+                    cookmem_bit2treeIndex(leastbit, i);
 
                     chunk = removeSmallChunkList(i);
                     COOKMEM_ASSERT(chunk != nullptr && chunk->getSize() == getSmallBinSize(i));
@@ -704,7 +704,7 @@ private:
         std::size_t  actualSize = size;
 
         BinIndexType binIndex;
-        getLargeBinIndex(size, binIndex);
+        cookmem_getLargeBinIndex(size, binIndex);
 
         for (; binIndex < NTREEBINS; ++binIndex)
         {
@@ -712,7 +712,8 @@ private:
             if (!tree.isEmpty ())
             {
                 chunk = reinterpret_cast<MemChunk*>(tree.remove(actualSize));
-                break;
+                if (chunk != nullptr)
+                    break;
             }
         }
 
@@ -884,7 +885,7 @@ private:
     void addLargeChunk(MemChunk* chunk)
     {
         BinIndexType treeBinIndex;
-        getLargeBinIndex(chunk->getSize(), treeBinIndex);
+        cookmem_getLargeBinIndex(chunk->getSize(), treeBinIndex);
         PtrAVLTree& tree = treeAt(treeBinIndex);
         if (!isTreeMapMarked(treeBinIndex))
         {
@@ -896,7 +897,7 @@ private:
     inline void removeLargeChunk(MemChunk* chunk)
     {
         BinIndexType treeBinIndex;
-        getLargeBinIndex(chunk->getSize(), treeBinIndex);
+        cookmem_getLargeBinIndex(chunk->getSize(), treeBinIndex);
         PtrAVLTree& tree = treeAt(treeBinIndex);
 
         tree.remove(chunk);
@@ -929,7 +930,8 @@ private:
     }
 };
 
-#undef getLargeBinIndex
+#undef cookmem_getLargeBinIndex
+#undef cookmem_bit2treeIndex
 
 }   // namespace heng yuan
 

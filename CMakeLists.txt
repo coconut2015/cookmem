@@ -16,6 +16,12 @@ add_custom_target(ctest COMMAND ${CMAKE_CTEST_COMMAND})
 
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR})
 
+if(MSVC)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zi")
+else()
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
+endif()
+
 if(COVERAGE)
 	include(CodeCoverage)
 
@@ -117,10 +123,23 @@ add_test(NAME test_cachedarena
     COMMAND test_cachedarena)
 
 # -- performance tests -------------------------------------------------------
-# .. perf_cookmem
 
-add_executable(perf_cookmem
-	performance/perf_cookmem.cpp)
+add_executable(perf_cookmem_1
+	performance/perf_cookmem_1.cpp)
+add_test(NAME perf_cookmem_1
+    COMMAND perf_cookmem_1)
 
-add_test(NAME perf_cookmem
-    COMMAND perf_cookmem)
+add_executable(perf_cookmem_2
+	performance/perf_cookmem_2.cpp)
+add_test(NAME perf_cookmem_2
+    COMMAND perf_cookmem_2)
+
+add_executable(perf_cookmem_3
+	performance/perf_cookmem_3.cpp)
+add_test(NAME perf_cookmem_3
+    COMMAND perf_cookmem_3)
+
+add_executable(perf_cookmem_4
+	performance/perf_cookmem_4.cpp)
+add_test(NAME perf_cookmem_4
+    COMMAND perf_cookmem_4)
