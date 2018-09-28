@@ -17,7 +17,8 @@ The algorithm and some code used here is based on dlmalloc
 ( http://g.oswego.edu/dl/html/malloc.html ).
 
 The goal of this utility is not necessarily providing the fastest memory
-allocator, but one with good enough performance.
+allocator, but one with good enough performance that should be comparable
+to typical malloc implementations.
 
 Installation Instruction
 ------------------------
