@@ -42,7 +42,7 @@ if(BUILD_DOC)
 	find_package(Doxygen)
 	if (DOXYGEN_FOUND)
 		# set input and output files
-		set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile.in)
+		set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/doxygen/Doxyfile.in)
 		set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
 
 		# request to configure the file
@@ -66,58 +66,45 @@ include_directories(include/)
 #)
 
 # -- tests -------------------------------------------------------------------
-# .. test_cookavltree
-add_executable(test_cookavltree
-	test/test_cookavltree.cpp)
-
-add_test(NAME test_cookavltree
-    COMMAND test_cookavltree)
-
-# .. test_cooklru
-add_executable(test_cooklru
-	test/test_cooklru.cpp)
-
-add_test(NAME test_cooklru
-    COMMAND test_cooklru)
 
 # .. test_cookptrcircularlist
 add_executable(test_cookptrcircularlist
-	test/test_cookptrcircularlist.cpp)
+	tests/test_cookptrcircularlist.cpp)
 
 add_test(NAME test_cookptrcircularlist
     COMMAND test_cookptrcircularlist)
 
 # .. test_cookptravltree
 add_executable(test_cookptravltree
-	test/test_cookptravltree.cpp)
+	tests/test_cookptravltree.cpp)
 
 add_test(NAME test_cookptravltree
     COMMAND test_cookptravltree)
 
 # .. test_cookmem
 add_executable(test_cookmem
-	test/test_cookmem.cpp)
+	tests/test_cookmem.cpp)
 
 add_test(NAME test_cookmem
     COMMAND test_cookmem)
 
 # .. test_fixedarena
 add_executable(test_fixedarena
-	test/test_fixedarena.cpp)
+	tests/test_fixedarena.cpp)
 
 add_test(NAME test_fixedarena
     COMMAND test_fixedarena)
 
 # .. test_mmaparena
 add_executable(test_mmaparena
-	test/test_mmaparena.cpp)
+	tests/test_mmaparena.cpp)
 
 add_test(NAME test_mmaparena
     COMMAND test_mmaparena)
 
 # .. test_cachedarena
 add_executable(test_cachedarena
-	test/test_cachedarena.cpp)
+	tests/test_cachedarena.cpp)
 
 add_test(NAME test_cachedarena
     COMMAND test_cachedarena)
@@ -125,21 +112,42 @@ add_test(NAME test_cachedarena
 # -- performance tests -------------------------------------------------------
 
 add_executable(perf_cookmem_1
-	performance/perf_cookmem_1.cpp)
+	performances/perf_cookmem_1.cpp)
 add_test(NAME perf_cookmem_1
     COMMAND perf_cookmem_1)
 
 add_executable(perf_cookmem_2
-	performance/perf_cookmem_2.cpp)
+	performances/perf_cookmem_2.cpp)
 add_test(NAME perf_cookmem_2
     COMMAND perf_cookmem_2)
 
 add_executable(perf_cookmem_3
-	performance/perf_cookmem_3.cpp)
+	performances/perf_cookmem_3.cpp)
 add_test(NAME perf_cookmem_3
     COMMAND perf_cookmem_3)
 
 add_executable(perf_cookmem_4
-	performance/perf_cookmem_4.cpp)
+	performances/perf_cookmem_4.cpp)
 add_test(NAME perf_cookmem_4
     COMMAND perf_cookmem_4)
+
+# -- examples -------------------------------------------------------
+add_executable(ex_1
+	examples/ex_1.cpp)
+add_test(NAME ex_1
+    COMMAND ex_1)
+
+add_executable(ex_2
+	examples/ex_2.cpp)
+add_test(NAME ex_2
+    COMMAND ex_2)
+
+add_executable(ex_3
+	examples/ex_3.cpp)
+add_test(NAME ex_3
+    COMMAND ex_3)
+
+add_executable(ex_4
+	examples/ex_4.cpp)
+add_test(NAME ex_4
+    COMMAND ex_4)
