@@ -933,6 +933,6 @@ private:
 #undef cookmem_getLargeBinIndex
 #undef cookmem_bit2treeIndex
 
-}   // namespace heng yuan
+}   // namespace cookmem
 
 #endif  // COOK_MEM_H

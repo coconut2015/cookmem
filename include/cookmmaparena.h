@@ -87,6 +87,6 @@ private:
     int         m_flag;
 };
 
-}   // namespace heng yuan
+}   // namespace cookmem
 
 #endif  // COOK_MMAP_MEM_ARENA_H
