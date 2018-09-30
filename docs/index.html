@@ -103,7 +103,7 @@ $(document).ready(function(){initNavTree('index.html','');});
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p><a href="https://travis-ci.org/coconut2015/cookmem"></a><a href="https://codecov.io/gh/coconut2015/cookmem"></a><a href="http://www.apache.org/licenses/LICENSE-2.0"></a></p>
-<p>CookMem is a a memory context / allocator written in C++11 that can be easily and quickly cleaned up by freeing the segments, rather than doing individual frees. It is extremely useful to deal with third party libraries that can potentially have memory leaks, or to simplify the memory management.</p>
+<p>CookMem is a <a href="https://en.wikipedia.org/wiki/Region-based_memory_management">memory context</a> / allocator written in C++11 that can be easily and quickly cleaned up by freeing the segments, rather than doing individual frees. It is extremely useful to deal with third party libraries that can potentially have memory leaks, or to simplify the memory management.</p>
 <p>The secondary goal of this project is to provide a good enough performance that should be comparable to <a href="http://g.oswego.edu/dl/html/malloc.html">dlmalloc</a> and its derivatives. In fact, the algorithms and some code used here are mostly based on dlmalloc. I basically took the pain to understand dlmalloc and rewrote the logics in C++. Some key calculations though are kept the same as dlmalloc since there is no point to reinvent wheels.</p>
 <p>The project documentation is at <a href="http://coconut2015.github.io/cookmem/">http://coconut2015.github.io/cookmem/</a> </p>
 </div></div><!-- contents -->
