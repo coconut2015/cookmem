@@ -20,16 +20,18 @@
 #define ASSERT_EQ(e,v) do { if ((e) != (v)) { std::cout << "Mismatch at line " << __LINE__ << std::endl; return 1; } } while (0)
 #define ASSERT_NE(e,v) do { if ((e) == (v)) { std::cout << "Mismatch at line " << __LINE__ << std::endl; return 1; } } while (0)
 
+#define NUM_ENTRIES 9
+
 static int
 test1 ()
 {
     cookmem::MmapArena arena;
     cookmem::MemPool<cookmem::MmapArena> pool (arena);
 
-    void* ptrs[10];
+    void* ptrs[NUM_ENTRIES];
 
     std::size_t size = 3;
-    for (int i = 0; i < 10; ++i)
+    for (int i = 0; i < NUM_ENTRIES; ++i)
     {
         size *= 10;
         ptrs[i] = pool.allocate(size);
@@ -37,13 +39,13 @@ test1 ()
         ASSERT_NE(nullptr, ptrs[i]);
     }
 
-    for (int i = 0; i < 10; ++i)
+    for (int i = 0; i < NUM_ENTRIES; ++i)
     {
         pool.deallocate(ptrs[i]);
     }
 
     pool.releaseAll();
-    for (int i = 0; i < 10; ++i)
+    for (int i = 0; i < NUM_ENTRIES; ++i)
     {
         ASSERT_EQ(false, pool.contains (ptrs[i]));
     }
