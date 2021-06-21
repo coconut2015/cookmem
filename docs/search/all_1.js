@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['cachedarena',['CachedArena',['../classcookmem_1_1CachedArena.html',1,'cookmem']]],
-  ['cachedarena',['CachedArena',['../classcookmem_1_1CachedArena.html#a3a3ba478eda0304fc539f612ae962ff3',1,'cookmem::CachedArena']]],
+  ['cachedarena',['CachedArena',['../classcookmem_1_1CachedArena.html',1,'cookmem::CachedArena&lt; Arena &gt;'],['../classcookmem_1_1CachedArena.html#a3a3ba478eda0304fc539f612ae962ff3',1,'cookmem::CachedArena::CachedArena()']]],
   ['callocate',['callocate',['../classcookmem_1_1MemPool.html#a6828410b4c1be12c28fabe822e6558db',1,'cookmem::MemPool']]],
   ['circularlist',['CircularList',['../classcookmem_1_1CircularList.html',1,'cookmem']]],
   ['circularlist_3c_20smallmemchunk_20_3e',['CircularList&lt; SmallMemChunk &gt;',['../classcookmem_1_1CircularList.html',1,'cookmem']]],

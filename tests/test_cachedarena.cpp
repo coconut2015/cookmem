@@ -15,7 +15,7 @@
  */
 #include <iostream>
 #include <cookmem.h>
-#include <cookmmaparena.h>
+#include <cookmallocarena.h>
 
 #define ASSERT_EQ(e,v) do { if ((e) != (v)) { std::cout << "Mismatch at line " << __LINE__ << std::endl; return 1; } } while (0)
 #define ASSERT_NE(e,v) do { if ((e) == (v)) { std::cout << "Mismatch at line " << __LINE__ << std::endl; return 1; } } while (0)
@@ -25,11 +25,11 @@
 static int
 test1 ()
 {
-    cookmem::MmapArena arena;
-    cookmem::CachedArena<cookmem::MmapArena> cachedArena (arena);
+    cookmem::MallocArena arena;
+    cookmem::CachedArena<cookmem::MallocArena> cachedArena (arena);
 
     {
-        cookmem::MemPool<cookmem::CachedArena<cookmem::MmapArena> > pool (cachedArena);
+        cookmem::MemPool<cookmem::CachedArena<cookmem::MallocArena> > pool (cachedArena);
 
         void* ptrs[NUM_ENTRIES];
 
@@ -55,7 +55,7 @@ test1 ()
     }
 
     {
-        cookmem::MemPool<cookmem::CachedArena<cookmem::MmapArena> > pool (cachedArena);
+        cookmem::MemPool<cookmem::CachedArena<cookmem::MallocArena> > pool (cachedArena);
 
         void* ptrs[NUM_ENTRIES];
 

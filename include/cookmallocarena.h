@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Heng Yuan
+ * Copyright (c) 2021 Heng Yuan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef COOK_MMAP_MEM_ARENA_H
-#define COOK_MMAP_MEM_ARENA_H
+#ifndef COOK_MALLOC_MEM_ARENA_H
+#define COOK_MALLOC_MEM_ARENA_H
 
 #include <cookmemarena.h>
 
-#include <sys/mman.h>
+#include <cstdlib>
 
 namespace cookmem
 {
@@ -26,7 +26,7 @@ namespace cookmem
 /**
  * An mmap based memory arena.
  */
-class MmapArena
+class MallocArena
 {
 public:
     /**
@@ -35,40 +35,32 @@ public:
      * @param   minSize
      *          minimum segment size.  It should be noted that this value
      *          needs to be a multiple of 16.
-     * @param   prot
-     *          mmap protection flag
-     * @param   flag
-     *          mmap flag
      */
-    MmapArena(std::size_t minSize = 65536, int prot = ( PROT_READ | PROT_WRITE ), int flag = ( MAP_PRIVATE | MAP_ANONYMOUS ))
-    : m_minSize (minSize), m_prot (prot), m_flag (flag)
+    MallocArena (std::size_t minSize = 65536)
+    : m_minSize (minSize)
     {
     }
 
     /**
-     * Allocate an arena segment using mmap().
+     * Allocate an arena segment using malloc.
      *
      * @param   size
      *          the size of the segment.  This value is updated upon successful
      *          request to indicate the actual size obtained.
      * @return  the allocated pointer.  nullptr is allocation failed.
      */
-    void* getSegment(std::size_t& size)
+    void*
+    getSegment (std::size_t& size)
     {
         if (size < m_minSize)
         {
             size = m_minSize;
         }
-        void* ptr = mmap(nullptr, size, m_prot, m_flag, -1, 0);
-        if (ptr == MAP_FAILED)
-        {
-            return nullptr;
-        }
-        return ptr;
+        return malloc (size);
     }
 
     /**
-     * Free an arena segment using munamp().
+     * Free an arena segment using free.
      *
      * @param   ptr
      *          the pointer to be freed.
@@ -76,17 +68,17 @@ public:
      *          the size of the pointer.
      * @return  true if there is an error.  false is okay.
      */
-    bool freeSegment(void* ptr, std::size_t size)
+    bool
+    freeSegment (void* ptr, std::size_t size)
     {
-        return munmap(ptr, size) != 0;
+        free (ptr);
+        return false;
     }
 
 private:
     std::size_t m_minSize;
-    int         m_prot;
-    int         m_flag;
 };
 
 }   // namespace cookmem
 
-#endif  // COOK_MMAP_MEM_ARENA_H
+#endif  // COOK_MALLOC_MEM_ARENA_H

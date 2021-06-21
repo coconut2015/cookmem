@@ -11,9 +11,9 @@ var classcookmem_1_1MemPool =
     [ "callocate", "classcookmem_1_1MemPool.html#a6828410b4c1be12c28fabe822e6558db", null ],
     [ "contains", "classcookmem_1_1MemPool.html#a52b132564dc7bd5eb24650834cb949ea", null ],
     [ "deallocate", "classcookmem_1_1MemPool.html#addb55cb3331907efe0cebf9fc711959c", null ],
-    [ "getFootprint", "classcookmem_1_1MemPool.html#ab5cc3f5b132378338e5c4281c98628c9", null ],
-    [ "getFootPrintLimit", "classcookmem_1_1MemPool.html#ade0ad64bc15bedc2fa2a77e950799404", null ],
-    [ "getMaxFootprint", "classcookmem_1_1MemPool.html#ac3d32ea12f1b0fc3ee70d788b4a21185", null ],
+    [ "getFootprint", "classcookmem_1_1MemPool.html#a27969d6e28877b2bd7da9dd900ed33e2", null ],
+    [ "getFootPrintLimit", "classcookmem_1_1MemPool.html#a59c849cc04b0278d28d12e152750e3b6", null ],
+    [ "getMaxFootprint", "classcookmem_1_1MemPool.html#a51df4f3224fd61bd9c425ae6bf6f9d6c", null ],
     [ "reallocate", "classcookmem_1_1MemPool.html#ace93564348ef4da1100fa163d346fae7", null ],
     [ "releaseAll", "classcookmem_1_1MemPool.html#aa53110ef23f89559ce100d22f50a0383", null ],
     [ "setFootprintLimit", "classcookmem_1_1MemPool.html#aeaeaa6e036407550fc5f089735953fb8", null ]
