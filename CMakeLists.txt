@@ -95,13 +95,6 @@ add_executable(test_fixedarena
 add_test(NAME test_fixedarena
     COMMAND test_fixedarena)
 
-# .. test_mmaparena
-add_executable(test_mmaparena
-	tests/test_mmaparena.cpp)
-
-add_test(NAME test_mmaparena
-    COMMAND test_mmaparena)
-
 # .. test_cachedarena
 add_executable(test_cachedarena
 	tests/test_cachedarena.cpp)
@@ -109,27 +102,37 @@ add_executable(test_cachedarena
 add_test(NAME test_cachedarena
     COMMAND test_cachedarena)
 
+# .. test_mmaparena
+if (UNIX)
+	add_executable(test_mmaparena
+		tests/test_mmaparena.cpp)
+
+	add_test(NAME test_mmaparena
+		COMMAND test_mmaparena)
+endif (UNIX)
+
 # -- performance tests -------------------------------------------------------
+if (UNIX)
+	add_executable(perf_cookmem_1
+		performances/perf_cookmem_1.cpp)
+	add_test(NAME perf_cookmem_1
+		COMMAND perf_cookmem_1)
 
-add_executable(perf_cookmem_1
-	performances/perf_cookmem_1.cpp)
-add_test(NAME perf_cookmem_1
-    COMMAND perf_cookmem_1)
+	add_executable(perf_cookmem_2
+		performances/perf_cookmem_2.cpp)
+	add_test(NAME perf_cookmem_2
+		COMMAND perf_cookmem_2)
 
-add_executable(perf_cookmem_2
-	performances/perf_cookmem_2.cpp)
-add_test(NAME perf_cookmem_2
-    COMMAND perf_cookmem_2)
+	add_executable(perf_cookmem_3
+		performances/perf_cookmem_3.cpp)
+	add_test(NAME perf_cookmem_3
+		COMMAND perf_cookmem_3)
 
-add_executable(perf_cookmem_3
-	performances/perf_cookmem_3.cpp)
-add_test(NAME perf_cookmem_3
-    COMMAND perf_cookmem_3)
-
-add_executable(perf_cookmem_4
-	performances/perf_cookmem_4.cpp)
-add_test(NAME perf_cookmem_4
-    COMMAND perf_cookmem_4)
+	add_executable(perf_cookmem_4
+		performances/perf_cookmem_4.cpp)
+	add_test(NAME perf_cookmem_4
+		COMMAND perf_cookmem_4)
+endif (UNIX)
 
 # -- examples -------------------------------------------------------
 add_executable(ex_1
@@ -137,17 +140,19 @@ add_executable(ex_1
 add_test(NAME ex_1
     COMMAND ex_1)
 
-add_executable(ex_2
-	examples/ex_2.cpp)
-add_test(NAME ex_2
-    COMMAND ex_2)
+if (UNIX)
+	add_executable(ex_2
+		examples/ex_2.cpp)
+	add_test(NAME ex_2
+		COMMAND ex_2)
 
-add_executable(ex_3
-	examples/ex_3.cpp)
-add_test(NAME ex_3
-    COMMAND ex_3)
+	add_executable(ex_3
+		examples/ex_3.cpp)
+	add_test(NAME ex_3
+		COMMAND ex_3)
 
-add_executable(ex_4
-	examples/ex_4.cpp)
-add_test(NAME ex_4
-    COMMAND ex_4)
+	add_executable(ex_4
+		examples/ex_4.cpp)
+	add_test(NAME ex_4
+		COMMAND ex_4)
+endif (UNIX)

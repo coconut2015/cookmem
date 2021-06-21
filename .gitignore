@@ -10,4 +10,6 @@ CMakeFiles
 /release
 /profiler
 /doc
+/out
+/build
 Makefile

@@ -15,7 +15,7 @@
  */
 #include <iostream>
 #include <cookmem.h>
-#include <cookmmaparena.h>
+#include <cookmallocarena.h>
 
 #define ASSERT_EQ(e,v) do { if ((e) != (v)) { std::cout << "Mismatch at line " << __LINE__ << std::endl; return 1; } } while (0)
 #define ASSERT_NE(e,v) do { if ((e) == (v)) { std::cout << "Mismatch at line " << __LINE__ << std::endl; return 1; } } while (0)
@@ -23,8 +23,8 @@
 static int
 test1 ()
 {
-    cookmem::MmapArena arena;
-    cookmem::MemPool<cookmem::MmapArena> pool (arena);
+    cookmem::MallocArena arena;
+    cookmem::MemPool<cookmem::MallocArena> pool (arena);
 
     void* ptr;
 
@@ -49,8 +49,8 @@ test1 ()
 static int
 test2 ()
 {
-    cookmem::MmapArena arena;
-    cookmem::MemPool<cookmem::MmapArena> pool (arena);
+    cookmem::MallocArena arena;
+    cookmem::MemPool<cookmem::MallocArena> pool (arena);
 
     void* ptr[10000];
 
@@ -86,8 +86,8 @@ test2 ()
 static int
 test3 ()
 {
-    cookmem::MmapArena arena;
-    cookmem::MemPool<cookmem::MmapArena> pool (arena);
+    cookmem::MallocArena arena;
+    cookmem::MemPool<cookmem::MallocArena> pool (arena);
 
     void* ptr[300];
 
@@ -123,8 +123,8 @@ test3 ()
 static int
 testError1 ()
 {
-    cookmem::MmapArena arena;
-    cookmem::MemPool<cookmem::MmapArena> pool (arena);
+    cookmem::MallocArena arena;
+    cookmem::MemPool<cookmem::MallocArena> pool (arena);
 
     ASSERT_EQ(nullptr, pool.allocate(0xffffffffffffffffUL));
 
