@@ -24,7 +24,7 @@ namespace cookmem
 {
 
 /**
- * An mmap based memory arena.
+ * An malloc/free based memory arena.
  */
 class MallocArena
 {
