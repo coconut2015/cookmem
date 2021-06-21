@@ -490,7 +490,7 @@ public:
         printf ("}\n");
     }
 private:
-    inline static std::int16_t max (std::int16_t a, std::int16_t b)
+    inline static std::int16_t getMax (std::int16_t a, std::int16_t b)
     {
         return (a < b) ? b : a;
     }
@@ -502,7 +502,7 @@ private:
 
     inline static void updateHeight (Node* node)
     {
-        node->height = max (getHeight (node->left), getHeight (node->right)) + 1;
+        node->height = getMax (getHeight (node->left), getHeight (node->right)) + 1;
     }
 
     inline static void setParent (Node* node, Node* parent)
@@ -626,17 +626,17 @@ private:
     {
         if (!root)
             return;
-        printf ("%016lx -- {", (std::size_t)root);
+        printf ("%016zx -- {", (std::size_t)root);
         if (root->left)
         {
-            printf (" %016lx", (std::size_t)root->left);
+            printf (" %016zx", (std::size_t)root->left);
         }
         if (root->right)
         {
-            printf (" %016lx", (std::size_t)root->right);
+            printf (" %016zx", (std::size_t)root->right);
         }
         printf (" }\n");
-        printf ("%016lx [ label = %ld ]\n",
+        printf ("%016zx [ label = %zd ]\n",
                 (std::size_t)root,
                 root->size);
         printNode (root->left);

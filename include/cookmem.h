@@ -19,6 +19,10 @@
 #include <cstddef>
 #include <cstring>
 
+#ifdef WIN32
+#include <windows.h>
+#endif /* WIN32 */
+
 #include <cookmemarena.h>
 #include <cookptravltree.h>
 #include <cookptrcircularlist.h>
@@ -683,7 +687,7 @@ private:
         return ((binIndex) << SMALLBIN_SHIFT);
     }
 
-    static inline std::size_t getSmallBinIndex(std::size_t size)
+    static inline BinIndexType getSmallBinIndex(std::size_t size)
     {
         return (BinIndexType) ((size) >> SMALLBIN_SHIFT);
     }
