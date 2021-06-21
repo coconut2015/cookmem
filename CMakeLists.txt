@@ -4,7 +4,6 @@ project (CookMem
 	LANGUAGES CXX
 )
 
-set( CMAKE_SYSTEM_NAME Linux )
 set( CMAKE_CXX_STANDARD 11 )
 enable_testing()
 
@@ -17,27 +16,33 @@ add_custom_target(ctest COMMAND ${CMAKE_CTEST_COMMAND})
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR})
 
 if(MSVC)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zi")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zi")
 else()
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
 endif()
 
-if(COVERAGE)
-	include(CodeCoverage)
+if (UNIX)
+	if(COVERAGE)
+		include(CodeCoverage)
 
-	setup_target_for_coverage_lcov (
-		NAME test_coverage
-		EXECUTABLE ctest
-		DEPENDENCIES ctest
-	)
+		setup_target_for_coverage_lcov (
+			NAME test_coverage
+			EXECUTABLE ctest
+			DEPENDENCIES ctest
+		)
 
-	APPEND_COVERAGE_COMPILER_FLAGS()
-endif(COVERAGE)
+		APPEND_COVERAGE_COMPILER_FLAGS()
+	endif(COVERAGE)
+endif(UNIX)
+
+if (VCPROFILER)
+	set(LINK_OPTIONS "/PROFILE")
+endif (VCPROFILER)
 
 #
 # On ubuntu install doxygen and graphviz
 #
-if(BUILD_DOC)
+if (BUILD_DOC)
 	# check if Doxygen is installed
 	find_package(Doxygen)
 	if (DOXYGEN_FOUND)

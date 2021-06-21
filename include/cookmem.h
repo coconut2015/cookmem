@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Heng Yuan
+ * Copyright (c) 2018-2021 Heng Yuan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,13 +34,13 @@ namespace cookmem
 template<class T>
 T least_bit(T x)
 {
-    return ((x) & -(x));
+    return ((x) & -(static_cast<int>(x)));
 }
 
 template<class T>
 T left_bits(T x)
 {
-    return ((x << 1) | -(x << 1));
+    return ((x << 1) | -static_cast<int>(x << 1));
 }
 
 /* assign tree index for size S to variable I. Use x86 asm if possible  */
@@ -287,7 +287,7 @@ private:
     /**
      * The largest memory request size allowed.
      */
-    static const std::size_t MAX_REQUEST = ((-MIN_CHUNK_SIZE) << 2);                                                                     //////////////
+    static const std::size_t MAX_REQUEST = (static_cast<std::size_t>(-static_cast<long>(MIN_CHUNK_SIZE)) << 2);
     /**
      * The largest small request size that can fit into the smallest
      * small memory chunk.
