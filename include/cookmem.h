@@ -296,7 +296,7 @@ private:
     /**
      * The number of extra bytes needed for a segment.
      */
-    static const std::size_t SEGMENT_OVERHEAD = (sizeof(MemSegment) - sizeof(std::size_t) + ALIGN_MASK) & ~ALIGN_MASK + sizeof(std::size_t);
+    static const std::size_t SEGMENT_OVERHEAD = ((sizeof(MemSegment) - sizeof(std::size_t) + ALIGN_MASK) & (~ALIGN_MASK)) + sizeof(std::size_t);
     /**
      * The number of frees before attempting to coalesce memory chunks.
      */
