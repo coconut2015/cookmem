@@ -23,11 +23,11 @@
 #include <windows.h>
 #endif /* WIN32 */
 
-#include <cookexception.h>
-#include <cookmemarena.h>
-#include <cookptravltree.h>
-#include <cookptrcircularlist.h>
-#include <cookutils.h>
+#include "cookexception.h"
+#include "cookmemarena.h"
+#include "cookptravltree.h"
+#include "cookptrcircularlist.h"
+#include "cookutils.h"
 
 namespace cookmem
 {

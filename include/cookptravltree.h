@@ -19,7 +19,7 @@
 #include <cstdio>
 #include <cstdint>
 
-#include <cookexception.h>
+#include "cookexception.h"
 
 namespace cookmem
 {
