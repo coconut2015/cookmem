@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef COOK_PTRAVLTREE_H_
-#define COOK_PTRAVLTREE_H_
+#ifndef COOK_PTRAVLTREE_H
+#define COOK_PTRAVLTREE_H
 
 #include <cstdio>
-#include <cookutils.h>
+#include <cstdint>
+
+#include <cookexception.h>
 
 namespace cookmem
 {
@@ -160,7 +162,7 @@ public:
                 return;
             }
         }
-        throw MemException("Invalid PtrAVLTree.");
+        throw Exception("Invalid PtrAVLTree.");
     }
 
     /**
@@ -368,7 +370,7 @@ public:
         {
             if (root == nullptr)
             {
-                throw MemException("pointer not found.");
+                throw Exception("pointer not found.");
             }
 
             if (size < root->size)
@@ -650,4 +652,4 @@ private:
 
 }   // namespace cookmem
 
-#endif  /* COOK_PTRAVLTREE_H_ */
+#endif  // COOK_PTRAVLTREE_H

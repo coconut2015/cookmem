@@ -23,33 +23,6 @@ namespace cookmem
 {
 
 /**
- * A simple memory related exception.
- */
-class MemException
-{
-public:
-    /**
-     * Constructor.
-     *
-     * @param   msg
-     *          the message associated with this exception.
-     */
-    MemException(const char* msg)
-    : m_msg(msg)
-    {
-    }
-
-    /**
-     * Get the exception message.
-     *
-     * @return  the exception message.
-     */
-    const char* getMessage() { return m_msg; }
-private:
-    const char* m_msg;
-};
-
-/**
  * This is a utility template to find the smallest integer type that can
  * contain the value specified.
  */
@@ -64,11 +37,5 @@ using IntTypeSelector =
     >::type;
 
 }   // namespace cookmem
-
-#ifdef NDEBUG
-#define COOKMEM_ASSERT(b)
-#else /* NDEBUG */
-#define COOKMEM_ASSERT(b) do { if (!(b)) throw MemException("assertion failure."); } while (0)
-#endif /* NDEBUG */
 
 #endif  // COOK_UTILS_H

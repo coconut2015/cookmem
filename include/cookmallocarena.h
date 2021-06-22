@@ -16,9 +16,9 @@
 #ifndef COOK_MALLOC_MEM_ARENA_H
 #define COOK_MALLOC_MEM_ARENA_H
 
-#include <cookmemarena.h>
-
 #include <cstdlib>
+
+#include <cookmemarena.h>
 
 namespace cookmem
 {

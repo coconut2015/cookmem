@@ -17,7 +17,7 @@
 #define COOK_MEM_ARENA_H
 
 #include <cstddef>
-#include <stdint.h>
+#include <cstdint>
 
 #include <cookptravltree.h>
 

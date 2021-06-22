@@ -16,9 +16,9 @@
 #ifndef COOK_MMAP_MEM_ARENA_H
 #define COOK_MMAP_MEM_ARENA_H
 
-#include <cookmemarena.h>
-
 #include <sys/mman.h>
+
+#include <cookmemarena.h>
 
 namespace cookmem
 {

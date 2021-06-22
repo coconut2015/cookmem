@@ -23,6 +23,7 @@
 #include <windows.h>
 #endif /* WIN32 */
 
+#include <cookexception.h>
 #include <cookmemarena.h>
 #include <cookptravltree.h>
 #include <cookptrcircularlist.h>

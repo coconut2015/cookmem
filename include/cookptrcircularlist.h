@@ -16,7 +16,7 @@
 #ifndef COOK_PTR_CIRCULAR_LIST_H
 #define COOK_PTR_CIRCULAR_LIST_H
 
-#include <cookutils.h>
+#include <cookexception.h>
 
 namespace cookmem
 {
