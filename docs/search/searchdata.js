@@ -1,8 +1,8 @@
 var indexSectionsWithContent =
 {
-  0: "acdfgilmprstv~",
-  1: "cfmp",
-  2: "acdfgimprs~",
+  0: "acdefgilmprstv~",
+  1: "cefmp",
+  2: "acdefgimprs~",
   3: "cdpsv",
   4: "cilt"
 };

@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['test_20build_20instruction',['Test Build Instruction',['../md__mnt_d_workspace_cookmem_doxygen_build.html',1,'']]],
-  ['tutorials',['Tutorials',['../tutorials.html',1,'']]]
+  ['setfootprintlimit',['setFootprintLimit',['../classcookmem_1_1MemPool.html#aeaeaa6e036407550fc5f089735953fb8',1,'cookmem::MemPool']]],
+  ['size_5ftype',['size_type',['../classcookmem_1_1MemPool.html#a9851f71145f4d37762a17e0aeef609c7',1,'cookmem::MemPool']]]
 ];

@@ -1,5 +1,6 @@
 var files =
 [
+    [ "cookexception.h", "cookexception_8h_source.html", null ],
     [ "cookmallocarena.h", "cookmallocarena_8h_source.html", null ],
     [ "cookmem.h", "cookmem_8h_source.html", null ],
     [ "cookmemarena.h", "cookmemarena_8h_source.html", null ],

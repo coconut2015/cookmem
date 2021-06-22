@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['fixedarena',['FixedArena',['../classcookmem_1_1FixedArena.html',1,'cookmem']]]
+  ['exception',['Exception',['../classcookmem_1_1Exception.html',1,'cookmem']]]
 ];
