@@ -1,0 +1,10 @@
+version: 2.1
+jobs:
+  build-and-test:
+    docker:
+      - image: cimg/base:stable-18.04
+    steps:
+      - checkout
+      - run: sudo apt-get update && sudo apt-get install -y g++ cmake lcov
+      - run: chmod +x make.sh && ./make.sh debug
+      - run: bash <(curl -s https://codecov.io/bash)
