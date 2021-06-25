@@ -84,9 +84,11 @@ $(document).ready(function(){initNavTree('index.html','');});
 <div class="title">CookMem </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a href="https://travis-ci.com/coconut2015/cookmem"></a><a href="https://codecov.io/gh/coconut2015/cookmem"></a><a href="http://www.apache.org/licenses/LICENSE-2.0"></a></p>
+<div class="textblock"><p><a href="https://app.circleci.com/pipelines/github/coconut2015/cookmem"></a><a href="https://codecov.io/gh/coconut2015/cookmem"></a><a href="http://www.apache.org/licenses/LICENSE-2.0"></a></p>
 <p>CookMem is a <a href="https://en.wikipedia.org/wiki/Region-based_memory_management">memory context</a> / allocator written in C++11 that can be easily and quickly cleaned up by freeing the segments, rather than doing individual frees. It is extremely useful to deal with third party libraries that can potentially have memory leaks, or to simplify the memory management.</p>
-<p>The secondary goal of this project is to provide a good enough performance that should be comparable to <a href="http://g.oswego.edu/dl/html/malloc.html">dlmalloc</a> and its derivatives. In fact, the algorithms and some code used here are mostly based on dlmalloc. I basically took the pain to understand dlmalloc and rewrote the logics in C++. Some key calculations though are kept the same as dlmalloc since there is no point to reinvent wheels.</p>
+<p>Unlike projects like <a href="https://www.nedprod.com/programs/portable/nedmalloc/">nedmalloc</a>, this project focuses on single threaded performance. It is intended to be used within a thread, such that it would not have to pay for the cost of synchronization for tiny allocation / deallocations.</p>
+<p>The algorithms and some code used here are based on <a href="http://gee.cs.oswego.edu/dl/html/malloc.html">dlmalloc</a>. I basically took the pain to understand dlmalloc and rewrote the logics in C++. Some key calculations though are kept the same as dlmalloc since there are no points to reinvent wheels.</p>
+<p>Since I have never learnt <a href="https://en.wikipedia.org/wiki/Red%E2%80%93black_tree">Red-black tree</a> which dlmalloc uses. <a href="https://en.wikipedia.org/wiki/AVL_tree">AVL tree</a> is used instead. There can be some minor performance trade offs. Maybe one day I will learn the RB-tree and check the difference ;)</p>
 <p>The project documentation is at <a href="http://coconut2015.github.io/cookmem/">http://coconut2015.github.io/cookmem/</a> </p>
 </div></div><!-- contents -->
 </div><!-- doc-content -->

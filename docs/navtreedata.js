@@ -9,8 +9,8 @@ var NAVTREE =
     ] ],
     [ "Current Limitations", "limitations.html", null ],
     [ "Installation", "install.html", null ],
-    [ "Test Build Instruction", "md__mnt_d_workspace_cookmem_doxygen_build.html", null ],
-    [ "License", "md__mnt_d_workspace_cookmem_doxygen_license.html", null ],
+    [ "Test Build Instruction", "build.html", null ],
+    [ "License", "license.html", null ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],

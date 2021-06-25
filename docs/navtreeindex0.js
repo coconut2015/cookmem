@@ -2,6 +2,7 @@ var NAVTREEINDEX0 =
 {
 ".html":[5,0,0],
 "annotated.html":[5,0],
+"build.html":[3],
 "classcookmem_1_1CachedArena.html":[5,0,0,0],
 "classcookmem_1_1CachedArena.html#a26574c4201ec8cf1978248691d3c1b5a":[5,0,0,0,2],
 "classcookmem_1_1CachedArena.html#a3a3ba478eda0304fc539f612ae962ff3":[5,0,0,0,0],
@@ -72,9 +73,8 @@ var NAVTREEINDEX0 =
 "functions_type.html":[5,2,2],
 "index.html":[],
 "install.html":[2],
+"license.html":[4],
 "limitations.html":[1],
-"md__mnt_d_workspace_cookmem_doxygen_build.html":[3],
-"md__mnt_d_workspace_cookmem_doxygen_license.html":[4],
 "pages.html":[],
 "tutorials.html":[0],
 "tutorials.html#ex_1":[0,0],

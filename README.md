@@ -9,11 +9,19 @@ freeing the segments, rather than doing individual frees.  It is extremely
 useful to deal with third party libraries that can potentially have memory
 leaks, or to simplify the memory management.
 
-The secondary goal of this project is to provide a good enough performance
-that should be comparable to [dlmalloc](http://g.oswego.edu/dl/html/malloc.html)
-and its derivatives.  In fact, the algorithms and some code used here are
-mostly based on dlmalloc.  I basically took the pain to understand dlmalloc
-and rewrote the logics in C++.  Some key calculations though are kept the
-same as dlmalloc since there is no point to reinvent wheels.
+Unlike projects like [nedmalloc](https://www.nedprod.com/programs/portable/nedmalloc/),
+this project focuses on single threaded performance.  It is intended to be
+used within a thread, such that it would not have to pay for the cost of
+synchronization for tiny allocation / deallocations.
+
+The algorithms and some code used here are based on [dlmalloc](http://gee.cs.oswego.edu/dl/html/malloc.html).
+I basically took the pain to understand dlmalloc and rewrote the logics
+in C++.  Some key calculations though are kept the same as dlmalloc since
+there are no points to reinvent wheels.
+
+Since I have never learnt [Red-black tree](https://en.wikipedia.org/wiki/Red%E2%80%93black_tree)
+which dlmalloc uses.  [AVL tree](https://en.wikipedia.org/wiki/AVL_tree)
+is used instead.  There can be some minor performance trade offs.  Maybe one
+day I will learn the RB-tree and check the difference ;)
 
 The project documentation is at http://coconut2015.github.io/cookmem/

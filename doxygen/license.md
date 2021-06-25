@@ -1,4 +1,4 @@
-License
+License {#license}
 =======
 
 Copyright 2018 by Heng Yuan
