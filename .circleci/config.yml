@@ -1,13 +1,21 @@
 version: 2.1
+orbs:
+  codecov: codecov/codecov@1.2.3
 jobs:
   build_and_test:
     docker:
       - image: cimg/base:stable-18.04
     steps:
       - checkout
-      - run: sudo apt-get update && sudo apt-get install -y g++ cmake lcov
-      - run: chmod +x make.sh && ./make.sh debug
-      - run: bash <(curl -s https://codecov.io/bash)
+      - run:
+        name: Install packages
+        command: sudo apt-get update && sudo apt-get install -y g++ cmake lcov
+      - run:
+        name: Build and test
+        command: chmod +x make.sh && ./make.sh debug
+      - run:
+        name: Upload coverage to Codecov
+        command: bash <(curl -s https://codecov.io/bash)
 workflows:
   all:
     jobs:
