@@ -21,7 +21,7 @@ int
 main (int argc, const char* argv[])
 {
     // Use default arena
-    cookmem::SimpleMemContext<> memCtx;
+    cookmem::SimpleMemContext<cookmem::MmapArena> memCtx;
 
     // allocate memory
     void* ptr = memCtx.allocate (100);

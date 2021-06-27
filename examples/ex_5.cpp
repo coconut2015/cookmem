@@ -20,7 +20,7 @@
 int
 main (int argc, const char* argv[])
 {
-    cookmem::CachedMemContext<> memCtx;
+    cookmem::SimpleMemContext<> memCtx;
 
     void* ptr1 = memCtx.allocate (10);
 
@@ -42,6 +42,10 @@ main (int argc, const char* argv[])
     std::cout << "Allocated size for ptr1: " << memCtx.getSize (ptr1) << std::endl;
 
     // Expect 1 for both pointers.
+    //
+    // contains first make sure the memory is within memCtx segments,
+    // then it would check if the pointer is marked being used.
+    //
     std::cout << "ptr1 is used: " << memCtx.contains (ptr1, true) << std::endl;
     std::cout << "ptr2 is used: " << memCtx.contains (ptr2, true) << std::endl;
 
@@ -51,6 +55,13 @@ main (int argc, const char* argv[])
     // Expect 0 for both pointers.
     std::cout << "ptr1 is used: " << memCtx.contains (ptr1, true) << std::endl;
     std::cout << "ptr2 is used: " << memCtx.contains (ptr2, true) << std::endl;
+
+    // Both pointers sizes are 0.
+    //
+    // If you want a perform a fast check if the pointer memory has been
+    // freed or not, like in debugger, use getSize ().
+    std::cout << "Size for ptr1: " << memCtx.getSize (ptr1) << std::endl;
+    std::cout << "Size for ptr2 " << memCtx.getSize (ptr2) << std::endl;
 
     return 0;
 }

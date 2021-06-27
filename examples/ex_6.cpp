@@ -22,7 +22,13 @@ main (int argc, const char* argv[])
 {
     try
     {
-        cookmem::CachedMemContext<> memCtx (true);
+        // Set padding to true when creating a memory context.
+        //
+        // Once set, it cannot be changed since it expects all the memory
+        // allocated to have 1-8 padding bytes at the end.
+        cookmem::SimpleMemContext<> memCtx (true);
+
+        std::cout << "Padding enabled: " << memCtx.isPadding () << std::endl;
 
         void* ptr = memCtx.allocate (10);
 
@@ -30,13 +36,17 @@ main (int argc, const char* argv[])
         // the option to store the exact allocated size.
         std::cout << "Allocated size for ptr: " << memCtx.getSize (ptr) << std::endl;
 
-        // intentionally writing pass the allocated size.
+        // Intentionally write pass the allocated size.
         memset (ptr, 0xff, 11);
 
+        // Deallocation would trigger the padding byte check.
+        // An exception is thrown in this function because it discovered
+        // that a padding byte has been modified.
         memCtx.deallocate (ptr);
     }
     catch (cookmem::Exception& ex)
     {
+        // Catch the exception and print the message.
         std::cout << ex.getMessage () << std::endl;
     }
 

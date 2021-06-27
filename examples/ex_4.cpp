@@ -20,7 +20,8 @@
 int
 main (int argc, const char* argv[])
 {
-    typedef cookmem::CachedMemContext<> ParentCachedMemCtx;
+    // CachedMemContext is a child class of MemContext
+    typedef cookmem::CachedMemContext<cookmem::MmapArena, cookmem::NoActionMemLogger> ParentCachedMemCtx;
     typedef cookmem::MemContext<cookmem::CachedArena<cookmem::MmapArena>, cookmem::NoActionMemLogger>   ChildCachedMemCtx;
 
     // Create the parent ctx
@@ -38,7 +39,7 @@ main (int argc, const char* argv[])
     {
         // Create the child ctx
         //
-        // Note that the child shares the cachedArena with the parent
+        // Note that the child shares the cachedArena with the parent.
         ChildCachedMemCtx childCtx (parentCtx);
 
         // Allocate memory in the child ctx
