@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Heng Yuan
+ * Copyright (c) 2018-2021 Heng Yuan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,32 +15,31 @@
  */
 
 #include <cookmem.h>
-#include <cookmmaparena.h>
 
 #define USE_DL_PREFIX   1
 #define HAVE_MORECORE   0
 #include "dlmalloc.c"
 
 static bool s_useDLMalloc = true;
-static cookmem::MmapArena s_arena;
-static cookmem::CachedArena<cookmem::MmapArena> s_cachedArena (s_arena);
-static cookmem::MemPool<cookmem::CachedArena<cookmem::MmapArena> > s_pool (s_cachedArena);
+static cookmem::CachedMemContext<> s_memCtx;
 
 extern "C"
 {
 
-void* malloc(std::size_t size)
+void*
+malloc (std::size_t size)
 {
     if (s_useDLMalloc)
     {
         return dlmalloc(size);
     }
     {
-        return s_pool.allocate(size);
+        return s_memCtx.allocate(size);
     }
 }
 
-void free(void* ptr)
+void
+free (void* ptr)
 {
     if (s_useDLMalloc)
     {
@@ -48,11 +47,12 @@ void free(void* ptr)
     }
     else
     {
-        s_pool.deallocate(ptr);
+        s_memCtx.deallocate(ptr);
     }
 }
 
-void* calloc(std::size_t num, std::size_t size)
+void*
+calloc (std::size_t num, std::size_t size)
 {
     if (s_useDLMalloc)
     {
@@ -60,11 +60,12 @@ void* calloc(std::size_t num, std::size_t size)
     }
     else
     {
-        return s_pool.callocate(num, size);
+        return s_memCtx.callocate(num, size);
     }
 }
 
-void* realloc(void* ptr, std::size_t size)
+void*
+realloc (void* ptr, std::size_t size)
 {
     if (s_useDLMalloc)
     {
@@ -72,7 +73,7 @@ void* realloc(void* ptr, std::size_t size)
     }
     else
     {
-        return s_pool.reallocate(ptr, size);
+        return s_memCtx.reallocate(ptr, size);
     }
 }
 

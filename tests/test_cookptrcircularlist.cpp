@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include <cookptrcircularlist.h>
 #include <iostream>
+
+#include <cookptrcircularlist.h>
 
 #define ASSERT_EQ(e,v) do { if ((e) != (v)) { std::cout << "Mismatch at line " << __LINE__ << std::endl; return 1; } } while (0)
 #define ASSERT_NE(e,v) do { if ((e) == (v)) { std::cout << "Mismatch at line " << __LINE__ << std::endl; return 1; } } while (0)
@@ -46,15 +47,15 @@ test1 ()
     list.add (&n6);
     list.add (&n7);
 
-    ASSERT_EQ(&n1, list.remove ());
-    ASSERT_EQ(&n7, list.remove ());
-    ASSERT_EQ(&n6, list.remove ());
-    ASSERT_EQ(&n5, list.remove ());
-    ASSERT_EQ(&n4, list.remove ());
-    ASSERT_EQ(&n3, list.remove ());
-    ASSERT_EQ(&n2, list.remove ());
-    ASSERT_EQ(true, list.isEmpty());
-    ASSERT_EQ(nullptr, list.remove ());
+    ASSERT_EQ (&n1, list.remove ());
+    ASSERT_EQ (&n7, list.remove ());
+    ASSERT_EQ (&n6, list.remove ());
+    ASSERT_EQ (&n5, list.remove ());
+    ASSERT_EQ (&n4, list.remove ());
+    ASSERT_EQ (&n3, list.remove ());
+    ASSERT_EQ (&n2, list.remove ());
+    ASSERT_EQ (true, list.isEmpty ());
+    ASSERT_EQ (nullptr, list.remove ());
 
     list.add (&n1);
     list.add (&n2);
@@ -68,19 +69,20 @@ test1 ()
     list.remove (&n2);
     list.remove (&n3);
     list.remove (&n4);
-    ASSERT_EQ(&n7, list.remove ());
-    ASSERT_EQ(&n6, list.remove ());
+    ASSERT_EQ (&n7, list.remove ());
+    ASSERT_EQ (&n6, list.remove ());
     list.remove (&n5);
-    ASSERT_EQ(true, list.isEmpty());
-    ASSERT_EQ(nullptr, list.remove ());
+    ASSERT_EQ (true, list.isEmpty ());
+    ASSERT_EQ (nullptr, list.remove ());
 
     return 0;
 }
 
 
-int main(int argc, const char* argv[])
+int
+main (int argc, const char* argv[])
 {
-    ASSERT_EQ(0, test1 ());
+    ASSERT_EQ (0, test1 ());
 
     return 0;
 }

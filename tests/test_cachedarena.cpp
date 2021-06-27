@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 #include <iostream>
+
 #include <cookmem.h>
-#include <cookmallocarena.h>
 
 #define ASSERT_EQ(e,v) do { if ((e) != (v)) { std::cout << "Mismatch at line " << __LINE__ << std::endl; return 1; } } while (0)
 #define ASSERT_NE(e,v) do { if ((e) == (v)) { std::cout << "Mismatch at line " << __LINE__ << std::endl; return 1; } } while (0)
@@ -27,9 +27,10 @@ test1 ()
 {
     cookmem::MallocArena arena;
     cookmem::CachedArena<cookmem::MallocArena> cachedArena (arena);
+    cookmem::NoActionMemLogger logger;
 
     {
-        cookmem::MemPool<cookmem::CachedArena<cookmem::MallocArena> > pool (cachedArena);
+        cookmem::MemContext<cookmem::CachedArena<cookmem::MallocArena>, cookmem::NoActionMemLogger> memCtx (cachedArena, logger);
 
         void* ptrs[NUM_ENTRIES];
 
@@ -37,25 +38,25 @@ test1 ()
         for (int i = 0; i < NUM_ENTRIES; ++i)
         {
             size *= 10;
-            ptrs[i] = pool.allocate(size);
-            ASSERT_EQ(true, pool.contains (ptrs[i]));
-            ASSERT_NE(nullptr, ptrs[i]);
+            ptrs[i] = memCtx.allocate (size);
+            ASSERT_EQ (true, memCtx.contains (ptrs[i]));
+            ASSERT_NE (nullptr, ptrs[i]);
         }
 
         for (int i = 0; i < NUM_ENTRIES; ++i)
         {
-            pool.deallocate(ptrs[i]);
+            memCtx.deallocate (ptrs[i]);
         }
 
-        pool.releaseAll();
+        memCtx.releaseAll ();
         for (int i = 0; i < NUM_ENTRIES; ++i)
         {
-            ASSERT_EQ(false, pool.contains (ptrs[i]));
+            ASSERT_EQ (false, memCtx.contains (ptrs[i]));
         }
     }
 
     {
-        cookmem::MemPool<cookmem::CachedArena<cookmem::MallocArena> > pool (cachedArena);
+        cookmem::MemContext<cookmem::CachedArena<cookmem::MallocArena>, cookmem::NoActionMemLogger> memCtx(cachedArena, logger);
 
         void* ptrs[NUM_ENTRIES];
 
@@ -63,20 +64,20 @@ test1 ()
         for (int i = 0; i < NUM_ENTRIES; ++i)
         {
             size *= 10;
-            ptrs[i] = pool.allocate(size);
-            ASSERT_EQ(true, pool.contains (ptrs[i]));
-            ASSERT_NE(nullptr, ptrs[i]);
+            ptrs[i] = memCtx.allocate (size);
+            ASSERT_EQ (true, memCtx.contains (ptrs[i]));
+            ASSERT_NE (nullptr, ptrs[i]);
         }
 
         for (int i = 0; i < NUM_ENTRIES; ++i)
         {
-            pool.deallocate(ptrs[i]);
+            memCtx.deallocate (ptrs[i]);
         }
 
-        pool.releaseAll();
+        memCtx.releaseAll();
         for (int i = 0; i < NUM_ENTRIES; ++i)
         {
-            ASSERT_EQ(false, pool.contains (ptrs[i]));
+            ASSERT_EQ (false, memCtx.contains (ptrs[i]));
         }
     }
 
@@ -84,9 +85,10 @@ test1 ()
 }
 
 
-int main(int argc, const char* argv[])
+int
+main (int argc, const char* argv[])
 {
-    ASSERT_EQ(0, test1 ());
+    ASSERT_EQ (0, test1 ());
 
     return 0;
 }

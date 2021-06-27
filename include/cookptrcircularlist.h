@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Heng Yuan
+ * Copyright (c) 2018-2021 Heng Yuan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,8 @@ public:
      * @param   ptr
      *          a node pointer to be added to the list
      */
-    void add (Node* ptr)
+    void
+    add (Node* ptr)
     {
         if (m_head)
         {
@@ -62,7 +63,8 @@ public:
      *
      * @return  the first node in the list.
      */
-    Node* remove ()
+    Node*
+    remove ()
     {
         if (m_head == nullptr)
         {
@@ -89,13 +91,15 @@ public:
     }
 
     /**
+     * Remove a chunk from the list.
      *
      * @param   chunk
      *          the chunk to be removed.
      * @return  true if the list is now empty.
      *          false otherwise.
      */
-    bool remove (Node* chunk)
+    bool
+    remove (Node* chunk)
     {
         Node* prev = chunk->prev;
         Node* next = chunk->next;
@@ -125,6 +129,7 @@ public:
      *          false otherwise.
      */
     bool isEmpty () const { return m_head == nullptr; }
+
 private:
     /** The first node in the list */
     Node*   m_head;

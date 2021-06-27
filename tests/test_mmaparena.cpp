@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Heng Yuan
+ * Copyright (c) 2018-2021 Heng Yuan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 #include <iostream>
+
 #include <cookmem.h>
-#include <cookmmaparena.h>
 
 #define ASSERT_EQ(e,v) do { if ((e) != (v)) { std::cout << "Mismatch at line " << __LINE__ << std::endl; return 1; } } while (0)
 #define ASSERT_NE(e,v) do { if ((e) == (v)) { std::cout << "Mismatch at line " << __LINE__ << std::endl; return 1; } } while (0)
@@ -25,8 +25,7 @@
 static int
 test1 ()
 {
-    cookmem::MmapArena arena;
-    cookmem::MemPool<cookmem::MmapArena> pool (arena);
+    cookmem::SimpleMemContext<cookmem::MmapArena> memCtx;
 
     void* ptrs[NUM_ENTRIES];
 
@@ -34,23 +33,23 @@ test1 ()
     for (int i = 0; i < NUM_ENTRIES; ++i)
     {
         size *= 10;
-        ptrs[i] = pool.allocate(size);
-        ASSERT_EQ(true, pool.contains (ptrs[i]));
-        ASSERT_NE(nullptr, ptrs[i]);
+        ptrs[i] = memCtx.allocate (size);
+        ASSERT_NE (nullptr, ptrs[i]);
+        ASSERT_EQ (true, memCtx.contains (ptrs[i]));
     }
 
     for (int i = 0; i < NUM_ENTRIES; ++i)
     {
-        pool.deallocate(ptrs[i]);
+        memCtx.deallocate (ptrs[i]);
     }
 
-    pool.releaseAll();
+    memCtx.releaseAll();
     for (int i = 0; i < NUM_ENTRIES; ++i)
     {
-        ASSERT_EQ(false, pool.contains (ptrs[i]));
+        ASSERT_EQ (false, memCtx.contains (ptrs[i]));
     }
 
-    ASSERT_EQ(nullptr, pool.allocate(0xffffffffff000000));
+    ASSERT_EQ (nullptr, memCtx.allocate (0xffffffffff000000));
 
     return 0;
 }
@@ -58,23 +57,22 @@ test1 ()
 static int
 test2 ()
 {
-    cookmem::MmapArena arena;
-    cookmem::MemPool<cookmem::MmapArena> pool (arena);
+    cookmem::SimpleMemContext<cookmem::MmapArena> memCtx;
 
     std::size_t size = 300;
-    void* ptr = pool.callocate(1, size);
+    void* ptr = memCtx.callocate (1, size);
     for (std::size_t s = 0; s < size; ++s)
     {
-        ASSERT_EQ(0, ((char*)ptr)[s]);
+        ASSERT_EQ (0, ((char*)ptr)[s]);
     }
-    pool.deallocate(ptr);
+    memCtx.deallocate (ptr);
 
-    ptr = pool.callocate(10, size);
+    ptr = memCtx.callocate (10, size);
     for (std::size_t s = 0; s < 10 * size; ++s)
     {
-        ASSERT_EQ(0, ((char*)ptr)[s]);
+        ASSERT_EQ (0, ((char*)ptr)[s]);
     }
-    pool.deallocate(ptr);
+    memCtx.deallocate (ptr);
 
     return 0;
 }
@@ -82,26 +80,25 @@ test2 ()
 static int
 test3 ()
 {
-    cookmem::MmapArena arena;
-    cookmem::MemPool<cookmem::MmapArena> pool (arena);
+    cookmem::SimpleMemContext<cookmem::MmapArena> memCtx;
 
     std::size_t size = 300;
-    void* ptr = pool.callocate(1, size);
+    void* ptr = memCtx.callocate (1, size);
     for (std::size_t s = 0; s < size; ++s)
     {
-        ASSERT_EQ(0, ((char*)ptr)[s]);
+        ASSERT_EQ (0, ((char*)ptr)[s]);
     }
 
-    ptr = pool.reallocate(ptr, 10 * size);
-    ASSERT_NE(nullptr, ptr);
-    pool.deallocate(ptr);
+    ptr = memCtx.reallocate (ptr, 10 * size);
+    ASSERT_NE (nullptr, ptr);
+    memCtx.deallocate (ptr);
 
-    ptr = pool.reallocate(nullptr, 10 * size);
-    ASSERT_NE(nullptr, ptr);
+    ptr = memCtx.reallocate (nullptr, 10 * size);
+    ASSERT_NE (nullptr, ptr);
 
-    void* ptr2 = pool.reallocate(ptr, size);
-    ASSERT_EQ(ptr, ptr2);
-    pool.deallocate(ptr);
+    void* ptr2 = memCtx.reallocate (ptr, size);
+    ASSERT_EQ (ptr, ptr2);
+    memCtx.deallocate (ptr);
 
     return 0;
 }
@@ -109,25 +106,25 @@ test3 ()
 static int
 test4 ()
 {
-    cookmem::MmapArena arena;
-    cookmem::MemPool<cookmem::MmapArena> pool (arena);
+    cookmem::SimpleMemContext<cookmem::MmapArena> memCtx;
 
-    pool.setFootprintLimit(1000000);
+    memCtx.setFootprintLimit(1000000);
 
-    void* ptr = pool.allocate (800000);
-    ASSERT_NE(nullptr, ptr);
+    void* ptr = memCtx.allocate (800000);
+    ASSERT_NE (nullptr, ptr);
 
-    ASSERT_EQ(nullptr, pool.allocate (800000));
+    ASSERT_EQ (nullptr, memCtx.allocate (800000));
     return 0;
 }
 
 
-int main(int argc, const char* argv[])
+int
+main (int argc, const char* argv[])
 {
-    ASSERT_EQ(0, test1 ());
-    ASSERT_EQ(0, test2 ());
-    ASSERT_EQ(0, test3 ());
-    ASSERT_EQ(0, test4 ());
+    ASSERT_EQ (0, test1 ());
+    ASSERT_EQ (0, test2 ());
+    ASSERT_EQ (0, test3 ());
+    ASSERT_EQ (0, test4 ());
 
     return 0;
 }

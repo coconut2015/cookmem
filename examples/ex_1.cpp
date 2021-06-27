@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Heng Yuan
+ * Copyright (c) 2018-2021 Heng Yuan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,28 +14,31 @@
  * limitations under the License.
  */
 #include <iostream>
+
 #include <cookmem.h>
 
-int main(int argc, const char* argv[])
+int
+main (int argc, const char* argv[])
 {
     char buffer[64000];
     cookmem::FixedArena arena (buffer, sizeof(buffer));
-    cookmem::MemPool<cookmem::FixedArena> pool (arena);
+    cookmem::NoActionMemLogger logger;
+    cookmem::MemContext<cookmem::FixedArena, cookmem::NoActionMemLogger> memCtx (arena, logger);
 
-    // allocate memory
-    void* ptr = pool.allocate(100);
+    // Allocate memory
+    void* ptr = memCtx.allocate (100);
 
-    // free the memory
-    pool.deallocate(ptr);
+    // Free the memory
+    memCtx.deallocate (ptr);
 
-    // much like calloc in c, allocate 100 bytes which is set to 0.
-    ptr = pool.callocate(1, 100);
+    // Much like calloc in c, allocate 100 bytes which is set to 0.
+    ptr = memCtx.callocate (1, 100);
 
-    // change the size of the memory
-    ptr = pool.reallocate(ptr, 1000);
+    // Change the size of the memory
+    ptr = memCtx.reallocate (ptr, 1000);
 
-    // free the memory
-    pool.deallocate(ptr);
+    // Free the memory
+    memCtx.deallocate (ptr);
 
     return 0;
 }

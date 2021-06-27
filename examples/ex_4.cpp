@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Heng Yuan
+ * Copyright (c) 2018-2021 Heng Yuan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,52 +14,69 @@
  * limitations under the License.
  */
 #include <iostream>
+
 #include <cookmem.h>
-#include <cookmmaparena.h>
 
-int main(int argc, const char* argv[])
+int
+main (int argc, const char* argv[])
 {
-    cookmem::MmapArena arena;
-    cookmem::CachedArena<cookmem::MmapArena> cachedArena (arena);
+    typedef cookmem::CachedMemContext<> ParentCachedMemCtx;
+    typedef cookmem::MemContext<cookmem::CachedArena<cookmem::MmapArena>, cookmem::NoActionMemLogger>   ChildCachedMemCtx;
 
-    cookmem::MemPool<cookmem::CachedArena<cookmem::MmapArena>> parentPool (cachedArena);
+    // Create the parent ctx
+    ParentCachedMemCtx parentCtx;
 
     int* ptrs[10];
 
-    // allocate memory in the parent pool
+    // Allocate memory in the parent ctx
     for (int i = 0; i < 5; ++i)
     {
-        ptrs[i] = (int*)parentPool.allocate(sizeof(int));
+        ptrs[i] = (int*)parentCtx.allocate (sizeof(int));
         *ptrs[i] = i;
     }
 
     {
-        cookmem::MemPool<cookmem::CachedArena<cookmem::MmapArena>> childPool (cachedArena);
+        // Create the child ctx
+        //
+        // Note that the child shares the cachedArena with the parent
+        ChildCachedMemCtx childCtx (parentCtx);
 
-        // allocate memory in the child pool
+        // Allocate memory in the child ctx
         for (int i = 5; i < 10; ++i)
         {
-            ptrs[i] = (int*)childPool.allocate(sizeof(int));
+            ptrs[i] = (int*)childCtx.allocate (sizeof(int));
             *ptrs[i] = i;
         }
 
-        // before releasing the child pool, copy things to parent pool if necessary
+        // Before releasing the child ctx, copy things to parent ctx if necessary
         for (int i = 0; i < 10; ++i)
         {
-            if (childPool.contains(ptrs[i]))
+            if (childCtx.contains (ptrs[i]))
             {
                 std::cout << "Copying index " << i << std::endl;
-                int* ptr = (int*)parentPool.allocate (sizeof(int));
+                int* ptr = (int*)parentCtx.allocate (sizeof(int));
                 *ptr = *ptrs[i];
                 ptrs[i] = ptr;
             }
         }
+
+        // Child ctx is destroyed.  No individual pieces of memories are
+        // deallocated.  Instead, all the segments child ctx uses are simply
+        // released to the cachedArena, which can then be re-used by the
+        // parent ctx.
+        //
+        // This approach is very efficient if when you need to deal with
+        // lots of temporary small allocations that need to be deallocated
+        // at end of the task.
+        //
+        // At the same time, you can avoid having potentially large memory
+        // segments being allocated / deallocated frequently.
     }
 
-    // verify all memories are owned by parent pool
+    // Verify all memories are owned by parent ctx
     for (int i = 0; i < 10; ++i)
     {
-        if (!parentPool.contains(ptrs[i]))
+        if (!parentCtx.contains (ptrs[i]))
         {
             std::cout << "Oops: index " << i << " is problematic." << std::endl;
             return 1;

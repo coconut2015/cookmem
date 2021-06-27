@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Heng Yuan
+ * Copyright (c) 2018-2021 Heng Yuan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 #define COOK_MEM_ARENA_H
 
 #include <cstddef>
-#include <cstdint>
 
 #include "cookptravltree.h"
 
@@ -42,7 +41,8 @@ public:
      *          request to indicate the actual size obtained.
      * @return  the allocated pointer.  nullptr is allocation failed.
      */
-    virtual void* getSegment(std::size_t& size) = 0;
+    virtual void*
+    getSegment (std::size_t& size) = 0;
 
     /**
      * Free an arena segment.
@@ -53,7 +53,8 @@ public:
      *          the size of the pointer.
      * @return  true if there is an error.  false is okay.
      */
-    virtual bool freeSegment(void* ptr, std::size_t size) = 0;
+    virtual bool
+    freeSegment (void* ptr, std::size_t size) = 0;
 };
 
 /**
@@ -64,15 +65,15 @@ class FixedArena
 {
 public:
     /**
-     * Arena constructor.
+     * Constructor.
      *
      * @param   ptr
      *          the memory buffer for memory allocation.
      * @param   size
      *          the size of the memory pointer.
      */
-    FixedArena(void* ptr, std::size_t size)
-    : m_page (), m_size (), m_used (false)
+    FixedArena (void* ptr, std::size_t size)
+    : m_used (false)
     {
         std::size_t remain = (std::size_t)ptr & 0xfUL;
         if (remain)
@@ -97,7 +98,8 @@ public:
      *          request to indicate the actual size obtained.
      * @return  the allocated pointer.  nullptr if allocation failed.
      */
-    void* getSegment(std::size_t& size)
+    void*
+    getSegment (std::size_t& size)
     {
         if (m_used || size > m_size)
         {
@@ -117,7 +119,8 @@ public:
      *          the size of the pointer.
      * @return  true if there is an error.  false is okay.
      */
-    bool freeSegment(void* ptr, std::size_t size)
+    bool
+    freeSegment (void* ptr, std::size_t size)
     {
         if (!m_used || ptr != m_page || size != m_size)
         {
@@ -164,7 +167,8 @@ public:
      *          request to indicate the actual size obtained.
      * @return  the allocated pointer.  nullptr is allocation failed.
      */
-    void* getSegment(std::size_t& size)
+    void*
+    getSegment (std::size_t& size)
     {
         void* seg = m_tree.remove(size);
         if (seg)
@@ -186,9 +190,10 @@ public:
      *          the size of the pointer.
      * @return  false.
      */
-    bool freeSegment(void* ptr, std::size_t size)
+    bool
+    freeSegment (void* ptr, std::size_t size)
     {
-        m_tree.add(ptr, size);
+        m_tree.add (ptr, size);
         return false;
     }
 

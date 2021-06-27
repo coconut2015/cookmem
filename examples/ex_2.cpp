@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Heng Yuan
+ * Copyright (c) 2018-2021 Heng Yuan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,23 @@
  * limitations under the License.
  */
 #include <iostream>
-#include <cookmem.h>
-#include <cookmmaparena.h>
 
-int main(int argc, const char* argv[])
+#include <cookmem.h>
+
+int
+main (int argc, const char* argv[])
 {
-    cookmem::MmapArena arena;
-    cookmem::MemPool<cookmem::MmapArena> pool (arena);
+    // Use default arena
+    cookmem::SimpleMemContext<> memCtx;
 
     // allocate memory
-    void* ptr = pool.allocate(100);
+    void* ptr = memCtx.allocate (100);
 
     // change the size of the memory
-    ptr = pool.reallocate(ptr, 1000);
+    ptr = memCtx.reallocate (ptr, 1000);
 
     // free the memory
-    pool.deallocate(ptr);
+    memCtx.deallocate (ptr);
 
     return 0;
 }

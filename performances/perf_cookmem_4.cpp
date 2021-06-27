@@ -47,7 +47,8 @@ test1 ()
     }
 }
 
-int main(int argc, const char* argv[])
+int
+main (int argc, const char* argv[])
 {
     std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
 

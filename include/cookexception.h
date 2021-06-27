@@ -19,6 +19,14 @@
 namespace cookmem
 {
 
+typedef enum
+{
+    MEM_ERROR_GENERAL,      // general error
+    MEM_ERROR_ASSERT,       // assertion failure
+    MEM_ERROR_DOUBLE_FREE,  // freeing an already free pointer
+    MEM_ERROR_PADDING,      // padding byte error
+}  MemError_et;
+
 /**
  * A simple memory related exception.
  */
@@ -31,19 +39,28 @@ public:
      * @param   msg
      *          the message associated with this exception.
      */
-    Exception (const char* msg)
-    : m_msg(msg)
+    Exception (MemError_et error, const char* msg)
+    : m_error (error),
+      m_msg (msg)
     {
     }
+
+    /**
+     * Get the exception error.
+     *
+     * @return  the exception error.
+     */
+    const MemError_et getError () const { return m_error; }
 
     /**
      * Get the exception message.
      *
      * @return  the exception message.
      */
-    const char* getMessage() { return m_msg; }
+    const char* getMessage () const { return m_msg; }
 private:
-    const char* m_msg;
+    const MemError_et   m_error;
+    const char*         m_msg;
 };
 
 }   // namespace cookmem
@@ -51,7 +68,7 @@ private:
 #ifdef NDEBUG
 #define COOKMEM_ASSERT(b)
 #else /* NDEBUG */
-#define COOKMEM_ASSERT(b) do { if (!(b)) throw Exception("assertion failure."); } while (0)
+#define COOKMEM_ASSERT(b) do { if (!(b)) throw Exception (cookmem::MEM_ERROR_ASSERT, "assertion failure."); } while (0)
 #endif /* NDEBUG */
 
 #endif  // COOK_EXCEPTION_H

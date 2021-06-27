@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Heng Yuan
+ * Copyright (c) 2018-2021 Heng Yuan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,43 +14,47 @@
  * limitations under the License.
  */
 #include <iostream>
-#include <cookmem.h>
-#include <cookmmaparena.h>
 
-int main(int argc, const char* argv[])
+#include <cookmem.h>
+
+int
+main (int argc, const char* argv[])
 {
     cookmem::MmapArena arena;
     cookmem::CachedArena<cookmem::MmapArena> cachedArena (arena);
+    cookmem::NoActionMemLogger logger;
+
+    typedef cookmem::MemContext<cookmem::CachedArena<cookmem::MmapArena>, cookmem::NoActionMemLogger> CachedMemCtx;
 
     {
-        cookmem::MemPool<cookmem::CachedArena<cookmem::MmapArena>> pool (cachedArena);
+        CachedMemCtx memCtx (cachedArena, logger);
 
-        // allocate memory
-        void* ptr = pool.allocate(100);
+        // Allocate memory
+        void* ptr = memCtx.allocate (100);
 
-        // change the size of the memory
-        ptr = pool.reallocate(ptr, 1000);
+        // Change the size of the memory
+        ptr = memCtx.reallocate (ptr, 1000);
 
-        // free the memory
-        pool.deallocate(ptr);
+        // Free the memory
+        memCtx.deallocate (ptr);
 
-        // destructor of MemPool is called to release all allocated memory
+        // Destructor of MemContext is called to release all allocated memory
         // segments back to cachedArena
     }
 
     {
-        cookmem::MemPool<cookmem::CachedArena<cookmem::MmapArena>> pool (cachedArena);
+        CachedMemCtx memCtx (cachedArena, logger);
 
-        // allocate memory.  The memory segment saved in cachedArena are re-used.
-        void* ptr = pool.allocate(100);
+        // Allocate memory.  The memory segment saved in cachedArena are re-used.
+        void* ptr = memCtx.allocate (100);
 
-        // change the size of the memory
-        ptr = pool.reallocate(ptr, 1000);
+        // Change the size of the memory
+        ptr = memCtx.reallocate (ptr, 1000);
 
-        // free the memory
-        pool.deallocate(ptr);
+        // Free the memory
+        memCtx.deallocate (ptr);
 
-        // destructor of MemPool is called to release all allocated memory
+        // Destructor of MemContext is called to release all allocated memory
         // segments back to cachedArena
     }
     return 0;

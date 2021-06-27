@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Heng Yuan
+ * Copyright (c) 2018-2021 Heng Yuan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 #include <iostream>
+
 #include <cookmem.h>
-#include <cookmallocarena.h>
 
 #define ASSERT_EQ(e,v) do { if ((e) != (v)) { std::cout << "Mismatch at line " << __LINE__ << std::endl; return 1; } } while (0)
 #define ASSERT_NE(e,v) do { if ((e) == (v)) { std::cout << "Mismatch at line " << __LINE__ << std::endl; return 1; } } while (0)
@@ -23,25 +23,24 @@
 static int
 test1 ()
 {
-    cookmem::MallocArena arena;
-    cookmem::MemPool<cookmem::MallocArena> pool (arena);
+    cookmem::SimpleMemContext<cookmem::MallocArena> memCtx;
 
     void* ptr;
 
-    ptr = pool.allocate(30);
-    ASSERT_NE(nullptr, ptr);
-    pool.deallocate(ptr);
+    ptr = memCtx.allocate (30);
+    ASSERT_NE (nullptr, ptr);
+    memCtx.deallocate (ptr);
 
-    ptr = pool.allocate(300);
-    ASSERT_NE(nullptr, ptr);
-    ptr = pool.allocate(3000);
-    ASSERT_NE(nullptr, ptr);
-    ptr = pool.allocate(30000);
-    ASSERT_NE(nullptr, ptr);
-    ptr = pool.allocate(30000);
-    ASSERT_NE(nullptr, ptr);
-    ptr = pool.allocate(30000);
-    ASSERT_NE(nullptr, ptr);
+    ptr = memCtx.allocate (300);
+    ASSERT_NE (nullptr, ptr);
+    ptr = memCtx.allocate (3000);
+    ASSERT_NE (nullptr, ptr);
+    ptr = memCtx.allocate (30000);
+    ASSERT_NE (nullptr, ptr);
+    ptr = memCtx.allocate (30000);
+    ASSERT_NE (nullptr, ptr);
+    ptr = memCtx.allocate (30000);
+    ASSERT_NE (nullptr, ptr);
 
     return 0;
 }
@@ -49,8 +48,7 @@ test1 ()
 static int
 test2 ()
 {
-    cookmem::MallocArena arena;
-    cookmem::MemPool<cookmem::MallocArena> pool (arena);
+    cookmem::SimpleMemContext<cookmem::MallocArena> memCtx;
 
     void* ptr[10000];
 
@@ -58,26 +56,26 @@ test2 ()
     for (int i = 0; i < 10000; ++i)
     {
         size += 8;
-        ptr[i] = pool.allocate(size);
-        ASSERT_NE(nullptr, ptr[i]);
+        ptr[i] = memCtx.allocate (size);
+        ASSERT_NE (nullptr, ptr[i]);
     }
 
     for (int i = 0; i < 10000; ++i)
     {
-        pool.deallocate(ptr[i]);
+        memCtx.deallocate (ptr[i]);
     }
 
     size = 8;
     for (int i = 0; i < 10000; ++i)
     {
         size += 8;
-        ptr[i] = pool.allocate(size);
-        ASSERT_NE(nullptr, ptr[i]);
+        ptr[i] = memCtx.allocate (size);
+        ASSERT_NE (nullptr, ptr[i]);
     }
 
     for (int i = 0; i < 10000; ++i)
     {
-        pool.deallocate(ptr[i]);
+        memCtx.deallocate (ptr[i]);
     }
 
     return 0;
@@ -86,8 +84,7 @@ test2 ()
 static int
 test3 ()
 {
-    cookmem::MallocArena arena;
-    cookmem::MemPool<cookmem::MallocArena> pool (arena);
+    cookmem::SimpleMemContext<cookmem::MallocArena> memCtx;
 
     void* ptr[300];
 
@@ -95,48 +92,36 @@ test3 ()
     for (int i = 0; i < 300; ++i)
     {
         size += 8;
-        ptr[i] = pool.allocate(size);
-        ASSERT_NE(nullptr, ptr[i]);
+        ptr[i] = memCtx.allocate (size);
+        ASSERT_NE (nullptr, ptr[i]);
     }
 
     for (int i = 0; i < 300; ++i)
     {
-        pool.deallocate(ptr[i]);
+        memCtx.deallocate (ptr[i]);
     }
 
     size = 300;
     for (int i = 0; i < 300; ++i)
     {
         size += 8;
-        ptr[i] = pool.allocate(size);
-        ASSERT_NE(nullptr, ptr[i]);
+        ptr[i] = memCtx.allocate (size);
+        ASSERT_NE (nullptr, ptr[i]);
     }
 
     for (int i = 0; i < 300; ++i)
     {
-        pool.deallocate(ptr[i]);
+        memCtx.deallocate (ptr[i]);
     }
 
     return 0;
 }
 
-static int
-testError1 ()
+int
+main (int argc, const char* argv[])
 {
-    cookmem::MallocArena arena;
-    cookmem::MemPool<cookmem::MallocArena> pool (arena);
-
-    ASSERT_EQ(nullptr, pool.allocate(0xffffffffffffffffUL));
-
-    return 0;
-}
-
-int main(int argc, const char* argv[])
-{
-    ASSERT_EQ(0, test1 ());
-    ASSERT_EQ(0, test2 ());
-    ASSERT_EQ(0, test3 ());
-
-    ASSERT_EQ(0, testError1 ());
+    ASSERT_EQ (0, test1 ());
+    ASSERT_EQ (0, test2 ());
+    ASSERT_EQ (0, test3 ());
     return 0;
 }

@@ -10,18 +10,19 @@ useful to deal with third party libraries that can potentially have memory
 leaks, or to simplify the memory management.
 
 Unlike projects like [nedmalloc](https://www.nedprod.com/programs/portable/nedmalloc/),
-this project focuses on single threaded performance.  It is intended to be
+this project focuses on the single-thread performance.  It is intended to be
 used within a thread, such that it would not have to pay for the cost of
-synchronization for tiny allocation / deallocations.
+synchronization for tiny allocations / deallocations.
 
 The algorithms and some code used here are based on [dlmalloc](http://gee.cs.oswego.edu/dl/html/malloc.html).
 I basically took the pain to understand dlmalloc and rewrote the logics
 in C++.  Some key calculations though are kept the same as dlmalloc since
 there are no points to reinvent wheels.
 
-Since I have never learnt [Red-black tree](https://en.wikipedia.org/wiki/Red%E2%80%93black_tree)
+Since I have never learnt [Red-black tree](https://en.wikipedia.org/wiki/Red%E2%80%93black_tree),
 which dlmalloc uses.  [AVL tree](https://en.wikipedia.org/wiki/AVL_tree)
 is used instead.  There can be some minor performance trade offs.  Maybe one
 day I will learn the RB-tree and check the difference ;)
 
-The project documentation is at http://coconut2015.github.io/cookmem/
+Documention: http://coconut2015.github.io/cookmem/
+Source: https://github.com/coconut2015/cookmem

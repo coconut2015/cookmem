@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Heng Yuan
+ * Copyright (c) 2018-2021 Heng Yuan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef COOK_PTRAVLTREE_H
-#define COOK_PTRAVLTREE_H
+#ifndef COOK_PTR_AVLTREE_H
+#define COOK_PTR_AVLTREE_H
 
 #include <cstdio>
 #include <cstdint>
@@ -92,7 +92,8 @@ public:
      * @param   size
      *          the size of the pointer
      */
-    void add(void* ptr, std::size_t size)
+    void
+    add (void* ptr, std::size_t size)
     {
         Node*   node = reinterpret_cast<Node*>(ptr);
         node->size = size;
@@ -162,7 +163,7 @@ public:
                 return;
             }
         }
-        throw Exception("Invalid PtrAVLTree.");
+        throw Exception (MEM_ERROR_GENERAL, "Invalid PtrAVLTree.");
     }
 
     /**
@@ -175,7 +176,8 @@ public:
      * @return  the node matching the search key that is at least the size
      *          of the provided.  This node is also removed from the tree.
      */
-    void* remove(std::size_t& size)
+    void*
+    remove (std::size_t& size)
     {
         Node* root;
         Node* stack[sizeof(Node*) * 8 + 1];
@@ -335,7 +337,8 @@ public:
      * @param   ptr
      *          the pointer to be removed from the tree
      */
-    void remove(void* ptr)
+    void
+    remove (void* ptr)
     {
         Node* node = reinterpret_cast<Node*>(ptr);
 
@@ -370,7 +373,7 @@ public:
         {
             if (root == nullptr)
             {
-                throw Exception("pointer not found.");
+                throw Exception (MEM_ERROR_GENERAL, "pointer not found.");
             }
 
             if (size < root->size)
@@ -477,7 +480,8 @@ public:
      *
      * @return  true if the tree is empty.  false otherwise.
      */
-    bool isEmpty ()
+    bool
+    isEmpty ()
     {
         return m_root == nullptr;
     }
@@ -485,29 +489,34 @@ public:
     /**
      * Debugging function that prints the tree nodes to GraphViz format.
      */
-    void printGraph ()
+    void
+    printGraph ()
     {
         printf ("graph G {\n");
         printNode (m_root);
         printf ("}\n");
     }
 private:
-    inline static std::int16_t getMax (std::int16_t a, std::int16_t b)
+    inline static std::int16_t
+    getMax (std::int16_t a, std::int16_t b)
     {
         return (a < b) ? b : a;
     }
 
-    inline static std::int16_t getHeight (const Node* node)
+    inline static std::int16_t
+    getHeight (const Node* node)
     {
         return node ? node->height : 0;
     }
 
-    inline static void updateHeight (Node* node)
+    inline static void
+    updateHeight (Node* node)
     {
         node->height = getMax (getHeight (node->left), getHeight (node->right)) + 1;
     }
 
-    inline static void setParent (Node* node, Node* parent)
+    inline static void
+    setParent (Node* node, Node* parent)
     {
         if (node->size < parent->size)
         {
@@ -519,17 +528,20 @@ private:
         }
     }
 
-    inline static void setLeftChild (Node* root, Node* left)
+    inline static void
+    setLeftChild (Node* root, Node* left)
     {
         root->left = left;
     }
 
-    inline static void setRightChild (Node* root, Node* right)
+    inline static void
+    setRightChild (Node* root, Node* right)
     {
         root->right = right;
     }
 
-    inline static Node* balance (Node** stack, std::int16_t depth)
+    inline static Node*
+    balance (Node** stack, std::int16_t depth)
     {
         for (;;)
         {
@@ -592,7 +604,8 @@ private:
         return nullptr;
     }
 
-    inline static Node* rotateWithLeftChild (Node* root)
+    inline static Node*
+    rotateWithLeftChild (Node* root)
     {
         Node* left = root->left;
         setLeftChild (root, left->right);
@@ -602,7 +615,8 @@ private:
         return left;
     }
 
-    inline static Node* rotateWithRightChild (Node* root)
+    inline static Node*
+    rotateWithRightChild (Node* root)
     {
         Node* right = root->right;
         setRightChild (root, right->left);
@@ -612,19 +626,22 @@ private:
         return right;
     }
 
-    inline static Node* doubleWithLeftChild (Node* root)
+    inline static Node*
+    doubleWithLeftChild (Node* root)
     {
         setLeftChild (root, rotateWithRightChild (root->left));
         return rotateWithLeftChild (root);
     }
 
-    inline static Node* doubleWithRightChild (Node* root)
+    inline static Node*
+    doubleWithRightChild (Node* root)
     {
         setRightChild (root, rotateWithLeftChild (root->right));
         return rotateWithRightChild (root);
     }
 
-    static void printNode (Node* root)
+    static void
+    printNode (Node* root)
     {
         if (!root)
             return;
@@ -652,4 +669,4 @@ private:
 
 }   // namespace cookmem
 
-#endif  // COOK_PTRAVLTREE_H
+#endif  // COOK_PTR_AVLTREE_H

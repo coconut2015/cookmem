@@ -15,11 +15,11 @@ add_custom_target(ctest COMMAND ${CMAKE_CTEST_COMMAND})
 
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR})
 
-if(MSVC)
+if (MSVC)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zi")
-else()
+else (MSVC)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall")
-endif()
+endif (MSVC)
 
 if (UNIX)
 	if(COVERAGE)
@@ -33,7 +33,7 @@ if (UNIX)
 
 		APPEND_COVERAGE_COMPILER_FLAGS()
 	endif(COVERAGE)
-endif(UNIX)
+endif (UNIX)
 
 if (VCPROFILER)
 	set(LINK_OPTIONS "/PROFILE")
@@ -63,7 +63,7 @@ if (BUILD_DOC)
 	else (DOXYGEN_FOUND)
 		message("Doxygen need to be installed to generate the doxygen documentation")
 	endif (DOXYGEN_FOUND)
-endif(BUILD_DOC)
+endif (BUILD_DOC)
 
 include_directories(include/)
 
@@ -77,46 +77,58 @@ add_executable(test_cookptrcircularlist
 	tests/test_cookptrcircularlist.cpp)
 
 add_test(NAME test_cookptrcircularlist
-    COMMAND test_cookptrcircularlist)
+	COMMAND test_cookptrcircularlist)
 
 # .. test_cookptravltree
 add_executable(test_cookptravltree
 	tests/test_cookptravltree.cpp)
 
 add_test(NAME test_cookptravltree
-    COMMAND test_cookptravltree)
+	COMMAND test_cookptravltree)
 
 # .. test_cookmem
-add_executable(test_cookmem
-	tests/test_cookmem.cpp)
+add_executable(test_cookmem_01
+	tests/test_cookmem_01.cpp)
 
-add_test(NAME test_cookmem
-    COMMAND test_cookmem)
+add_test(NAME test_cookmem_01
+	COMMAND test_cookmem_01)
+
+add_executable(test_cookmem_02
+	tests/test_cookmem_02.cpp)
+
+add_test(NAME test_cookmem_02
+	COMMAND test_cookmem_02)
+
+add_executable(test_cookmem_error_01
+	tests/test_cookmem_error_01.cpp)
+
+add_test(NAME test_cookmem_error_01
+	COMMAND test_cookmem_error_01)
 
 # .. test_fixedarena
 add_executable(test_fixedarena
 	tests/test_fixedarena.cpp)
 
 add_test(NAME test_fixedarena
-    COMMAND test_fixedarena)
+	COMMAND test_fixedarena)
 
 # .. test_cachedarena
 add_executable(test_cachedarena
 	tests/test_cachedarena.cpp)
 
 add_test(NAME test_cachedarena
-    COMMAND test_cachedarena)
+	COMMAND test_cachedarena)
 
 # .. test_mmaparena
-if (UNIX)
-	add_executable(test_mmaparena
-		tests/test_mmaparena.cpp)
+add_executable(test_mmaparena
+	tests/test_mmaparena.cpp)
 
-	add_test(NAME test_mmaparena
-		COMMAND test_mmaparena)
-endif (UNIX)
+add_test(NAME test_mmaparena
+	COMMAND test_mmaparena)
 
 # -- performance tests -------------------------------------------------------
+# Until I figure out how to replace malloc / free on Windows, these tests
+# can only be done on Linux.
 if (UNIX)
 	add_executable(perf_cookmem_1
 		performances/perf_cookmem_1.cpp)
@@ -143,21 +155,19 @@ endif (UNIX)
 add_executable(ex_1
 	examples/ex_1.cpp)
 add_test(NAME ex_1
-    COMMAND ex_1)
+	COMMAND ex_1)
 
-if (UNIX)
-	add_executable(ex_2
-		examples/ex_2.cpp)
-	add_test(NAME ex_2
-		COMMAND ex_2)
+add_executable(ex_2
+	examples/ex_2.cpp)
+add_test(NAME ex_2
+	COMMAND ex_2)
 
-	add_executable(ex_3
-		examples/ex_3.cpp)
-	add_test(NAME ex_3
-		COMMAND ex_3)
+add_executable(ex_3
+	examples/ex_3.cpp)
+add_test(NAME ex_3
+	COMMAND ex_3)
 
-	add_executable(ex_4
-		examples/ex_4.cpp)
-	add_test(NAME ex_4
-		COMMAND ex_4)
-endif (UNIX)
+add_executable(ex_4
+	examples/ex_4.cpp)
+add_test(NAME ex_4
+	COMMAND ex_4)
