@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>CookMem: cookmem::MemPool&lt; MemArena, T &gt; Class Template Reference</title>
+<title>CookMem: cookmem::MemPool&lt; Arena, Logger, T &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -86,69 +86,81 @@ $(document).ready(function(){initNavTree('classcookmem_1_1MemPool.html','');});
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="classcookmem_1_1MemPool-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">cookmem::MemPool&lt; MemArena, T &gt; Class Template Reference</div>  </div>
+<div class="title">cookmem::MemPool&lt; Arena, Logger, T &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="cookmem_8h_source.html">cookmem.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="cookmempool_8h_source.html">cookmempool.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a9851f71145f4d37762a17e0aeef609c7"><td class="memItemLeft" align="right" valign="top">typedef std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemPool.html#a9851f71145f4d37762a17e0aeef609c7">size_type</a></td></tr>
-<tr class="separator:a9851f71145f4d37762a17e0aeef609c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a059f6008827e7e7211fb8731fe1ff230"><td class="memItemLeft" align="right" valign="top">typedef std::ptrdiff_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemPool.html#a059f6008827e7e7211fb8731fe1ff230">difference_type</a></td></tr>
-<tr class="separator:a059f6008827e7e7211fb8731fe1ff230"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac09ff0adf69e99617563ff56557d507b"><td class="memItemLeft" align="right" valign="top">typedef T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemPool.html#ac09ff0adf69e99617563ff56557d507b">value_type</a></td></tr>
-<tr class="separator:ac09ff0adf69e99617563ff56557d507b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a03f463bc0637544ce43fabe4986b9841"><td class="memItemLeft" align="right" valign="top">typedef T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemPool.html#a03f463bc0637544ce43fabe4986b9841">pointer</a></td></tr>
-<tr class="separator:a03f463bc0637544ce43fabe4986b9841"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a507aa81037f3596c6dac5eed977cb979"><td class="memItemLeft" align="right" valign="top">typedef const T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemPool.html#a507aa81037f3596c6dac5eed977cb979">const_pointer</a></td></tr>
-<tr class="separator:a507aa81037f3596c6dac5eed977cb979"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae7a051b14eebc937048514b03fa40065"><td class="memItemLeft" align="right" valign="top">typedef std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemPool.html#ae7a051b14eebc937048514b03fa40065">size_type</a></td></tr>
+<tr class="separator:ae7a051b14eebc937048514b03fa40065"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae258e191be5b390202fd280bfff33d4c"><td class="memItemLeft" align="right" valign="top">typedef std::ptrdiff_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemPool.html#ae258e191be5b390202fd280bfff33d4c">difference_type</a></td></tr>
+<tr class="separator:ae258e191be5b390202fd280bfff33d4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a58cc62a3938cc163ec079892a968dac1"><td class="memItemLeft" align="right" valign="top">typedef T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemPool.html#a58cc62a3938cc163ec079892a968dac1">value_type</a></td></tr>
+<tr class="separator:a58cc62a3938cc163ec079892a968dac1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a463c2ebd9ad2e8c5a5d6ef593584707b"><td class="memItemLeft" align="right" valign="top">typedef T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemPool.html#a463c2ebd9ad2e8c5a5d6ef593584707b">pointer</a></td></tr>
+<tr class="separator:a463c2ebd9ad2e8c5a5d6ef593584707b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3f0f0c03b5f1ee3dc049342b516d9d9"><td class="memItemLeft" align="right" valign="top">typedef const T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemPool.html#ac3f0f0c03b5f1ee3dc049342b516d9d9">const_pointer</a></td></tr>
+<tr class="separator:ac3f0f0c03b5f1ee3dc049342b516d9d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:af1e27577e7a96bcefcb91d95f52e48de"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemPool.html#af1e27577e7a96bcefcb91d95f52e48de">MemPool</a> (<a class="el" href="classcookmem_1_1MemArena.html">MemArena</a> &amp;arena)</td></tr>
-<tr class="separator:af1e27577e7a96bcefcb91d95f52e48de"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acae587530c44fb5d584dbd7de4c0caca"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemPool.html#acae587530c44fb5d584dbd7de4c0caca">~MemPool</a> ()</td></tr>
-<tr class="separator:acae587530c44fb5d584dbd7de4c0caca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeaeaa6e036407550fc5f089735953fb8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemPool.html#aeaeaa6e036407550fc5f089735953fb8">setFootprintLimit</a> (std::size_t footprintLimit)</td></tr>
-<tr class="separator:aeaeaa6e036407550fc5f089735953fb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a59c849cc04b0278d28d12e152750e3b6"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemPool.html#a59c849cc04b0278d28d12e152750e3b6">getFootPrintLimit</a> () const</td></tr>
-<tr class="separator:a59c849cc04b0278d28d12e152750e3b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae185bb0bd1dee7de3d052b337498bbf6"><td class="memItemLeft" align="right" valign="top">T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemPool.html#ae185bb0bd1dee7de3d052b337498bbf6">allocate</a> (std::size_t size)</td></tr>
-<tr class="separator:ae185bb0bd1dee7de3d052b337498bbf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ace93564348ef4da1100fa163d346fae7"><td class="memItemLeft" align="right" valign="top">T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemPool.html#ace93564348ef4da1100fa163d346fae7">reallocate</a> (T *ptr, std::size_t size)</td></tr>
-<tr class="separator:ace93564348ef4da1100fa163d346fae7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6828410b4c1be12c28fabe822e6558db"><td class="memItemLeft" align="right" valign="top">T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemPool.html#a6828410b4c1be12c28fabe822e6558db">callocate</a> (std::size_t num, std::size_t size)</td></tr>
-<tr class="separator:a6828410b4c1be12c28fabe822e6558db"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:addb55cb3331907efe0cebf9fc711959c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemPool.html#addb55cb3331907efe0cebf9fc711959c">deallocate</a> (T *ptr, std::size_t size=0)</td></tr>
-<tr class="separator:addb55cb3331907efe0cebf9fc711959c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a52b132564dc7bd5eb24650834cb949ea"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemPool.html#a52b132564dc7bd5eb24650834cb949ea">contains</a> (T *ptr)</td></tr>
-<tr class="separator:a52b132564dc7bd5eb24650834cb949ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa53110ef23f89559ce100d22f50a0383"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemPool.html#aa53110ef23f89559ce100d22f50a0383">releaseAll</a> ()</td></tr>
-<tr class="separator:aa53110ef23f89559ce100d22f50a0383"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a27969d6e28877b2bd7da9dd900ed33e2"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemPool.html#a27969d6e28877b2bd7da9dd900ed33e2">getFootprint</a> () const</td></tr>
-<tr class="separator:a27969d6e28877b2bd7da9dd900ed33e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a51df4f3224fd61bd9c425ae6bf6f9d6c"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemPool.html#a51df4f3224fd61bd9c425ae6bf6f9d6c">getMaxFootprint</a> () const</td></tr>
-<tr class="separator:a51df4f3224fd61bd9c425ae6bf6f9d6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abab4700193f16ba3d5bee92e407f2305"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemPool.html#abab4700193f16ba3d5bee92e407f2305">MemPool</a> (Arena &amp;arena, Logger &amp;logger, bool padding=false)</td></tr>
+<tr class="separator:abab4700193f16ba3d5bee92e407f2305"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a489bc6a337e66bf56727196c8cec7860"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemPool.html#a489bc6a337e66bf56727196c8cec7860">~MemPool</a> ()</td></tr>
+<tr class="separator:a489bc6a337e66bf56727196c8cec7860"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20c57a5b86d49fef4160e750acb1e05a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemPool.html#a20c57a5b86d49fef4160e750acb1e05a">setFootprintLimit</a> (<a class="el" href="classcookmem_1_1MemPool.html#ae7a051b14eebc937048514b03fa40065">size_type</a> footprintLimit)</td></tr>
+<tr class="separator:a20c57a5b86d49fef4160e750acb1e05a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac272cd12f0d861bdf99be08f8259fa19"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemPool.html#ae7a051b14eebc937048514b03fa40065">size_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemPool.html#ac272cd12f0d861bdf99be08f8259fa19">getFootPrintLimit</a> () const</td></tr>
+<tr class="separator:ac272cd12f0d861bdf99be08f8259fa19"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5b57dff29a64366c727e0c83d054201"><td class="memItemLeft" align="right" valign="top">T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemPool.html#ac5b57dff29a64366c727e0c83d054201">allocate</a> (<a class="el" href="classcookmem_1_1MemPool.html#ae7a051b14eebc937048514b03fa40065">size_type</a> userSize)</td></tr>
+<tr class="separator:ac5b57dff29a64366c727e0c83d054201"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a779dd0f4f52caef7a417a60e8a3ac7c8"><td class="memItemLeft" align="right" valign="top">T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemPool.html#a779dd0f4f52caef7a417a60e8a3ac7c8">reallocate</a> (T *ptr, <a class="el" href="classcookmem_1_1MemPool.html#ae7a051b14eebc937048514b03fa40065">size_type</a> newUserSize)</td></tr>
+<tr class="separator:a779dd0f4f52caef7a417a60e8a3ac7c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e7af4edcd1620132112dcbcf488b7b4"><td class="memItemLeft" align="right" valign="top">T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemPool.html#a5e7af4edcd1620132112dcbcf488b7b4">callocate</a> (<a class="el" href="classcookmem_1_1MemPool.html#ae7a051b14eebc937048514b03fa40065">size_type</a> num, <a class="el" href="classcookmem_1_1MemPool.html#ae7a051b14eebc937048514b03fa40065">size_type</a> size)</td></tr>
+<tr class="separator:a5e7af4edcd1620132112dcbcf488b7b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a80060bb2acc4cb209b5ed206430c61bd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemPool.html#a80060bb2acc4cb209b5ed206430c61bd">deallocate</a> (T *ptr, <a class="el" href="classcookmem_1_1MemPool.html#ae7a051b14eebc937048514b03fa40065">size_type</a> size=0)</td></tr>
+<tr class="separator:a80060bb2acc4cb209b5ed206430c61bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a69306fa0f64e3bbd674bbb8426f1e81a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemPool.html#a69306fa0f64e3bbd674bbb8426f1e81a">contains</a> (T *ptr, bool checkUsed=false)</td></tr>
+<tr class="separator:a69306fa0f64e3bbd674bbb8426f1e81a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5cbc65ea93153418b0c5b5e6fbb38756"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemPool.html#ae7a051b14eebc937048514b03fa40065">size_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemPool.html#a5cbc65ea93153418b0c5b5e6fbb38756">getUserSize</a> (T *ptr)</td></tr>
+<tr class="separator:a5cbc65ea93153418b0c5b5e6fbb38756"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada94b1e98ca7f22960df2bd61dbe6cf6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemPool.html#ada94b1e98ca7f22960df2bd61dbe6cf6">releaseAll</a> ()</td></tr>
+<tr class="separator:ada94b1e98ca7f22960df2bd61dbe6cf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5635660df8a0504c36644cfd174ee0e2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemPool.html#ae7a051b14eebc937048514b03fa40065">size_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemPool.html#a5635660df8a0504c36644cfd174ee0e2">getFootprint</a> () const</td></tr>
+<tr class="separator:a5635660df8a0504c36644cfd174ee0e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57228bfefdd8d39de07cb8f0a5e8be75"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemPool.html#ae7a051b14eebc937048514b03fa40065">size_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemPool.html#a57228bfefdd8d39de07cb8f0a5e8be75">getMaxFootprint</a> () const</td></tr>
+<tr class="separator:a57228bfefdd8d39de07cb8f0a5e8be75"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af72dab8937b646a8bb97fb188318e87d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemPool.html#af72dab8937b646a8bb97fb188318e87d">isStoringExactSize</a> () const</td></tr>
+<tr class="separator:af72dab8937b646a8bb97fb188318e87d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11ea02d1b8250face5505feaaef0cf09"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemPool.html#a11ea02d1b8250face5505feaaef0cf09">setStoringExactSize</a> (bool b)</td></tr>
+<tr class="separator:a11ea02d1b8250face5505feaaef0cf09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd4b2358afa0f6be7d39a3712d9c8261"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemPool.html#abd4b2358afa0f6be7d39a3712d9c8261">isPadding</a> () const</td></tr>
+<tr class="separator:abd4b2358afa0f6be7d39a3712d9c8261"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae25d5655bba7b9404cb80f264463fce6"><td class="memItemLeft" align="right" valign="top">std::uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemPool.html#ae25d5655bba7b9404cb80f264463fce6">getPaddingByte</a> () const</td></tr>
+<tr class="separator:ae25d5655bba7b9404cb80f264463fce6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2c69d5d5da99fd5f7833746fe7bee4a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemPool.html#af2c69d5d5da99fd5f7833746fe7bee4a">setPaddingByte</a> (std::uint8_t paddingByte)</td></tr>
+<tr class="separator:af2c69d5d5da99fd5f7833746fe7bee4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;class MemArena, class T = void&gt;<br />
-class cookmem::MemPool&lt; MemArena, T &gt;</h3>
+<div class="textblock"><h3>template&lt;class Arena, class Logger, class T = void&gt;<br />
+class cookmem::MemPool&lt; Arena, Logger, T &gt;</h3>
 
 <p>A memory allocator.</p>
 <p>Note that this class only provides the algorithm necessary to deal with small memory chunks. The actual ability to get memory segment (such as mmap memory pages) is deferred to memory arena. </p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="a507aa81037f3596c6dac5eed977cb979"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a507aa81037f3596c6dac5eed977cb979">&#9670;&nbsp;</a></span>const_pointer</h2>
+<a id="ac3f0f0c03b5f1ee3dc049342b516d9d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac3f0f0c03b5f1ee3dc049342b516d9d9">&#9670;&nbsp;</a></span>const_pointer</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class MemArena, class T = void&gt; </div>
+template&lt;class Arena, class Logger, class T = void&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">typedef const T* <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a>&lt; <a class="el" href="classcookmem_1_1MemArena.html">MemArena</a>, T &gt;::<a class="el" href="classcookmem_1_1MemPool.html#a507aa81037f3596c6dac5eed977cb979">const_pointer</a></td>
+          <td class="memname">typedef const T* <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a>&lt; Arena, Logger, T &gt;::<a class="el" href="classcookmem_1_1MemPool.html#ac3f0f0c03b5f1ee3dc049342b516d9d9">const_pointer</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -156,16 +168,16 @@ template&lt;class MemArena, class T = void&gt; </div>
 
 </div>
 </div>
-<a id="a059f6008827e7e7211fb8731fe1ff230"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a059f6008827e7e7211fb8731fe1ff230">&#9670;&nbsp;</a></span>difference_type</h2>
+<a id="ae258e191be5b390202fd280bfff33d4c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae258e191be5b390202fd280bfff33d4c">&#9670;&nbsp;</a></span>difference_type</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class MemArena, class T = void&gt; </div>
+template&lt;class Arena, class Logger, class T = void&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">typedef std::ptrdiff_t <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a>&lt; <a class="el" href="classcookmem_1_1MemArena.html">MemArena</a>, T &gt;::<a class="el" href="classcookmem_1_1MemPool.html#a059f6008827e7e7211fb8731fe1ff230">difference_type</a></td>
+          <td class="memname">typedef std::ptrdiff_t <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a>&lt; Arena, Logger, T &gt;::<a class="el" href="classcookmem_1_1MemPool.html#ae258e191be5b390202fd280bfff33d4c">difference_type</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -173,16 +185,16 @@ template&lt;class MemArena, class T = void&gt; </div>
 
 </div>
 </div>
-<a id="a03f463bc0637544ce43fabe4986b9841"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a03f463bc0637544ce43fabe4986b9841">&#9670;&nbsp;</a></span>pointer</h2>
+<a id="a463c2ebd9ad2e8c5a5d6ef593584707b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a463c2ebd9ad2e8c5a5d6ef593584707b">&#9670;&nbsp;</a></span>pointer</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class MemArena, class T = void&gt; </div>
+template&lt;class Arena, class Logger, class T = void&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">typedef T* <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a>&lt; <a class="el" href="classcookmem_1_1MemArena.html">MemArena</a>, T &gt;::<a class="el" href="classcookmem_1_1MemPool.html#a03f463bc0637544ce43fabe4986b9841">pointer</a></td>
+          <td class="memname">typedef T* <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a>&lt; Arena, Logger, T &gt;::<a class="el" href="classcookmem_1_1MemPool.html#a463c2ebd9ad2e8c5a5d6ef593584707b">pointer</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -190,16 +202,16 @@ template&lt;class MemArena, class T = void&gt; </div>
 
 </div>
 </div>
-<a id="a9851f71145f4d37762a17e0aeef609c7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9851f71145f4d37762a17e0aeef609c7">&#9670;&nbsp;</a></span>size_type</h2>
+<a id="ae7a051b14eebc937048514b03fa40065"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae7a051b14eebc937048514b03fa40065">&#9670;&nbsp;</a></span>size_type</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class MemArena, class T = void&gt; </div>
+template&lt;class Arena, class Logger, class T = void&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">typedef std::size_t <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a>&lt; <a class="el" href="classcookmem_1_1MemArena.html">MemArena</a>, T &gt;::<a class="el" href="classcookmem_1_1MemPool.html#a9851f71145f4d37762a17e0aeef609c7">size_type</a></td>
+          <td class="memname">typedef std::size_t <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a>&lt; Arena, Logger, T &gt;::<a class="el" href="classcookmem_1_1MemPool.html#ae7a051b14eebc937048514b03fa40065">size_type</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -207,16 +219,16 @@ template&lt;class MemArena, class T = void&gt; </div>
 
 </div>
 </div>
-<a id="ac09ff0adf69e99617563ff56557d507b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac09ff0adf69e99617563ff56557d507b">&#9670;&nbsp;</a></span>value_type</h2>
+<a id="a58cc62a3938cc163ec079892a968dac1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a58cc62a3938cc163ec079892a968dac1">&#9670;&nbsp;</a></span>value_type</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class MemArena, class T = void&gt; </div>
+template&lt;class Arena, class Logger, class T = void&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">typedef T <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a>&lt; <a class="el" href="classcookmem_1_1MemArena.html">MemArena</a>, T &gt;::<a class="el" href="classcookmem_1_1MemPool.html#ac09ff0adf69e99617563ff56557d507b">value_type</a></td>
+          <td class="memname">typedef T <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a>&lt; Arena, Logger, T &gt;::<a class="el" href="classcookmem_1_1MemPool.html#a58cc62a3938cc163ec079892a968dac1">value_type</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -225,23 +237,39 @@ template&lt;class MemArena, class T = void&gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="af1e27577e7a96bcefcb91d95f52e48de"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af1e27577e7a96bcefcb91d95f52e48de">&#9670;&nbsp;</a></span>MemPool()</h2>
+<a id="abab4700193f16ba3d5bee92e407f2305"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abab4700193f16ba3d5bee92e407f2305">&#9670;&nbsp;</a></span>MemPool()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class MemArena, class T = void&gt; </div>
+template&lt;class Arena, class Logger, class T = void&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a>&lt; <a class="el" href="classcookmem_1_1MemArena.html">MemArena</a>, T &gt;::<a class="el" href="classcookmem_1_1MemPool.html">MemPool</a> </td>
+          <td class="memname"><a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a>&lt; Arena, Logger, T &gt;::<a class="el" href="classcookmem_1_1MemPool.html">MemPool</a> </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classcookmem_1_1MemArena.html">MemArena</a> &amp;&#160;</td>
-          <td class="paramname"><em>arena</em></td><td>)</td>
+          <td class="paramtype">Arena &amp;&#160;</td>
+          <td class="paramname"><em>arena</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">Logger &amp;&#160;</td>
+          <td class="paramname"><em>logger</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>padding</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -253,25 +281,26 @@ template&lt;class MemArena, class T = void&gt; </div>
 <p>Constructor </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">arena</td><td>memory arena used to allocate memory segments. </td></tr>
+    <tr><td class="paramname">padding</td><td>Should memory pool pad extra bytes after allocated memory to detect out of bound access. Depending on the allocated size, the minimum number of bytes to pad is 1, and the maximum is 8. </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="acae587530c44fb5d584dbd7de4c0caca"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acae587530c44fb5d584dbd7de4c0caca">&#9670;&nbsp;</a></span>~MemPool()</h2>
+<a id="a489bc6a337e66bf56727196c8cec7860"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a489bc6a337e66bf56727196c8cec7860">&#9670;&nbsp;</a></span>~MemPool()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class MemArena, class T = void&gt; </div>
+template&lt;class Arena, class Logger, class T = void&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a>&lt; <a class="el" href="classcookmem_1_1MemArena.html">MemArena</a>, T &gt;::~<a class="el" href="classcookmem_1_1MemPool.html">MemPool</a> </td>
+          <td class="memname"><a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a>&lt; Arena, Logger, T &gt;::~<a class="el" href="classcookmem_1_1MemPool.html">MemPool</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -289,22 +318,22 @@ template&lt;class MemArena, class T = void&gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ae185bb0bd1dee7de3d052b337498bbf6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae185bb0bd1dee7de3d052b337498bbf6">&#9670;&nbsp;</a></span>allocate()</h2>
+<a id="ac5b57dff29a64366c727e0c83d054201"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac5b57dff29a64366c727e0c83d054201">&#9670;&nbsp;</a></span>allocate()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class MemArena, class T = void&gt; </div>
+template&lt;class Arena, class Logger, class T = void&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">T* <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a>&lt; <a class="el" href="classcookmem_1_1MemArena.html">MemArena</a>, T &gt;::allocate </td>
+          <td class="memname">T* <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a>&lt; Arena, Logger, T &gt;::allocate </td>
           <td>(</td>
-          <td class="paramtype">std::size_t&#160;</td>
-          <td class="paramname"><em>size</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="classcookmem_1_1MemPool.html#ae7a051b14eebc937048514b03fa40065">size_type</a>&#160;</td>
+          <td class="paramname"><em>userSize</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -325,27 +354,27 @@ template&lt;class MemArena, class T = void&gt; </div>
 
 </div>
 </div>
-<a id="a6828410b4c1be12c28fabe822e6558db"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6828410b4c1be12c28fabe822e6558db">&#9670;&nbsp;</a></span>callocate()</h2>
+<a id="a5e7af4edcd1620132112dcbcf488b7b4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e7af4edcd1620132112dcbcf488b7b4">&#9670;&nbsp;</a></span>callocate()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class MemArena, class T = void&gt; </div>
+template&lt;class Arena, class Logger, class T = void&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">T* <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a>&lt; <a class="el" href="classcookmem_1_1MemArena.html">MemArena</a>, T &gt;::callocate </td>
+          <td class="memname">T* <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a>&lt; Arena, Logger, T &gt;::callocate </td>
           <td>(</td>
-          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramtype"><a class="el" href="classcookmem_1_1MemPool.html#ae7a051b14eebc937048514b03fa40065">size_type</a>&#160;</td>
           <td class="paramname"><em>num</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramtype"><a class="el" href="classcookmem_1_1MemPool.html#ae7a051b14eebc937048514b03fa40065">size_type</a>&#160;</td>
           <td class="paramname"><em>size</em>&#160;</td>
         </tr>
         <tr>
@@ -372,23 +401,33 @@ template&lt;class MemArena, class T = void&gt; </div>
 
 </div>
 </div>
-<a id="a52b132564dc7bd5eb24650834cb949ea"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a52b132564dc7bd5eb24650834cb949ea">&#9670;&nbsp;</a></span>contains()</h2>
+<a id="a69306fa0f64e3bbd674bbb8426f1e81a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a69306fa0f64e3bbd674bbb8426f1e81a">&#9670;&nbsp;</a></span>contains()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class MemArena, class T = void&gt; </div>
+template&lt;class Arena, class Logger, class T = void&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a>&lt; <a class="el" href="classcookmem_1_1MemArena.html">MemArena</a>, T &gt;::contains </td>
+          <td class="memname">bool <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a>&lt; Arena, Logger, T &gt;::contains </td>
           <td>(</td>
           <td class="paramtype">T *&#160;</td>
-          <td class="paramname"><em>ptr</em></td><td>)</td>
+          <td class="paramname"><em>ptr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>checkUsed</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -398,30 +437,30 @@ template&lt;class MemArena, class T = void&gt; </div>
 </table>
 </div><div class="memdoc">
 <p>Check if a pointer is within the address space of segments owned by this <a class="el" href="classcookmem_1_1MemPool.html">MemPool</a>.</p>
-<p>It should be noted that it does not check whether or not the pointer is in use.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">ptr</td><td>memory pointer </td></tr>
+    <tr><td class="paramname">checkUsed</td><td>check the pointer if it is used. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>whether the memory address is in the space of segments owned by this <a class="el" href="classcookmem_1_1MemPool.html">MemPool</a>. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>whether the memory address is in the space of segments owned by this <a class="el" href="classcookmem_1_1MemPool.html">MemPool</a>. If checkUsed is true, the result is true only if the pointer is also marked as used. </dd></dl>
 
 </div>
 </div>
-<a id="addb55cb3331907efe0cebf9fc711959c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#addb55cb3331907efe0cebf9fc711959c">&#9670;&nbsp;</a></span>deallocate()</h2>
+<a id="a80060bb2acc4cb209b5ed206430c61bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a80060bb2acc4cb209b5ed206430c61bd">&#9670;&nbsp;</a></span>deallocate()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class MemArena, class T = void&gt; </div>
+template&lt;class Arena, class Logger, class T = void&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a>&lt; <a class="el" href="classcookmem_1_1MemArena.html">MemArena</a>, T &gt;::deallocate </td>
+          <td class="memname">void <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a>&lt; Arena, Logger, T &gt;::deallocate </td>
           <td>(</td>
           <td class="paramtype">T *&#160;</td>
           <td class="paramname"><em>ptr</em>, </td>
@@ -429,7 +468,7 @@ template&lt;class MemArena, class T = void&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramtype"><a class="el" href="classcookmem_1_1MemPool.html#ae7a051b14eebc937048514b03fa40065">size_type</a>&#160;</td>
           <td class="paramname"><em>size</em> = <code>0</code>&#160;</td>
         </tr>
         <tr>
@@ -455,19 +494,19 @@ template&lt;class MemArena, class T = void&gt; </div>
 
 </div>
 </div>
-<a id="a27969d6e28877b2bd7da9dd900ed33e2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a27969d6e28877b2bd7da9dd900ed33e2">&#9670;&nbsp;</a></span>getFootprint()</h2>
+<a id="a5635660df8a0504c36644cfd174ee0e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5635660df8a0504c36644cfd174ee0e2">&#9670;&nbsp;</a></span>getFootprint()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class MemArena, class T = void&gt; </div>
+template&lt;class Arena, class Logger, class T = void&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::size_t <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a>&lt; <a class="el" href="classcookmem_1_1MemArena.html">MemArena</a>, T &gt;::getFootprint </td>
+          <td class="memname"><a class="el" href="classcookmem_1_1MemPool.html#ae7a051b14eebc937048514b03fa40065">size_type</a> <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a>&lt; Arena, Logger, T &gt;::getFootprint </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -484,19 +523,19 @@ template&lt;class MemArena, class T = void&gt; </div>
 
 </div>
 </div>
-<a id="a59c849cc04b0278d28d12e152750e3b6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a59c849cc04b0278d28d12e152750e3b6">&#9670;&nbsp;</a></span>getFootPrintLimit()</h2>
+<a id="ac272cd12f0d861bdf99be08f8259fa19"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac272cd12f0d861bdf99be08f8259fa19">&#9670;&nbsp;</a></span>getFootPrintLimit()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class MemArena, class T = void&gt; </div>
+template&lt;class Arena, class Logger, class T = void&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::size_t <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a>&lt; <a class="el" href="classcookmem_1_1MemArena.html">MemArena</a>, T &gt;::getFootPrintLimit </td>
+          <td class="memname"><a class="el" href="classcookmem_1_1MemPool.html#ae7a051b14eebc937048514b03fa40065">size_type</a> <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a>&lt; Arena, Logger, T &gt;::getFootPrintLimit </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -513,19 +552,19 @@ template&lt;class MemArena, class T = void&gt; </div>
 
 </div>
 </div>
-<a id="a51df4f3224fd61bd9c425ae6bf6f9d6c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a51df4f3224fd61bd9c425ae6bf6f9d6c">&#9670;&nbsp;</a></span>getMaxFootprint()</h2>
+<a id="a57228bfefdd8d39de07cb8f0a5e8be75"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a57228bfefdd8d39de07cb8f0a5e8be75">&#9670;&nbsp;</a></span>getMaxFootprint()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class MemArena, class T = void&gt; </div>
+template&lt;class Arena, class Logger, class T = void&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::size_t <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a>&lt; <a class="el" href="classcookmem_1_1MemArena.html">MemArena</a>, T &gt;::getMaxFootprint </td>
+          <td class="memname"><a class="el" href="classcookmem_1_1MemPool.html#ae7a051b14eebc937048514b03fa40065">size_type</a> <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a>&lt; Arena, Logger, T &gt;::getMaxFootprint </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -542,19 +581,144 @@ template&lt;class MemArena, class T = void&gt; </div>
 
 </div>
 </div>
-<a id="ace93564348ef4da1100fa163d346fae7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ace93564348ef4da1100fa163d346fae7">&#9670;&nbsp;</a></span>reallocate()</h2>
+<a id="ae25d5655bba7b9404cb80f264463fce6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae25d5655bba7b9404cb80f264463fce6">&#9670;&nbsp;</a></span>getPaddingByte()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class MemArena, class T = void&gt; </div>
+template&lt;class Arena, class Logger, class T = void&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">T* <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a>&lt; <a class="el" href="classcookmem_1_1MemArena.html">MemArena</a>, T &gt;::reallocate </td>
+          <td class="memname">std::uint8_t <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a>&lt; Arena, Logger, T &gt;::getPaddingByte </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Get the padding byte.</p>
+<dl class="section return"><dt>Returns</dt><dd>The padding byte. </dd></dl>
+
+</div>
+</div>
+<a id="a5cbc65ea93153418b0c5b5e6fbb38756"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5cbc65ea93153418b0c5b5e6fbb38756">&#9670;&nbsp;</a></span>getUserSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Arena, class Logger, class T = void&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1MemPool.html#ae7a051b14eebc937048514b03fa40065">size_type</a> <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a>&lt; Arena, Logger, T &gt;::getUserSize </td>
+          <td>(</td>
+          <td class="paramtype">T *&#160;</td>
+          <td class="paramname"><em>ptr</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Gets the allocated size for a pointer.</p>
+<p>If we are storing the exact size of the pointer, then the result can match the exact size of user's allocation.</p>
+<p>Otherwise, the result is the aligned size.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ptr</td><td>A pointer. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the allocation size. if the pointer is nullptr, the result is 0. if the pointer is not used, the result is 0. </dd></dl>
+
+</div>
+</div>
+<a id="abd4b2358afa0f6be7d39a3712d9c8261"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd4b2358afa0f6be7d39a3712d9c8261">&#9670;&nbsp;</a></span>isPadding()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Arena, class Logger, class T = void&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a>&lt; Arena, Logger, T &gt;::isPadding </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Check whether or not we are padding bytes at the end of the allocated memory.</p>
+<dl class="section return"><dt>Returns</dt><dd>whether or not we are padding bytes at the end of the allocated memory. </dd></dl>
+
+</div>
+</div>
+<a id="af72dab8937b646a8bb97fb188318e87d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af72dab8937b646a8bb97fb188318e87d">&#9670;&nbsp;</a></span>isStoringExactSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Arena, class Logger, class T = void&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a>&lt; Arena, Logger, T &gt;::isStoringExactSize </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Check whether or not we are storing the exact user size in the memory.</p>
+<dl class="section return"><dt>Returns</dt><dd>whether or not we are storing the exact user size in the memory. </dd></dl>
+
+</div>
+</div>
+<a id="a779dd0f4f52caef7a417a60e8a3ac7c8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a779dd0f4f52caef7a417a60e8a3ac7c8">&#9670;&nbsp;</a></span>reallocate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Arena, class Logger, class T = void&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">T* <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a>&lt; Arena, Logger, T &gt;::reallocate </td>
           <td>(</td>
           <td class="paramtype">T *&#160;</td>
           <td class="paramname"><em>ptr</em>, </td>
@@ -562,8 +726,8 @@ template&lt;class MemArena, class T = void&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::size_t&#160;</td>
-          <td class="paramname"><em>size</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="classcookmem_1_1MemPool.html#ae7a051b14eebc937048514b03fa40065">size_type</a>&#160;</td>
+          <td class="paramname"><em>newUserSize</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -581,27 +745,27 @@ template&lt;class MemArena, class T = void&gt; </div>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">ptr</td><td>the current memory pointer. </td></tr>
-    <tr><td class="paramname">size</td><td>the new size </td></tr>
+    <tr><td class="paramname">newUserSize</td><td>the new size </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the reallocated pointer. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>the reallocated pointer. If the new size cannot be satisfied, a nullptr is returned and the old pointer remains valid. </dd></dl>
 
 </div>
 </div>
-<a id="aa53110ef23f89559ce100d22f50a0383"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa53110ef23f89559ce100d22f50a0383">&#9670;&nbsp;</a></span>releaseAll()</h2>
+<a id="ada94b1e98ca7f22960df2bd61dbe6cf6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ada94b1e98ca7f22960df2bd61dbe6cf6">&#9670;&nbsp;</a></span>releaseAll()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class MemArena, class T = void&gt; </div>
+template&lt;class Arena, class Logger, class T = void&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a>&lt; <a class="el" href="classcookmem_1_1MemArena.html">MemArena</a>, T &gt;::releaseAll </td>
+          <td class="memname">void <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a>&lt; Arena, Logger, T &gt;::releaseAll </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -617,21 +781,21 @@ template&lt;class MemArena, class T = void&gt; </div>
 
 </div>
 </div>
-<a id="aeaeaa6e036407550fc5f089735953fb8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aeaeaa6e036407550fc5f089735953fb8">&#9670;&nbsp;</a></span>setFootprintLimit()</h2>
+<a id="a20c57a5b86d49fef4160e750acb1e05a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a20c57a5b86d49fef4160e750acb1e05a">&#9670;&nbsp;</a></span>setFootprintLimit()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class MemArena, class T = void&gt; </div>
+template&lt;class Arena, class Logger, class T = void&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a>&lt; <a class="el" href="classcookmem_1_1MemArena.html">MemArena</a>, T &gt;::setFootprintLimit </td>
+          <td class="memname">void <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a>&lt; Arena, Logger, T &gt;::setFootprintLimit </td>
           <td>(</td>
-          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramtype"><a class="el" href="classcookmem_1_1MemPool.html#ae7a051b14eebc937048514b03fa40065">size_type</a>&#160;</td>
           <td class="paramname"><em>footprintLimit</em></td><td>)</td>
           <td></td>
         </tr>
@@ -652,8 +816,79 @@ template&lt;class MemArena, class T = void&gt; </div>
 
 </div>
 </div>
+<a id="af2c69d5d5da99fd5f7833746fe7bee4a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af2c69d5d5da99fd5f7833746fe7bee4a">&#9670;&nbsp;</a></span>setPaddingByte()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Arena, class Logger, class T = void&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a>&lt; Arena, Logger, T &gt;::setPaddingByte </td>
+          <td>(</td>
+          <td class="paramtype">std::uint8_t&#160;</td>
+          <td class="paramname"><em>paddingByte</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Set the padding byte.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">paddingByte</td><td>The padding byte. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a11ea02d1b8250face5505feaaef0cf09"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a11ea02d1b8250face5505feaaef0cf09">&#9670;&nbsp;</a></span>setStoringExactSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Arena, class Logger, class T = void&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a>&lt; Arena, Logger, T &gt;::setStoringExactSize </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>b</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Set whether or not we should be storing the exact user size in memory.</p>
+<p>It can only be changed if the current padding is false.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">b</td><td>the boolean choice </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li><a class="el" href="cookmem_8h_source.html">cookmem.h</a></li>
+<li><a class="el" href="cookmempool_8h_source.html">cookmempool.h</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

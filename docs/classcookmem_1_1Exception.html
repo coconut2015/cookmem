@@ -92,16 +92,18 @@ $(document).ready(function(){initNavTree('classcookmem_1_1Exception.html','');})
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a96a6d99068f3faa1b9df9263f1e04c75"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1Exception.html#a96a6d99068f3faa1b9df9263f1e04c75">Exception</a> (const char *msg)</td></tr>
-<tr class="separator:a96a6d99068f3faa1b9df9263f1e04c75"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acaafba7436b2e0f3552db5e29db84300"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1Exception.html#acaafba7436b2e0f3552db5e29db84300">getMessage</a> ()</td></tr>
-<tr class="separator:acaafba7436b2e0f3552db5e29db84300"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57f60d8c4a7a2b4ea8e16c018be7598e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1Exception.html#a57f60d8c4a7a2b4ea8e16c018be7598e">Exception</a> (MemError_et error, const char *msg)</td></tr>
+<tr class="separator:a57f60d8c4a7a2b4ea8e16c018be7598e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c88b4a50222e56949e221bdbe6dc84d"><td class="memItemLeft" align="right" valign="top">const MemError_et&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1Exception.html#a8c88b4a50222e56949e221bdbe6dc84d">getError</a> () const</td></tr>
+<tr class="separator:a8c88b4a50222e56949e221bdbe6dc84d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6e0a952ee5d48b27da4944953d735fc"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1Exception.html#aa6e0a952ee5d48b27da4944953d735fc">getMessage</a> () const</td></tr>
+<tr class="separator:aa6e0a952ee5d48b27da4944953d735fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A simple memory related exception. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a96a6d99068f3faa1b9df9263f1e04c75"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a96a6d99068f3faa1b9df9263f1e04c75">&#9670;&nbsp;</a></span>Exception()</h2>
+<a id="a57f60d8c4a7a2b4ea8e16c018be7598e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a57f60d8c4a7a2b4ea8e16c018be7598e">&#9670;&nbsp;</a></span>Exception()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -112,9 +114,19 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">cookmem::Exception::Exception </td>
           <td>(</td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>msg</em></td><td>)</td>
+          <td class="paramtype">MemError_et&#160;</td>
+          <td class="paramname"><em>error</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>msg</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -134,8 +146,35 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="acaafba7436b2e0f3552db5e29db84300"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acaafba7436b2e0f3552db5e29db84300">&#9670;&nbsp;</a></span>getMessage()</h2>
+<a id="a8c88b4a50222e56949e221bdbe6dc84d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c88b4a50222e56949e221bdbe6dc84d">&#9670;&nbsp;</a></span>getError()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const MemError_et cookmem::Exception::getError </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Get the exception error.</p>
+<dl class="section return"><dt>Returns</dt><dd>the exception error. </dd></dl>
+
+</div>
+</div>
+<a id="aa6e0a952ee5d48b27da4944953d735fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa6e0a952ee5d48b27da4944953d735fc">&#9670;&nbsp;</a></span>getMessage()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -147,7 +186,7 @@ Public Member Functions</h2></td></tr>
           <td class="memname">const char* cookmem::Exception::getMessage </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td></td>
+          <td> const</td>
         </tr>
       </table>
   </td>

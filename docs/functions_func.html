@@ -88,7 +88,8 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 , <a class="el" href="classcookmem_1_1PtrAVLTree.html#a4ca63ce0ed6058944c1337480fcb86e1">cookmem::PtrAVLTree</a>
 </li>
 <li>allocate()
-: <a class="el" href="classcookmem_1_1MemPool.html#ae185bb0bd1dee7de3d052b337498bbf6">cookmem::MemPool&lt; MemArena, T &gt;</a>
+: <a class="el" href="classcookmem_1_1MemContext.html#abe761f043180e6b0e6609c703c96d285">cookmem::MemContext&lt; Arena, Logger, T &gt;</a>
+, <a class="el" href="classcookmem_1_1MemPool.html#ac5b57dff29a64366c727e0c83d054201">cookmem::MemPool&lt; Arena, Logger, T &gt;</a>
 </li>
 </ul>
 
@@ -98,24 +99,27 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 : <a class="el" href="classcookmem_1_1CachedArena.html#a3a3ba478eda0304fc539f612ae962ff3">cookmem::CachedArena&lt; Arena &gt;</a>
 </li>
 <li>callocate()
-: <a class="el" href="classcookmem_1_1MemPool.html#a6828410b4c1be12c28fabe822e6558db">cookmem::MemPool&lt; MemArena, T &gt;</a>
+: <a class="el" href="classcookmem_1_1MemContext.html#acc8202b0689b06c897f9aa7c2595ed52">cookmem::MemContext&lt; Arena, Logger, T &gt;</a>
+, <a class="el" href="classcookmem_1_1MemPool.html#a5e7af4edcd1620132112dcbcf488b7b4">cookmem::MemPool&lt; Arena, Logger, T &gt;</a>
 </li>
 <li>contains()
-: <a class="el" href="classcookmem_1_1MemPool.html#a52b132564dc7bd5eb24650834cb949ea">cookmem::MemPool&lt; MemArena, T &gt;</a>
+: <a class="el" href="classcookmem_1_1MemContext.html#af1de3191fa7a69fb7c6af17e8d4f6a06">cookmem::MemContext&lt; Arena, Logger, T &gt;</a>
+, <a class="el" href="classcookmem_1_1MemPool.html#a69306fa0f64e3bbd674bbb8426f1e81a">cookmem::MemPool&lt; Arena, Logger, T &gt;</a>
 </li>
 </ul>
 
 
 <h3><a id="index_d"></a>- d -</h3><ul>
 <li>deallocate()
-: <a class="el" href="classcookmem_1_1MemPool.html#addb55cb3331907efe0cebf9fc711959c">cookmem::MemPool&lt; MemArena, T &gt;</a>
+: <a class="el" href="classcookmem_1_1MemContext.html#ae24f4696209fc9b1d205a57c328daa2f">cookmem::MemContext&lt; Arena, Logger, T &gt;</a>
+, <a class="el" href="classcookmem_1_1MemPool.html#a80060bb2acc4cb209b5ed206430c61bd">cookmem::MemPool&lt; Arena, Logger, T &gt;</a>
 </li>
 </ul>
 
 
 <h3><a id="index_e"></a>- e -</h3><ul>
 <li>Exception()
-: <a class="el" href="classcookmem_1_1Exception.html#a96a6d99068f3faa1b9df9263f1e04c75">cookmem::Exception</a>
+: <a class="el" href="classcookmem_1_1Exception.html#a57f60d8c4a7a2b4ea8e16c018be7598e">cookmem::Exception</a>
 </li>
 </ul>
 
@@ -135,17 +139,36 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 
 
 <h3><a id="index_g"></a>- g -</h3><ul>
+<li>getArena()
+: <a class="el" href="classcookmem_1_1MemContext.html#aa1d770fa9fc999fdf13ac47e506700fb">cookmem::MemContext&lt; Arena, Logger, T &gt;</a>
+</li>
+<li>getError()
+: <a class="el" href="classcookmem_1_1Exception.html#a8c88b4a50222e56949e221bdbe6dc84d">cookmem::Exception</a>
+</li>
 <li>getFootprint()
-: <a class="el" href="classcookmem_1_1MemPool.html#a27969d6e28877b2bd7da9dd900ed33e2">cookmem::MemPool&lt; MemArena, T &gt;</a>
+: <a class="el" href="classcookmem_1_1MemContext.html#a76e7b6846cf5d7135927916a1344f9e1">cookmem::MemContext&lt; Arena, Logger, T &gt;</a>
+, <a class="el" href="classcookmem_1_1MemPool.html#a5635660df8a0504c36644cfd174ee0e2">cookmem::MemPool&lt; Arena, Logger, T &gt;</a>
 </li>
 <li>getFootPrintLimit()
-: <a class="el" href="classcookmem_1_1MemPool.html#a59c849cc04b0278d28d12e152750e3b6">cookmem::MemPool&lt; MemArena, T &gt;</a>
+: <a class="el" href="classcookmem_1_1MemContext.html#a75ea25a1c9c25471bfcfdad6c200f137">cookmem::MemContext&lt; Arena, Logger, T &gt;</a>
+, <a class="el" href="classcookmem_1_1MemPool.html#ac272cd12f0d861bdf99be08f8259fa19">cookmem::MemPool&lt; Arena, Logger, T &gt;</a>
+</li>
+<li>getLogger()
+: <a class="el" href="classcookmem_1_1MemContext.html#af257b4931a8afa37fce2b78ef3b354a3">cookmem::MemContext&lt; Arena, Logger, T &gt;</a>
 </li>
 <li>getMaxFootprint()
-: <a class="el" href="classcookmem_1_1MemPool.html#a51df4f3224fd61bd9c425ae6bf6f9d6c">cookmem::MemPool&lt; MemArena, T &gt;</a>
+: <a class="el" href="classcookmem_1_1MemContext.html#ac2353e83620c7f791d5804f8f712a071">cookmem::MemContext&lt; Arena, Logger, T &gt;</a>
+, <a class="el" href="classcookmem_1_1MemPool.html#a57228bfefdd8d39de07cb8f0a5e8be75">cookmem::MemPool&lt; Arena, Logger, T &gt;</a>
 </li>
 <li>getMessage()
-: <a class="el" href="classcookmem_1_1Exception.html#acaafba7436b2e0f3552db5e29db84300">cookmem::Exception</a>
+: <a class="el" href="classcookmem_1_1Exception.html#aa6e0a952ee5d48b27da4944953d735fc">cookmem::Exception</a>
+</li>
+<li>getPaddingByte()
+: <a class="el" href="classcookmem_1_1MemContext.html#aea24cf2aefb67dd9166a486dc79a187d">cookmem::MemContext&lt; Arena, Logger, T &gt;</a>
+, <a class="el" href="classcookmem_1_1MemPool.html#ae25d5655bba7b9404cb80f264463fce6">cookmem::MemPool&lt; Arena, Logger, T &gt;</a>
+</li>
+<li>getPool()
+: <a class="el" href="classcookmem_1_1MemContext.html#a97a0dafbf22756feab0c606291f9715d">cookmem::MemContext&lt; Arena, Logger, T &gt;</a>
 </li>
 <li>getSegment()
 : <a class="el" href="classcookmem_1_1CachedArena.html#a26574c4201ec8cf1978248691d3c1b5a">cookmem::CachedArena&lt; Arena &gt;</a>
@@ -153,6 +176,12 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 , <a class="el" href="classcookmem_1_1MallocArena.html#a3c77304b5537088c5221ba495410f63d">cookmem::MallocArena</a>
 , <a class="el" href="classcookmem_1_1MemArena.html#ac538893fb62f4d139bbfe5d2e7f82b6c">cookmem::MemArena</a>
 , <a class="el" href="classcookmem_1_1MmapArena.html#a941b6de7da37c7903790a6d2038d4221">cookmem::MmapArena</a>
+</li>
+<li>getSize()
+: <a class="el" href="classcookmem_1_1MemContext.html#a1b6b66b7a729aa0c2a7ff7c5952a8f46">cookmem::MemContext&lt; Arena, Logger, T &gt;</a>
+</li>
+<li>getUserSize()
+: <a class="el" href="classcookmem_1_1MemPool.html#a5cbc65ea93153418b0c5b5e6fbb38756">cookmem::MemPool&lt; Arena, Logger, T &gt;</a>
 </li>
 </ul>
 
@@ -162,6 +191,14 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 : <a class="el" href="classcookmem_1_1CircularList.html#ae0cf87b31cf44696f816dc4376728eb2">cookmem::CircularList&lt; Node &gt;</a>
 , <a class="el" href="classcookmem_1_1PtrAVLTree.html#a24a16d1a2d9a70f5b96b9f78b354598b">cookmem::PtrAVLTree</a>
 </li>
+<li>isPadding()
+: <a class="el" href="classcookmem_1_1MemContext.html#a9f1c30d91638abcf2ac3274ac6fe14b5">cookmem::MemContext&lt; Arena, Logger, T &gt;</a>
+, <a class="el" href="classcookmem_1_1MemPool.html#abd4b2358afa0f6be7d39a3712d9c8261">cookmem::MemPool&lt; Arena, Logger, T &gt;</a>
+</li>
+<li>isStoringExactSize()
+: <a class="el" href="classcookmem_1_1MemContext.html#a37d4a81cc07a6e67d967369386311ca1">cookmem::MemContext&lt; Arena, Logger, T &gt;</a>
+, <a class="el" href="classcookmem_1_1MemPool.html#af72dab8937b646a8bb97fb188318e87d">cookmem::MemPool&lt; Arena, Logger, T &gt;</a>
+</li>
 </ul>
 
 
@@ -170,7 +207,7 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 : <a class="el" href="classcookmem_1_1MallocArena.html#a0cba4cc6cf620b0ddf7edc9297e0f603">cookmem::MallocArena</a>
 </li>
 <li>MemPool()
-: <a class="el" href="classcookmem_1_1MemPool.html#af1e27577e7a96bcefcb91d95f52e48de">cookmem::MemPool&lt; MemArena, T &gt;</a>
+: <a class="el" href="classcookmem_1_1MemPool.html#abab4700193f16ba3d5bee92e407f2305">cookmem::MemPool&lt; Arena, Logger, T &gt;</a>
 </li>
 <li>MmapArena()
 : <a class="el" href="classcookmem_1_1MmapArena.html#abe4ab5cc79aefa2522e0bcb4bf06b8a1">cookmem::MmapArena</a>
@@ -190,10 +227,12 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 
 <h3><a id="index_r"></a>- r -</h3><ul>
 <li>reallocate()
-: <a class="el" href="classcookmem_1_1MemPool.html#ace93564348ef4da1100fa163d346fae7">cookmem::MemPool&lt; MemArena, T &gt;</a>
+: <a class="el" href="classcookmem_1_1MemContext.html#a365a9980fe45f6f185f5e56a4327b624">cookmem::MemContext&lt; Arena, Logger, T &gt;</a>
+, <a class="el" href="classcookmem_1_1MemPool.html#a779dd0f4f52caef7a417a60e8a3ac7c8">cookmem::MemPool&lt; Arena, Logger, T &gt;</a>
 </li>
 <li>releaseAll()
-: <a class="el" href="classcookmem_1_1MemPool.html#aa53110ef23f89559ce100d22f50a0383">cookmem::MemPool&lt; MemArena, T &gt;</a>
+: <a class="el" href="classcookmem_1_1MemContext.html#a185281bc031db04792819826cf62d66e">cookmem::MemContext&lt; Arena, Logger, T &gt;</a>
+, <a class="el" href="classcookmem_1_1MemPool.html#ada94b1e98ca7f22960df2bd61dbe6cf6">cookmem::MemPool&lt; Arena, Logger, T &gt;</a>
 </li>
 <li>remove()
 : <a class="el" href="classcookmem_1_1CircularList.html#a14e8bf203f7ff1f63e2d48d00c0777e9">cookmem::CircularList&lt; Node &gt;</a>
@@ -204,14 +243,23 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 
 <h3><a id="index_s"></a>- s -</h3><ul>
 <li>setFootprintLimit()
-: <a class="el" href="classcookmem_1_1MemPool.html#aeaeaa6e036407550fc5f089735953fb8">cookmem::MemPool&lt; MemArena, T &gt;</a>
+: <a class="el" href="classcookmem_1_1MemContext.html#a351598a0c0fe8886b2ac8f4cf1a6750f">cookmem::MemContext&lt; Arena, Logger, T &gt;</a>
+, <a class="el" href="classcookmem_1_1MemPool.html#a20c57a5b86d49fef4160e750acb1e05a">cookmem::MemPool&lt; Arena, Logger, T &gt;</a>
+</li>
+<li>setPaddingByte()
+: <a class="el" href="classcookmem_1_1MemContext.html#a6612333ad8022577348352faf75c2fad">cookmem::MemContext&lt; Arena, Logger, T &gt;</a>
+, <a class="el" href="classcookmem_1_1MemPool.html#af2c69d5d5da99fd5f7833746fe7bee4a">cookmem::MemPool&lt; Arena, Logger, T &gt;</a>
+</li>
+<li>setStoringExactSize()
+: <a class="el" href="classcookmem_1_1MemContext.html#a685b74fd2af68e1cd7839150dd040c3b">cookmem::MemContext&lt; Arena, Logger, T &gt;</a>
+, <a class="el" href="classcookmem_1_1MemPool.html#a11ea02d1b8250face5505feaaef0cf09">cookmem::MemPool&lt; Arena, Logger, T &gt;</a>
 </li>
 </ul>
 
 
 <h3><a id="index_0x7e"></a>- ~ -</h3><ul>
 <li>~MemPool()
-: <a class="el" href="classcookmem_1_1MemPool.html#acae587530c44fb5d584dbd7de4c0caca">cookmem::MemPool&lt; MemArena, T &gt;</a>
+: <a class="el" href="classcookmem_1_1MemPool.html#a489bc6a337e66bf56727196c8cec7860">cookmem::MemPool&lt; Arena, Logger, T &gt;</a>
 </li>
 <li>~PtrAVLTree()
 : <a class="el" href="classcookmem_1_1PtrAVLTree.html#ae1a88304f7310bfd7cc330a6b099f35d">cookmem::PtrAVLTree</a>

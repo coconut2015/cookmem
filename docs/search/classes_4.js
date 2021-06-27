@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['ptravltree',['PtrAVLTree',['../classcookmem_1_1PtrAVLTree.html',1,'cookmem']]]
+  ['noactionmemlogger',['NoActionMemLogger',['../classcookmem_1_1NoActionMemLogger.html',1,'cookmem']]]
 ];
