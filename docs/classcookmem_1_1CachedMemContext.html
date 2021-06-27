@@ -82,6 +82,7 @@ $(document).ready(function(){initNavTree('classcookmem_1_1CachedMemContext.html'
 <div class="header">
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="classcookmem_1_1CachedMemContext-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">cookmem::CachedMemContext&lt; Arena, Logger, T &gt; Class Template Reference</div>  </div>
@@ -144,8 +145,11 @@ typedef <a class="el" href="classcookmem_1_1MemPool.html">MemPool</a>&lt; <a cla
 <tr class="memitem:a4dd6bda0e3ecc1ebdd7d2ff41aec9f7d inherit pub_types_classcookmem_1_1MemContext"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classcookmem_1_1MemPool.html#ac3f0f0c03b5f1ee3dc049342b516d9d9">Pool::const_pointer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemContext.html#a4dd6bda0e3ecc1ebdd7d2ff41aec9f7d">const_pointer</a></td></tr>
 <tr class="separator:a4dd6bda0e3ecc1ebdd7d2ff41aec9f7d inherit pub_types_classcookmem_1_1MemContext"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a66baa6072d5c25a4bc75dbb7b44f2303"><td class="memItemLeft" align="right" valign="top"><a id="a66baa6072d5c25a4bc75dbb7b44f2303"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>CachedMemContext</b> (bool padding=false)</td></tr>
+<tr class="separator:a66baa6072d5c25a4bc75dbb7b44f2303"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classcookmem_1_1MemContext"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classcookmem_1_1MemContext')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classcookmem_1_1MemContext.html">cookmem::MemContext&lt; CachedArena&lt; Arena &gt;, Logger, T &gt;</a></td></tr>
 <tr class="memitem:a9688029b0e2f99224ff5943cde8c3812 inherit pub_methods_classcookmem_1_1MemContext"><td class="memItemLeft" align="right" valign="top"><a id="a9688029b0e2f99224ff5943cde8c3812"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>MemContext</b> (<a class="el" href="classcookmem_1_1CachedArena.html">CachedArena</a>&lt; Arena &gt; &amp;arena, Logger &amp;logger, bool padding=false)</td></tr>
@@ -205,7 +209,7 @@ class cookmem::CachedMemContext&lt; Arena, Logger, T &gt;</h3>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class Arena  = MmapArena, class Logger  = NoActionMemLogger, class T  = void&gt; </div>
+template&lt;class Arena = MmapArena, class Logger = NoActionMemLogger, class T = void&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">typedef <a class="el" href="classcookmem_1_1MemContext.html#a4dd6bda0e3ecc1ebdd7d2ff41aec9f7d">MemCtx::const_pointer</a> <a class="el" href="classcookmem_1_1CachedMemContext.html">cookmem::CachedMemContext</a>&lt; Arena, Logger, T &gt;::<a class="el" href="classcookmem_1_1CachedMemContext.html#aa5571af8e47cc5c866cbbb65b3d80985">const_pointer</a></td>
@@ -222,7 +226,7 @@ template&lt;class Arena  = MmapArena, class Logger  = NoActionMemLogger, class T
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class Arena  = MmapArena, class Logger  = NoActionMemLogger, class T  = void&gt; </div>
+template&lt;class Arena = MmapArena, class Logger = NoActionMemLogger, class T = void&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">typedef <a class="el" href="classcookmem_1_1MemContext.html#aa0893450204715450ded06a58d094cb4">MemCtx::difference_type</a> <a class="el" href="classcookmem_1_1CachedMemContext.html">cookmem::CachedMemContext</a>&lt; Arena, Logger, T &gt;::<a class="el" href="classcookmem_1_1CachedMemContext.html#a9d3286cab8b1793f43c5d3f9cca0fbb4">difference_type</a></td>
@@ -239,7 +243,7 @@ template&lt;class Arena  = MmapArena, class Logger  = NoActionMemLogger, class T
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class Arena  = MmapArena, class Logger  = NoActionMemLogger, class T  = void&gt; </div>
+template&lt;class Arena = MmapArena, class Logger = NoActionMemLogger, class T = void&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">typedef <a class="el" href="classcookmem_1_1MemContext.html#a600b237b4fb6f9c720f4b8e9359435e7">MemCtx::pointer</a> <a class="el" href="classcookmem_1_1CachedMemContext.html">cookmem::CachedMemContext</a>&lt; Arena, Logger, T &gt;::<a class="el" href="classcookmem_1_1CachedMemContext.html#afde895172b46a58f81c537cac0bd2cd5">pointer</a></td>
@@ -256,7 +260,7 @@ template&lt;class Arena  = MmapArena, class Logger  = NoActionMemLogger, class T
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class Arena  = MmapArena, class Logger  = NoActionMemLogger, class T  = void&gt; </div>
+template&lt;class Arena = MmapArena, class Logger = NoActionMemLogger, class T = void&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">typedef MemCtx::size_type <a class="el" href="classcookmem_1_1CachedMemContext.html">cookmem::CachedMemContext</a>&lt; Arena, Logger, T &gt;::<a class="el" href="classcookmem_1_1CachedMemContext.html#ae4f7673041d1e90cac793a3794a9f365">size_type</a></td>
@@ -273,7 +277,7 @@ template&lt;class Arena  = MmapArena, class Logger  = NoActionMemLogger, class T
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class Arena  = MmapArena, class Logger  = NoActionMemLogger, class T  = void&gt; </div>
+template&lt;class Arena = MmapArena, class Logger = NoActionMemLogger, class T = void&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">typedef <a class="el" href="classcookmem_1_1MemContext.html#a02c436361ded434a7a322b871f14eae5">MemCtx::value_type</a> <a class="el" href="classcookmem_1_1CachedMemContext.html">cookmem::CachedMemContext</a>&lt; Arena, Logger, T &gt;::<a class="el" href="classcookmem_1_1CachedMemContext.html#a5b1e989865a558cf924dd0f9089c3bbf">value_type</a></td>

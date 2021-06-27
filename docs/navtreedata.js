@@ -5,7 +5,9 @@ var NAVTREE =
       [ "cookmem::FixedArena", "tutorials.html#ex_1", null ],
       [ "cookmem::MmapArena", "tutorials.html#ex_2", null ],
       [ "cookmem::CachedArena", "tutorials.html#ex_3", null ],
-      [ "Copying Data Between Memory Pools", "tutorials.html#ex_4", null ]
+      [ "Copying Data Between Memory Pools", "tutorials.html#ex_4", null ],
+      [ "Pointer Information", "tutorials.html#Querying", null ],
+      [ "Corruption Detection", "tutorials.html#Memory", null ]
     ] ],
     [ "Current Limitations", "limitations.html", null ],
     [ "Installation", "install.html", null ],

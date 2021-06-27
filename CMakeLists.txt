@@ -171,3 +171,13 @@ add_executable(ex_4
 	examples/ex_4.cpp)
 add_test(NAME ex_4
 	COMMAND ex_4)
+
+add_executable(ex_5
+	examples/ex_5.cpp)
+add_test(NAME ex_5
+	COMMAND ex_5)
+
+add_executable(ex_6
+	examples/ex_6.cpp)
+add_test(NAME ex_6
+	COMMAND ex_6)

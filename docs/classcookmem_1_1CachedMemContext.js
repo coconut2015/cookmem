@@ -7,6 +7,6 @@ var classcookmem_1_1CachedMemContext =
     [ "pointer", "classcookmem_1_1CachedMemContext.html#afde895172b46a58f81c537cac0bd2cd5", null ],
     [ "size_type", "classcookmem_1_1CachedMemContext.html#ae4f7673041d1e90cac793a3794a9f365", null ],
     [ "value_type", "classcookmem_1_1CachedMemContext.html#a5b1e989865a558cf924dd0f9089c3bbf", null ],
-    [ "CachedMemContext", "classcookmem_1_1CachedMemContext.html#a50b652a20a74dafefc1760cf92afee4c", null ],
+    [ "CachedMemContext", "classcookmem_1_1CachedMemContext.html#a66baa6072d5c25a4bc75dbb7b44f2303", null ],
     [ "~CachedMemContext", "classcookmem_1_1CachedMemContext.html#aeb1063d689eb3fa49c890dd839ebd2b7", null ]
 ];

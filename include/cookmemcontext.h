@@ -371,9 +371,9 @@ public:
     typedef typename MemCtx::const_pointer      const_pointer;
 
 public:
-    CachedMemContext ()
+    CachedMemContext (bool padding = false)
     : Container (),
-      MemCtx (Container::cachedArena, Container::logger)
+      MemCtx (Container::cachedArena, Container::logger, padding)
     {
     }
 
