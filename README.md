@@ -5,14 +5,18 @@ CookMem {#mainpage}
 
 CookMem is a [memory context](https://en.wikipedia.org/wiki/Region-based_memory_management)
 / allocator written in C++11 that can be easily and quickly cleaned up by
-freeing the segments, rather than doing individual frees.  It is extremely
-useful to deal with third party libraries that can potentially have memory
-leaks, or to simplify the memory management.
+freeing the segments, rather than doing individual frees.
 
-Unlike projects like [nedmalloc](https://www.nedprod.com/programs/portable/nedmalloc/),
-this project focuses on the single-thread performance.  It is intended to be
-used within a thread, such that it would not have to pay for the cost of
-synchronization for tiny allocations / deallocations.
+Unlike projects such as [nedmalloc](https://www.nedprod.com/programs/portable/nedmalloc/)
+which is intended to replace ```malloc``` / ```free``` in multi-threaded
+applications, this project focuses on the single-thread performance.  It is
+intended to be used within a thread in an MPP process, such that it would
+not have to pay for the cost of synchronization for tiny
+allocations / deallocations.
+
+Additionally, cookmem separates out the logic for obtaining large segments
+of memory, to allow users easily creating their flavor of the memory context
+for their specific needs.
 
 The algorithms and some code used here are based on [dlmalloc](http://gee.cs.oswego.edu/dl/html/malloc.html).
 I basically took the pain to understand dlmalloc and rewrote the logics
