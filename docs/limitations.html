@@ -86,11 +86,10 @@ $(document).ready(function(){initNavTree('limitations.html','');});
 <div class="contents">
 <div class="textblock"><ol type="1">
 <li>Coalescing of memory chunks is not yet implemented.</li>
-<li>Locking support is not yet added.</li>
-<li>There are no logics for detecting memory corruptions.</li>
-<li>There are no debugging capabilities.</li>
+<li>Locking support is not added. This feature will not be implemented since this project is to be used within a thread.</li>
+<li>The ability to fill the newly allocated memory or deallocated memory with some magic values. Filling hew newly allocated memory with magic values could be added in the future. However, filling deallocated memory with magic values would have limitations due to the internal structures being used.</li>
 </ol>
-<p>These features will be added later when I have time. </p>
+<p>Some of these features will be added later when I have time. </p>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

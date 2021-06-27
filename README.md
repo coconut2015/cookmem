@@ -24,5 +24,5 @@ which dlmalloc uses.  [AVL tree](https://en.wikipedia.org/wiki/AVL_tree)
 is used instead.  There can be some minor performance trade offs.  Maybe one
 day I will learn the RB-tree and check the difference ;)
 
-Documention: http://coconut2015.github.io/cookmem/
-Source: https://github.com/coconut2015/cookmem
+* Documention: http://coconut2015.github.io/cookmem/
+* Source: https://github.com/coconut2015/cookmem

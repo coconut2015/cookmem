@@ -2,9 +2,9 @@ var NAVTREE =
 [
   [ "CookMem", "index.html", [
     [ "Tutorials", "tutorials.html", [
-      [ "Simple Memory Wrapper Arena", "tutorials.html#ex_1", null ],
-      [ "mmap Based Memory Arena", "tutorials.html#ex_2", null ],
-      [ "Cached Memory Arena", "tutorials.html#ex_3", null ],
+      [ "cookmem::FixedArena", "tutorials.html#ex_1", null ],
+      [ "cookmem::MmapArena", "tutorials.html#ex_2", null ],
+      [ "cookmem::CachedArena", "tutorials.html#ex_3", null ],
       [ "Copying Data Between Memory Pools", "tutorials.html#ex_4", null ]
     ] ],
     [ "Current Limitations", "limitations.html", null ],
