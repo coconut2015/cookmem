@@ -35,6 +35,11 @@ test1 ()
     ASSERT_EQ (true, list.isEmpty ());
     ASSERT_EQ (nullptr, list.remove (size = 0));
 
+    for (int i = 0; i < 20; ++i)
+    {
+        ASSERT_EQ (false, list.contains (&n[i]));
+    }
+
     list.add (&n[0], 10);
     list.add (&n[1], 20);
     list.add (&n[2], 30);
@@ -59,11 +64,23 @@ test1 ()
     ASSERT_EQ (false, list.isEmpty ());
     list.printGraph();
 
+    for (int i = 0; i < 20; ++i)
+    {
+        ASSERT_EQ (true, list.contains (&n[i]));
+    }
+
     ASSERT_EQ (&n[8], list.remove (size = 100));
+    ASSERT_EQ (false, list.contains (&n[8]));
+
     ASSERT_EQ (&n[14], list.remove (size = 550));
+    ASSERT_EQ (false, list.contains (&n[14]));
+
     ASSERT_EQ (&n[19], list.remove (size = 20));
+    ASSERT_EQ (false, list.contains (&n[19]));
     ASSERT_EQ (&n[5], list.remove (size = 20));
+    ASSERT_EQ (false, list.contains (&n[5]));
     ASSERT_EQ (&n[1], list.remove (size = 20));
+    ASSERT_EQ (false, list.contains (&n[1]));
     ASSERT_EQ (&n[7], list.remove (size = 80));
     ASSERT_EQ (&n[2], list.remove (size = 25));
     ASSERT_EQ (nullptr, list.remove (size = 10000));
@@ -87,11 +104,99 @@ test1 ()
     return 0;
 }
 
+static int
+test2 ()
+{
+    Node n[1];
+    std::size_t size;
+    cookmem::PtrAVLTree list;
+
+    list.add (&n[0], 10);
+    list.remove ((size = 10));
+
+    return 0;
+}
+
+static int
+test3 ()
+{
+    Node n[1];
+    cookmem::PtrAVLTree list;
+
+    list.add (&n[0], 10);
+    list.remove (&n[0]);
+
+    return 0;
+}
+
+static int
+test4 ()
+{
+    Node n[20];
+    std::size_t size;
+    cookmem::PtrAVLTree list;
+
+    ASSERT_EQ (true, list.isEmpty ());
+    ASSERT_EQ (nullptr, list.remove (size = 0));
+
+    for (int i = 0; i < 20; ++i)
+    {
+        ASSERT_EQ (false, list.contains (&n[i]));
+    }
+
+    list.add (&n[0], 10);
+    list.add (&n[1], 20);
+    list.add (&n[2], 30);
+    list.add (&n[3], 40);
+    list.add (&n[4], 50);
+    list.add (&n[5], 20);
+    list.add (&n[6], 40);
+    list.add (&n[7], 80);
+    list.add (&n[8], 150);
+    list.add (&n[9], 250);
+    list.add (&n[10], 60);
+    list.add (&n[11], 220);
+    list.add (&n[12], 330);
+    list.add (&n[13], 440);
+    list.add (&n[14], 550);
+    list.add (&n[15], 320);
+    list.add (&n[16], 340);
+    list.add (&n[17], 430);
+    list.add (&n[18], 10);
+    list.add (&n[19], 20);
+
+    list.remove (&n[8]);
+    list.remove (&n[14]);
+    list.remove (&n[19]);
+    list.remove (&n[5]);
+    list.remove (&n[1]);
+    list.remove (&n[7]);
+    list.remove (&n[2]);
+    list.remove (&n[15]);
+    list.remove (&n[12]);
+    list.remove (&n[16]);
+    list.remove (&n[17]);
+    list.remove (&n[4]);
+    list.remove (&n[10]);
+    list.remove (&n[13]);
+    list.remove (&n[11]);
+    list.remove (&n[9]);
+    list.remove (&n[18]);
+    list.remove (&n[0]);
+    list.remove (&n[6]);
+    list.remove (&n[3]);
+
+    ASSERT_EQ (true, list.isEmpty ());
+
+    return 0;
+}
 
 int
 main (int argc, const char* argv[])
 {
     ASSERT_EQ (0, test1 ());
-
+    ASSERT_EQ (0, test2 ());
+    ASSERT_EQ (0, test3 ());
+    ASSERT_EQ (0, test4 ());
     return 0;
 }

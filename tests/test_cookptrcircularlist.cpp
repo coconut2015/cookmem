@@ -39,7 +39,12 @@ test1 ()
 
     cookmem::CircularList<Node> list;
 
+    ASSERT_EQ (false, list.contains (&n1));
+
     list.add (&n1);
+
+    ASSERT_EQ (true, list.contains (&n1));
+
     list.add (&n2);
     list.add (&n3);
     list.add (&n4);
@@ -47,10 +52,21 @@ test1 ()
     list.add (&n6);
     list.add (&n7);
 
+    ASSERT_EQ (true, list.contains (&n1));
+    ASSERT_EQ (true, list.contains (&n2));
+    ASSERT_EQ (true, list.contains (&n3));
+    ASSERT_EQ (true, list.contains (&n4));
+    ASSERT_EQ (true, list.contains (&n5));
+    ASSERT_EQ (true, list.contains (&n6));
+    ASSERT_EQ (true, list.contains (&n7));
+
     ASSERT_EQ (&n1, list.remove ());
+    ASSERT_EQ (false, list.contains (&n1));
+
     ASSERT_EQ (&n7, list.remove ());
     ASSERT_EQ (&n6, list.remove ());
     ASSERT_EQ (&n5, list.remove ());
+    ASSERT_EQ (false, list.contains (&n5));
     ASSERT_EQ (&n4, list.remove ());
     ASSERT_EQ (&n3, list.remove ());
     ASSERT_EQ (&n2, list.remove ());

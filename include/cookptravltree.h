@@ -242,91 +242,7 @@ public:
             return next;
         }
 
-        Node* left = root->left;
-        Node* right = root->right;
-
-        Node* newRoot;
-        if (left == nullptr)
-        {
-            newRoot = right;
-        }
-        else if (right == nullptr)
-        {
-            newRoot = left;
-        }
-        else
-        {
-            // this is a more complicated case.
-            // the solution is the move the smallest of the right branch
-            // here.
-            std::int16_t newDepth;
-            Node* newStack[sizeof(Node*) * 8 + 1];
-            newStack[0] = right;
-            for (newDepth = 0; newStack[newDepth]->left != nullptr; ++newDepth)
-            {
-                newStack[newDepth + 1] = newStack[newDepth]->left;
-            }
-            Node* min = newStack[newDepth];
-            if (min == right)
-            {
-                newRoot = right;
-                setLeftChild (newRoot, left);
-            }
-            else
-            {
-                // first detach min from the parent
-                Node* parent = newStack[newDepth - 1];
-                parent->left = nullptr;
-
-                // rebalance the right
-                Node* newRight = balance (newStack, newDepth);
-                if (newRight != nullptr)
-                {
-                    right = newRight;
-                }
-
-                setLeftChild (min, left);
-                setRightChild (min, right);
-
-                newRoot = min;
-            }
-        }
-
-        if (depth == 0)
-        {
-            m_root = newRoot;
-            size = root->size;
-            return root;
-        }
-        if (newRoot == nullptr)
-        {
-            // so root is the leaf.
-            if (root->size < stack[depth - 1]->size)
-            {
-                stack[depth - 1]->left = nullptr;
-            }
-            else
-            {
-                stack[depth - 1]->right = nullptr;
-            }
-            newRoot = balance (stack, depth);
-            if (newRoot != nullptr)
-            {
-                m_root = newRoot;
-            }
-            size = root->size;
-            return root;
-        }
-
-        setParent (newRoot, stack[depth - 1]);
-
-        stack[depth] = newRoot;
-        newRoot = balance (stack, depth);
-
-        if (newRoot != nullptr)
-        {
-            m_root = newRoot;
-        }
+        removeNode (root, stack, depth);
         size = root->size;
         return root;
     }
@@ -412,67 +328,51 @@ public:
             return;
         }
 
-        Node* left = root->left;
-        Node* right = root->right;
+        removeNode (root, stack, depth);
+    }
 
-        Node* newRoot;
-        if (left == nullptr)
+    /**
+     * Check if the pointer is stored in the tree.
+     *
+     * @param   ptr
+     *          the pointer to be searched.
+     */
+    bool
+    contains (void* ptr)
+    {
+        if (m_root == nullptr)
         {
-            newRoot = right;
+            return false;
         }
-        else if (right == nullptr)
+
+        Node* node = reinterpret_cast<Node*>(ptr);
+        const std::size_t size = node->size;
+
+        Node* root = m_root;
+        while (root != nullptr)
         {
-            newRoot = left;
-        }
-        else
-        {
-            // this is a more complicated case.
-            // the solution is the move the smallest of the right branch
-            // here.
-            std::int16_t newDepth;
-            Node* newStack[sizeof(Node*) * 8 + 1];
-            newStack[0] = right;
-            for (newDepth = 0; newStack[newDepth]->left != nullptr; ++newDepth)
+            if (size < root->size)
             {
-                newStack[newDepth + 1] = newStack[newDepth]->left;
+                root = root->left;
             }
-            Node* min = newStack[newDepth];
-            if (min == right)
+            else if (size > root->size)
             {
-                newRoot = right;
-                setLeftChild (newRoot, left);
+                root = root->right;
             }
             else
             {
-                // first detach min from the parent
-                Node* parent = newStack[newDepth - 1];
-                parent->left = nullptr;
-
-                // rebalance the right
-                Node* newRight = balance (newStack, newDepth - 1);
-                if (newRight != nullptr)
+                do
                 {
-                    right = newRight;
+                    if (root == node)
+                    {
+                        return true;
+                    }
+                    root = root->next;
                 }
-
-                setLeftChild (min, left);
-                setRightChild (min, right);
-
-                newRoot = min;
+                while (root != nullptr);
             }
         }
-
-        if (depth == 0)
-        {
-            m_root = newRoot;
-        }
-        stack[depth] = newRoot;
-        newRoot = balance (stack, depth);
-
-        if (newRoot != nullptr)
-        {
-            m_root = newRoot;
-        }
+        return false;
     }
 
     /**
@@ -660,6 +560,94 @@ private:
                 root->size);
         printNode (root->left);
         printNode (root->right);
+    }
+
+    void
+    removeNode (Node* root, Node** stack, int depth)
+    {
+        Node* left = root->left;
+        Node* right = root->right;
+
+        Node* newRoot;
+        if (left == nullptr)
+        {
+            newRoot = right;
+        }
+        else if (right == nullptr)
+        {
+            newRoot = left;
+        }
+        else
+        {
+            // this is a more complicated case.
+            // the solution is the move the smallest of the right branch
+            // here.
+            std::int16_t newDepth;
+            Node* newStack[sizeof (Node*) * 8 + 1];
+            newStack[0] = right;
+            for (newDepth = 0; newStack[newDepth]->left != nullptr; ++newDepth)
+            {
+                newStack[newDepth + 1] = newStack[newDepth]->left;
+            }
+            Node* min = newStack[newDepth];
+            if (min == right)
+            {
+                newRoot = right;
+                setLeftChild (newRoot, left);
+            }
+            else
+            {
+                // first detach min from the parent
+                Node* parent = newStack[newDepth - 1];
+                parent->left = nullptr;
+
+                // rebalance the right
+                Node* newRight = balance (newStack, newDepth);
+                if (newRight != nullptr)
+                {
+                    right = newRight;
+                }
+
+                setLeftChild (min, left);
+                setRightChild (min, right);
+
+                newRoot = min;
+            }
+        }
+
+        if (depth == 0)
+        {
+            m_root = newRoot;
+            return;
+        }
+        if (newRoot == nullptr)
+        {
+            // so root is the leaf.
+            if (root->size < stack[depth - 1]->size)
+            {
+                stack[depth - 1]->left = nullptr;
+            }
+            else
+            {
+                stack[depth - 1]->right = nullptr;
+            }
+            newRoot = balance (stack, depth);
+            if (newRoot != nullptr)
+            {
+                m_root = newRoot;
+            }
+            return;
+        }
+
+        setParent (newRoot, stack[depth - 1]);
+
+        stack[depth] = newRoot;
+        newRoot = balance (stack, depth);
+
+        if (newRoot != nullptr)
+        {
+            m_root = newRoot;
+        }
     }
 
 private:

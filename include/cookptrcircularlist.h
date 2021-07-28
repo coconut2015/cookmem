@@ -123,6 +123,29 @@ public:
     }
 
     /**
+     * Check if a chunk is in the list
+     */
+    bool
+    contains (Node* chunk)
+    {
+        if (m_head == nullptr)
+        {
+            return false;
+        }
+        Node* node = m_head;
+        do
+        {
+            if (node == chunk)
+            {
+                return true;
+            }
+            node = node->next;
+        }
+        while (node != m_head);
+        return false;
+    }
+
+    /**
      * Check if the list is empty.
      *
      * @return  true if the list is empty.
