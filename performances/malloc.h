@@ -33,6 +33,7 @@ malloc (std::size_t size)
     {
         return dlmalloc(size);
     }
+    else
     {
         return s_memCtx.allocate(size);
     }
