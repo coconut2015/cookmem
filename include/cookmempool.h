@@ -24,7 +24,7 @@
 #endif /* WIN32 */
 
 #include "cookexception.h"
-#include "cookptravltree.h"
+#include "cookrbtree.h"
 #include "cookptrcircularlist.h"
 
 namespace cookmem
@@ -171,6 +171,7 @@ public:
 
 private:
     typedef unsigned int    BinIndexType;
+    typedef PtrRBTree       PtrTreeType;
 
 private:
     /**
@@ -528,9 +529,9 @@ private:
      */
     CircularList<SmallMemChunk> m_smallLists[NSMALLBINS];
     /**
-     * AVL trees for large chunks
+     * Red-black trees for large chunks
      */
-    PtrAVLTree      m_largeTrees[NTREEBINS];
+    PtrTreeType     m_largeTrees[NTREEBINS];
 
     // memory foot print tracking
     /**
@@ -1303,7 +1304,7 @@ private:
         return ((size) >> SMALLBIN_SHIFT) < NSMALLBINS;
     }
 
-    inline PtrAVLTree&
+    inline PtrTreeType&
     treeAt (BinIndexType i)
     {
         return m_largeTrees[i];
@@ -1320,7 +1321,7 @@ private:
 
         for (; binIndex < NTREEBINS; ++binIndex)
         {
-            PtrAVLTree& tree = treeAt (binIndex);
+            PtrTreeType& tree = treeAt (binIndex);
             if (!tree.isEmpty ())
             {
                 chunk = reinterpret_cast<MemChunk*>(tree.remove(actualSize));
@@ -1516,7 +1517,7 @@ private:
     {
         BinIndexType treeBinIndex;
         cookmem_getLargeBinIndex(chunk->getChunkSize(), treeBinIndex);
-        PtrAVLTree& tree = treeAt (treeBinIndex);
+        PtrTreeType& tree = treeAt (treeBinIndex);
         if (!isTreeMapMarked (treeBinIndex))
         {
             markTreeMap (treeBinIndex);
@@ -1529,7 +1530,7 @@ private:
     {
         BinIndexType treeBinIndex;
         cookmem_getLargeBinIndex (chunk->getChunkSize(), treeBinIndex);
-        PtrAVLTree& tree = treeAt (treeBinIndex);
+        PtrTreeType& tree = treeAt (treeBinIndex);
 
         tree.remove (chunk);
         if (tree.isEmpty ())
@@ -1552,7 +1553,7 @@ private:
         {
             BinIndexType treeBinIndex;
             cookmem_getLargeBinIndex (chunk->getChunkSize (), treeBinIndex);
-            PtrAVLTree& tree = treeAt (treeBinIndex);
+            PtrTreeType& tree = treeAt (treeBinIndex);
             return tree.contains (chunk);
         }
     }

@@ -18,7 +18,7 @@
 
 #include <cstddef>
 
-#include "cookptravltree.h"
+#include "cookrbtree.h"
 
 namespace cookmem
 {
@@ -144,6 +144,8 @@ template<class Arena>
 class CachedArena
 {
 public:
+    typedef PtrRBTree   PtrTreeType;
+public:
     /**
      * Constructor
      *
@@ -199,7 +201,7 @@ public:
 
 private:
     Arena&      m_arena;
-    PtrAVLTree  m_tree;
+    PtrTreeType m_tree;
 };
 
 

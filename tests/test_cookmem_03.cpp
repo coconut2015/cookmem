@@ -152,7 +152,6 @@ test5 ()
 
     for (int i = 0; i < 10000; ++i)
     {
-        printf ("++ id: %d\n", i);
         memCtx.deallocate (ptr[i]);
         memCtx.coalesce ();
         memCtx.validate ();
@@ -223,7 +222,6 @@ test6 ()
         size += 8;
         ptr[i] = memCtx.allocate (size);
         assertNotNull (ptr[i], __FILE__, __LINE__);
-        printf ("id: %d, size: %zu\n", i, memCtx.getSize (ptr[i]));
     }
 
     printf ("******** step 6\n");
@@ -269,13 +267,11 @@ test6 ()
 
     for (int i = 0; i < 10000; ++i)
     {
-        printf ("++ id: %d\n", i);
         assertEquals (true, memCtx.contains (ptr[i]), __FILE__, __LINE__);
     }
 
     for (int i = 0; i < 10000; ++i)
     {
-        printf ("-- id: %d\n", i);
         memCtx.deallocate (ptr[i]);
         memCtx.validate ();
     }

@@ -867,6 +867,8 @@ private:
     NodeType *m_root;
 };
 
+typedef RedBlackTree<PtrRBNode> PtrRBTree;
+
 } // namespace cookmem
 
 #endif // COOK_PTR_RBTREE_H
