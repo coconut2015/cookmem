@@ -7,10 +7,12 @@ var classcookmem_1_1MemPool =
     [ "value_type", "classcookmem_1_1MemPool.html#a58cc62a3938cc163ec079892a968dac1", null ],
     [ "MemPool", "classcookmem_1_1MemPool.html#abab4700193f16ba3d5bee92e407f2305", null ],
     [ "~MemPool", "classcookmem_1_1MemPool.html#a489bc6a337e66bf56727196c8cec7860", null ],
-    [ "allocate", "classcookmem_1_1MemPool.html#ac5b57dff29a64366c727e0c83d054201", null ],
-    [ "callocate", "classcookmem_1_1MemPool.html#a5e7af4edcd1620132112dcbcf488b7b4", null ],
+    [ "allocate", "classcookmem_1_1MemPool.html#aefe82c35d08ad2d4a204294e9c12003c", null ],
+    [ "callocate", "classcookmem_1_1MemPool.html#a8d8e8c8c1e644c984bdee18956e43428", null ],
+    [ "coalesce", "classcookmem_1_1MemPool.html#a53a42667328c8cf95ac62ac7d9e2a3b5", null ],
     [ "contains", "classcookmem_1_1MemPool.html#a69306fa0f64e3bbd674bbb8426f1e81a", null ],
     [ "deallocate", "classcookmem_1_1MemPool.html#a80060bb2acc4cb209b5ed206430c61bd", null ],
+    [ "getCoalesceInterval", "classcookmem_1_1MemPool.html#ac6a5ef27247751f83868cc4b2c33e7a3", null ],
     [ "getFootprint", "classcookmem_1_1MemPool.html#a5635660df8a0504c36644cfd174ee0e2", null ],
     [ "getFootPrintLimit", "classcookmem_1_1MemPool.html#ac272cd12f0d861bdf99be08f8259fa19", null ],
     [ "getMaxFootprint", "classcookmem_1_1MemPool.html#a57228bfefdd8d39de07cb8f0a5e8be75", null ],
@@ -18,9 +20,11 @@ var classcookmem_1_1MemPool =
     [ "getUserSize", "classcookmem_1_1MemPool.html#a5cbc65ea93153418b0c5b5e6fbb38756", null ],
     [ "isPadding", "classcookmem_1_1MemPool.html#abd4b2358afa0f6be7d39a3712d9c8261", null ],
     [ "isStoringExactSize", "classcookmem_1_1MemPool.html#af72dab8937b646a8bb97fb188318e87d", null ],
-    [ "reallocate", "classcookmem_1_1MemPool.html#a779dd0f4f52caef7a417a60e8a3ac7c8", null ],
+    [ "reallocate", "classcookmem_1_1MemPool.html#a22174344bece371fe44d241038701da8", null ],
     [ "releaseAll", "classcookmem_1_1MemPool.html#ada94b1e98ca7f22960df2bd61dbe6cf6", null ],
+    [ "setCoalesceInterval", "classcookmem_1_1MemPool.html#abf2c0b431d01cfb8ecc485b514623729", null ],
     [ "setFootprintLimit", "classcookmem_1_1MemPool.html#a20c57a5b86d49fef4160e750acb1e05a", null ],
     [ "setPaddingByte", "classcookmem_1_1MemPool.html#af2c69d5d5da99fd5f7833746fe7bee4a", null ],
-    [ "setStoringExactSize", "classcookmem_1_1MemPool.html#a11ea02d1b8250face5505feaaef0cf09", null ]
+    [ "setStoringExactSize", "classcookmem_1_1MemPool.html#a11ea02d1b8250face5505feaaef0cf09", null ],
+    [ "validate", "classcookmem_1_1MemPool.html#a403fb5acd329686f7a02b5e69c030637", null ]
 ];

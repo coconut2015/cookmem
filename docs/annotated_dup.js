@@ -2,7 +2,7 @@ var annotated_dup =
 [
     [ "cookmem", null, [
       [ "CachedArena", "classcookmem_1_1CachedArena.html", "classcookmem_1_1CachedArena" ],
-      [ "CachedMemContainer", "structcookmem_1_1CachedMemContainer.html", "structcookmem_1_1CachedMemContainer" ],
+      [ "CachedMemContainer", "structcookmem_1_1CachedMemContainer.html", null ],
       [ "CachedMemContext", "classcookmem_1_1CachedMemContext.html", "classcookmem_1_1CachedMemContext" ],
       [ "CircularList", "classcookmem_1_1CircularList.html", "classcookmem_1_1CircularList" ],
       [ "Exception", "classcookmem_1_1Exception.html", "classcookmem_1_1Exception" ],
@@ -13,9 +13,12 @@ var annotated_dup =
       [ "MemLogger", "classcookmem_1_1MemLogger.html", null ],
       [ "MemPool", "classcookmem_1_1MemPool.html", "classcookmem_1_1MemPool" ],
       [ "MmapArena", "classcookmem_1_1MmapArena.html", "classcookmem_1_1MmapArena" ],
-      [ "NoActionMemLogger", "classcookmem_1_1NoActionMemLogger.html", "classcookmem_1_1NoActionMemLogger" ],
+      [ "NoActionMemLogger", "classcookmem_1_1NoActionMemLogger.html", null ],
       [ "PtrAVLTree", "classcookmem_1_1PtrAVLTree.html", "classcookmem_1_1PtrAVLTree" ],
-      [ "SimpleMemContainer", "structcookmem_1_1SimpleMemContainer.html", "structcookmem_1_1SimpleMemContainer" ],
+      [ "PtrRBNode", "classcookmem_1_1PtrRBNode.html", null ],
+      [ "RedBlackTree", "classcookmem_1_1RedBlackTree.html", "classcookmem_1_1RedBlackTree" ],
+      [ "SegmentStatistics", "classcookmem_1_1SegmentStatistics.html", null ],
+      [ "SimpleMemContainer", "structcookmem_1_1SimpleMemContainer.html", null ],
       [ "SimpleMemContext", "classcookmem_1_1SimpleMemContext.html", "classcookmem_1_1SimpleMemContext" ]
     ] ]
 ];

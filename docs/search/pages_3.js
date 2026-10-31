@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['test_20build_20instruction',['Test Build Instruction',['../build.html',1,'']]],
-  ['tutorials',['Tutorials',['../tutorials.html',1,'']]]
+  ['license_0',['License',['../license.html',1,'']]],
+  ['limitations_1',['Current Limitations',['../limitations.html',1,'']]]
 ];
