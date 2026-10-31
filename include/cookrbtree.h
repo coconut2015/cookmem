@@ -189,18 +189,6 @@ public:
         m_red = red;
     }
 
-    void
-    setAsBlack ()
-    {
-        m_red = false;
-    }
-
-    void
-    setAsRed ()
-    {
-        m_red = true;
-    }
-
 private:
     /** reserved to make the header the same as MemChunk in cookmem.h */
     std::size_t     m_reserved;
@@ -273,7 +261,7 @@ public:
 
         if (newNode->getParent () == nullptr)
         {
-            newNode->setAsBlack ();
+            newNode->setRed (false);
             return;
         }
         if (newNode->getParent ()->getParent () == nullptr)
@@ -542,9 +530,9 @@ private:
                 if (uncleNode != nullptr &&
                     uncleNode->isRed ())
                 {
-                    uncleNode->setAsBlack ();
-                    node->getParent ()->setAsBlack ();
-                    grandParentNode->setAsRed ();
+                    uncleNode->setRed (false);
+                    node->getParent ()->setRed (false);
+                    grandParentNode->setRed (true);
                     node = node->getParent ()->getParent ();
                 }
                 else
@@ -554,8 +542,8 @@ private:
                         node = node->getParent ();
                         doLeftRotation(node);
                     }
-                    node->getParent ()->setAsBlack ();
-                    node->getParent ()->getParent ()->setAsRed ();
+                    node->getParent ()->setRed (false);
+                    node->getParent ()->getParent ()->setRed (true);
                     doRightRotation (node->getParent ()->getParent ());
                 }
             }
@@ -565,9 +553,9 @@ private:
                 if (uncleNode != nullptr &&
                     uncleNode->isRed ())
                 {
-                    uncleNode->setAsBlack ();
-                    node->getParent ()->setAsBlack ();
-                    grandParentNode->setAsRed ();
+                    uncleNode->setRed (false);
+                    node->getParent ()->setRed (false);
+                    grandParentNode->setRed (true);
                     node = node->getParent ()->getParent ();
                 }
                 else
@@ -577,8 +565,8 @@ private:
                         node = node->getParent ();
                         doRightRotation (node);
                     }
-                    node->getParent ()->setAsBlack ();
-                    node->getParent ()->getParent ()->setAsRed ();
+                    node->getParent ()->setRed (false);
+                    node->getParent ()->getParent ()->setRed (true);
                     doLeftRotation (node->getParent ()->getParent ());
                 }
             }
@@ -589,7 +577,7 @@ private:
             }
         }
 
-        m_root->setAsBlack ();
+        m_root->setRed (false);
     }
 
     void
@@ -671,11 +659,11 @@ private:
         }
         if (childNode != nullptr)
         {
-            childNode->setAsBlack ();
+            childNode->setRed (false);
         }
         if (m_root != nullptr)
         {
-            m_root->setAsBlack ();
+            m_root->setRed (false);
         }
     }
 
@@ -700,8 +688,8 @@ private:
                 NodeType* siblingNode = parentNode->getRight ();
                 if (siblingNode != nullptr && siblingNode->isRed ())
                 {
-                    siblingNode->setAsBlack ();
-                    parentNode->setAsRed ();
+                    siblingNode->setRed (false);
+                    parentNode->setRed (true);
                     doLeftRotation (parentNode);
                     siblingNode = parentNode->getRight ();
                 }
@@ -712,7 +700,7 @@ private:
                 {
                     if (siblingNode != nullptr)
                     {
-                        siblingNode->setAsRed ();
+                        siblingNode->setRed (true);
                     }
                     node = parentNode;
                     parentNode = node->getParent ();
@@ -723,17 +711,17 @@ private:
                     {
                         if (siblingNode->getLeft () != nullptr)
                         {
-                            siblingNode->getLeft ()->setAsBlack ();
+                            siblingNode->getLeft ()->setRed (false);
                         }
-                        siblingNode->setAsRed ();
+                        siblingNode->setRed (true);
                         doRightRotation (siblingNode);
                         siblingNode = parentNode->getRight ();
                     }
                     siblingNode->setRed (parentNode->isRed ());
-                    parentNode->setAsBlack ();
+                    parentNode->setRed (false);
                     if (siblingNode->getRight () != nullptr)
                     {
-                        siblingNode->getRight ()->setAsBlack ();
+                        siblingNode->getRight ()->setRed (false);
                     }
                     doLeftRotation (parentNode);
                     node = m_root;
@@ -745,8 +733,8 @@ private:
                 NodeType* siblingNode = parentNode->getLeft ();
                 if (siblingNode != nullptr && siblingNode->isRed ())
                 {
-                    siblingNode->setAsBlack ();
-                    parentNode->setAsRed ();
+                    siblingNode->setRed (false);
+                    parentNode->setRed (true);
                     doRightRotation (parentNode);
                     siblingNode = parentNode->getLeft ();
                 }
@@ -757,7 +745,7 @@ private:
                 {
                     if (siblingNode != nullptr)
                     {
-                        siblingNode->setAsRed ();
+                        siblingNode->setRed (true);
                     }
                     node = parentNode;
                     parentNode = node->getParent ();
@@ -768,17 +756,17 @@ private:
                     {
                         if (siblingNode->getRight () != nullptr)
                         {
-                            siblingNode->getRight ()->setAsBlack ();
+                            siblingNode->getRight ()->setRed (false);
                         }
-                        siblingNode->setAsRed ();
+                        siblingNode->setRed (true);
                         doLeftRotation (siblingNode);
                         siblingNode = parentNode->getLeft ();
                     }
                     siblingNode->setRed (parentNode->isRed ());
-                    parentNode->setAsBlack ();
+                    parentNode->setRed (false);
                     if (siblingNode->getLeft () != nullptr)
                     {
-                        siblingNode->getLeft ()->setAsBlack ();
+                        siblingNode->getLeft ()->setRed (false);
                     }
                     doRightRotation (parentNode);
                     node = m_root;
@@ -789,7 +777,7 @@ private:
 
         if (node != nullptr)
         {
-            node->setAsBlack ();
+            node->setRed (false);
         }
     }
 
