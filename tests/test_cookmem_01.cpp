@@ -117,11 +117,86 @@ test3 ()
     return 0;
 }
 
+static int
+test4 ()
+{
+    cookmem::SimpleMemContext<cookmem::MallocArena> memCtx;
+
+    memCtx.setCoalesceInterval (2);
+
+    void* ptr[3];
+
+    int size = 8;
+    for (int i = 0; i < 3; ++i)
+    {
+        ptr[i] = memCtx.allocate (size);
+        ASSERT_NE (nullptr, ptr[i]);
+    }
+
+    memCtx.validate ();
+
+    for (int i = 2; i >= 0; --i)
+    {
+        memCtx.deallocate (ptr[i]);
+    }
+
+    memCtx.validate ();
+
+    return 0;
+}
+
+static int
+test5 ()
+{
+    cookmem::SimpleMemContext<cookmem::MallocArena> memCtx;
+    const int NUM = 3;
+
+    memCtx.setCoalesceInterval (2);
+
+    void* ptr[NUM];
+
+    int size = 8;
+    for (int i = 0; i < NUM; ++i)
+    {
+        ptr[i] = memCtx.allocate (size);
+        ASSERT_NE (nullptr, ptr[i]);
+    }
+
+    memCtx.validate ();
+
+    for (int i = 0; i < NUM; ++i)
+    {
+        memCtx.deallocate (ptr[i]);
+    }
+
+    memCtx.validate ();
+
+    size = 8;
+    for (int i = 0; i < NUM; ++i)
+    {
+        ptr[i] = memCtx.allocate (size);
+        ASSERT_NE (nullptr, ptr[i]);
+    }
+
+    memCtx.validate ();
+
+    for (int i = 0; i < NUM; ++i)
+    {
+        memCtx.deallocate (ptr[i]);
+    }
+
+    memCtx.validate ();
+
+    return 0;
+}
+
 int
 main (int argc, const char* argv[])
 {
     ASSERT_EQ (0, test1 ());
     ASSERT_EQ (0, test2 ());
     ASSERT_EQ (0, test3 ());
+    ASSERT_EQ (0, test4 ());
+    ASSERT_EQ (0, test5 ());
     return 0;
 }

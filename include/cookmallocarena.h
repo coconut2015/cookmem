@@ -23,6 +23,60 @@
 namespace cookmem
 {
 
+class SegmentStatistics
+{
+public:
+    typedef std::size_t size_type;
+
+public:
+    SegmentStatistics ()
+    : m_currentSegments (0),
+      m_maxSegments (0),
+      m_currentSize (0),
+      m_maxSize (0)
+    {
+    }
+
+    void
+    print () const
+    {
+        printf ("current segments: %zu, current size: %zu, max segments: %zu, max size: %zu\n",
+                m_currentSegments,
+                m_currentSize,
+                m_maxSegments,
+                m_maxSize);
+    }
+
+    void
+    newSegment (size_type segSize)
+    {
+        ++m_currentSegments;
+        m_currentSize += segSize;
+
+        if (m_maxSegments < m_currentSegments)
+        {
+            m_maxSegments = m_currentSegments;
+        }
+        if (m_maxSize < m_currentSize)
+        {
+            m_maxSize = m_currentSize;
+        }
+    }
+
+    void
+    freeSegment (size_type segSize)
+    {
+        --m_currentSegments;
+        m_currentSize -= segSize;
+    }
+
+private:
+    size_type   m_currentSegments;
+    size_type   m_maxSegments;
+    size_type   m_currentSize;
+    size_type   m_maxSize;
+};
+
 /**
  * An malloc/free based memory arena.
  */
@@ -37,7 +91,8 @@ public:
      *          needs to be a multiple of 16.
      */
     MallocArena (std::size_t minSize = 65536)
-    : m_minSize (minSize)
+    : m_minSize (minSize),
+      m_stats ()
     {
     }
 
@@ -56,6 +111,7 @@ public:
         {
             size = m_minSize;
         }
+        m_stats.newSegment (size);
         return malloc (size);
     }
 
@@ -71,12 +127,21 @@ public:
     bool
     freeSegment (void* ptr, std::size_t size)
     {
+        m_stats.freeSegment (size);
+
         free (ptr);
         return false;
     }
 
+    void
+    printStats ()
+    {
+        m_stats.print ();
+    }
+
 private:
-    std::size_t m_minSize;
+    std::size_t         m_minSize;
+    SegmentStatistics   m_stats;
 };
 
 }   // namespace cookmem

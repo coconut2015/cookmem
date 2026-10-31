@@ -79,6 +79,13 @@ add_executable(test_cookptrcircularlist
 add_test(NAME test_cookptrcircularlist
 	COMMAND test_cookptrcircularlist)
 
+# .. test_cookrbtree
+add_executable(test_cookrbtree
+	tests/test_cookrbtree.cpp)
+
+add_test(NAME test_cookrbtree
+	COMMAND test_cookrbtree)
+
 # .. test_cookptravltree
 add_executable(test_cookptravltree
 	tests/test_cookptravltree.cpp)
@@ -98,6 +105,12 @@ add_executable(test_cookmem_02
 
 add_test(NAME test_cookmem_02
 	COMMAND test_cookmem_02)
+
+add_executable(test_cookmem_03
+	tests/test_cookmem_03.cpp)
+
+add_test(NAME test_cookmem_03
+	COMMAND test_cookmem_03)
 
 add_executable(test_cookmem_error_01
 	tests/test_cookmem_error_01.cpp)

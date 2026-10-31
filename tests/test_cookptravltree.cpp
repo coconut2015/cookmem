@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 #include <iostream>
+#include <cstdlib>
+#include <map>
+#include <set>
 
 #include <cookptravltree.h>
 
@@ -191,6 +194,144 @@ test4 ()
     return 0;
 }
 
+static int
+test5 ()
+{
+    Node searchNodes[11];
+    cookmem::PtrAVLTree searchList;
+    const std::size_t searchValues[] =
+        { 100, 50, 150, 25, 75, 125, 175, 10, 40, 60, 90 };
+    for (std::size_t i = 0; i < 11; ++i)
+    {
+        searchList.add (&searchNodes[i], searchValues[i]);
+    }
+    std::size_t requested = 95;
+    ASSERT_EQ (&searchNodes[0], searchList.remove (requested));
+    ASSERT_EQ (std::size_t (100), requested);
+
+    Node n[8];
+    cookmem::PtrAVLTree list;
+
+    list.add (&n[0], 20);
+    list.add (&n[1], 10);
+    list.add (&n[2], 40);
+    list.add (&n[3], 5);
+    list.add (&n[4], 15);
+    list.add (&n[5], 30);
+    list.add (&n[6], 50);
+    list.add (&n[7], 35);
+    list.remove (&n[0]);
+
+    ASSERT_EQ (true, list.contains (&n[1]));
+    ASSERT_EQ (true, list.contains (&n[2]));
+    ASSERT_EQ (true, list.contains (&n[3]));
+    ASSERT_EQ (true, list.contains (&n[4]));
+    ASSERT_EQ (true, list.contains (&n[5]));
+    ASSERT_EQ (true, list.contains (&n[6]));
+    ASSERT_EQ (true, list.contains (&n[7]));
+    ASSERT_EQ (false, list.isEmpty ());
+
+    Node duplicates[3];
+    cookmem::PtrAVLTree duplicateList;
+    std::size_t size = 10;
+    duplicateList.add (&duplicates[0], 10);
+    duplicateList.add (&duplicates[1], 10);
+    duplicateList.add (&duplicates[2], 10);
+    ASSERT_EQ (&duplicates[2], duplicateList.remove (size));
+    duplicateList.remove (&duplicates[1]);
+    ASSERT_EQ (false, duplicateList.contains (&duplicates[1]));
+    ASSERT_EQ (true, duplicateList.contains (&duplicates[0]));
+    duplicateList.remove (&duplicates[0]);
+    ASSERT_EQ (true, duplicateList.isEmpty ());
+    return 0;
+}
+
+static int
+test6 ()
+{
+    const std::size_t count = 128;
+    Node nodes[count];
+    bool present[count] = {};
+    bool initialized[count] = {};
+    std::size_t values[count] = {};
+    std::size_t activeCount = 0;
+    std::map<std::size_t, std::set<std::size_t> > active;
+    cookmem::PtrAVLTree list;
+    std::srand (1);
+
+    for (int step = 0; step < 3000; ++step)
+    {
+        if (activeCount < count && (active.empty () || std::rand () % 2 == 0))
+        {
+            std::size_t id = static_cast<std::size_t> (std::rand ()) % count;
+            while (present[id])
+            {
+                id = (id + 1) % count;
+            }
+            std::size_t value = static_cast<std::size_t> (std::rand ()) % 64;
+            list.add (&nodes[id], value);
+            values[id] = value;
+            active[value].insert (id);
+            present[id] = true;
+            initialized[id] = true;
+            ++activeCount;
+        }
+        else if (std::rand () % 2 == 0)
+        {
+            std::size_t id = static_cast<std::size_t> (std::rand ()) % count;
+            while (!present[id])
+            {
+                id = (id + 1) % count;
+            }
+            std::size_t value = values[id];
+            list.remove (&nodes[id]);
+            active[value].erase (id);
+            if (active[value].empty ())
+            {
+                active.erase (value);
+            }
+            present[id] = false;
+            --activeCount;
+        }
+        else
+        {
+            std::size_t requested = static_cast<std::size_t> (std::rand ()) % 70;
+            std::map<std::size_t, std::set<std::size_t> >::iterator expected =
+                active.lower_bound (requested);
+            std::size_t actual = requested;
+            Node* removed = static_cast<Node*> (list.remove (actual));
+            if (expected == active.end ())
+            {
+                ASSERT_EQ (nullptr, removed);
+            }
+            else
+            {
+                ASSERT_NE (nullptr, removed);
+                ASSERT_EQ (expected->first, actual);
+                std::size_t id = static_cast<std::size_t> (removed - nodes);
+                ASSERT_EQ (1u, expected->second.erase (id));
+                present[id] = false;
+                --activeCount;
+                if (expected->second.empty ())
+                {
+                    active.erase (expected);
+                }
+            }
+        }
+
+        ASSERT_EQ (active.empty (), list.isEmpty ());
+        for (std::size_t id = 0; id < count; ++id)
+        {
+            if (initialized[id])
+            {
+                ASSERT_EQ (present[id], list.contains (&nodes[id]));
+            }
+        }
+    }
+
+    return 0;
+}
+
 int
 main (int argc, const char* argv[])
 {
@@ -198,5 +339,7 @@ main (int argc, const char* argv[])
     ASSERT_EQ (0, test2 ());
     ASSERT_EQ (0, test3 ());
     ASSERT_EQ (0, test4 ());
+    ASSERT_EQ (0, test5 ());
+    ASSERT_EQ (0, test6 ());
     return 0;
 }

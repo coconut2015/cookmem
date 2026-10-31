@@ -39,9 +39,11 @@ public:
      * @param   msg
      *          the message associated with this exception.
      */
-    Exception (MemError_et error, const char* msg)
+    Exception (MemError_et error, const char* msg, const char* file = nullptr, int line = 0)
     : m_error (error),
-      m_msg (msg)
+      m_msg (msg),
+      m_file (file),
+      m_line (line)
     {
     }
 
@@ -58,9 +60,25 @@ public:
      * @return  the exception message.
      */
     const char* getMessage () const { return m_msg; }
+
+    /**
+     * Get the file where the exception got thrown.
+     *
+     * @return  the file where the exception got thrown.
+     */
+    const char* getFile () const { return m_file; }
+
+    /**
+     * Get the line number of where the exception got thrown.
+     *
+     * @return  the line number of where the exception got thrown.
+     */
+    int getLine () const { return m_line; }
 private:
     const MemError_et   m_error;
     const char*         m_msg;
+    const char*         m_file;
+    int                 m_line;
 };
 
 }   // namespace cookmem
@@ -68,7 +86,7 @@ private:
 #ifdef NDEBUG
 #define COOKMEM_ASSERT(b)
 #else /* NDEBUG */
-#define COOKMEM_ASSERT(b) do { if (!(b)) throw Exception (cookmem::MEM_ERROR_ASSERT, "assertion failure."); } while (0)
+#define COOKMEM_ASSERT(b) do { if (!(b)) throw cookmem::Exception (cookmem::MEM_ERROR_ASSERT, "assertion failure.", __FILE__, __LINE__); } while (0)
 #endif /* NDEBUG */
 
 #endif  // COOK_EXCEPTION_H

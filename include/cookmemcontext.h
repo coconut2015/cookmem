@@ -78,7 +78,7 @@ public:
      *          nullptr if the request cannot be satisfied.
      */
     inline T*
-    allocate (std::size_t size) { return m_pool.allocate (size); }
+    allocate (size_type size) { return m_pool.allocate (size); }
 
     /**
      * This function reallocate a memory.
@@ -92,7 +92,7 @@ public:
      *          remains valid.
      */
     inline T*
-    reallocate (T* ptr, std::size_t size) { return m_pool.reallocate (ptr, size); }
+    reallocate (T* ptr, size_type size) { return m_pool.reallocate (ptr, size); }
 
     /**
      * Allocate n items of certain size.  The memory allocated is zeroed.
@@ -104,7 +104,7 @@ public:
      * @return  memory allocated.
      */
     inline T*
-    callocate (std::size_t num, std::size_t size) { return m_pool.callocate (num, size); }
+    callocate (size_type num, size_type size) { return m_pool.callocate (num, size); }
 
     /**
      * Free a piece of memory previously allocated by this memory pool.
@@ -115,7 +115,19 @@ public:
      *          mostly ignored.  It is only used by the memory logger.
      */
     inline void
-    deallocate (T* ptr, std::size_t size = 0) { m_pool.deallocate (ptr, size); }
+    deallocate (T* ptr, size_type size = 0) { m_pool.deallocate (ptr, size); }
+
+    /**
+     * Validate the internal memory structures.
+     */
+    inline void
+    validate () { m_pool.validate (); }
+
+    /**
+     * Forcing the coalescing of free memory fragments.
+     */
+    inline void
+    coalesce () { m_pool.coalesce (); }
 
     /**
      * Check if a pointer is within the address space of segments owned
@@ -147,11 +159,8 @@ public:
      *          if the pointer is nullptr, the result is 0.
      *          if the pointer is not used, the result is 0.
      */
-    size_type
-    getSize (T* ptr)
-    {
-        return m_pool.getUserSize (ptr);
-    }
+    inline size_type
+    getSize (T* ptr) { return m_pool.getUserSize (ptr); }
 
     /**
      * Release all the memory segments held by this MemPool.
@@ -164,7 +173,7 @@ public:
      *
      * @return  the memory footprint limit
      */
-    inline std::size_t
+    inline size_type
     getFootPrintLimit () const { return m_pool.getFootPrintLimit (); }
 
     /**
@@ -174,14 +183,14 @@ public:
      *
      */
     inline void
-    setFootprintLimit (std::size_t footprintLimit) { m_pool.setFootprintLimit (footprintLimit); }
+    setFootprintLimit (size_type footprintLimit) { m_pool.setFootprintLimit (footprintLimit); }
 
     /**
      * Get the current memory footprint.
      *
      * @return  the current memory footprint.
      */
-    inline std::size_t
+    inline size_type
     getFootprint () const { return m_pool.getFootPrint (); }
 
     /**
@@ -189,8 +198,22 @@ public:
      *
      * @return  the maximum memory footprint.
      */
-    inline std::size_t
+    inline size_type
     getMaxFootprint () const { return m_pool.getMaxFootprint (); }
+
+    /**
+     * Setting the number of deallocations to trigger the coalescing free
+     * memory fragments.
+     */
+    void
+    setCoalesceInterval (size_type interval) { m_pool.setCoalesceInterval (interval); }
+
+    /**
+     * Setting the number of deallocations to trigger the coalescing free
+     * memory fragments.
+     */
+    size_type
+    getCoalesceInterval () { return m_pool.getCoalesceInterval (); }
 
     /**
      * Check whether or not we are storing the exact user size in the memory.

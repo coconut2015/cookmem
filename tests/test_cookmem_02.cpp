@@ -143,8 +143,17 @@ test3 ()
 int
 main (int argc, const char* argv[])
 {
-    ASSERT_EQ (0, test1 ());
-    ASSERT_EQ (0, test2 ());
-    ASSERT_EQ (0, test3 ());
+    try
+    {
+        ASSERT_EQ (0, test1 ());
+        ASSERT_EQ (0, test2 ());
+        ASSERT_EQ (0, test3 ());
+    }
+    catch (cookmem::Exception& ex)
+    {
+        std::cout << "Exception thrown at " << ex.getFile () << ":"
+                  << ex.getLine () << ": " << ex.getMessage () << std::endl;
+        return 1;
+    }
     return 0;
 }

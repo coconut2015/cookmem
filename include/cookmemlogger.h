@@ -101,7 +101,7 @@ class MemLogger
      *          the type of the error encountered.
      */
     virtual void
-    logError (void* userPtr, MemError_et error) = 0;
+    logError (void* userPtr, MemError_et error, const char* file = __FILE__, int line = __LINE__) = 0;
 };
 
 /**
@@ -125,9 +125,9 @@ public:
     inline void logDeallocation (void* userPtr, std::size_t userSize) { }
 
     inline void
-    logError (void* userPtr, MemError_et error)
+    logError (void* userPtr, MemError_et error, const char* file = __FILE__, int line = __LINE__)
     {
-        throw Exception (error, "memory corruption detected.");
+        throw Exception (error, "memory corruption detected.", file, line);
     }
 };
 

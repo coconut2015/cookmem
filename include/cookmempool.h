@@ -204,17 +204,29 @@ private:
             return m_size & BIT_MASK;
         }
 
+        inline size_type
+        getPrevChunkSize () const
+        {
+            return m_prevFootSize & BIT_MASK;
+        }
+
         inline void
         setFreeChunkSize (size_type chunkSize)
         {
             m_size = chunkSize;
-            ((MemChunk*)((char*)(this) + (chunkSize)))->m_prevFootSize = chunkSize;
+            getNextChunk (chunkSize)->m_prevFootSize = chunkSize;
         }
 
         inline bool
         isUsed () const
         {
             return m_size & BIT_USED;
+        }
+
+        inline bool
+        isPrevChunkUsed () const
+        {
+            return m_prevFootSize & BIT_USED;
         }
 
         inline size_type
@@ -226,7 +238,7 @@ private:
                 char diff = *((char*)(this) + chunkSize - 1);
                 if (diff <= 0)
                 {
-                    throw Exception (MEM_ERROR_PADDING, "Invalid padding byte value");
+                    throw Exception (MEM_ERROR_PADDING, "Invalid padding byte value", __FILE__, __LINE__);
                 }
                 return chunkSize - CHUNK_OVERHEAD - diff;
             }
@@ -248,7 +260,43 @@ private:
                     *(((char*)this) + chunkSize - 1) = diff;
                 }
             }
-            ((MemChunk*)((char*) (this) + (chunkSize)))->m_prevFootSize = chunkSize | BIT_USED;
+            getNextChunk (chunkSize)->m_prevFootSize = chunkSize | BIT_USED;
+        }
+
+        inline MemChunk*
+        getPrevChunk ()
+        {
+            return (MemChunk*)((char*)this - getPrevChunkSize ());
+        }
+
+        inline MemChunk*
+        getNextChunk (size_type chunkSize)
+        {
+            return (MemChunk*)((char*)this + chunkSize);
+        }
+
+        inline const MemChunk*
+        getNextChunk () const
+        {
+            return (const MemChunk*)((char*)this + getChunkSize ());
+        }
+
+        bool
+        isValidSize ()
+        {
+            const MemChunk* nextChunk = getNextChunk (getChunkSize ());
+            return getChunkSize () == nextChunk->getPrevChunkSize () &&
+                   isUsed () == nextChunk->isPrevChunkUsed ();
+        }
+
+        void
+        print () const
+        {
+            printf ("-- chunk[ %p ]: size: %zu, used = %s, exact size: %zu\n",
+                    this,
+                    getChunkSize (),
+                    (isUsed () ? "true " : "false"),
+                    getUserSize ());
         }
     };
 
@@ -263,6 +311,8 @@ private:
 
     class MemSegment
     {
+    public:
+        static const size_type  SEGMENT_HEADER = offsetof (MemSegment, m_pad);
     private:
         /**
          * Allocated size.
@@ -296,10 +346,34 @@ private:
             // We do not initiate m_next since it will be assigned
             // by the caller anyways.
 
-            size_type  chunkSize = segSize - SEGMENT_OVERHEAD;
-            MemChunk* chunk = (MemChunk*)(((char*)this) + offsetof (MemSegment, m_pad));
+            size_type  chunkSize = getMaxChunkSize ();
+            MemChunk* chunk = getFirstChunk ();
             chunk->setFreeChunkSize (chunkSize);
             return chunk;
+        }
+
+        MemChunk*
+        getFirstChunk ()
+        {
+            return (MemChunk*)(((char*)this) + offsetof (MemSegment, m_pad));
+        }
+
+        const MemChunk*
+        getFirstChunk () const
+        {
+            return (const MemChunk*)(((char*)this) + offsetof (MemSegment, m_pad));
+        }
+
+        MemChunk*
+        getPastLastChunk ()
+        {
+            return (MemChunk*)(((char*)getFirstChunk ()) + getMaxChunkSize ());
+        }
+
+        const MemChunk*
+        getPastLastChunk () const
+        {
+            return (MemChunk*)(((char*)getFirstChunk ()) + getMaxChunkSize ());
         }
 
         size_type
@@ -318,6 +392,35 @@ private:
         setNext (MemSegment* seg)
         {
             m_next = seg;
+        }
+
+        size_type
+        getMaxChunkSize () const
+        {
+            return (m_size - SEGMENT_OVERHEAD) & MemChunk::BIT_MASK;
+        }
+
+        void
+        print () const
+        {
+            printf ("== segment %p, size: %zu, header: %zu, footer: %zu\n", this, m_size, offsetof(MemSegment, m_pad), sizeof(MemChunk));
+            const MemChunk* chunk = getFirstChunk ();
+            const MemChunk* lastChunk = getPastLastChunk ();
+            for (;;)
+            {
+                if (chunk < lastChunk)
+                {
+                    chunk->print ();
+                    chunk = chunk->getNextChunk ();
+                }
+                else
+                {
+                    printf ("-- chunk[ %p ]: size: %zu\n",
+                            chunk,
+                            chunk->getChunkSize ());
+                    break;
+                }
+            }
         }
     };
 
@@ -380,11 +483,11 @@ private:
     /**
      * The number of extra bytes needed for a segment.
      */
-    static const size_type  SEGMENT_OVERHEAD = ((sizeof(MemSegment) - sizeof(size_type) + ALIGN_MASK) & (~ALIGN_MASK)) + sizeof(size_type);
+    static const size_type  SEGMENT_OVERHEAD = ((((MemSegment::SEGMENT_HEADER + ALIGN_MASK) & ~ALIGN_MASK) + sizeof(MemChunk) + +ALIGN_MASK) & ~ALIGN_MASK);
     /**
      * The number of frees before attempting to coalesce memory chunks.
      */
-    static const size_type  MAX_RELEASE_CHECK_RATE = 4095;
+    static const size_type  DEFAULT_COALESCE_INTERVAL= 4095;
     /**
      * Default padding bytes for strict bounding check.
      */
@@ -409,9 +512,14 @@ private:
      * SLL of memory segments obtained from arena
      */
     MemSegment*     m_segList;
-
-    size_type       m_release_checks;
-
+    /**
+     * The number of deallocations before coalescing is triggererd.
+     */
+    size_type       m_coalesceInterval;
+    /**
+     * The number of deallocations since the last coalescing.
+     */
+    size_type       m_numFrees;
     BinIndexType    m_smallMap;
     BinIndexType    m_treeMap;
 
@@ -465,7 +573,8 @@ public:
       m_logger (logger),
       m_footprintLimit (0),
       m_segList (nullptr),
-      m_release_checks (0),
+      m_coalesceInterval (DEFAULT_COALESCE_INTERVAL),
+      m_numFrees (0),
       m_smallMap (0),
       m_treeMap (0),
       m_smallLists (),
@@ -520,6 +629,29 @@ public:
     }
 
     /**
+     * Set the number of deallocations to trigger the coalescing free memory
+     * fragments.
+     */
+    void
+    setCoalesceInterval (size_type interval)
+    {
+        m_coalesceInterval = interval;
+    }
+
+    /**
+     * Get the number of deallocations to trigger the coalescing free memory
+     * fragments.
+     *
+     * @return  the number of deallocations to trigger the coalescing free
+     *          memory fragments.
+     */
+    size_type
+    getCoalesceInterval () const
+    {
+        return m_coalesceInterval;
+    }
+
+    /**
      * Allocate memory from the memory pool.
      *
      * @param   size
@@ -553,7 +685,7 @@ public:
                 binIndex += ~smallBits & 1; /* Uses next bin if idx empty */
 
                 chunk = removeSmallChunkList (binIndex);
-                COOKMEM_ASSERT(chunk != nullptr && chunk->getChunkSize() == getSmallBinSize (binIndex));
+                COOKMEM_ASSERT(chunk != nullptr && chunk->getChunkSize () == getSmallBinSize (binIndex));
 
                 setUsed (chunk, userSize);
 
@@ -570,8 +702,8 @@ public:
                     BinIndexType leastbit = least_bit(leftbits);
                     cookmem_bit2treeIndex(leastbit, i);
 
-                    chunk = removeSmallChunkList(i);
-                    COOKMEM_ASSERT(chunk != nullptr && chunk->getChunkSize() == getSmallBinSize(i));
+                    chunk = removeSmallChunkList (i);
+                    COOKMEM_ASSERT(chunk != nullptr && chunk->getChunkSize () == getSmallBinSize (i));
 
                     chunk = splitChunk (chunk, chunkSize);
 
@@ -710,8 +842,9 @@ public:
             MemChunk* chunk = mem2Chunk (ptr);
             if (!chunk->isUsed())
             {
-                throw Exception (MEM_ERROR_DOUBLE_FREE, "potentially freeing an unused pointer");
+                throw Exception (MEM_ERROR_DOUBLE_FREE, "potentially freeing an unused pointer", __FILE__, __LINE__);
             }
+            COOKMEM_ASSERT (chunk->isValidSize ());
             size_type chunkSize = chunk->getChunkSize ();
             if (m_padding)
             {
@@ -732,7 +865,7 @@ public:
                 {
                     if (paddingPtr[i] != m_paddingByte)
                     {
-                        throw Exception (MEM_ERROR_PADDING, "padding byte got modified.");
+                        throw Exception (MEM_ERROR_PADDING, "padding byte got modified.", __FILE__, __LINE__);
                     }
                 }
             }
@@ -740,6 +873,12 @@ public:
 
             chunk->setFreeChunkSize (chunkSize);
             addChunk (chunk);
+
+            ++m_numFrees;
+            if (m_numFrees >= m_coalesceInterval)
+            {
+                coalesce ();
+            }
         }
         else
         {
@@ -779,6 +918,175 @@ public:
             seg = seg->getNext ();
         }
         return false;
+    }
+
+    /**
+     * Validate that all memory structures are correct.
+     */
+    void
+    validate ()
+    {
+        MemSegment* seg = m_segList;
+        while (seg)
+        {
+            size_type   segSize = seg->getSize ();
+            size_type   remainSize = segSize;
+
+            MemChunk*   firstChunk = seg->getFirstChunk ();
+            MemChunk*   chunk = seg->getPastLastChunk ();
+
+            do
+            {
+                size_type   prevChunkSize = chunk->getPrevChunkSize ();
+
+                if (prevChunkSize == 0)
+                {
+                    break;
+                }
+
+                COOKMEM_ASSERT (prevChunkSize < remainSize);
+                remainSize -= prevChunkSize;
+
+                MemChunk*   prevChunk = chunk->getPrevChunk ();
+                COOKMEM_ASSERT (prevChunkSize == prevChunk->getChunkSize ());
+
+                if (!chunk->isPrevChunkUsed ())
+                {
+                    COOKMEM_ASSERT (isValidChunk (prevChunk));
+                }
+
+                chunk = prevChunk;
+            }
+            while (chunk >= firstChunk);
+
+            COOKMEM_ASSERT (remainSize == SEGMENT_OVERHEAD &&
+                            chunk == firstChunk);
+
+            seg = seg->getNext ();
+        }
+    }
+
+
+    /**
+     * Coalesce all the free chunks to reduce memory fragmentation.
+     */
+    void
+    coalesce ()
+    {
+        MemSegment* seg = m_segList;
+        MemSegment* prevSeg = nullptr;
+        while (seg)
+        {
+            MemSegment* nextSeg = seg->getNext ();
+
+            size_type   segSize = seg->getSize ();
+            size_type   remainSize = segSize;
+            size_type   currentFreeChunkSize = 0;
+
+            MemChunk*   firstChunk = seg->getFirstChunk ();
+            MemChunk*   chunk = seg->getPastLastChunk ();
+
+            chunk = chunk->getPrevChunk ();
+
+            while (chunk > firstChunk)
+            {
+                COOKMEM_ASSERT (chunk->isValidSize ());
+
+                bool        chunkIsUsed = chunk->isUsed ();
+                size_type   chunkSize = chunk->getChunkSize ();
+
+                COOKMEM_ASSERT (chunkSize < remainSize);
+                remainSize -= chunkSize;
+
+                if (!chunkIsUsed)
+                {
+                    COOKMEM_ASSERT (isValidChunk (chunk));
+
+                    if (chunk->isPrevChunkUsed ())
+                    {
+                        if (currentFreeChunkSize > 0)
+                        {
+                            removeChunk (chunk);
+
+                            currentFreeChunkSize += chunk->getChunkSize ();
+
+                            chunk->setFreeChunkSize (currentFreeChunkSize);
+
+                            addChunk (chunk);
+
+                            currentFreeChunkSize = 0;
+                        }
+                    }
+                    else
+                    {
+                        // remove the current chunk
+                        removeChunk (chunk);
+
+                        currentFreeChunkSize += chunkSize;
+                    }
+                }
+
+                chunk = chunk->getPrevChunk ();
+            }
+
+            COOKMEM_ASSERT (chunk == firstChunk);
+
+            {
+                bool        chunkIsUsed = chunk->isUsed ();
+                size_type   chunkSize = chunk->getChunkSize ();
+
+                COOKMEM_ASSERT (chunkSize < remainSize);
+                remainSize -= chunkSize;
+                COOKMEM_ASSERT (remainSize == SEGMENT_OVERHEAD);
+
+                if (!chunkIsUsed &&
+                    currentFreeChunkSize > 0)
+                {
+                    COOKMEM_ASSERT (isValidChunk (chunk));
+
+                    removeChunk (chunk);
+
+                    currentFreeChunkSize += chunk->getChunkSize ();
+
+                    chunk->setFreeChunkSize (currentFreeChunkSize);
+
+                    addChunk (chunk);
+
+                    currentFreeChunkSize = 0;
+                }
+            }
+
+            if (!firstChunk->isUsed () &&
+                firstChunk->getChunkSize () == seg->getMaxChunkSize ())
+            {
+                // The entire segment is free, so we can just release the
+                // segment.
+                //
+                // If users want to keep the segment around for caching, they
+                // can always use CacheMemArena.
+                removeChunk (firstChunk);
+
+                m_logger.logFreeSegment (seg, segSize);
+                m_arena.freeSegment (seg, segSize);
+
+                if (prevSeg == nullptr)
+                {
+                    m_segList = nextSeg;
+                }
+                if (prevSeg != nullptr)
+                {
+                    prevSeg->setNext (nextSeg);
+                }
+            }
+            else
+            {
+                prevSeg = seg;
+            }
+
+            seg = nextSeg;
+        }
+        validate ();
+        m_numFrees = 0;
     }
 
     /**
@@ -919,6 +1227,19 @@ public:
         m_paddingByte = (char)paddingByte;
     }
 
+    void
+    print () const
+    {
+        printf ("**** context: %p ****\n", this);
+
+        MemSegment* seg = m_segList;
+        while (seg)
+        {
+            seg->print ();
+            seg = seg->getNext ();
+        }
+    }
+
 private:
     static inline BinIndexType
     idx2bit (BinIndexType binIndex)
@@ -999,7 +1320,7 @@ private:
 
         for (; binIndex < NTREEBINS; ++binIndex)
         {
-            PtrAVLTree& tree = treeAt(binIndex);
+            PtrAVLTree& tree = treeAt (binIndex);
             if (!tree.isEmpty ())
             {
                 chunk = reinterpret_cast<MemChunk*>(tree.remove(actualSize));
@@ -1090,7 +1411,6 @@ private:
          */
         if (seg)
         {
-
             if ((m_footprint += segSize) > m_maxFootprint)
             {
                 m_maxFootprint = m_footprint;
@@ -1102,8 +1422,6 @@ private:
             {
                 m_segList = seg;
                 seg->setNext (nullptr);
-
-                m_release_checks = MAX_RELEASE_CHECK_RATE;
             }
             else
             {
@@ -1198,10 +1516,10 @@ private:
     {
         BinIndexType treeBinIndex;
         cookmem_getLargeBinIndex(chunk->getChunkSize(), treeBinIndex);
-        PtrAVLTree& tree = treeAt(treeBinIndex);
-        if (!isTreeMapMarked(treeBinIndex))
+        PtrAVLTree& tree = treeAt (treeBinIndex);
+        if (!isTreeMapMarked (treeBinIndex))
         {
-            markTreeMap(treeBinIndex);
+            markTreeMap (treeBinIndex);
         }
         tree.add(chunk, chunk->getChunkSize());
     }
@@ -1210,20 +1528,39 @@ private:
     removeLargeChunk (MemChunk* chunk)
     {
         BinIndexType treeBinIndex;
-        cookmem_getLargeBinIndex(chunk->getChunkSize(), treeBinIndex);
-        PtrAVLTree& tree = treeAt(treeBinIndex);
+        cookmem_getLargeBinIndex (chunk->getChunkSize(), treeBinIndex);
+        PtrAVLTree& tree = treeAt (treeBinIndex);
 
-        tree.remove(chunk);
-        if (tree.isEmpty())
+        tree.remove (chunk);
+        if (tree.isEmpty ())
         {
-            clearTreeMap(treeBinIndex);
+            clearTreeMap (treeBinIndex);
+        }
+    }
+
+    inline bool
+    isValidChunk (MemChunk* chunk)
+    {
+        if (isSmallChunk (chunk->getChunkSize ()))
+        {
+            BinIndexType I = getSmallBinIndex (chunk->getChunkSize ());
+
+            CircularList<SmallMemChunk>& freeList = getSmallChunkList (I);
+            return freeList.contains ((SmallMemChunk*)chunk);
+        }
+        else
+        {
+            BinIndexType treeBinIndex;
+            cookmem_getLargeBinIndex (chunk->getChunkSize (), treeBinIndex);
+            PtrAVLTree& tree = treeAt (treeBinIndex);
+            return tree.contains (chunk);
         }
     }
 
     inline void
     addChunk (MemChunk* chunk)
     {
-        if (isSmallChunk(chunk->getChunkSize()))
+        if (isSmallChunk(chunk->getChunkSize ()))
         {
             addSmallChunk (chunk);
         }
@@ -1236,8 +1573,10 @@ private:
     inline void
     removeChunk (MemChunk* chunk)
     {
-        if (isSmallChunk(chunk->getChunkSize()))
+        if (isSmallChunk (chunk->getChunkSize ()))
+        {
             removeSmallChunk (chunk);
+        }
         else
         {
             removeLargeChunk (chunk);

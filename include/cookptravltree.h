@@ -163,7 +163,7 @@ public:
                 return;
             }
         }
-        throw Exception (MEM_ERROR_GENERAL, "Invalid PtrAVLTree.");
+        throw Exception (MEM_ERROR_GENERAL, "Invalid PtrAVLTree.", __FILE__, __LINE__);
     }
 
     /**
@@ -179,72 +179,51 @@ public:
     void*
     remove (std::size_t& size)
     {
-        Node* root;
         Node* stack[sizeof(Node*) * 8 + 1];
-        std::int16_t depth;
+        Node* root = m_root;
+        Node* candidate = nullptr;
+        std::int16_t depth = 0;
+        std::int16_t candidateDepth = 0;
 
-        if (m_root == nullptr)
+        while (root != nullptr)
+        {
+            stack[depth] = root;
+
+            if (size <= root->size)
+            {
+                candidate = root;
+                candidateDepth = depth;
+                root = root->left;
+            }
+            else
+            {
+                root = root->right;
+            }
+            ++depth;
+        }
+
+        if (candidate == nullptr)
         {
             return nullptr;
         }
 
-        root = stack[0] = m_root;
-
-        for (depth = 0; ; ++depth)
+        // The candidate is the smallest node whose size is at least the key.
+        if (candidate->next)
         {
-            if (root == nullptr)
+            Node* next = candidate->next;
+            candidate->next = next->next;
+            if (candidate->next != nullptr)
             {
-                --depth;
-                root = stack[depth];
-                if (size > root->size)
-                {
-                    // check if the parent is also smaller.
-                    if (depth == 0)
-                    {
-                        return nullptr;
-                    }
-
-                    --depth;
-                    root = stack[depth];
-                    if (size > root->size)
-                    {
-                        return nullptr;
-                    }
-                    break;
-                }
-                break;
+                candidate->next->left = candidate;
             }
-
-            if (size < root->size)
-            {
-                root = stack[depth + 1] = root->left;
-                continue;
-            }
-            else if (size > root->size)
-            {
-                root = stack[depth + 1] = root->right;
-                continue;
-            }
-
-            break;
-        }
-
-        // At this point, this node's size is the smallest size
-        // larger than or equal to rs.size.
-        if (root->next)
-        {
-            // This is a simple case of having SLL of similar sized nodes.
-            // just remove one from the SLL.
-            Node* next = root->next;
-            root->next = next->next;
 
             size = next->size;
             return next;
         }
 
-        removeNode (root, stack, depth);
-        size = root->size;
-        return root;
+        size = candidate->size;
+        removeNode (candidate, stack, candidateDepth);
+        return candidate;
     }
 
     /**
@@ -289,7 +268,7 @@ public:
         {
             if (root == nullptr)
             {
-                throw Exception (MEM_ERROR_GENERAL, "pointer not found.");
+                throw Exception (MEM_ERROR_GENERAL, "pointer not found.", __FILE__, __LINE__);
             }
 
             if (size < root->size)
@@ -594,12 +573,13 @@ private:
             {
                 newRoot = right;
                 setLeftChild (newRoot, left);
+                updateHeight (newRoot);
             }
             else
             {
                 // first detach min from the parent
                 Node* parent = newStack[newDepth - 1];
-                parent->left = nullptr;
+                parent->left = min->right;
 
                 // rebalance the right
                 Node* newRight = balance (newStack, newDepth);
@@ -610,6 +590,7 @@ private:
 
                 setLeftChild (min, left);
                 setRightChild (min, right);
+                updateHeight (min);
 
                 newRoot = min;
             }
@@ -618,6 +599,15 @@ private:
         if (depth == 0)
         {
             m_root = newRoot;
+            if (newRoot != nullptr)
+            {
+                stack[0] = newRoot;
+                newRoot = balance (stack, 1);
+                if (newRoot != nullptr)
+                {
+                    m_root = newRoot;
+                }
+            }
             return;
         }
         if (newRoot == nullptr)
@@ -642,7 +632,7 @@ private:
         setParent (newRoot, stack[depth - 1]);
 
         stack[depth] = newRoot;
-        newRoot = balance (stack, depth);
+        newRoot = balance (stack, depth + 1);
 
         if (newRoot != nullptr)
         {
