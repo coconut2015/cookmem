@@ -20,41 +20,27 @@
 #include <string>
 #include <iostream>
 
-#include "malloc.h"
+#include "perftest.h"
 
-#define ASSERT_EQ(e,v) do { if ((e) != (v)) { std::cout << "Mismatch at line " << __LINE__ << std::endl; return 1; } } while (0)
-#define ASSERT_NE(e,v) do { if ((e) == (v)) { std::cout << "Mismatch at line " << __LINE__ << std::endl; return 1; } } while (0)
-
-static void
-test1 ()
+struct Test1
 {
-    std::vector<std::string> strings;
-
-    std::string str("01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789");
-
-    for (int i = 0; i < 1000000; ++i)
+    void
+    run ()
     {
-        strings.push_back(str);
+        std::vector<std::string> strings;
+
+        std::string str("01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789");
+
+        for (int i = 0; i < 1000000; ++i)
+        {
+            strings.push_back(str);
+        }
     }
-}
+};
 
 int
 main (int argc, const char* argv[])
 {
-    std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
-
-    s_useDLMalloc = true;
-    test1 ();
-
-    std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
-
-    s_useDLMalloc = false;
-    test1 ();
-    s_useDLMalloc = true;
-
-    std::chrono::high_resolution_clock::time_point t3 = std::chrono::high_resolution_clock::now();
-
-    std::cout << std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1).count() << ","
-              << std::chrono::duration_cast<std::chrono::duration<double>>(t3 - t2).count() << std::endl;
-    return 0;
+    Test1 test1;
+    return PerformanceTest ().run (test1);
 }

@@ -16,9 +16,9 @@
 #ifndef COOK_MEM_CONTEXT_H
 #define COOK_MEM_CONTEXT_H
 
-#include "cookmmaparena.h"
-#include "cookmemlogger.h"
-#include "cookmempool.h"
+#include "mmaparena.h"
+#include "logger.h"
+#include "pool.h"
 
 namespace cookmem
 {
@@ -30,12 +30,12 @@ namespace cookmem
  * This class is mostly used in cases when arena or logger that do not have
  * default constructors.
  */
-template<class Arena, class Logger, class T=void>
+template<class Arena, class Logger, class TreeType = PtrRBTree, class T=void>
 class MemContext
 {
 public:
-    typedef MemContext<Arena, Logger, T>    MemCtx;
-    typedef MemPool<Arena, Logger, T>       Pool;
+    typedef MemContext<Arena, Logger, TreeType, T>  MemCtx;
+    typedef MemPool<Arena, Logger, TreeType, T>     Pool;
 
     /** size type */
     typedef typename Pool::size_type        size_type;
@@ -316,12 +316,12 @@ struct SimpleMemContainer
  * This class is mostly used in cases when arena or logger both have default
  * constructors.
  */
-template<class Arena = MmapArena, class Logger = NoActionMemLogger, class T=void>
-class SimpleMemContext : private SimpleMemContainer<Arena, Logger>, public MemContext<Arena, Logger, T>
+template<class Arena = MmapArena, class Logger = NoActionMemLogger, class TreeType = PtrRBTree, class T=void>
+class SimpleMemContext : private SimpleMemContainer<Arena, Logger>, public MemContext<Arena, Logger, TreeType, T>
 {
 public:
     typedef SimpleMemContainer<Arena, Logger>   Container;
-    typedef MemContext<Arena, Logger, T>        MemCtx;
+    typedef MemContext<Arena, Logger, TreeType, T>  MemCtx;
 
     /** size type */
     typedef typename MemCtx::size_type          size_type;
@@ -375,12 +375,12 @@ struct CachedMemContainer
  * This class is mostly used in cases when arena or logger both have default
  * constructors.
  */
-template<class Arena = MmapArena, class Logger = NoActionMemLogger, class T = void>
-class CachedMemContext : private CachedMemContainer<Arena, Logger>, public MemContext<CachedArena<Arena>, Logger, T>
+template<class Arena = MmapArena, class Logger = NoActionMemLogger, class TreeType = PtrRBTree, class T = void>
+class CachedMemContext : private CachedMemContainer<Arena, Logger>, public MemContext<CachedArena<Arena>, Logger, TreeType, T>
 {
 public:
     typedef CachedMemContainer<Arena, Logger>   Container;
-    typedef MemContext<CachedArena<Arena>, Logger, T>   MemCtx;
+    typedef MemContext<CachedArena<Arena>, Logger, TreeType, T> MemCtx;
 
     /** size type */
     typedef typename MemCtx::size_type          size_type;

@@ -100,6 +100,12 @@ add_executable(test_cookmem_01
 add_test(NAME test_cookmem_01
 	COMMAND test_cookmem_01)
 
+add_executable(test_statslogger
+	tests/test_statslogger.cpp)
+
+add_test(NAME test_statslogger
+	COMMAND test_statslogger)
+
 add_executable(test_cookmem_02
 	tests/test_cookmem_02.cpp)
 

@@ -23,9 +23,11 @@
 #include <windows.h>
 #endif /* WIN32 */
 
-#include "cookexception.h"
-#include "cookrbtree.h"
-#include "cookptrcircularlist.h"
+#include "config.h"
+#include "exception.h"
+#include "avltree.h"
+#include "rbtree.h"
+#include "circularlist.h"
 
 namespace cookmem
 {
@@ -154,7 +156,7 @@ T left_bits(T x)
  * small memory chunks.  The actual ability to get memory segment (such
  * as mmap memory pages) is deferred to memory arena.
  */
-template<class Arena, class Logger, class T=void>
+template<class Arena, class Logger, class TreeType = PtrRBTree, class T=void>
 class MemPool
 {
 public:
@@ -171,7 +173,7 @@ public:
 
 private:
     typedef unsigned int    BinIndexType;
-    typedef PtrRBTree       PtrTreeType;
+    typedef TreeType        PtrTreeType;
 
 private:
     /**
@@ -492,15 +494,6 @@ private:
      * The number of extra bytes needed for a segment.
      */
     static const size_type  SEGMENT_OVERHEAD = ((((MemSegment::SEGMENT_HEADER + ALIGN_MASK) & ~ALIGN_MASK) + sizeof(MemChunk) + +ALIGN_MASK) & ~ALIGN_MASK);
-    /**
-     * The number of frees between full-pool coalescing passes.
-     */
-    static const size_type  DEFAULT_COALESCE_INTERVAL= 4095;
-    /**
-     * Default padding bytes for strict bounding check.
-     */
-    static const char DEFAULT_PADDING_BYTE = (char)0xcd;
-
 private:
     /**
      * The memory arena used to allocate / free large memory segments.
@@ -530,6 +523,11 @@ private:
     size_type       m_numFrees;
     BinIndexType    m_smallMap;
     BinIndexType    m_treeMap;
+    /**
+     * The designated free chunk reserved for fast allocation.
+     */
+    MemChunk*       m_dv;
+    size_type       m_dvSize;
 
     /**
      * LinkedLists for small chunks
@@ -585,6 +583,8 @@ public:
       m_numFrees (0),
       m_smallMap (0),
       m_treeMap (0),
+      m_dv (nullptr),
+      m_dvSize (0),
       m_smallLists (),
       m_largeTrees (),
       m_footprint (0),
@@ -695,11 +695,12 @@ public:
 
                 setUsed (chunk, userSize);
 
-                return getUserPointer (chunk, userSize);
+                return getUserPointer (chunk, userSize, MEM_ALLOC_SMALL);
             }
             else
             {
-                if (smallBits != 0)
+                if (chunkSize > m_dvSize &&
+                    smallBits != 0)
                 {
                     /* Use chunk in next nonempty smallbin */
                     MemChunk* chunk;
@@ -715,14 +716,14 @@ public:
 
                     setUsed (chunk, userSize);
 
-                    return getUserPointer (chunk, userSize);
+                    return getUserPointer (chunk, userSize, MEM_ALLOC_SMALL);
                 }
             }
         }
         else if (allocSize >= MAX_REQUEST)
         {
             // The request size is too big.
-            m_logger.logAllocation (nullptr, userSize);
+            m_logger.logAllocation (nullptr, userSize, MEM_ALLOC_BIG);
             return nullptr;
         }
         else
@@ -732,16 +733,37 @@ public:
 
         MemChunk* chunk;
 
+        if (allocSize < MIN_LARGE_REQUEST &&
+            m_dvSize >= chunkSize)
+        {
+            chunk = takeDesignatedVictim (chunkSize);
+            setUsed (chunk, userSize);
+            return getUserPointer (chunk, userSize, MEM_ALLOC_DV);
+        }
+
+        MemAllocType_et allocType = MEM_ALLOC_NONE;
+
         /*
          * Check if we have enough space in existing chunks.
          */
         if (m_treeMap != 0)
         {
             chunk = treeMalloc (chunkSize);
+            if (chunk != nullptr)
+            {
+                allocType = MEM_ALLOC_TREE;
+            }
         }
         else
         {
             chunk = nullptr;
+        }
+
+        if (chunk == nullptr &&
+            m_dvSize >= chunkSize)
+        {
+            chunk = takeDesignatedVictim (chunkSize);
+            allocType = MEM_ALLOC_DV;
         }
 
         /*
@@ -753,14 +775,15 @@ public:
 
             if (chunk == nullptr)
             {
-                m_logger.logAllocation (nullptr, userSize);
+                m_logger.logAllocation (nullptr, userSize, MEM_ALLOC_BIG);
                 return nullptr;
             }
+            allocType = MEM_ALLOC_ARENA;
         }
 
         setUsed (chunk, userSize);
 
-        return getUserPointer (chunk, userSize);
+        return getUserPointer (chunk, userSize, allocType);
     }
 
     /**
@@ -804,9 +827,28 @@ public:
         {
             m_logger.logReallocation(ptr, oldAllocSize, newUserSize);
 
-            // simply split the chunk
-            splitChunk (chunk, newChunkSize);
-            setUsed (chunk, newUserSize);
+            size_type remainSize = chunk->getChunkSize () - newChunkSize;
+            if (remainSize >= MIN_CHUNK_SIZE)
+            {
+                MemChunk* remainChunk = (MemChunk*)((char*)chunk + newChunkSize);
+                MemChunk* nextChunk = remainChunk->getNextChunk (remainSize);
+
+                if (!nextChunk->isUsed ())
+                {
+                    removeChunk (nextChunk);
+                    remainSize += nextChunk->getChunkSize ();
+                }
+
+                chunk->setFreeChunkSize (newChunkSize);
+                setUsed (chunk, newUserSize);
+                remainChunk->setFreeChunkSize (remainSize);
+                addChunk (remainChunk);
+            }
+            else
+            {
+                setUsed (chunk, newUserSize);
+            }
+
             return ptr;
         }
     }
@@ -893,8 +935,8 @@ public:
 
             if (!nextChunkUsed)
             {
-                removeChunk (nextChunk);
                 freeChunkSize += nextChunk->getChunkSize ();
+                removeChunk (nextChunk);
             }
 
             freeChunk->setFreeChunkSize (freeChunkSize);
@@ -952,6 +994,11 @@ public:
     void
     validate ()
     {
+        COOKMEM_ASSERT ((m_dv == nullptr && m_dvSize == 0) ||
+                        (m_dv != nullptr &&
+                         !m_dv->isUsed () &&
+                         m_dv->getChunkSize () == m_dvSize));
+
         MemSegment* seg = m_segList;
         while (seg)
         {
@@ -994,7 +1041,7 @@ public:
 
 
     /**
-     * Coalesce adjacent free chunks and release fully free segments.
+     * Release segments that are entirely free.
      */
     void
     coalesce ()
@@ -1006,82 +1053,7 @@ public:
             MemSegment* nextSeg = seg->getNext ();
 
             size_type   segSize = seg->getSize ();
-            size_type   remainSize = segSize;
-            size_type   currentFreeChunkSize = 0;
-
             MemChunk*   firstChunk = seg->getFirstChunk ();
-            MemChunk*   chunk = seg->getPastLastChunk ();
-
-            chunk = chunk->getPrevChunk ();
-
-            while (chunk > firstChunk)
-            {
-                COOKMEM_ASSERT (chunk->isValidSize ());
-
-                bool        chunkIsUsed = chunk->isUsed ();
-                size_type   chunkSize = chunk->getChunkSize ();
-
-                COOKMEM_ASSERT (chunkSize < remainSize);
-                remainSize -= chunkSize;
-
-                if (!chunkIsUsed)
-                {
-                    COOKMEM_ASSERT (isValidChunk (chunk));
-
-                    if (chunk->isPrevChunkUsed ())
-                    {
-                        if (currentFreeChunkSize > 0)
-                        {
-                            removeChunk (chunk);
-
-                            currentFreeChunkSize += chunk->getChunkSize ();
-
-                            chunk->setFreeChunkSize (currentFreeChunkSize);
-
-                            addChunk (chunk);
-
-                            currentFreeChunkSize = 0;
-                        }
-                    }
-                    else
-                    {
-                        // remove the current chunk
-                        removeChunk (chunk);
-
-                        currentFreeChunkSize += chunkSize;
-                    }
-                }
-
-                chunk = chunk->getPrevChunk ();
-            }
-
-            COOKMEM_ASSERT (chunk == firstChunk);
-
-            {
-                bool        chunkIsUsed = chunk->isUsed ();
-                size_type   chunkSize = chunk->getChunkSize ();
-
-                COOKMEM_ASSERT (chunkSize < remainSize);
-                remainSize -= chunkSize;
-                COOKMEM_ASSERT (remainSize == SEGMENT_OVERHEAD);
-
-                if (!chunkIsUsed &&
-                    currentFreeChunkSize > 0)
-                {
-                    COOKMEM_ASSERT (isValidChunk (chunk));
-
-                    removeChunk (chunk);
-
-                    currentFreeChunkSize += chunk->getChunkSize ();
-
-                    chunk->setFreeChunkSize (currentFreeChunkSize);
-
-                    addChunk (chunk);
-
-                    currentFreeChunkSize = 0;
-                }
-            }
-
             if (!firstChunk->isUsed () &&
                 firstChunk->getChunkSize () == seg->getMaxChunkSize ())
             {
@@ -1108,10 +1080,8 @@ public:
             {
                 prevSeg = seg;
             }
-
             seg = nextSeg;
         }
-        validate ();
         m_numFrees = 0;
     }
 
@@ -1163,6 +1133,8 @@ public:
         m_smallMap = 0;
         m_treeMap = 0;
         m_footprint = 0;
+        m_dv = nullptr;
+        m_dvSize = 0;
         memset (m_largeTrees, 0, sizeof(m_largeTrees));
         memset (m_smallLists, 0, sizeof(m_smallLists));
     }
@@ -1392,6 +1364,33 @@ private:
     }
 
     /**
+     * Take the designated victim chunk and split it into two parts.
+     *
+     * The first part is returned and the second part is saved as the
+     * new designated victim.
+     *
+     * @param   size
+     *          The first part size.
+     * @return  The first part chunk.
+     */
+    inline MemChunk*
+    takeDesignatedVictim (size_type size)
+    {
+        MemChunk* chunk = m_dv;
+        size_type remainSize = m_dvSize - size;
+        removeChunk (chunk);
+
+        if (remainSize >= MIN_CHUNK_SIZE)
+        {
+            MemChunk* remainChunk = (MemChunk*)((char*)chunk + size);
+            chunk->setFreeChunkSize (size);
+            remainChunk->setFreeChunkSize (remainSize);
+            addChunk (remainChunk);
+        }
+        return chunk;
+    }
+
+    /**
      * Obtain a large memory chunk from memory arena.
      *
      * @param   chunkSize
@@ -1567,6 +1566,11 @@ private:
     inline bool
     isValidChunk (MemChunk* chunk)
     {
+        if (chunk == m_dv)
+        {
+            return true;
+        }
+
         if (isSmallChunk (chunk->getChunkSize ()))
         {
             BinIndexType I = getSmallBinIndex (chunk->getChunkSize ());
@@ -1590,6 +1594,11 @@ private:
         {
             addSmallChunk (chunk);
         }
+        else if (m_dv == nullptr)
+        {
+            m_dv = chunk;
+            m_dvSize = chunk->getChunkSize ();
+        }
         else
         {
             addLargeChunk (chunk);
@@ -1599,7 +1608,12 @@ private:
     inline void
     removeChunk (MemChunk* chunk)
     {
-        if (isSmallChunk (chunk->getChunkSize ()))
+        if (chunk == m_dv)
+        {
+            m_dv = nullptr;
+            m_dvSize = 0;
+        }
+        else if (isSmallChunk (chunk->getChunkSize ()))
         {
             removeSmallChunk (chunk);
         }
@@ -1642,10 +1656,10 @@ private:
     }
 
     inline T*
-    getUserPointer (MemChunk* chunk, size_type userSize)
+    getUserPointer (MemChunk* chunk, size_type userSize, MemAllocType_et allocType)
     {
         T* userPtr = chunk2Mem (chunk);
-        m_logger.logAllocation (userPtr, userSize);
+        m_logger.logAllocation (userPtr, userSize, allocType);
         return userPtr;
     }
 };

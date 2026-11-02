@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef COOK_PTR_RBTREE_H
-#define COOK_PTR_RBTREE_H
+#ifndef COOK_MEM_RBTREE_H
+#define COOK_MEM_RBTREE_H
 
 #include <iostream>
 #include <string>
 
-#include "cookexception.h"
+#include "exception.h"
 
 namespace cookmem
 {
@@ -859,4 +859,4 @@ typedef RedBlackTree<PtrRBNode> PtrRBTree;
 
 } // namespace cookmem
 
-#endif // COOK_PTR_RBTREE_H
+#endif // COOK_MEM_RBTREE_H

@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef COOK_PTR_CIRCULAR_LIST_H
-#define COOK_PTR_CIRCULAR_LIST_H
+#ifndef COOK_MEM_CIRCULAR_LIST_H
+#define COOK_MEM_CIRCULAR_LIST_H
 
-#include "cookexception.h"
+#include "exception.h"
 
 namespace cookmem
 {
@@ -160,4 +160,4 @@ private:
 
 }   // namespace cookmem
 
-#endif  // COOK_PTR_CIRCULAR_LIST_H
+#endif  // COOK_MEM_CIRCULAR_LIST_H

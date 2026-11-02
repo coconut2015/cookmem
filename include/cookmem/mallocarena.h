@@ -18,7 +18,8 @@
 
 #include <cstdlib>
 
-#include "cookmemarena.h"
+#include "arena.h"
+#include "config.h"
 
 namespace cookmem
 {
@@ -90,7 +91,7 @@ public:
      *          minimum segment size.  It should be noted that this value
      *          needs to be a multiple of 16.
      */
-    MallocArena (std::size_t minSize = 65536)
+    MallocArena (std::size_t minSize = DEFAULT_MIN_SEGMENT_SIZE)
     : m_minSize (minSize),
       m_stats ()
     {

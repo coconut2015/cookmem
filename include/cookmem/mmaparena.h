@@ -22,7 +22,8 @@
 #include <sys/mman.h>
 #endif  // WIN32
 
-#include "cookmemarena.h"
+#include "arena.h"
+#include "config.h"
 
 namespace cookmem
 {
@@ -45,7 +46,7 @@ public:
      * @param   type
      *          allocation type
      */
-    MmapArena (std::size_t minSize = 65536, DWORD prot = PAGE_READWRITE, DWORD type = ( MEM_RESERVE | MEM_COMMIT ))
+    MmapArena (std::size_t minSize = DEFAULT_MIN_SEGMENT_SIZE, DWORD prot = PAGE_READWRITE, DWORD type = ( MEM_RESERVE | MEM_COMMIT ))
       : m_minSize (minSize),
         m_prot (prot),
         m_type (type)
@@ -108,7 +109,7 @@ public:
      * @param   flag
      *          mmap flag
      */
-    MmapArena(std::size_t minSize = 65536, int prot = ( PROT_READ | PROT_WRITE ), int flag = ( MAP_PRIVATE | MAP_ANONYMOUS ))
+    MmapArena(std::size_t minSize = DEFAULT_MIN_SEGMENT_SIZE, int prot = ( PROT_READ | PROT_WRITE ), int flag = ( MAP_PRIVATE | MAP_ANONYMOUS ))
       : m_minSize (minSize),
         m_prot (prot),
         m_flag (flag)

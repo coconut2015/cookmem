@@ -16,9 +16,9 @@
 #ifndef COOK_MEM_H
 #define COOK_MEM_H
 
-#include "cookexception.h"
-#include "cookmallocarena.h"
-#include "cookmmaparena.h"
-#include "cookmemcontext.h"
+#include "cookmem/exception.h"
+#include "cookmem/mallocarena.h"
+#include "cookmem/mmaparena.h"
+#include "cookmem/context.h"
 
 #endif  // COOK_MEM_H

@@ -15,7 +15,7 @@
  */
 #include <iostream>
 
-#include <cookptrcircularlist.h>
+#include <cookmem/circularlist.h>
 
 #define ASSERT_EQ(e,v) do { if ((e) != (v)) { std::cout << "Mismatch at line " << __LINE__ << std::endl; return 1; } } while (0)
 #define ASSERT_NE(e,v) do { if ((e) == (v)) { std::cout << "Mismatch at line " << __LINE__ << std::endl; return 1; } } while (0)

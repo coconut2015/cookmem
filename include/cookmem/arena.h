@@ -18,7 +18,7 @@
 
 #include <cstddef>
 
-#include "cookrbtree.h"
+#include "rbtree.h"
 
 namespace cookmem
 {
@@ -26,7 +26,7 @@ namespace cookmem
 /**
  * An arena is used to retrieve a page of memory.
  *
- * This class here is merely to define the functions needed to implement a MemArena.
+ * This class here is merely to define the interface needed to implement a MemArena.
  */
 class MemArena
 {
@@ -139,12 +139,18 @@ private:
 /**
  * CachedArena is used to cache the segments released and see if they can be
  * reused in the future segment request.
+ *
+ * @tparam  Arena
+ *          the memory arena that does the actual memory allocation
+ * @tparam  TreeType
+ *          The type of the tree used to cache the released segments.
+ *          The default is PtrRBTree.
  */
-template<class Arena>
+template<class Arena, class TreeType = PtrRBTree>
 class CachedArena
 {
 public:
-    typedef PtrRBTree   PtrTreeType;
+    typedef TreeType   PtrTreeType;
 public:
     /**
      * Constructor

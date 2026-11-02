@@ -38,7 +38,7 @@ since cookmem::MemPool already does the tracking.
 \section ex_3 cookmem::CachedArena
 
 cookmem::CachedArena basically caches the memory segments released in an
-[AVL tree](https://en.wikipedia.org/wiki/AVL_tree) and reuses them for
+[red-black tree](https://en.wikipedia.org/wiki/Red%E2%80%93black_tree) and reuses them for
 later requests.  This is useful when it is expensive to request and
 release memory segments.
 
