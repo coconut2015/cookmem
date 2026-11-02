@@ -50,6 +50,7 @@ main (int argc, const char* argv[])
 
     s_useDLMalloc = false;
     test1 ();
+    s_useDLMalloc = true;
 
     std::chrono::high_resolution_clock::time_point t3 = std::chrono::high_resolution_clock::now();
 
