@@ -190,6 +190,61 @@ test5 ()
     return 0;
 }
 
+static int
+test6 ()
+{
+    cookmem::MallocArena arena (256);
+    cookmem::NoActionMemLogger logger;
+    cookmem::MemContext<cookmem::MallocArena, cookmem::NoActionMemLogger> memCtx (arena, logger);
+
+    memCtx.getPool ().setFootprintLimit (256);
+    memCtx.setCoalesceInterval (100);
+
+    void* first = memCtx.allocate (8);
+    void* second = memCtx.allocate (8);
+    void* third = memCtx.allocate (8);
+    void* last = memCtx.allocate (112);
+    ASSERT_NE (nullptr, first);
+    ASSERT_NE (nullptr, second);
+    ASSERT_NE (nullptr, third);
+    ASSERT_NE (nullptr, last);
+
+    memCtx.deallocate (first);
+    memCtx.deallocate (second);
+    memCtx.validate ();
+
+    void* merged = memCtx.allocate (40);
+    ASSERT_EQ (first, merged);
+
+    memCtx.deallocate (third);
+    memCtx.deallocate (last);
+    memCtx.deallocate (merged);
+    memCtx.validate ();
+
+    first = memCtx.allocate (8);
+    second = memCtx.allocate (8);
+    third = memCtx.allocate (8);
+    last = memCtx.allocate (112);
+    ASSERT_NE (nullptr, first);
+    ASSERT_NE (nullptr, second);
+    ASSERT_NE (nullptr, third);
+    ASSERT_NE (nullptr, last);
+
+    memCtx.deallocate (third);
+    memCtx.deallocate (second);
+    memCtx.validate ();
+
+    merged = memCtx.allocate (40);
+    ASSERT_EQ (second, merged);
+
+    memCtx.deallocate (first);
+    memCtx.deallocate (last);
+    memCtx.deallocate (merged);
+    memCtx.validate ();
+
+    return 0;
+}
+
 int
 main (int argc, const char* argv[])
 {
@@ -198,5 +253,6 @@ main (int argc, const char* argv[])
     ASSERT_EQ (0, test3 ());
     ASSERT_EQ (0, test4 ());
     ASSERT_EQ (0, test5 ());
+    ASSERT_EQ (0, test6 ());
     return 0;
 }

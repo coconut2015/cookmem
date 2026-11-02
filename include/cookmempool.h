@@ -218,6 +218,12 @@ private:
             getNextChunk (chunkSize)->m_prevFootSize = chunkSize;
         }
 
+        inline void
+        setFence ()
+        {
+            m_size = BIT_USED;
+        }
+
         inline bool
         isUsed () const
         {
@@ -350,6 +356,7 @@ private:
             size_type  chunkSize = getMaxChunkSize ();
             MemChunk* chunk = getFirstChunk ();
             chunk->setFreeChunkSize (chunkSize);
+            chunk->getNextChunk (chunkSize)->setFence ();
             return chunk;
         }
 
@@ -486,7 +493,7 @@ private:
      */
     static const size_type  SEGMENT_OVERHEAD = ((((MemSegment::SEGMENT_HEADER + ALIGN_MASK) & ~ALIGN_MASK) + sizeof(MemChunk) + +ALIGN_MASK) & ~ALIGN_MASK);
     /**
-     * The number of frees before attempting to coalesce memory chunks.
+     * The number of frees between full-pool coalescing passes.
      */
     static const size_type  DEFAULT_COALESCE_INTERVAL= 4095;
     /**
@@ -514,7 +521,7 @@ private:
      */
     MemSegment*     m_segList;
     /**
-     * The number of deallocations before coalescing is triggererd.
+     * The number of deallocations before a full-pool coalescing pass.
      */
     size_type       m_coalesceInterval;
     /**
@@ -630,8 +637,7 @@ public:
     }
 
     /**
-     * Set the number of deallocations to trigger the coalescing free memory
-     * fragments.
+     * Set the number of deallocations between full-pool coalescing passes.
      */
     void
     setCoalesceInterval (size_type interval)
@@ -640,11 +646,10 @@ public:
     }
 
     /**
-     * Get the number of deallocations to trigger the coalescing free memory
-     * fragments.
+     * Get the number of deallocations between full-pool coalescing passes.
      *
-     * @return  the number of deallocations to trigger the coalescing free
-     *          memory fragments.
+     * @return  the number of deallocations between full-pool coalescing
+     *          passes.
      */
     size_type
     getCoalesceInterval () const
@@ -872,8 +877,28 @@ public:
             }
             m_logger.logDeallocation (ptr, chunk->getUserSize ());
 
-            chunk->setFreeChunkSize (chunkSize);
-            addChunk (chunk);
+            bool        prevChunkUsed = chunk->isPrevChunkUsed ();
+            MemChunk*   nextChunk = chunk->getNextChunk (chunkSize);
+            bool        nextChunkUsed = nextChunk->isUsed ();
+            MemChunk*   freeChunk = chunk;
+            size_type   freeChunkSize = chunkSize;
+
+            if (!prevChunkUsed)
+            {
+                MemChunk* prevChunk = chunk->getPrevChunk ();
+                removeChunk (prevChunk);
+                freeChunk = prevChunk;
+                freeChunkSize += prevChunk->getChunkSize ();
+            }
+
+            if (!nextChunkUsed)
+            {
+                removeChunk (nextChunk);
+                freeChunkSize += nextChunk->getChunkSize ();
+            }
+
+            freeChunk->setFreeChunkSize (freeChunkSize);
+            addChunk (freeChunk);
 
             ++m_numFrees;
             if (m_numFrees >= m_coalesceInterval)
@@ -969,7 +994,7 @@ public:
 
 
     /**
-     * Coalesce all the free chunks to reduce memory fragmentation.
+     * Coalesce adjacent free chunks and release fully free segments.
      */
     void
     coalesce ()
