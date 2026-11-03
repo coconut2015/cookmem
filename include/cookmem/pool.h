@@ -17,6 +17,7 @@
 #define COOK_MEM_POOL_H
 
 #include <cstddef>
+#include <cstdint>
 #include <cstring>
 
 #ifdef WIN32
@@ -556,7 +557,7 @@ private:
      * to pad some bytes at the end of user allocation.  It can be used to
      * detect the common issue of having extra bytes padded at the end.
      */
-    const bool      m_padding;
+    const std::uint8_t  m_padding;
     /**
      * The padding byte.
      */
@@ -564,17 +565,18 @@ private:
 public:
     /**
      * Constructor
+     *
      * @param   arena
-     *          memory arena used to allocate memory segments.
-     * @param   padding
-     *          Should memory pool pad extra bytes after allocated memory
-     *          to detect out of bound access.  Depending on the allocated
-     *          size, the minimum number of bytes to pad is 1, and the
-     *          maximum is 8.
+     *          Memory arena used to allocate memory segments.
+     * @param   logger
+     *          Logging facility used to log memory allocation and deallocation.
+     * @param   paddingSize
+     *          The number of bytes to pad after each allocation to detect
+     *          out of bound access.  0 disables the padding check.
      */
-    MemPool (Arena&     arena,
-             Logger&    logger,
-             bool       padding = false)
+    MemPool (Arena&         arena,
+             Logger&        logger,
+             std::uint8_t   paddingSize = DEFAULT_PADDING_SIZE)
     : m_arena (arena),
       m_logger (logger),
       m_footprintLimit (0),
@@ -589,10 +591,14 @@ public:
       m_largeTrees (),
       m_footprint (0),
       m_maxFootprint (0),
-      m_storingExactSize (padding),
-      m_padding (padding),
+      m_storingExactSize (paddingSize != 0),
+      m_padding (paddingSize),
       m_paddingByte (DEFAULT_PADDING_BYTE)
     {
+        if (m_padding > MAX_PADDING_SIZE)
+        {
+            throw Exception (MEM_ERROR_GENERAL, "padding size cannot exceed 8 bytes.", __FILE__, __LINE__);
+        }
     }
 
     /**
@@ -894,22 +900,19 @@ public:
             }
             COOKMEM_ASSERT (chunk->isValidSize ());
             size_type chunkSize = chunk->getChunkSize ();
-            if (m_padding)
+            if (m_padding != 0)
             {
                 COOKMEM_ASSERT (chunkSize > CHUNK_OVERHEAD);
                 size_type userSize = chunk->getUserSize () + CHUNK_OVERHEAD;
                 COOKMEM_ASSERT (userSize < chunkSize);
+#if COOKMEM_DEBUG > 0
                 char diff = (char)(chunkSize - userSize);
                 COOKMEM_ASSERT ((diff > 0) && ((userSize + diff) == chunkSize));
                 COOKMEM_ASSERT (*(((char*)chunk) + chunkSize - 1) == diff);
+#endif  // COOKMEM_DEBUG
 
                 char* paddingPtr = ((char*)chunk) + userSize;
-                --diff;
-                if (diff > 8)
-                {
-                    diff = 8;
-                }
-                for (int i = 0; i < diff; ++i)
+                for (std::uint8_t i = 0; i < m_padding; ++i)
                 {
                     if (paddingPtr[i] != m_paddingByte)
                     {
@@ -1183,7 +1186,7 @@ public:
     void
     setStoringExactSize (bool b)
     {
-        if (!m_padding)
+        if (m_padding == 0)
         {
             m_storingExactSize = b;
         }
@@ -1198,6 +1201,15 @@ public:
      */
     bool
     isPadding () const
+    {
+        return m_padding != 0;
+    }
+
+    /**
+     * Get the number of padding bytes checked after each allocation.
+     */
+    std::uint8_t
+    getPaddingSize () const
     {
         return m_padding;
     }
@@ -1624,12 +1636,21 @@ private:
     }
 
     /**
-     * If we are padding bytes, then we need to pad at least 1 byte,
+     * Add the configured padding bytes and one byte for the size metadata.
      */
     inline size_t
     getMinAllocSize (size_type userSize)
     {
-        return m_padding ? userSize + 1 : userSize;
+        if (m_padding == 0)
+        {
+            return userSize;
+        }
+        if (userSize > (MAX_REQUEST - m_padding - 1))
+        {
+            return MAX_REQUEST;
+        }
+        // +1 for the size metadata
+        return userSize + m_padding + 1;
     }
 
     inline void
@@ -1639,16 +1660,10 @@ private:
 
         // if we are padding, userSize will always be smaller
         // than the chunkSize
-        if (m_padding)
+        if (m_padding != 0)
         {
-            size_type   chunkSize = chunk->getChunkSize ();
             char*       paddingPtr = ((char*)chunk) + userSize + CHUNK_OVERHEAD;
-            char        diff = (char)(chunkSize - CHUNK_OVERHEAD - userSize - 1);
-            if (diff > 8)
-            {
-                diff = 8;
-            }
-            for (int i = 0; i < diff; ++i)
+            for (std::uint8_t i = 0; i < m_padding; ++i)
             {
                 paddingPtr[i] = m_paddingByte;
             }

@@ -16,6 +16,8 @@
 #ifndef COOK_EXCEPTION_H
 #define COOK_EXCEPTION_H
 
+#include "config.h"
+
 namespace cookmem
 {
 
@@ -83,10 +85,10 @@ private:
 
 }   // namespace cookmem
 
-#ifdef NDEBUG
-#define COOKMEM_ASSERT(b)
-#else /* NDEBUG */
+#if COOKMEM_DEBUG > 0
 #define COOKMEM_ASSERT(b) do { if (!(b)) throw cookmem::Exception (cookmem::MEM_ERROR_ASSERT, "assertion failure.", __FILE__, __LINE__); } while (0)
-#endif /* NDEBUG */
+#else   // COOKMEM_DEBUG
+#define COOKMEM_ASSERT(b)
+#endif  // COOKMEM_DEBUG
 
 #endif  // COOK_EXCEPTION_H

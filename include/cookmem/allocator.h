@@ -17,6 +17,7 @@
 #define COOK_MEM_ALLOCATOR_H
 
 #include <cstddef>
+#include <cstdint>
 #include <limits>
 #include <new>
 #include <utility>
@@ -56,18 +57,13 @@ public:
         typedef CookMemAllocator<U, Arena, Logger, TreeType> other;
     };
 
-    CookMemAllocator ()
-    : m_context ()
-    {
-    }
-
     CookMemAllocator (const CookMemAllocator&)
     : m_context ()
     {
     }
 
-    explicit CookMemAllocator (bool padding)
-    : m_context (padding)
+    explicit CookMemAllocator (std::uint8_t paddingSize = DEFAULT_PADDING_SIZE)
+    : m_context (paddingSize)
     {
     }
 

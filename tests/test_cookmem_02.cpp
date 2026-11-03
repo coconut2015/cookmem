@@ -23,6 +23,7 @@ test1 ()
 {
     cookmem::SimpleMemContext<cookmem::MallocArena> memCtx;
 
+    ASSERT_EQ (0, memCtx.getPaddingSize ());
     ASSERT_EQ (false, memCtx.isStoringExactSize ());
 
     ASSERT_EQ (0UL, memCtx.getSize (nullptr));
@@ -102,10 +103,14 @@ test2 ()
 static int
 test3 ()
 {
-    cookmem::SimpleMemContext<cookmem::MallocArena> memCtx (true);
+    cookmem::SimpleMemContext<cookmem::MallocArena> memCtx (4);
 
     ASSERT_EQ (true, memCtx.isPadding ());
+    ASSERT_EQ (4, memCtx.getPaddingSize ());
     ASSERT_EQ (true, memCtx.isStoringExactSize ());
+
+    cookmem::MemContext<cookmem::MallocArena, cookmem::NoActionMemLogger> copiedContext (memCtx);
+    ASSERT_EQ (4, copiedContext.getPaddingSize ());
 
     void* ptr;
 

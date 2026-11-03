@@ -16,6 +16,9 @@
 #ifndef COOK_MEM_CONTEXT_H
 #define COOK_MEM_CONTEXT_H
 
+#include <cstdint>
+
+#include "config.h"
 #include "mmaparena.h"
 #include "logger.h"
 #include "pool.h"
@@ -49,19 +52,19 @@ public:
     typedef typename Pool::const_pointer    const_pointer;
 
 public:
-    MemContext (Arena&  arena,
-                Logger& logger,
-                bool    padding = false)
+    MemContext (Arena&          arena,
+                Logger&         logger,
+                std::uint8_t    paddingSize = DEFAULT_PADDING_SIZE)
     : m_arena (arena),
       m_logger (logger),
-      m_pool (m_arena, m_logger, padding)
+      m_pool (m_arena, m_logger, paddingSize)
     {
     }
 
     MemContext (MemCtx& other)
     : m_arena (other.getArena ()),
       m_logger (other.getLogger ()),
-      m_pool (m_arena, m_logger, other.isPadding ())
+      m_pool (m_arena, m_logger, other.getPaddingSize ())
     {
     }
 
@@ -243,6 +246,12 @@ public:
     isPadding () const { return m_pool.isPadding (); }
 
     /**
+     * Get the number of padding bytes checked after each allocation.
+     */
+    std::uint8_t
+    getPaddingSize () const { return m_pool.getPaddingSize (); }
+
+    /**
      * Get the padding byte.
      *
      * @return  The padding byte.
@@ -335,9 +344,9 @@ public:
     typedef typename MemCtx::const_pointer      const_pointer;
 
 public:
-    SimpleMemContext (bool padding = false)
+    SimpleMemContext (std::uint8_t paddingSize = DEFAULT_PADDING_SIZE)
     : Container (),
-      MemCtx (Container::arena, Container::logger, padding)
+      MemCtx (Container::arena, Container::logger, paddingSize)
     {
     }
 
@@ -394,9 +403,9 @@ public:
     typedef typename MemCtx::const_pointer      const_pointer;
 
 public:
-    CachedMemContext (bool padding = false)
+    CachedMemContext (std::uint8_t paddingSize = DEFAULT_PADDING_SIZE)
     : Container (),
-      MemCtx (Container::cachedArena, Container::logger, padding)
+      MemCtx (Container::cachedArena, Container::logger, paddingSize)
     {
     }
 

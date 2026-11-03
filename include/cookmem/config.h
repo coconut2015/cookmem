@@ -17,6 +17,7 @@
 #define COOK_MEM_CONFIG_H
 
 #include <cstddef>
+#include <cstdint>
 
 namespace cookmem
 {
@@ -32,10 +33,20 @@ const std::size_t DEFAULT_COALESCE_INTERVAL = 4095 * 1024;
  */
 const std::size_t DEFAULT_MIN_SEGMENT_SIZE = 65536;
 /**
+ * Default number of padding bytes checked after each allocation.
+ */
+const std::uint8_t DEFAULT_PADDING_SIZE = 0;
+/**
+ * Maximum number of padding bytes checked after each allocation.
+ */
+const std::uint8_t MAX_PADDING_SIZE = 8;
+/**
  * Default padding byte for strict bounds checking.
  */
 const char DEFAULT_PADDING_BYTE = (char)0xcd;
 
 }   // namespace cookmem
+
+#define COOKMEM_DEBUG 0
 
 #endif  // COOK_MEM_CONFIG_H
