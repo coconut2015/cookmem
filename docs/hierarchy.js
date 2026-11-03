@@ -26,13 +26,13 @@ var hierarchy =
     [ "cookmem::MemPool< Arena, Logger, PtrRBTree, void >", "classcookmem_1_1MemPool.html", null ],
     [ "cookmem::MemPool< CachedArena< MmapArena >, NoActionMemLogger, PtrRBTree, void >", "classcookmem_1_1MemPool.html", null ],
     [ "cookmem::MemPool< MmapArena, NoActionMemLogger, PtrRBTree, void >", "classcookmem_1_1MemPool.html", null ],
+    [ "cookmem::MemStatistics", "structcookmem_1_1MemStatistics.html", null ],
     [ "cookmem::MmapArena", "classcookmem_1_1MmapArena.html", null ],
     [ "cookmem::NoActionMemLogger", "classcookmem_1_1NoActionMemLogger.html", null ],
     [ "cookmem::PtrAVLTree", "classcookmem_1_1PtrAVLTree.html", null ],
     [ "cookmem::PtrRBNode", "classcookmem_1_1PtrRBNode.html", null ],
     [ "cookmem::CookMemAllocator< T, Arena, Logger, TreeType >::rebind< U >", "structcookmem_1_1CookMemAllocator_1_1rebind.html", null ],
     [ "cookmem::RedBlackTree< Node >", "classcookmem_1_1RedBlackTree.html", null ],
-    [ "cookmem::SegmentStatistics", "classcookmem_1_1SegmentStatistics.html", null ],
     [ "cookmem::SimpleMemContainer< Arena, Logger >", "structcookmem_1_1SimpleMemContainer.html", [
       [ "cookmem::SimpleMemContext< Arena, Logger, TreeType, T >", "classcookmem_1_1SimpleMemContext.html", null ]
     ] ],

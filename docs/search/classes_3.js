@@ -10,5 +10,6 @@ var searchData=
   ['mempool_3c_20arena_2c_20logger_2c_20ptrrbtree_2c_20void_20_3e_7',['MemPool&lt; Arena, Logger, PtrRBTree, void &gt;',['../classcookmem_1_1MemPool.html',1,'cookmem']]],
   ['mempool_3c_20cachedarena_3c_20mmaparena_20_3e_2c_20noactionmemlogger_2c_20ptrrbtree_2c_20void_20_3e_8',['MemPool&lt; CachedArena&lt; MmapArena &gt;, NoActionMemLogger, PtrRBTree, void &gt;',['../classcookmem_1_1MemPool.html',1,'cookmem']]],
   ['mempool_3c_20mmaparena_2c_20noactionmemlogger_2c_20ptrrbtree_2c_20void_20_3e_9',['MemPool&lt; MmapArena, NoActionMemLogger, PtrRBTree, void &gt;',['../classcookmem_1_1MemPool.html',1,'cookmem']]],
-  ['mmaparena_10',['MmapArena',['../classcookmem_1_1MmapArena.html',1,'cookmem']]]
+  ['memstatistics_10',['MemStatistics',['../structcookmem_1_1MemStatistics.html',1,'cookmem']]],
+  ['mmaparena_11',['MmapArena',['../classcookmem_1_1MmapArena.html',1,'cookmem']]]
 ];

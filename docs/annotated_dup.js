@@ -13,14 +13,14 @@ var annotated_dup =
       [ "MemContext", "classcookmem_1_1MemContext.html", "classcookmem_1_1MemContext" ],
       [ "MemLogger", "classcookmem_1_1MemLogger.html", null ],
       [ "MemPool", "classcookmem_1_1MemPool.html", "classcookmem_1_1MemPool" ],
+      [ "MemStatistics", "structcookmem_1_1MemStatistics.html", "structcookmem_1_1MemStatistics" ],
       [ "MmapArena", "classcookmem_1_1MmapArena.html", "classcookmem_1_1MmapArena" ],
       [ "NoActionMemLogger", "classcookmem_1_1NoActionMemLogger.html", null ],
       [ "PtrAVLTree", "classcookmem_1_1PtrAVLTree.html", "classcookmem_1_1PtrAVLTree" ],
       [ "PtrRBNode", "classcookmem_1_1PtrRBNode.html", null ],
       [ "RedBlackTree", "classcookmem_1_1RedBlackTree.html", "classcookmem_1_1RedBlackTree" ],
-      [ "SegmentStatistics", "classcookmem_1_1SegmentStatistics.html", null ],
       [ "SimpleMemContainer", "structcookmem_1_1SimpleMemContainer.html", null ],
       [ "SimpleMemContext", "classcookmem_1_1SimpleMemContext.html", "classcookmem_1_1SimpleMemContext" ],
-      [ "StatsLogger", "classcookmem_1_1StatsLogger.html", "classcookmem_1_1StatsLogger" ]
+      [ "StatsLogger", "classcookmem_1_1StatsLogger.html", null ]
     ] ]
 ];
