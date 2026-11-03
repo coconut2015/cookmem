@@ -1,6 +1,7 @@
 .cproject
 .project
 .vs
+/.vscode
 .vagrant
 *.log
 /.settings

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2021 Heng Yuan
+ * Copyright (c) 2018-2026 Heng Yuan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,41 +16,40 @@
 #include <iostream>
 
 #include <cookmem.h>
-
-#define ASSERT_EQ(e,v) do { if ((e) != (v)) { std::cout << "Mismatch at line " << __LINE__ << std::endl; return 1; } } while (0)
-#define ASSERT_NE(e,v) do { if ((e) == (v)) { std::cout << "Mismatch at line " << __LINE__ << std::endl; return 1; } } while (0)
+#include "unittest.h"
 
 static int
 test1 ()
 {
     cookmem::SimpleMemContext<cookmem::MallocArena> memCtx;
 
+    ASSERT_EQ (0, memCtx.getPaddingSize ());
     ASSERT_EQ (false, memCtx.isStoringExactSize ());
 
-    ASSERT_EQ (0, memCtx.getSize (nullptr));
+    ASSERT_EQ (0UL, memCtx.getSize (nullptr));
 
     void* ptr;
 
     ptr = memCtx.allocate (30);
     ASSERT_NE (nullptr, ptr);
-    ASSERT_EQ (32, memCtx.getSize (ptr));
+    ASSERT_EQ (32UL, memCtx.getSize (ptr));
     memCtx.deallocate (ptr);
-    ASSERT_EQ (0, memCtx.getSize (ptr));
+    ASSERT_EQ (0UL, memCtx.getSize (ptr));
 
     ptr = memCtx.allocate (300);
     ASSERT_NE (nullptr, ptr);
-    ASSERT_EQ (304, memCtx.getSize (ptr));
+    ASSERT_EQ (304UL, memCtx.getSize (ptr));
     ptr = memCtx.allocate (3000);
     ASSERT_NE (nullptr, ptr);
-    ASSERT_EQ (3008, memCtx.getSize (ptr));
+    ASSERT_EQ (3008UL, memCtx.getSize (ptr));
     ptr = memCtx.allocate (30000);
     ASSERT_NE (nullptr, ptr);
-    ASSERT_EQ (30000, memCtx.getSize (ptr));
+    ASSERT_EQ (30000UL, memCtx.getSize (ptr));
     ptr = memCtx.allocate (30000);
-    ASSERT_EQ (30000, memCtx.getSize (ptr));
+    ASSERT_EQ (30000UL, memCtx.getSize (ptr));
     ASSERT_NE (nullptr, ptr);
     ptr = memCtx.allocate (30000);
-    ASSERT_EQ (30000, memCtx.getSize (ptr));
+    ASSERT_EQ (30000UL, memCtx.getSize (ptr));
     ASSERT_NE (nullptr, ptr);
 
     return 0;
@@ -70,31 +69,31 @@ test2 ()
     ptr = memCtx.allocate (30);
     ASSERT_NE (nullptr, ptr);
     memset (ptr, 0xff, 30);
-    ASSERT_EQ (30, memCtx.getSize (ptr));
+    ASSERT_EQ (30UL, memCtx.getSize (ptr));
     memCtx.deallocate (ptr);
 
     ptr = memCtx.allocate (300);
     ASSERT_NE (nullptr, ptr);
     memset (ptr, 0xff, 300);
-    ASSERT_EQ (300, memCtx.getSize (ptr));
+    ASSERT_EQ (300UL, memCtx.getSize (ptr));
 
     ptr = memCtx.allocate (3000);
     ASSERT_NE (nullptr, ptr);
     memset (ptr, 0xff, 3000);
-    ASSERT_EQ (3000, memCtx.getSize (ptr));
+    ASSERT_EQ (3000UL, memCtx.getSize (ptr));
 
     ptr = memCtx.allocate (30000);
     ASSERT_NE (nullptr, ptr);
     memset (ptr, 0xff, 3000);
-    ASSERT_EQ (30000, memCtx.getSize (ptr));
+    ASSERT_EQ (30000UL, memCtx.getSize (ptr));
 
     ptr = memCtx.allocate (30000);
-    ASSERT_EQ (30000, memCtx.getSize (ptr));
+    ASSERT_EQ (30000UL, memCtx.getSize (ptr));
     memset (ptr, 0xff, 30000);
     ASSERT_NE (nullptr, ptr);
 
     ptr = memCtx.allocate (30000);
-    ASSERT_EQ (30000, memCtx.getSize (ptr));
+    ASSERT_EQ (30000UL, memCtx.getSize (ptr));
     memset (ptr, 0xff, 30000);
     ASSERT_NE (nullptr, ptr);
 
@@ -104,28 +103,32 @@ test2 ()
 static int
 test3 ()
 {
-    cookmem::SimpleMemContext<cookmem::MallocArena> memCtx (true);
+    cookmem::SimpleMemContext<cookmem::MallocArena> memCtx (4);
 
     ASSERT_EQ (true, memCtx.isPadding ());
+    ASSERT_EQ (4, memCtx.getPaddingSize ());
     ASSERT_EQ (true, memCtx.isStoringExactSize ());
+
+    cookmem::MemContext<cookmem::MallocArena, cookmem::NoActionMemLogger> copiedContext (memCtx);
+    ASSERT_EQ (4, copiedContext.getPaddingSize ());
 
     void* ptr;
 
     ptr = memCtx.allocate (30);
     ASSERT_NE (nullptr, ptr);
     memset (ptr, 0xff, 30);
-    ASSERT_EQ (30, memCtx.getSize (ptr));
+    ASSERT_EQ (30UL, memCtx.getSize (ptr));
     memCtx.deallocate (ptr);
 
     ptr = memCtx.allocate (300);
     ASSERT_NE (nullptr, ptr);
     memset (ptr, 0xff, 300);
-    ASSERT_EQ (300, memCtx.getSize (ptr));
+    ASSERT_EQ (300UL, memCtx.getSize (ptr));
 
     ptr = memCtx.allocate (3000);
     ASSERT_NE (nullptr, ptr);
     memset (ptr, 0xff, 3000);
-    ASSERT_EQ (3000, memCtx.getSize (ptr));
+    ASSERT_EQ (3000UL, memCtx.getSize (ptr));
     memCtx.deallocate (ptr);
 
     for (size_t size = 30000; size < 30020; ++size)
@@ -143,8 +146,22 @@ test3 ()
 int
 main (int argc, const char* argv[])
 {
-    ASSERT_EQ (0, test1 ());
-    ASSERT_EQ (0, test2 ());
-    ASSERT_EQ (0, test3 ());
+    try
+    {
+        ASSERT_EQ (0, test1 ());
+        ASSERT_EQ (0, test2 ());
+        ASSERT_EQ (0, test3 ());
+    }
+    catch (const unittest::UnitTestException& ex)
+    {
+        std::cout << "Assertion failed at " << ex.getFile () << ":" << ex.getLine () << std::endl;
+        return 1;
+    }
+    catch (cookmem::Exception& ex)
+    {
+        std::cout << "Exception thrown at " << ex.getFile () << ":"
+                  << ex.getLine () << ": " << ex.getMessage () << std::endl;
+        return 1;
+    }
     return 0;
 }

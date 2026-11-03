@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2021 Heng Yuan
+ * Copyright (c) 2018-2026 Heng Yuan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,7 @@
 #include <iostream>
 
 #include <cookmem.h>
-
-#define ASSERT_EQ(e,v) do { if ((e) != (v)) { std::cout << "Mismatch at line " << __LINE__ << std::endl; return 1; } } while (0)
-#define ASSERT_NE(e,v) do { if ((e) == (v)) { std::cout << "Mismatch at line " << __LINE__ << std::endl; return 1; } } while (0)
+#include "unittest.h"
 
 static int
 test1 ()
@@ -117,11 +115,150 @@ test3 ()
     return 0;
 }
 
+static int
+test4 ()
+{
+    cookmem::SimpleMemContext<cookmem::MallocArena> memCtx;
+
+    memCtx.setCoalesceInterval (2);
+
+    void* ptr[3];
+
+    int size = 8;
+    for (int i = 0; i < 3; ++i)
+    {
+        ptr[i] = memCtx.allocate (size);
+        ASSERT_NE (nullptr, ptr[i]);
+    }
+
+    memCtx.validate ();
+
+    for (int i = 2; i >= 0; --i)
+    {
+        memCtx.deallocate (ptr[i]);
+    }
+
+    memCtx.validate ();
+
+    return 0;
+}
+
+static int
+test5 ()
+{
+    cookmem::SimpleMemContext<cookmem::MallocArena> memCtx;
+    const int NUM = 3;
+
+    memCtx.setCoalesceInterval (2);
+
+    void* ptr[NUM];
+
+    int size = 8;
+    for (int i = 0; i < NUM; ++i)
+    {
+        ptr[i] = memCtx.allocate (size);
+        ASSERT_NE (nullptr, ptr[i]);
+    }
+
+    memCtx.validate ();
+
+    for (int i = 0; i < NUM; ++i)
+    {
+        memCtx.deallocate (ptr[i]);
+    }
+
+    memCtx.validate ();
+
+    size = 8;
+    for (int i = 0; i < NUM; ++i)
+    {
+        ptr[i] = memCtx.allocate (size);
+        ASSERT_NE (nullptr, ptr[i]);
+    }
+
+    memCtx.validate ();
+
+    for (int i = 0; i < NUM; ++i)
+    {
+        memCtx.deallocate (ptr[i]);
+    }
+
+    memCtx.validate ();
+
+    return 0;
+}
+
+static int
+test6 ()
+{
+    cookmem::MallocArena arena (256);
+    cookmem::NoActionMemLogger logger;
+    cookmem::MemContext<cookmem::MallocArena, cookmem::NoActionMemLogger> memCtx (arena, logger);
+
+    memCtx.getPool ().setFootprintLimit (256);
+    memCtx.setCoalesceInterval (100);
+
+    void* first = memCtx.allocate (8);
+    void* second = memCtx.allocate (8);
+    void* third = memCtx.allocate (8);
+    void* last = memCtx.allocate (112);
+    ASSERT_NE (nullptr, first);
+    ASSERT_NE (nullptr, second);
+    ASSERT_NE (nullptr, third);
+    ASSERT_NE (nullptr, last);
+
+    memCtx.deallocate (first);
+    memCtx.deallocate (second);
+    memCtx.validate ();
+
+    void* merged = memCtx.allocate (40);
+    ASSERT_EQ (first, merged);
+
+    memCtx.deallocate (third);
+    memCtx.deallocate (last);
+    memCtx.deallocate (merged);
+    memCtx.validate ();
+
+    first = memCtx.allocate (8);
+    second = memCtx.allocate (8);
+    third = memCtx.allocate (8);
+    last = memCtx.allocate (112);
+    ASSERT_NE (nullptr, first);
+    ASSERT_NE (nullptr, second);
+    ASSERT_NE (nullptr, third);
+    ASSERT_NE (nullptr, last);
+
+    memCtx.deallocate (third);
+    memCtx.deallocate (second);
+    memCtx.validate ();
+
+    merged = memCtx.allocate (40);
+    ASSERT_EQ (second, merged);
+
+    memCtx.deallocate (first);
+    memCtx.deallocate (last);
+    memCtx.deallocate (merged);
+    memCtx.validate ();
+
+    return 0;
+}
+
 int
 main (int argc, const char* argv[])
 {
-    ASSERT_EQ (0, test1 ());
-    ASSERT_EQ (0, test2 ());
-    ASSERT_EQ (0, test3 ());
+    try
+    {
+        ASSERT_EQ (0, test1 ());
+        ASSERT_EQ (0, test2 ());
+        ASSERT_EQ (0, test3 ());
+        ASSERT_EQ (0, test4 ());
+        ASSERT_EQ (0, test5 ());
+        ASSERT_EQ (0, test6 ());
+    }
+    catch (const unittest::UnitTestException& ex)
+    {
+        std::cout << "Assertion failed at " << ex.getFile () << ":" << ex.getLine () << std::endl;
+        return 1;
+    }
     return 0;
 }

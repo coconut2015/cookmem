@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['exception',['Exception',['../classcookmem_1_1Exception.html',1,'cookmem::Exception'],['../classcookmem_1_1Exception.html#a57f60d8c4a7a2b4ea8e16c018be7598e',1,'cookmem::Exception::Exception()']]]
+  ['information_0',['Pointer Information',['../tutorials.html#Querying',1,'']]],
+  ['installation_1',['Installation',['../install.html',1,'']]],
+  ['instruction_2',['Test Build Instruction',['../build.html',1,'']]]
 ];

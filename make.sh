@@ -15,11 +15,59 @@
 # limitations under the License.
 #
 
+usage ()
+{
+	cat <<EOF
+Usage:
+    ./make.sh [build] [options] arguments
+
+build:
+    help                - print this help message.
+    debug               - debug build.
+    profiler            - make profiler build.
+    release             - make release build.
+    docs                - generate Doxygen documents.
+
+options
+    -h                  - print this help message.
+    -t                  - specify the test in the arguments.
+EOF
+}
+
+runMake ()
+{
+	make $@
+}
+
+runTest ()
+{
+	ctest -R $@
+}
+
 BUILD=debug
 
 if [ $# -gt 0 ]; then
 	BUILD=$1
+	shift
 fi
+
+TEST=
+
+while getopts "ht:" OPT; do
+	case $OPT in
+	h)
+		usage
+		exit 0
+	;;
+	t)
+		TEST=$OPTARG
+	;;
+	*)
+		echo "Unknown option: $OPT"
+		exit 1
+	;;
+	esac
+done
 
 CMAKE_BUILD_TYPE=
 COVERAGE=
@@ -32,19 +80,26 @@ case "$BUILD" in
 	;;
 	debug)
 		CMAKE_BUILD_TYPE=Debug
-		COVERAGE=-DCOVERAGE=1
+		if [ -z "$TEST" ]; then
+			COVERAGE=-DCOVERAGE=1
+		fi
 	;;
 	profiler)
 		CMAKE_BUILD_TYPE=Release
 		PROFILER="-DCMAKE_CXX_FLAGS=-pg -DCMAKE_EXE_LINKER_FLAGS=-pg -DCMAKE_SHARED_LINKER_FLAGS=-pg"
 	;;
-	doc)
+	doc|docs)
+		BUILD=doc
 		CMAKE_BUILD_TYPE=Release
 		BUILD_DOC=-DBUILD_DOC=1
 	;;
+	help)
+		usage
+		exit 0
+	;;
 	*)
 		echo "Unknown build option: $BUILD"
-	exit 1
+		exit 1
 	;;
 esac
 
@@ -58,13 +113,16 @@ cmake -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE $COVERAGE $PROFILER $BUILD_DOC ..|| e
 
 case "$BUILD" in
 	release)
-		make VERBOSE=1 && make test
+		runMake $TEST && runTest $TEST
 	;;
 	debug)
-		make && make test_coverage
+		runMake $TEST && runTest $TEST
+		if [ $? -eq 0 -a -z "$TEST" ]; then
+			make test_coverage
+		fi
 	;;
 	profiler)
-		make VERBOSE=1 && make test
+		runMake $TEST && runTest $TEST
 	;;
 	doc)
 		make doc_doxygen
