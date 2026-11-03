@@ -25,6 +25,19 @@
 namespace unittest
 {
 
+inline void
+printValue (nullptr_t)
+{
+    std::cout << "nullptr";
+}
+
+template<class T>
+inline void
+printValue (const T& value)
+{
+    std::cout << value;
+}
+
 class UnitTestException : public std::exception
 {
 public:
@@ -78,15 +91,17 @@ assertEquals (nullptr_t, const T* actual, const char* file, int line)
 }
 
 
-template<class T>
+template<class E, class A>
 inline void
-assertEquals (const T& expected, const T& actual, const char* file, int line)
+assertEquals (const E& expected, const A& actual, const char* file, int line)
 {
     if (expected != actual)
     {
-        std::cout << "== Expected: " << expected << std::endl;
-        std::cout << "== Actual  : " << actual << std::endl;
-
+        std::cout << "== Expected: ";
+        printValue (expected);
+        std::cout << std::endl << "== Actual  : ";
+        printValue (actual);
+        std::cout << std::endl;
         throw UnitTestAssertException (file, line);
     }
 }
@@ -105,15 +120,17 @@ assertNotEquals (nullptr_t, const T& actual, const char* file, int line)
 }
 
 
-template<class T>
+template<class E, class A>
 inline void
-assertNotEquals (const T& expected, const T& actual, const char* file, int line)
+assertNotEquals (const E& expected, const A& actual, const char* file, int line)
 {
     if (expected == actual)
     {
-        std::cout << "== Not expected: " << expected << std::endl;
-        std::cout << "== Actual      : " << actual << std::endl;
-
+        std::cout << "== Not expected: ";
+        printValue (expected);
+        std::cout << std::endl << "== Actual      : ";
+        printValue (actual);
+        std::cout << std::endl;
         throw UnitTestAssertException (file, line);
     }
 }

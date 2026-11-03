@@ -16,9 +16,7 @@
 #include <iostream>
 
 #include <cookmem.h>
-
-#define ASSERT_EQ(e,v) do { if ((e) != (v)) { std::cout << "Mismatch at line " << __LINE__ << std::endl; return 1; } } while (0)
-#define ASSERT_NE(e,v) do { if ((e) == (v)) { std::cout << "Mismatch at line " << __LINE__ << std::endl; return 1; } } while (0)
+#include "unittest.h"
 
 #define NUM_ENTRIES 9
 
@@ -88,7 +86,15 @@ test1 ()
 int
 main (int argc, const char* argv[])
 {
-    ASSERT_EQ (0, test1 ());
+    try
+    {
+        ASSERT_EQ (0, test1 ());
+    }
+    catch (const unittest::UnitTestException& ex)
+    {
+        std::cout << "Assertion failed at " << ex.getFile () << ":" << ex.getLine () << std::endl;
+        return 1;
+    }
 
     return 0;
 }

@@ -106,6 +106,12 @@ add_executable(test_statslogger
 add_test(NAME test_statslogger
 	COMMAND test_statslogger)
 
+add_executable(test_allocator
+	tests/test_allocator.cpp)
+
+add_test(NAME test_allocator
+	COMMAND test_allocator)
+
 add_executable(test_cookmem_02
 	tests/test_cookmem_02.cpp)
 

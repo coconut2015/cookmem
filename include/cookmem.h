@@ -20,5 +20,6 @@
 #include "cookmem/mallocarena.h"
 #include "cookmem/mmaparena.h"
 #include "cookmem/context.h"
+#include "cookmem/allocator.h"
 
 #endif  // COOK_MEM_H
