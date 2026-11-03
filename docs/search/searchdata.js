@@ -1,27 +1,18 @@
 var indexSectionsWithContent =
 {
-  0: "abcdefgilmnprstv~",
-  1: "cefmnprs",
-  2: "acdefgimprsv~",
-  3: "cdpsv",
-  4: "bcilt"
+  0: "bcdilmpt",
+  1: "bcilt"
 };
 
 var indexSectionNames =
 {
   0: "all",
-  1: "classes",
-  2: "functions",
-  3: "typedefs",
-  4: "pages"
+  1: "pages"
 };
 
 var indexSectionLabels =
 {
   0: "All",
-  1: "Classes",
-  2: "Functions",
-  3: "Typedefs",
-  4: "Pages"
+  1: "Pages"
 };
 
