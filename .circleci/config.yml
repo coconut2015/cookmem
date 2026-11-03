@@ -6,9 +6,9 @@ jobs:
     docker:
       - image: cimg/base:stable-18.04
     steps:
-      - add_ssh_keys
-        fingerprints:
-        - "SO:ME:FI:NG:ER:PR:IN:T"
+      - add_ssh_keys:
+          fingerprints:
+            - "SO:ME:FI:NG:ER:PR:IN:T"
       - checkout
       - run:
           name: Install packages
