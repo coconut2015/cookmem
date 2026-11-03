@@ -21,25 +21,39 @@ main ()
     cookmem::StatsLogger logger;
     int allocation;
     int segment;
+    int segment2;
 
     logger.logGetSegment (&segment, 128);
-    logger.logFreeSegment (&segment, 64);
+    logger.logCoalesce ();
+    logger.logCoalesce ();
+    logger.logGetSegment (nullptr, 256);
+    logger.logGetSegment (&segment2, 64);
+    logger.logFreeSegment (&segment, 128);
+    logger.logFreeSegment (&segment2, 64);
     logger.logAllocation (&allocation, 32, cookmem::MEM_ALLOC_SMALL);
     logger.logAllocation (nullptr, 64, cookmem::MEM_ALLOC_BIG);
     logger.logReallocation (&allocation, 32, 20);
     logger.logReallocation (&allocation, 20, 28);
     logger.logDeallocation (&allocation, 28);
 
-    if (logger.getNumAllocations () != 1 ||
-        logger.getNumAllocations (cookmem::MEM_ALLOC_SMALL) != 1 ||
-        logger.getNumAllocations (cookmem::MEM_ALLOC_BIG) != 0 ||
-        logger.getNumDeallocations () != 1 ||
-        logger.getNumGetSegments () != 1 ||
-        logger.getNumFreeSegments () != 1 ||
-        logger.getTotalAllocated () != 40 ||
-        logger.getTotalDeallocated () != 40 ||
-        logger.getTotalGetSegmentSize () != 128 ||
-        logger.getTotalFreeSegmentSize () != 64)
+    const cookmem::MemStatistics& stats = logger.getStats ();
+    if (stats.getNumAllocations () != 1 ||
+        stats.getNumAllocations (cookmem::MEM_ALLOC_SMALL) != 1 ||
+        stats.getNumAllocations (cookmem::MEM_ALLOC_BIG) != 0 ||
+        stats.getNumDeallocations () != 1 ||
+        stats.getNumGetSegments () != 2 ||
+        stats.getNumFreeSegments () != 2 ||
+        stats.getNumCoalesces () != 2 ||
+        stats.getTotalAllocated () != 40 ||
+        stats.getTotalDeallocated () != 40 ||
+        stats.getTotalGetSegmentSize () != 192 ||
+        stats.getTotalFreeSegmentSize () != 192 ||
+        stats.getCurrentAllocated () != 0 ||
+        stats.getPeakAllocated () != 32 ||
+        stats.getCurrentSegments () != 0 ||
+        stats.getPeakSegments () != 2 ||
+        stats.getCurrentSegmentSize () != 0 ||
+        stats.getPeakSegmentSize () != 192)
     {
         return 1;
     }

@@ -175,11 +175,15 @@ test6 ()
 {
     printf ("== %s ==\n", __FUNCTION__);
 
-    cookmem::SimpleMemContext<cookmem::MallocArena> memCtx;
+    cookmem::SimpleMemContext<cookmem::MallocArena, cookmem::StatsLogger> memCtx;
 
     void* ptr[10000];
 
-    memCtx.getArena ().printStats ();
+    memCtx.getLogger ().getStats ().printStats ();
+    std::size_t coalesceCount = memCtx.getLogger ().getStats ().getNumCoalesces ();
+    memCtx.coalesce ();
+    memCtx.coalesce ();
+    assertEquals (coalesceCount + 2, memCtx.getLogger ().getStats ().getNumCoalesces (), __FILE__, __LINE__);
 
     int size = 8;
     for (int i = 0; i < 10000; ++i)
@@ -191,7 +195,7 @@ test6 ()
     memCtx.validate ();
 
     printf ("******** step 1\n");
-    memCtx.getArena ().printStats ();
+    memCtx.getLogger ().getStats ().printStats ();
 
     for (int i = 0; i < 10000; ++i)
     {
@@ -199,22 +203,22 @@ test6 ()
     }
 
     printf ("******** step 2\n");
-    memCtx.getArena ().printStats ();
+    memCtx.getLogger ().getStats ().printStats ();
 
     memCtx.validate ();
 
     printf ("******** step 3\n");
-    memCtx.getArena ().printStats ();
+    memCtx.getLogger ().getStats ().printStats ();
 
     memCtx.coalesce ();
 
     printf ("******** step 4\n");
-    memCtx.getArena ().printStats ();
+    memCtx.getLogger ().getStats ().printStats ();
 
     memCtx.validate ();
 
     printf ("******** step 5\n");
-    memCtx.getArena ().printStats ();
+    memCtx.getLogger ().getStats ().printStats ();
 
     size = 8;
     for (int i = 0; i < 10000; ++i)
@@ -225,7 +229,7 @@ test6 ()
     }
 
     printf ("******** step 6\n");
-    memCtx.getArena ().printStats ();
+    memCtx.getLogger ().getStats ().printStats ();
 
     memCtx.validate ();
     for (int i = 0; i < 10000; ++i)
@@ -234,7 +238,7 @@ test6 ()
     }
 
     printf ("******** step 7\n");
-    memCtx.getArena ().printStats ();
+    memCtx.getLogger ().getStats ().printStats ();
 
     for (int i = 0; i < 10000; ++i)
     {
@@ -242,12 +246,12 @@ test6 ()
     }
 
     printf ("******** step 8\n");
-    memCtx.getArena ().printStats ();
+    memCtx.getLogger ().getStats ().printStats ();
 
     memCtx.validate ();
 
     printf ("******** step 9\n");
-    memCtx.getArena ().printStats ();
+    memCtx.getLogger ().getStats ().printStats ();
 
     size = 8;
     for (int i = 0; i < 10000; ++i)
@@ -258,12 +262,12 @@ test6 ()
     }
 
     printf ("******** step 10\n");
-    memCtx.getArena ().printStats ();
+    memCtx.getLogger ().getStats ().printStats ();
 
     memCtx.validate ();
 
     printf ("******** step 11\n");
-    memCtx.getArena ().printStats ();
+    memCtx.getLogger ().getStats ().printStats ();
 
     for (int i = 0; i < 10000; ++i)
     {
@@ -277,17 +281,17 @@ test6 ()
     }
 
     printf ("******** step 12\n");
-    memCtx.getArena ().printStats ();
+    memCtx.getLogger ().getStats ().printStats ();
 
     memCtx.validate ();
 
     printf ("******** step 13\n");
-    memCtx.getArena ().printStats ();
+    memCtx.getLogger ().getStats ().printStats ();
 
     memCtx.coalesce ();
 
     printf ("******** step 14\n");
-    memCtx.getArena ().printStats ();
+    memCtx.getLogger ().getStats ().printStats ();
 
     memCtx.validate ();
 }
