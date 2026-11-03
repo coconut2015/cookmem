@@ -25,6 +25,9 @@
 var NAVTREE =
 [
   [ "CookMem", "index.html", [
+    [ "Performance", "index.html#autotoc_md0", null ],
+    [ "Features", "index.html#autotoc_md1", null ],
+    [ "Links", "index.html#autotoc_md2", null ],
     [ "Tutorials", "tutorials.html", [
       [ "cookmem::FixedArena", "tutorials.html#ex_1", null ],
       [ "cookmem::MmapArena", "tutorials.html#ex_2", null ],
@@ -37,6 +40,16 @@ var NAVTREE =
     [ "Installation", "install.html", null ],
     [ "Test Build Instruction", "build.html", null ],
     [ "License", "license.html", null ],
+    [ "Classes", "annotated.html", [
+      [ "Class List", "annotated.html", "annotated_dup" ],
+      [ "Class Index", "classes.html", null ],
+      [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
+      [ "Class Members", "functions.html", [
+        [ "All", "functions.html", null ],
+        [ "Functions", "functions_func.html", null ],
+        [ "Typedefs", "functions_type.html", null ]
+      ] ]
+    ] ],
     [ "Files", "files.html", [
       [ "File List", "files.html", "files_dup" ]
     ] ]
@@ -45,7 +58,7 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"build.html"
+"allocator_8h_source.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

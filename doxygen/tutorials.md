@@ -9,7 +9,7 @@ CookMem divides the job of a memory context into three parts.
    within memory segments.  This component is typically managed and
    hidden by the memory context.
 3. Logger, which can be used to monitor the allocation / deallocation
-   activities.
+   activities.  The primary use of logger is to gather memory statistics.
 
 By decoupling memory arena from memory pool, and having simple interface
 for arena, it is much easier to have a custom memory context that would

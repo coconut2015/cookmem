@@ -99,6 +99,30 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <p>Unlike projects such as <a href="https://www.nedprod.com/programs/portable/nedmalloc/">nedmalloc</a> which is intended to replace <code>malloc</code> / <code>free</code> in multithreaded applications, this project focuses on the single-thread performance. It is intended to be used within a thread in an MPP process, such that it would not have to pay for the cost of synchronization for tiny allocations / deallocations.</p>
 <p>Additionally, cookmem separates out the logic for obtaining large segments of memory, to allow users easily creating their flavor of the memory context for their specific needs.</p>
 <p>The algorithms and some code used here are based on <a href="http://gee.cs.oswego.edu/dl/html/malloc.html">dlmalloc</a>. I basically took the pain to understand dlmalloc and rewrote the logics in C++. Some key calculations though are kept the same as dlmalloc since there are no points to reinvent wheels.</p>
+<h1><a class="anchor" id="autotoc_md0"></a>
+Performance</h1>
+<p>The performance of CookMem is comparable if not faster than dlmalloc. There are no locking for dlmalloc or CookMem. For CookMem, I also tested red-black tree (RB-tree) which is the default, and AVL-tree backend.</p>
+<p>In the following table, the numbers are in seconds.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Test   </th><th class="markdownTableHeadCenter">dlmalloc   </th><th class="markdownTableHeadRight">CookMem (RB-tree)   </th><th class="markdownTableHeadRight">CookMem (AVL-tree)    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">perf_cookmem_1   </td><td class="markdownTableBodyCenter">0.191505   </td><td class="markdownTableBodyRight">0.0987832   </td><td class="markdownTableBodyRight">0.17094    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">perf_cookmem_2   </td><td class="markdownTableBodyCenter">0.220995   </td><td class="markdownTableBodyRight">0.13999   </td><td class="markdownTableBodyRight">0.197844    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">perf_cookmem_3   </td><td class="markdownTableBodyCenter">0.0214372   </td><td class="markdownTableBodyRight">0.019327   </td><td class="markdownTableBodyRight">0.0191321    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">perf_cookmem_4   </td><td class="markdownTableBodyCenter">0.0318553   </td><td class="markdownTableBodyRight">0.0248138   </td><td class="markdownTableBodyRight">0.0250922col 1 is   </td></tr>
+</table>
+<h1><a class="anchor" id="autotoc_md1"></a>
+Features</h1>
+<ul>
+<li>Mix-n-match memory arena and logger support.</li>
+<li>Debugging support with out-of-bound detection.</li>
+</ul>
+<h1><a class="anchor" id="autotoc_md2"></a>
+Links</h1>
 <ul>
 <li>Documentation: <a href="http://coconut2015.github.io/cookmem/">http://coconut2015.github.io/cookmem/</a></li>
 <li>Source: <a href="https://github.com/coconut2015/cookmem">https://github.com/coconut2015/cookmem</a> </li>

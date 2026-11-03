@@ -23,5 +23,30 @@ I basically took the pain to understand dlmalloc and rewrote the logics
 in C++.  Some key calculations though are kept the same as dlmalloc since
 there are no points to reinvent wheels.
 
+Performance
+-----------
+
+The performance of CookMem is comparable if not faster than dlmalloc.  There
+are no locking for dlmalloc or CookMem.  For CookMem, I also tested red-black
+tree (RB-tree) which is the default, and AVL-tree backend.
+
+In the following table, the numbers are in seconds.
+
+| Test           |  dlmalloc  | CookMem (RB-tree) | CookMem (AVL-tree) |
+|----------------|:----------:|------------------:|-------------------:|
+| perf_cookmem_1 | 0.191505   | 0.0987832         | 0.17094            |
+| perf_cookmem_2 | 0.220995   | 0.13999           | 0.197844           |
+| perf_cookmem_3 | 0.0214372  | 0.019327          | 0.0191321          |
+| perf_cookmem_4 | 0.0318553  | 0.0248138         | 0.0250922col 1 is  |
+
+Features
+--------
+
+* Mix-n-match memory arena and logger support.
+* Debugging support with out-of-bound detection.
+
+Links
+-----
+
 * Documentation: http://coconut2015.github.io/cookmem/
 * Source: https://github.com/coconut2015/cookmem

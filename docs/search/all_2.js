@@ -1,5 +1,23 @@
 var searchData=
 [
-  ['data_20between_20memory_20pools_0',['Copying Data Between Memory Pools',['../tutorials.html#ex_4',1,'']]],
-  ['detection_1',['Corruption Detection',['../tutorials.html#Memory',1,'']]]
+  ['cachedarena_0',['cachedarena',['../classcookmem_1_1CachedArena.html#a7bd04dab4ccf676b1fde813ca273c11d',1,'cookmem::CachedArena::CachedArena()'],['../classcookmem_1_1CachedArena.html',1,'cookmem::CachedArena&lt; Arena, TreeType &gt;']]],
+  ['cachedarena_3c_20mmaparena_20_3e_1',['CachedArena&lt; MmapArena &gt;',['../classcookmem_1_1CachedArena.html',1,'cookmem']]],
+  ['cachedmemcontainer_2',['CachedMemContainer',['../structcookmem_1_1CachedMemContainer.html',1,'cookmem']]],
+  ['cachedmemcontainer_3c_20mmaparena_2c_20noactionmemlogger_20_3e_3',['CachedMemContainer&lt; MmapArena, NoActionMemLogger &gt;',['../structcookmem_1_1CachedMemContainer.html',1,'cookmem']]],
+  ['cachedmemcontext_4',['CachedMemContext',['../classcookmem_1_1CachedMemContext.html',1,'cookmem']]],
+  ['cachedmemcontext_3c_20mmaparena_2c_20noactionmemlogger_2c_20ptrrbtree_20_3e_5',['CachedMemContext&lt; MmapArena, NoActionMemLogger, PtrRBTree &gt;',['../classcookmem_1_1CachedMemContext.html',1,'cookmem']]],
+  ['callocate_6',['callocate',['../classcookmem_1_1MemContext.html#a7ec4fa5c035ba4d143f5abe8ab41a543',1,'cookmem::MemContext::callocate()'],['../classcookmem_1_1MemPool.html#a4cdd4d40e3d8ffe8b61b8599e7318c5b',1,'cookmem::MemPool::callocate()']]],
+  ['circularlist_7',['CircularList',['../classcookmem_1_1CircularList.html',1,'cookmem']]],
+  ['circularlist_3c_20smallmemchunk_20_3e_8',['CircularList&lt; SmallMemChunk &gt;',['../classcookmem_1_1CircularList.html',1,'cookmem']]],
+  ['coalesce_9',['coalesce',['../classcookmem_1_1MemContext.html#a9b6e8b73da336a9eacc1e7734542e34b',1,'cookmem::MemContext::coalesce()'],['../classcookmem_1_1MemPool.html#a443382f1cdd1455cd38be492a51b2c96',1,'cookmem::MemPool::coalesce()']]],
+  ['const_5fpointer_10',['const_pointer',['../classcookmem_1_1SimpleMemContext.html#a35244c605b4f14e07ddf0e7dd71eec89',1,'cookmem::SimpleMemContext::const_pointer'],['../classcookmem_1_1MemPool.html#aa1c56a1add59242dd71edca0dfcb9ada',1,'cookmem::MemPool::const_pointer'],['../classcookmem_1_1CachedMemContext.html#a069c081d7ff93e93066b449bff8cd096',1,'cookmem::CachedMemContext::const_pointer'],['../classcookmem_1_1MemContext.html#adb3518b7bac1c62ccce1b8833f70f91d',1,'cookmem::MemContext::const_pointer']]],
+  ['contains_11',['contains',['../classcookmem_1_1PtrAVLTree.html#adb8387b9a0c60f2229b5214546073665',1,'cookmem::PtrAVLTree::contains()'],['../classcookmem_1_1CircularList.html#a9ce8043532cec4724b8d3cf3e52cf851',1,'cookmem::CircularList::contains()'],['../classcookmem_1_1MemContext.html#a1f22eb4d92f78a10392b8538246fa1f5',1,'cookmem::MemContext::contains()'],['../classcookmem_1_1MemPool.html#a0fdcfc548d9769f63893d802194b8a7b',1,'cookmem::MemPool::contains()'],['../classcookmem_1_1RedBlackTree.html#aed90099d901e73c92500e17ea908a0a2',1,'cookmem::RedBlackTree::contains()']]],
+  ['cookmem_12',['CookMem',['../index.html',1,'']]],
+  ['cookmem_3a_3acachedarena_13',['cookmem::CachedArena',['../tutorials.html#ex_3',1,'']]],
+  ['cookmem_3a_3afixedarena_14',['cookmem::FixedArena',['../tutorials.html#ex_1',1,'']]],
+  ['cookmem_3a_3ammaparena_15',['cookmem::MmapArena',['../tutorials.html#ex_2',1,'']]],
+  ['cookmemallocator_16',['CookMemAllocator',['../classcookmem_1_1CookMemAllocator.html',1,'cookmem']]],
+  ['copying_20data_20between_20memory_20pools_17',['Copying Data Between Memory Pools',['../tutorials.html#ex_4',1,'']]],
+  ['corruption_20detection_18',['Corruption Detection',['../tutorials.html#Memory',1,'']]],
+  ['current_20limitations_19',['Current Limitations',['../limitations.html',1,'']]]
 ];
