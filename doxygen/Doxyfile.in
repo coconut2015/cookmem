@@ -777,7 +777,7 @@ INPUT                  = ../README.md \
 						 ../doxygen/install.md \
 						 ../doxygen/build.md \
 						 ../doxygen/license.md \
-						 ../include \
+						 ../include/ \
                          ../include/cookmem
 
 # This tag can be used to specify the character encoding of the source files
