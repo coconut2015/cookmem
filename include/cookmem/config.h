@@ -47,6 +47,8 @@ const char DEFAULT_PADDING_BYTE = (char)0xcd;
 
 }   // namespace cookmem
 
+#ifndef COOKMEM_DEBUG
 #define COOKMEM_DEBUG 0
+#endif  // COOKMEM_DEBUG
 
 #endif  // COOK_MEM_CONFIG_H

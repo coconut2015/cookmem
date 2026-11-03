@@ -26,8 +26,7 @@ var NAVTREE =
 [
   [ "CookMem", "index.html", [
     [ "Performance", "index.html#autotoc_md0", null ],
-    [ "Features", "index.html#autotoc_md1", null ],
-    [ "Links", "index.html#autotoc_md2", null ],
+    [ "Links", "index.html#autotoc_md1", null ],
     [ "Tutorials", "tutorials.html", [
       [ "cookmem::FixedArena", "tutorials.html#ex_1", null ],
       [ "cookmem::MmapArena", "tutorials.html#ex_2", null ],
@@ -39,6 +38,7 @@ var NAVTREE =
     [ "Current Limitations", "limitations.html", null ],
     [ "Installation", "install.html", null ],
     [ "Test Build Instruction", "build.html", null ],
+    [ "References", "references.html", null ],
     [ "License", "license.html", null ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],

@@ -60,6 +60,10 @@ public:
 /**
  * This memory arena simply wraps around a piece of memory which is used for
  * memory allocation.
+ *
+ * This class implements the interface of MemArena without explicitly
+ * inheriting from it.  This is to avoid the overhead of virtual function
+ * calls and allows inlining of the functions.
  */
 class FixedArena
 {
@@ -139,6 +143,10 @@ private:
 /**
  * CachedArena is used to cache the segments released and see if they can be
  * reused in the future segment request.
+ *
+ * This class implements the interface of MemArena without explicitly
+ * inheriting from it.  This is to avoid the overhead of virtual function
+ * calls and allows inlining of the functions.
  *
  * @tparam  Arena
  *          the memory arena that does the actual memory allocation

@@ -1,8 +1,8 @@
 Test Build Instruction {#build}
 ----------------------
 
-Linux
-~~~~~
+### Linux
+
 Run the following command to build.
 
 ```bash
@@ -18,8 +18,7 @@ Run the following command to build.
 * ``release`` - for building tests with optimization enabled.  It is for
   building internal performance tests.
 
-Windows
-~~~~~~~
+### Windows
 
 Run the following command to build.
 

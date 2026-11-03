@@ -130,6 +130,10 @@ class MemLogger
 
 /**
  * A very simple MemLogger that does mostly nothing.
+ *
+ * This class implements the interface of MemLogger without explicitly
+ * inheriting from it.  This is to avoid the overhead of virtual function
+ * calls and allows inlining of the functions.
  */
 class NoActionMemLogger
 {
@@ -160,6 +164,10 @@ public:
 
 /**
  * A MemLogger that tracks allocation and segment usage statistics.
+ *
+ * This class implements the interface of MemLogger without explicitly
+ * inheriting from it.  This is to avoid the overhead of virtual function
+ * calls and allows inlining of the functions.
  */
 class StatsLogger
 {

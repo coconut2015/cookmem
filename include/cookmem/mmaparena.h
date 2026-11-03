@@ -30,7 +30,12 @@ namespace cookmem
 
 #ifdef WIN32
 /**
- * An mmap based memory arena adapted for Windows.
+ * An mmap/munmap based memory arena adapted for Windows.
+ * Instead of using mmap/munmap, it uses VirtualAlloc/VirtualFree.
+ *
+ * This class implements the interface of MemArena without explicitly
+ * inheriting from it.  This is to avoid the overhead of virtual function
+ * calls and allows inlining of the functions.
  */
 class MmapArena
 {
@@ -93,7 +98,11 @@ private:
 };
 #else   // WIN32
 /**
- * An mmap based memory arena.
+ * An mmap/munmap based memory arena.
+ *
+ * This class implements the interface of MemArena without explicitly
+ * inheriting from it.  This is to avoid the overhead of virtual function
+ * calls and allows inlining of the functions.
  */
 class MmapArena
 {

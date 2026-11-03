@@ -39,12 +39,6 @@ In the following table, the numbers are in seconds.
 | perf_cookmem_3 | 0.0214372  | 0.019327          | 0.0191321          |
 | perf_cookmem_4 | 0.0318553  | 0.0248138         | 0.0250922          |
 
-Features
---------
-
-* Mix-n-match memory arena and logger support.
-* Debugging support with out-of-bound detection.
-
 Links
 -----
 

@@ -80,6 +80,10 @@ private:
 
 /**
  * An malloc/free based memory arena.
+ *
+ * This class implements the interface of MemArena without explicitly
+ * inheriting from it.  This is to avoid the overhead of virtual function
+ * calls and allows inlining of the functions.
  */
 class MallocArena
 {
