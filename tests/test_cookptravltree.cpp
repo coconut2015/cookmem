@@ -93,7 +93,7 @@ test1 ()
     ASSERT_EQ (&n[10], list.remove (size = 45));
     ASSERT_EQ (&n[13], list.remove (size = 300));
     ASSERT_EQ (&n[11], list.remove (size = 200));
-    ASSERT_EQ (220, size);
+    ASSERT_EQ (220UL, size);
     ASSERT_EQ (&n[9], list.remove (size = 200));
     ASSERT_EQ (&n[18], list.remove (size = 10));
     ASSERT_EQ (&n[0], list.remove (size = 10));

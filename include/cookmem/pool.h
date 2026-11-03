@@ -1135,8 +1135,8 @@ public:
         m_footprint = 0;
         m_dv = nullptr;
         m_dvSize = 0;
-        memset (m_largeTrees, 0, sizeof(m_largeTrees));
-        memset (m_smallLists, 0, sizeof(m_smallLists));
+        memset ((void*)m_largeTrees, 0, sizeof(m_largeTrees));
+        memset ((void*)m_smallLists, 0, sizeof(m_smallLists));
     }
 
     /**

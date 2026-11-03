@@ -25,30 +25,30 @@ test1 ()
 
     ASSERT_EQ (false, memCtx.isStoringExactSize ());
 
-    ASSERT_EQ (0, memCtx.getSize (nullptr));
+    ASSERT_EQ (0UL, memCtx.getSize (nullptr));
 
     void* ptr;
 
     ptr = memCtx.allocate (30);
     ASSERT_NE (nullptr, ptr);
-    ASSERT_EQ (32, memCtx.getSize (ptr));
+    ASSERT_EQ (32UL, memCtx.getSize (ptr));
     memCtx.deallocate (ptr);
-    ASSERT_EQ (0, memCtx.getSize (ptr));
+    ASSERT_EQ (0UL, memCtx.getSize (ptr));
 
     ptr = memCtx.allocate (300);
     ASSERT_NE (nullptr, ptr);
-    ASSERT_EQ (304, memCtx.getSize (ptr));
+    ASSERT_EQ (304UL, memCtx.getSize (ptr));
     ptr = memCtx.allocate (3000);
     ASSERT_NE (nullptr, ptr);
-    ASSERT_EQ (3008, memCtx.getSize (ptr));
+    ASSERT_EQ (3008UL, memCtx.getSize (ptr));
     ptr = memCtx.allocate (30000);
     ASSERT_NE (nullptr, ptr);
-    ASSERT_EQ (30000, memCtx.getSize (ptr));
+    ASSERT_EQ (30000UL, memCtx.getSize (ptr));
     ptr = memCtx.allocate (30000);
-    ASSERT_EQ (30000, memCtx.getSize (ptr));
+    ASSERT_EQ (30000UL, memCtx.getSize (ptr));
     ASSERT_NE (nullptr, ptr);
     ptr = memCtx.allocate (30000);
-    ASSERT_EQ (30000, memCtx.getSize (ptr));
+    ASSERT_EQ (30000UL, memCtx.getSize (ptr));
     ASSERT_NE (nullptr, ptr);
 
     return 0;
@@ -68,31 +68,31 @@ test2 ()
     ptr = memCtx.allocate (30);
     ASSERT_NE (nullptr, ptr);
     memset (ptr, 0xff, 30);
-    ASSERT_EQ (30, memCtx.getSize (ptr));
+    ASSERT_EQ (30UL, memCtx.getSize (ptr));
     memCtx.deallocate (ptr);
 
     ptr = memCtx.allocate (300);
     ASSERT_NE (nullptr, ptr);
     memset (ptr, 0xff, 300);
-    ASSERT_EQ (300, memCtx.getSize (ptr));
+    ASSERT_EQ (300UL, memCtx.getSize (ptr));
 
     ptr = memCtx.allocate (3000);
     ASSERT_NE (nullptr, ptr);
     memset (ptr, 0xff, 3000);
-    ASSERT_EQ (3000, memCtx.getSize (ptr));
+    ASSERT_EQ (3000UL, memCtx.getSize (ptr));
 
     ptr = memCtx.allocate (30000);
     ASSERT_NE (nullptr, ptr);
     memset (ptr, 0xff, 3000);
-    ASSERT_EQ (30000, memCtx.getSize (ptr));
+    ASSERT_EQ (30000UL, memCtx.getSize (ptr));
 
     ptr = memCtx.allocate (30000);
-    ASSERT_EQ (30000, memCtx.getSize (ptr));
+    ASSERT_EQ (30000UL, memCtx.getSize (ptr));
     memset (ptr, 0xff, 30000);
     ASSERT_NE (nullptr, ptr);
 
     ptr = memCtx.allocate (30000);
-    ASSERT_EQ (30000, memCtx.getSize (ptr));
+    ASSERT_EQ (30000UL, memCtx.getSize (ptr));
     memset (ptr, 0xff, 30000);
     ASSERT_NE (nullptr, ptr);
 
@@ -112,18 +112,18 @@ test3 ()
     ptr = memCtx.allocate (30);
     ASSERT_NE (nullptr, ptr);
     memset (ptr, 0xff, 30);
-    ASSERT_EQ (30, memCtx.getSize (ptr));
+    ASSERT_EQ (30UL, memCtx.getSize (ptr));
     memCtx.deallocate (ptr);
 
     ptr = memCtx.allocate (300);
     ASSERT_NE (nullptr, ptr);
     memset (ptr, 0xff, 300);
-    ASSERT_EQ (300, memCtx.getSize (ptr));
+    ASSERT_EQ (300UL, memCtx.getSize (ptr));
 
     ptr = memCtx.allocate (3000);
     ASSERT_NE (nullptr, ptr);
     memset (ptr, 0xff, 3000);
-    ASSERT_EQ (3000, memCtx.getSize (ptr));
+    ASSERT_EQ (3000UL, memCtx.getSize (ptr));
     memCtx.deallocate (ptr);
 
     for (size_t size = 30000; size < 30020; ++size)

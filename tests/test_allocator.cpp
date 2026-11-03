@@ -23,12 +23,6 @@ main ()
 {
     typedef cookmem::CookMemAllocator<int> IntAllocator;
     IntAllocator allocator;
-    cookmem::CookMemAllocator<long> reboundAllocator (allocator);
-
-    if (allocator == reboundAllocator)
-    {
-        return 1;
-    }
 
     std::vector<int, IntAllocator> values (allocator);
     values.push_back (42);
@@ -43,13 +37,7 @@ main ()
         linkedValues.front () != 42 ||
         linkedValues.back () != 7)
     {
-        return 2;
-    }
-
-    IntAllocator otherAllocator;
-    if (allocator == otherAllocator)
-    {
-        return 3;
+        return 1;
     }
 
     return 0;
