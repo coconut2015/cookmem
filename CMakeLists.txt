@@ -72,26 +72,26 @@ include_directories(include/)
 
 # -- tests -------------------------------------------------------------------
 
-# .. test_cookptrcircularlist
-add_executable(test_cookptrcircularlist
-	tests/test_cookptrcircularlist.cpp)
+# .. test_circularlist
+add_executable(test_circularlist
+	tests/test_circularlist.cpp)
 
-add_test(NAME test_cookptrcircularlist
-	COMMAND test_cookptrcircularlist)
+add_test(NAME test_circularlist
+	COMMAND test_circularlist)
 
-# .. test_cookrbtree
-add_executable(test_cookrbtree
-	tests/test_cookrbtree.cpp)
+# .. test_rbtree
+add_executable(test_rbtree
+	tests/test_rbtree.cpp)
 
-add_test(NAME test_cookrbtree
-	COMMAND test_cookrbtree)
+add_test(NAME test_rbtree
+	COMMAND test_rbtree)
 
-# .. test_cookptravltree
-add_executable(test_cookptravltree
-	tests/test_cookptravltree.cpp)
+# .. test_avltree
+add_executable(test_avltree
+	tests/test_avltree.cpp)
 
-add_test(NAME test_cookptravltree
-	COMMAND test_cookptravltree)
+add_test(NAME test_avltree
+	COMMAND test_avltree)
 
 # .. test_cookmem
 add_executable(test_cookmem_01
