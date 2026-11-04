@@ -127,6 +127,9 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 <h3><a id="index_g" name="index_g"></a>- g -</h3><ul>
 <li>getArena()&#160;:&#160;<a class="el" href="classcookmem_1_1MemContext.html#a1e36c00c180d9c934fc40ccd4c7f9a26">cookmem::MemContext&lt; Arena, Logger, TreeType, T &gt;</a></li>
 <li>getCoalesceInterval()&#160;:&#160;<a class="el" href="classcookmem_1_1MemContext.html#acc523e23a6e5d7c604cce3a8d80a4fa5">cookmem::MemContext&lt; Arena, Logger, TreeType, T &gt;</a>, <a class="el" href="classcookmem_1_1MemPool.html#a9ecd7dca471713014d7b20412c81d7fa">cookmem::MemPool&lt; Arena, Logger, TreeType, T &gt;</a></li>
+<li>getCurrentAllocated()&#160;:&#160;<a class="el" href="structcookmem_1_1MemStatistics.html#a7327cd2bc06c901a043324c6b5f66622">cookmem::MemStatistics</a></li>
+<li>getCurrentSegments()&#160;:&#160;<a class="el" href="structcookmem_1_1MemStatistics.html#acd617fc8554391f872f0848b15bc4e75">cookmem::MemStatistics</a></li>
+<li>getCurrentSegmentSize()&#160;:&#160;<a class="el" href="structcookmem_1_1MemStatistics.html#a2c4b84ed30fa31661390cc64856fe566">cookmem::MemStatistics</a></li>
 <li>getError()&#160;:&#160;<a class="el" href="classcookmem_1_1Exception.html#a8c88b4a50222e56949e221bdbe6dc84d">cookmem::Exception</a></li>
 <li>getFile()&#160;:&#160;<a class="el" href="classcookmem_1_1Exception.html#a98bbebd1af0fe5abd6bc442564f18ff9">cookmem::Exception</a></li>
 <li>getFootprint()&#160;:&#160;<a class="el" href="classcookmem_1_1MemContext.html#a9f08636c45cdc60279af67760e80e8c1">cookmem::MemContext&lt; Arena, Logger, TreeType, T &gt;</a>, <a class="el" href="classcookmem_1_1MemPool.html#abc097b770d0f8a2f6b258e12bb67e6f6">cookmem::MemPool&lt; Arena, Logger, TreeType, T &gt;</a></li>
@@ -135,19 +138,23 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 <li>getLogger()&#160;:&#160;<a class="el" href="classcookmem_1_1MemContext.html#abb543b0c8868e53d5eb381ad4170018b">cookmem::MemContext&lt; Arena, Logger, TreeType, T &gt;</a></li>
 <li>getMaxFootprint()&#160;:&#160;<a class="el" href="classcookmem_1_1MemContext.html#a058b6c729d7f7fd661c331a801dcd5fa">cookmem::MemContext&lt; Arena, Logger, TreeType, T &gt;</a>, <a class="el" href="classcookmem_1_1MemPool.html#acfc4adf04cb224fc39d12e2c31b42879">cookmem::MemPool&lt; Arena, Logger, TreeType, T &gt;</a></li>
 <li>getMessage()&#160;:&#160;<a class="el" href="classcookmem_1_1Exception.html#a5ba3630c5291e265bc4b05399cf41e0e">cookmem::Exception</a></li>
-<li>getNumAllocations()&#160;:&#160;<a class="el" href="classcookmem_1_1StatsLogger.html#ac79b36bbc9db46ffd59f9fedc8109ce6">cookmem::StatsLogger</a></li>
-<li>getNumDeallocations()&#160;:&#160;<a class="el" href="classcookmem_1_1StatsLogger.html#ad6c5d35305bf9143383c30d2f023875a">cookmem::StatsLogger</a></li>
-<li>getNumFreeSegments()&#160;:&#160;<a class="el" href="classcookmem_1_1StatsLogger.html#ad7eb45946d90fc7d5fb7643e73c9de9e">cookmem::StatsLogger</a></li>
-<li>getNumGetSegments()&#160;:&#160;<a class="el" href="classcookmem_1_1StatsLogger.html#a0ef3e869752baef1fa9f7fda41e870de">cookmem::StatsLogger</a></li>
+<li>getNumAllocations()&#160;:&#160;<a class="el" href="structcookmem_1_1MemStatistics.html#aea87f8bec9d7cd393a950a4533af980a">cookmem::MemStatistics</a></li>
+<li>getNumCoalesces()&#160;:&#160;<a class="el" href="structcookmem_1_1MemStatistics.html#a10f0c88d66e900dfcccd25695982fda8">cookmem::MemStatistics</a></li>
+<li>getNumDeallocations()&#160;:&#160;<a class="el" href="structcookmem_1_1MemStatistics.html#a8d7c0f436d19c63ca7498b919740adf8">cookmem::MemStatistics</a></li>
+<li>getNumFreeSegments()&#160;:&#160;<a class="el" href="structcookmem_1_1MemStatistics.html#ab03dce329d8f7a132bb2f1bda09f9d8a">cookmem::MemStatistics</a></li>
+<li>getNumGetSegments()&#160;:&#160;<a class="el" href="structcookmem_1_1MemStatistics.html#a22cefc6e46e47c1974e6cc0121d49808">cookmem::MemStatistics</a></li>
 <li>getPaddingByte()&#160;:&#160;<a class="el" href="classcookmem_1_1MemContext.html#a454e01e7ab1d4dd37049326ff90b79f3">cookmem::MemContext&lt; Arena, Logger, TreeType, T &gt;</a>, <a class="el" href="classcookmem_1_1MemPool.html#a7c71e29b7223f709400b593dcc6a0d77">cookmem::MemPool&lt; Arena, Logger, TreeType, T &gt;</a></li>
 <li>getPaddingSize()&#160;:&#160;<a class="el" href="classcookmem_1_1MemContext.html#abe0c7a8444ba8b65f37495fe45539dae">cookmem::MemContext&lt; Arena, Logger, TreeType, T &gt;</a>, <a class="el" href="classcookmem_1_1MemPool.html#a77d91bd104fbfda5d4dbf7edf7b7e7a6">cookmem::MemPool&lt; Arena, Logger, TreeType, T &gt;</a></li>
+<li>getPeakAllocated()&#160;:&#160;<a class="el" href="structcookmem_1_1MemStatistics.html#a4c25a64843effcce472696c3dea41f3d">cookmem::MemStatistics</a></li>
+<li>getPeakSegments()&#160;:&#160;<a class="el" href="structcookmem_1_1MemStatistics.html#afe3395bf6ccefe21b73b3173f726a4e9">cookmem::MemStatistics</a></li>
+<li>getPeakSegmentSize()&#160;:&#160;<a class="el" href="structcookmem_1_1MemStatistics.html#aeaaf9a6689f9038ebe38f7dfddebf8c5">cookmem::MemStatistics</a></li>
 <li>getPool()&#160;:&#160;<a class="el" href="classcookmem_1_1MemContext.html#a4c35f24760c2bce22173b25830d478af">cookmem::MemContext&lt; Arena, Logger, TreeType, T &gt;</a></li>
 <li>getSegment()&#160;:&#160;<a class="el" href="classcookmem_1_1CachedArena.html#a02b70c0e2474bf86420a45c2d8fe1999">cookmem::CachedArena&lt; Arena, TreeType &gt;</a>, <a class="el" href="classcookmem_1_1FixedArena.html#ac7f0c164daed205b28dbaf445e37be53">cookmem::FixedArena</a>, <a class="el" href="classcookmem_1_1MallocArena.html#aa63ea73e4fb9eddf193dfc51ec8ecdc0">cookmem::MallocArena</a>, <a class="el" href="classcookmem_1_1MemArena.html#aff8a58baef47469cb74422df8324f8a6">cookmem::MemArena</a>, <a class="el" href="classcookmem_1_1MmapArena.html#a0ad432dcf36fa40dceac8930439590cb">cookmem::MmapArena</a></li>
 <li>getSize()&#160;:&#160;<a class="el" href="classcookmem_1_1MemContext.html#a1db94dd9bf74e4e3281da3e47e846373">cookmem::MemContext&lt; Arena, Logger, TreeType, T &gt;</a></li>
-<li>getTotalAllocated()&#160;:&#160;<a class="el" href="classcookmem_1_1StatsLogger.html#a4ef717f68fda106b796dec89f27433dd">cookmem::StatsLogger</a></li>
-<li>getTotalDeallocated()&#160;:&#160;<a class="el" href="classcookmem_1_1StatsLogger.html#a574426e2d2ff0eb54490a6eb4560a21f">cookmem::StatsLogger</a></li>
-<li>getTotalFreeSegmentSize()&#160;:&#160;<a class="el" href="classcookmem_1_1StatsLogger.html#a5eb16f253ace941d2dfbbc7523a44fe8">cookmem::StatsLogger</a></li>
-<li>getTotalGetSegmentSize()&#160;:&#160;<a class="el" href="classcookmem_1_1StatsLogger.html#ac2b96ecee42af5086bd50eb58ff30d5e">cookmem::StatsLogger</a></li>
+<li>getTotalAllocated()&#160;:&#160;<a class="el" href="structcookmem_1_1MemStatistics.html#a6038760db4d293f82a5b1edc39b29f3f">cookmem::MemStatistics</a></li>
+<li>getTotalDeallocated()&#160;:&#160;<a class="el" href="structcookmem_1_1MemStatistics.html#a28179e30c3617f8ed63c6d5cf794e98a">cookmem::MemStatistics</a></li>
+<li>getTotalFreeSegmentSize()&#160;:&#160;<a class="el" href="structcookmem_1_1MemStatistics.html#aa6cb56e4f123d4f73a712bd5e52bbef3">cookmem::MemStatistics</a></li>
+<li>getTotalGetSegmentSize()&#160;:&#160;<a class="el" href="structcookmem_1_1MemStatistics.html#a6b0cb4d172845c7cef16bc0c2030593e">cookmem::MemStatistics</a></li>
 <li>getUserSize()&#160;:&#160;<a class="el" href="classcookmem_1_1MemPool.html#a3229e2814b85151a1e5019c6a56ff002">cookmem::MemPool&lt; Arena, Logger, TreeType, T &gt;</a></li>
 </ul>
 
@@ -169,6 +176,7 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 <h3><a id="index_p" name="index_p"></a>- p -</h3><ul>
 <li>pointer&#160;:&#160;<a class="el" href="classcookmem_1_1CachedMemContext.html#a13c0e307cf87c47e0eb810a46b02fffb">cookmem::CachedMemContext&lt; Arena, Logger, TreeType, T &gt;</a>, <a class="el" href="classcookmem_1_1MemContext.html#a4831e190cd7ed0c9d380983262e08c34">cookmem::MemContext&lt; Arena, Logger, TreeType, T &gt;</a>, <a class="el" href="classcookmem_1_1MemPool.html#af9efe4d87381763062297389fc5adb7d">cookmem::MemPool&lt; Arena, Logger, TreeType, T &gt;</a>, <a class="el" href="classcookmem_1_1SimpleMemContext.html#a27bff01af2f1861ea706087892f1087c">cookmem::SimpleMemContext&lt; Arena, Logger, TreeType, T &gt;</a></li>
 <li>printGraph()&#160;:&#160;<a class="el" href="classcookmem_1_1PtrAVLTree.html#a24696de9988fbfd8a6619c4b4465c4c8">cookmem::PtrAVLTree</a></li>
+<li>printStats()&#160;:&#160;<a class="el" href="structcookmem_1_1MemStatistics.html#afb199f0ec1bf2219f581759289d163ef">cookmem::MemStatistics</a></li>
 <li>PtrAVLTree()&#160;:&#160;<a class="el" href="classcookmem_1_1PtrAVLTree.html#a515e9946b84d94ad6e94051fc364b47c">cookmem::PtrAVLTree</a></li>
 </ul>
 

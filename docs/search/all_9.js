@@ -15,5 +15,6 @@ var searchData=
   ['mempool_3c_20arena_2c_20logger_2c_20ptrrbtree_2c_20void_20_3e_12',['MemPool&lt; Arena, Logger, PtrRBTree, void &gt;',['../classcookmem_1_1MemPool.html',1,'cookmem']]],
   ['mempool_3c_20cachedarena_3c_20mmaparena_20_3e_2c_20noactionmemlogger_2c_20ptrrbtree_2c_20void_20_3e_13',['MemPool&lt; CachedArena&lt; MmapArena &gt;, NoActionMemLogger, PtrRBTree, void &gt;',['../classcookmem_1_1MemPool.html',1,'cookmem']]],
   ['mempool_3c_20mmaparena_2c_20noactionmemlogger_2c_20ptrrbtree_2c_20void_20_3e_14',['MemPool&lt; MmapArena, NoActionMemLogger, PtrRBTree, void &gt;',['../classcookmem_1_1MemPool.html',1,'cookmem']]],
-  ['mmaparena_15',['mmaparena',['../classcookmem_1_1MmapArena.html',1,'cookmem::MmapArena'],['../classcookmem_1_1MmapArena.html#abece58b7ddeb11ac59519d5dc833bbf7',1,'cookmem::MmapArena::MmapArena()']]]
+  ['memstatistics_15',['MemStatistics',['../structcookmem_1_1MemStatistics.html',1,'cookmem']]],
+  ['mmaparena_16',['mmaparena',['../classcookmem_1_1MmapArena.html',1,'cookmem::MmapArena'],['../classcookmem_1_1MmapArena.html#abece58b7ddeb11ac59519d5dc833bbf7',1,'cookmem::MmapArena::MmapArena()']]]
 ];

@@ -143,6 +143,23 @@ test3 ()
     return 0;
 }
 
+static int
+test4 ()
+{
+    cookmem::SimpleMemContext<cookmem::MallocArena> memCtx;
+    void* ptr = memCtx.allocate (8);
+    ASSERT_NE (nullptr, ptr);
+
+    void* resized = memCtx.reallocate (ptr, 9);
+    ASSERT_EQ (ptr, resized);
+    ASSERT_EQ (true, memCtx.contains (resized, true));
+
+    memCtx.deallocate (resized);
+    memCtx.deallocate (nullptr);
+    memCtx.validate ();
+    return 0;
+}
+
 int
 main (int argc, const char* argv[])
 {
@@ -151,6 +168,7 @@ main (int argc, const char* argv[])
         ASSERT_EQ (0, test1 ());
         ASSERT_EQ (0, test2 ());
         ASSERT_EQ (0, test3 ());
+        ASSERT_EQ (0, test4 ());
     }
     catch (const unittest::UnitTestException& ex)
     {

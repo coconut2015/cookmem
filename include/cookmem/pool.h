@@ -1049,6 +1049,7 @@ public:
     void
     coalesce ()
     {
+        m_logger.logCoalesce ();
         MemSegment* seg = m_segList;
         MemSegment* prevSeg = nullptr;
         while (seg)

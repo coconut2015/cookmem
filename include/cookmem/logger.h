@@ -18,6 +18,7 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <cstdio>
 
 #include "exception.h"
 
@@ -77,6 +78,10 @@ class MemLogger
      */
     virtual void
     logFreeSegment (void* segment, std::size_t segmentSize) = 0;
+
+    /** Log a pool coalesce call. */
+    virtual void
+    logCoalesce () = 0;
 
     /**
      * Log the memory allocation.
@@ -146,6 +151,8 @@ public:
 
     inline void logFreeSegment (void* segment, std::size_t segmentSize) { }
 
+    inline void logCoalesce () { }
+
     inline void logAllocation (void* userPtr, std::size_t userSize, MemAllocType_et allocType) { }
 
     inline void logReallocation (void* userPtr, std::size_t oldUserSize, std::size_t newUserSize) { }
@@ -163,83 +170,29 @@ public:
 };
 
 /**
- * A MemLogger that tracks allocation and segment usage statistics.
- *
- * This class implements the interface of MemLogger without explicitly
- * inheriting from it.  This is to avoid the overhead of virtual function
- * calls and allows inlining of the functions.
+ * Memory allocation and segment usage statistics.
  */
-class StatsLogger
+struct MemStatistics
 {
 public:
-    StatsLogger ()
+    MemStatistics ()
     : m_numAllocations (0),
       m_numDeallocations (0),
       m_numGetSegments (0),
       m_numFreeSegments (0),
+      m_numCoalesces (0),
       m_totalAllocated (0),
       m_totalDeallocated (0),
       m_totalGetSegmentSize (0),
       m_totalFreeSegmentSize (0),
+      m_currentAllocated (0),
+      m_peakAllocated (0),
+      m_currentSegments (0),
+      m_peakSegments (0),
+      m_currentSegmentSize (0),
+      m_peakSegmentSize (0),
       m_numAllocationsByType {}
     {
-    }
-
-    void
-    logGetSegment (void*, std::size_t segmentSize)
-    {
-        ++m_numGetSegments;
-        m_totalGetSegmentSize += segmentSize;
-    }
-
-    void
-    logFreeSegment (void*, std::size_t segmentSize)
-    {
-        ++m_numFreeSegments;
-        m_totalFreeSegmentSize += segmentSize;
-    }
-
-    void
-    logAllocation (void* userPtr, std::size_t userSize, MemAllocType_et allocType)
-    {
-        if (userPtr != nullptr)
-        {
-            ++m_numAllocations;
-            m_totalAllocated += userSize;
-            ++m_numAllocationsByType[allocType];
-        }
-    }
-
-    void
-    logReallocation (void*, std::size_t oldUserSize, std::size_t newUserSize)
-    {
-        if (newUserSize > oldUserSize)
-        {
-            m_totalAllocated += newUserSize - oldUserSize;
-        }
-        else
-        {
-            m_totalDeallocated += oldUserSize - newUserSize;
-        }
-    }
-
-    void
-    logDeallocation (void* userPtr, std::size_t userSize)
-    {
-        if (userPtr != nullptr)
-        {
-            ++m_numDeallocations;
-            m_totalDeallocated += userSize;
-        }
-    }
-
-    void
-    logError (void*,
-              MemError_et error,
-              const char* file = __FILE__,
-              int line = __LINE__)
-    {
-        throw Exception (error, "memory corruption detected.", file, line);
     }
 
     /** Get the number of successful allocation events. */
@@ -255,6 +208,8 @@ public:
     std::size_t getNumGetSegments () const { return m_numGetSegments; }
     /** Get the number of released memory segments. */
     std::size_t getNumFreeSegments () const { return m_numFreeSegments; }
+    /** Get the number of pool coalesce calls. */
+    std::size_t getNumCoalesces () const { return m_numCoalesces; }
     /** Get the total number of bytes allocated. */
     std::size_t getTotalAllocated () const { return m_totalAllocated; }
     /** Get the total number of bytes deallocated. */
@@ -263,11 +218,79 @@ public:
     std::size_t getTotalGetSegmentSize () const { return m_totalGetSegmentSize; }
     /** Get the total size of released memory segments. */
     std::size_t getTotalFreeSegmentSize () const { return m_totalFreeSegmentSize; }
+    /** Get the current number of allocated user bytes. */
+    std::size_t getCurrentAllocated () const { return m_currentAllocated; }
+    /** Get the peak number of allocated user bytes. */
+    std::size_t getPeakAllocated () const { return m_peakAllocated; }
+    /** Get the current number of active memory segments. */
+    std::size_t getCurrentSegments () const { return m_currentSegments; }
+    /** Get the peak number of active memory segments. */
+    std::size_t getPeakSegments () const { return m_peakSegments; }
+    /** Get the current size of active memory segments. */
+    std::size_t getCurrentSegmentSize () const { return m_currentSegmentSize; }
+    /** Get the peak size of active memory segments. */
+    std::size_t getPeakSegmentSize () const { return m_peakSegmentSize; }
 
-    void
-    printStats ()
+    // Internal use only; ordinary comments keep these setters out of Doxygen output.
+    void setNumAllocations (std::size_t value) { m_numAllocations = value; }
+    void setNumAllocations (MemAllocType_et allocType, std::size_t value)
     {
+        m_numAllocationsByType[allocType] = value;
+    }
+    void setNumDeallocations (std::size_t value) { m_numDeallocations = value; }
+    void setNumGetSegments (std::size_t value) { m_numGetSegments = value; }
+    void setNumFreeSegments (std::size_t value) { m_numFreeSegments = value; }
+    void setNumCoalesces (std::size_t value) { m_numCoalesces = value; }
+    void setTotalAllocated (std::size_t value) { m_totalAllocated = value; }
+    void setTotalDeallocated (std::size_t value) { m_totalDeallocated = value; }
+    void setTotalGetSegmentSize (std::size_t value) { m_totalGetSegmentSize = value; }
+    void setTotalFreeSegmentSize (std::size_t value) { m_totalFreeSegmentSize = value; }
+    void setCurrentAllocated (std::size_t value) { m_currentAllocated = value; }
+    void setPeakAllocated (std::size_t value) { m_peakAllocated = value; }
+    void setCurrentSegments (std::size_t value) { m_currentSegments = value; }
+    void setPeakSegments (std::size_t value) { m_peakSegments = value; }
+    void setCurrentSegmentSize (std::size_t value) { m_currentSegmentSize = value; }
+    void setPeakSegmentSize (std::size_t value) { m_peakSegmentSize = value; }
 
+    /**
+     * Print the statistics to stdout.
+     */
+    void
+    printStats () const
+    {
+        std::printf ("current allocations: %zu bytes, peak allocations: %zu bytes, "
+                     "current segments: %zu (%zu bytes), peak segments: %zu (%zu bytes)\n",
+                     m_currentAllocated,
+                     m_peakAllocated,
+                     m_currentSegments,
+                     m_currentSegmentSize,
+                     m_peakSegments,
+                     m_peakSegmentSize);
+        std::printf ("coalesce calls: %zu\n", m_numCoalesces);
+
+        std::printf ("allocations by type:\n");
+        for (std::size_t i = 0; i < MEM_ALLOC_COUNT; ++i)
+        {
+            std::printf ("  %s: %zu\n",
+                         getAllocationTypeName (static_cast<MemAllocType_et> (i)),
+                         m_numAllocationsByType[i]);
+        }
+    }
+
+    static const char*
+    getAllocationTypeName (MemAllocType_et allocType)
+    {
+        static const char* const names[MEM_ALLOC_COUNT] =
+        {
+            "none",
+            "small",
+            "tree",
+            "dv",
+            "arena",
+            "big"
+        };
+        std::size_t index = static_cast<std::size_t> (allocType);
+        return index < MEM_ALLOC_COUNT ? names[index] : "unknown";
     }
 
 private:
@@ -275,11 +298,138 @@ private:
     std::size_t m_numDeallocations;
     std::size_t m_numGetSegments;
     std::size_t m_numFreeSegments;
+    std::size_t m_numCoalesces;
     std::size_t m_totalAllocated;
     std::size_t m_totalDeallocated;
     std::size_t m_totalGetSegmentSize;
     std::size_t m_totalFreeSegmentSize;
+    std::size_t m_currentAllocated;
+    std::size_t m_peakAllocated;
+    std::size_t m_currentSegments;
+    std::size_t m_peakSegments;
+    std::size_t m_currentSegmentSize;
+    std::size_t m_peakSegmentSize;
     std::size_t m_numAllocationsByType[MEM_ALLOC_COUNT];
+};
+
+/**
+ * A MemLogger that tracks allocation and segment usage statistics.
+ *
+ * This class implements the interface of MemLogger without explicitly
+ * inheriting from it.  This is to avoid the overhead of virtual function
+ * calls and allows inlining of the functions.
+ */
+class StatsLogger
+{
+public:
+    void
+    logCoalesce ()
+    {
+        m_stats.setNumCoalesces (m_stats.getNumCoalesces () + 1);
+    }
+
+    void
+    logGetSegment (void* segment, std::size_t segmentSize)
+    {
+        if (segment == nullptr)
+        {
+            return;
+        }
+        m_stats.setNumGetSegments (m_stats.getNumGetSegments () + 1);
+        m_stats.setTotalGetSegmentSize (m_stats.getTotalGetSegmentSize () + segmentSize);
+
+        std::size_t numSegments = m_stats.getCurrentSegments () + 1;
+        std::size_t segmentSizeTotal = m_stats.getCurrentSegmentSize () + segmentSize;
+        m_stats.setCurrentSegments (numSegments);
+        m_stats.setCurrentSegmentSize (segmentSizeTotal);
+        if (m_stats.getPeakSegments () < numSegments)
+        {
+            m_stats.setPeakSegments (numSegments);
+        }
+        if (m_stats.getPeakSegmentSize () < segmentSizeTotal)
+        {
+            m_stats.setPeakSegmentSize (segmentSizeTotal);
+        }
+    }
+
+    void
+    logFreeSegment (void* segment, std::size_t segmentSize)
+    {
+        if (segment == nullptr)
+        {
+            return;
+        }
+        m_stats.setNumFreeSegments (m_stats.getNumFreeSegments () + 1);
+        m_stats.setTotalFreeSegmentSize (m_stats.getTotalFreeSegmentSize () + segmentSize);
+        m_stats.setCurrentSegments (m_stats.getCurrentSegments () - 1);
+        m_stats.setCurrentSegmentSize (m_stats.getCurrentSegmentSize () - segmentSize);
+    }
+
+    void
+    logAllocation (void* userPtr, std::size_t userSize, MemAllocType_et allocType)
+    {
+        if (userPtr != nullptr)
+        {
+            m_stats.setNumAllocations (m_stats.getNumAllocations () + 1);
+            m_stats.setTotalAllocated (m_stats.getTotalAllocated () + userSize);
+            std::size_t currentAllocated = m_stats.getCurrentAllocated () + userSize;
+            m_stats.setCurrentAllocated (currentAllocated);
+            if (m_stats.getPeakAllocated () < currentAllocated)
+            {
+                m_stats.setPeakAllocated (currentAllocated);
+            }
+            m_stats.setNumAllocations (allocType,
+                                       m_stats.getNumAllocations (allocType) + 1);
+        }
+    }
+
+    void
+    logReallocation (void* userPtr, std::size_t oldUserSize, std::size_t newUserSize)
+    {
+        if (userPtr != nullptr && newUserSize > oldUserSize)
+        {
+            std::size_t delta = newUserSize - oldUserSize;
+            m_stats.setTotalAllocated (m_stats.getTotalAllocated () + delta);
+            std::size_t currentAllocated = m_stats.getCurrentAllocated () + delta;
+            m_stats.setCurrentAllocated (currentAllocated);
+            if (m_stats.getPeakAllocated () < currentAllocated)
+            {
+                m_stats.setPeakAllocated (currentAllocated);
+            }
+        }
+        else if (userPtr != nullptr)
+        {
+            std::size_t delta = oldUserSize - newUserSize;
+            m_stats.setTotalDeallocated (m_stats.getTotalDeallocated () + delta);
+            m_stats.setCurrentAllocated (m_stats.getCurrentAllocated () - delta);
+        }
+    }
+
+    void
+    logDeallocation (void* userPtr, std::size_t userSize)
+    {
+        if (userPtr != nullptr)
+        {
+            m_stats.setNumDeallocations (m_stats.getNumDeallocations () + 1);
+            m_stats.setTotalDeallocated (m_stats.getTotalDeallocated () + userSize);
+            m_stats.setCurrentAllocated (m_stats.getCurrentAllocated () - userSize);
+        }
+    }
+
+    void
+    logError (void*,
+              MemError_et error,
+              const char* file = __FILE__,
+              int line = __LINE__)
+    {
+        throw Exception (error, "memory corruption detected.", file, line);
+    }
+
+    MemStatistics& getStats () { return m_stats; }
+    const MemStatistics& getStats () const { return m_stats; }
+
+private:
+    MemStatistics m_stats;
 };
 
 }   // namespace cookmem
