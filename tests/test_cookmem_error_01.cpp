@@ -45,6 +45,9 @@ testError2 ()
     catch (cookmem::Exception& ex)
     {
         ASSERT_EQ (cookmem::MEM_ERROR_DOUBLE_FREE, ex.getError ());
+        ASSERT_NE (nullptr, ex.getMessage ());
+        ASSERT_NE (nullptr, ex.getFile ());
+        ASSERT_NE (0, ex.getLine ());
 
         return 0;
     }

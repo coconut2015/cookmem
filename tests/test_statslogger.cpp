@@ -28,13 +28,15 @@ main ()
     logger.logCoalesce ();
     logger.logGetSegment (nullptr, 256);
     logger.logGetSegment (&segment2, 64);
+    logger.logFreeSegment (nullptr, 512);
     logger.logFreeSegment (&segment, 128);
     logger.logFreeSegment (&segment2, 64);
     logger.logAllocation (&allocation, 32, cookmem::MEM_ALLOC_SMALL);
     logger.logAllocation (nullptr, 64, cookmem::MEM_ALLOC_BIG);
+    logger.logDeallocation (nullptr, 64);
     logger.logReallocation (&allocation, 32, 20);
-    logger.logReallocation (&allocation, 20, 28);
-    logger.logDeallocation (&allocation, 28);
+    logger.logReallocation (&allocation, 20, 40);
+    logger.logDeallocation (&allocation, 40);
 
     const cookmem::MemStatistics& stats = logger.getStats ();
     if (stats.getNumAllocations () != 1 ||
@@ -44,12 +46,12 @@ main ()
         stats.getNumGetSegments () != 2 ||
         stats.getNumFreeSegments () != 2 ||
         stats.getNumCoalesces () != 2 ||
-        stats.getTotalAllocated () != 40 ||
-        stats.getTotalDeallocated () != 40 ||
+        stats.getTotalAllocated () != 52 ||
+        stats.getTotalDeallocated () != 52 ||
         stats.getTotalGetSegmentSize () != 192 ||
         stats.getTotalFreeSegmentSize () != 192 ||
         stats.getCurrentAllocated () != 0 ||
-        stats.getPeakAllocated () != 32 ||
+        stats.getPeakAllocated () != 40 ||
         stats.getCurrentSegments () != 0 ||
         stats.getPeakSegments () != 2 ||
         stats.getCurrentSegmentSize () != 0 ||
