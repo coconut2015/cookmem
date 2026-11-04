@@ -1,9 +1,0 @@
-<map id="cookmem::MemContext&lt; Arena, Logger, TreeType, T &gt;" name="cookmem::MemContext&lt; Arena, Logger, TreeType, T &gt;">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,85,228,125"/>
-<area shape="rect" id="Node000002" href="$classcookmem_1_1CachedMemContext.html" title=" " alt="" coords="276,5,540,60"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="211,79,296,57,298,63,212,84"/>
-<area shape="rect" id="Node000003" href="$classcookmem_1_1CachedMemContext.html" title=" " alt="" coords="295,85,521,125"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="242,102,294,102,294,107,242,107"/>
-<area shape="rect" id="Node000004" href="$classcookmem_1_1SimpleMemContext.html" title=" " alt="" coords="296,149,520,189"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="222,125,317,146,316,151,221,130"/>
-</map>
