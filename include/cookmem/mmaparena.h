@@ -22,8 +22,8 @@
 #include <sys/mman.h>
 #endif  // WIN32
 
-#include "arena.h"
 #include "config.h"
+#include "arena.h"
 
 namespace cookmem
 {

@@ -25,8 +25,9 @@
 static int
 test1 ()
 {
-    typedef cookmem::CookMemAllocator<int> IntAllocator;
-    IntAllocator allocator;
+    typedef cookmem::Allocator<int> IntAllocator;
+    IntAllocator::context_type context;
+    IntAllocator allocator (context);
 
     std::vector<int, IntAllocator> values (allocator);
     values.push_back (42);
@@ -46,11 +47,26 @@ test1 ()
 static int
 testAllocatorOperations ()
 {
-    typedef cookmem::CookMemAllocator<int> IntAllocator;
+    typedef cookmem::Allocator<int> IntAllocator;
     typedef IntAllocator::rebind<char>::other CharAllocator;
-    IntAllocator allocator;
+    IntAllocator::context_type context;
+    IntAllocator allocator (context);
     IntAllocator copiedAllocator (allocator);
     CharAllocator reboundAllocator (allocator);
+    IntAllocator::context_type otherContext;
+    IntAllocator otherAllocator (otherContext);
+
+    ASSERT_EQ (&context, &copiedAllocator.getContext ());
+    ASSERT_EQ (&context, &reboundAllocator.getContext ());
+    ASSERT_EQ (true, allocator == copiedAllocator);
+    ASSERT_EQ (true, allocator == reboundAllocator);
+    ASSERT_EQ (false, allocator == otherAllocator);
+    ASSERT_EQ (false, allocator != copiedAllocator);
+    ASSERT_EQ (true, allocator != otherAllocator);
+    ASSERT_EQ (false, IntAllocator::is_always_equal::value);
+    ASSERT_EQ (false, IntAllocator::propagate_on_container_copy_assignment::value);
+    ASSERT_EQ (false, IntAllocator::propagate_on_container_move_assignment::value);
+    ASSERT_EQ (false, IntAllocator::propagate_on_container_swap::value);
 
     int value;
     allocator.construct (&value, 42);
@@ -85,8 +101,9 @@ throwsBadAlloc (Allocator& allocator, typename Allocator::size_type count)
 static int
 test2 ()
 {
-    typedef cookmem::CookMemAllocator<int> IntAllocator;
-    IntAllocator allocator;
+    typedef cookmem::Allocator<int> IntAllocator;
+    IntAllocator::context_type context;
+    IntAllocator allocator (context);
 
     ASSERT_EQ (nullptr, allocator.allocate (0));
     return 0;
@@ -95,13 +112,32 @@ test2 ()
 static int
 test3 ()
 {
-    typedef cookmem::CookMemAllocator<int> IntAllocator;
-    IntAllocator allocator;
+    typedef cookmem::Allocator<int> IntAllocator;
+    IntAllocator::context_type context;
+    IntAllocator allocator (context);
 
     ASSERT_EQ (true, throwsBadAlloc (allocator, allocator.max_size ()));
     ASSERT_EQ (true,
                throwsBadAlloc (allocator,
                                (std::numeric_limits<IntAllocator::size_type>::max) ()));
+    return 0;
+}
+
+static int
+testContainerSwap ()
+{
+    typedef cookmem::Allocator<int> IntAllocator;
+    IntAllocator::context_type context;
+    IntAllocator allocator (context);
+    std::vector<int, IntAllocator> first (allocator);
+    std::vector<int, IntAllocator> second (allocator);
+    first.push_back (1);
+    second.push_back (2);
+
+    first.swap (second);
+
+    ASSERT_EQ (2, first.front ());
+    ASSERT_EQ (1, second.front ());
     return 0;
 }
 
@@ -114,6 +150,7 @@ main ()
         ASSERT_EQ (0, testAllocatorOperations ());
         ASSERT_EQ (0, test2 ());
         ASSERT_EQ (0, test3 ());
+        ASSERT_EQ (0, testContainerSwap ());
     }
     catch (const unittest::UnitTestException& ex)
     {

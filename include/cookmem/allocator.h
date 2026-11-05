@@ -17,9 +17,9 @@
 #define COOK_MEM_ALLOCATOR_H
 
 #include <cstddef>
-#include <cstdint>
 #include <limits>
 #include <new>
+#include <type_traits>
 #include <utility>
 
 #include "context.h"
@@ -28,15 +28,15 @@ namespace cookmem
 {
 
 /**
- * An allocator backed by its own CookMem memory context.
+ * An allocator backed by a caller-owned CookMem memory context.
  *
- * Allocator copies and rebound allocators have independent contexts.
+ * Allocator copies and rebound allocators share the same context.
  */
 template<class T,
          class Arena = MmapArena,
          class Logger = NoActionMemLogger,
          class TreeType = PtrRBTree>
-class CookMemAllocator
+class Allocator
 {
 public:
     typedef CachedMemContext<Arena, Logger, TreeType> context_type;
@@ -50,42 +50,43 @@ public:
     typedef std::false_type         propagate_on_container_copy_assignment;
     typedef std::false_type         propagate_on_container_move_assignment;
     typedef std::false_type         propagate_on_container_swap;
+    typedef std::false_type         is_always_equal;
 
     template<class U>
     struct rebind
     {
-        typedef CookMemAllocator<U, Arena, Logger, TreeType> other;
+        typedef Allocator<U, Arena, Logger, TreeType> other;
     };
 
-    CookMemAllocator (const CookMemAllocator&)
-    : m_context ()
+    Allocator (const Allocator& other)
+    : m_context (other.m_context)
     {
     }
 
-    explicit CookMemAllocator (std::uint8_t paddingSize = DEFAULT_PADDING_SIZE)
-    : m_context (paddingSize)
+    explicit Allocator (context_type& context)
+    : m_context (context)
     {
     }
 
     template<class U>
-    CookMemAllocator (const CookMemAllocator<U, Arena, Logger, TreeType>&)
-    : m_context ()
+    Allocator (const Allocator<U, Arena, Logger, TreeType>& other)
+    : m_context (other.m_context)
     {
     }
 
     pointer
-    allocate (size_type count, const void* = nullptr)
+    allocate (size_type size, const void* = nullptr)
     {
-        if (count > max_size ())
+        if (size > (std::numeric_limits<size_type>::max) () / sizeof (T))
         {
             throw std::bad_alloc ();
         }
-        if (count == 0)
+        if (size == 0)
         {
             return nullptr;
         }
 
-        void* ptr = m_context.allocate (count * sizeof (T));
+        void* ptr = m_context.allocate (size * sizeof (T));
         if (ptr == nullptr)
         {
             throw std::bad_alloc ();
@@ -125,11 +126,25 @@ public:
         return m_context;
     }
 
+    template<class U>
+    bool
+    operator== (const Allocator<U, Arena, Logger, TreeType>& other) const
+    {
+        return &m_context == &other.m_context;
+    }
+
+    template<class U>
+    bool
+    operator!= (const Allocator<U, Arena, Logger, TreeType>& other) const
+    {
+        return !(*this == other);
+    }
+
 private:
     template<class, class, class, class>
-    friend class CookMemAllocator;
+    friend class Allocator;
 
-    context_type m_context;
+    context_type& m_context;
 };
 
 }   // namespace cookmem

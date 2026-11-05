@@ -177,32 +177,37 @@ if (UNIX)
 endif (UNIX)
 
 # -- examples -------------------------------------------------------
-add_executable(ex_1
-	examples/ex_1.cpp)
-add_test(NAME ex_1
-	COMMAND ex_1)
+add_executable(example_FixedArena
+	examples/example_FixedArena.cpp)
+add_test(NAME example_FixedArena
+	COMMAND example_FixedArena)
 
-add_executable(ex_2
-	examples/ex_2.cpp)
-add_test(NAME ex_2
-	COMMAND ex_2)
+add_executable(example_simplememcontext
+	examples/example_simplememcontext.cpp)
+add_test(NAME example_simplememcontext
+	COMMAND example_simplememcontext)
 
-add_executable(ex_3
-	examples/ex_3.cpp)
-add_test(NAME ex_3
-	COMMAND ex_3)
+add_executable(example_CachedArena
+	examples/example_CachedArena.cpp)
+add_test(NAME example_CachedArena
+	COMMAND example_CachedArena)
 
-add_executable(ex_4
-	examples/ex_4.cpp)
-add_test(NAME ex_4
-	COMMAND ex_4)
+add_executable(example_child
+	examples/example_child.cpp)
+add_test(NAME example_child
+	COMMAND example_child)
 
-add_executable(ex_5
-	examples/ex_5.cpp)
-add_test(NAME ex_5
-	COMMAND ex_5)
+add_executable(example_getSize
+	examples/example_getSize.cpp)
+add_test(NAME example_getSize
+	COMMAND example_getSize)
 
-add_executable(ex_6
-	examples/ex_6.cpp)
-add_test(NAME ex_6
-	COMMAND ex_6)
+add_executable(example_boundcheck
+	examples/example_boundcheck.cpp)
+add_test(NAME example_boundcheck
+	COMMAND example_boundcheck)
+
+add_executable(example_Allocator
+	examples/example_Allocator.cpp)
+add_test(NAME example_Allocator
+	COMMAND example_Allocator)
