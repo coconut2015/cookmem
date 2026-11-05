@@ -182,10 +182,10 @@ add_executable(example_FixedArena
 add_test(NAME example_FixedArena
 	COMMAND example_FixedArena)
 
-add_executable(example_simplememcontext
-	examples/example_simplememcontext.cpp)
-add_test(NAME example_simplememcontext
-	COMMAND example_simplememcontext)
+add_executable(example_SimpleMemContext
+	examples/example_SimpleMemContext.cpp)
+add_test(NAME example_SimpleMemContext
+	COMMAND example_SimpleMemContext)
 
 add_executable(example_CachedArena
 	examples/example_CachedArena.cpp)
