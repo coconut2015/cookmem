@@ -11,19 +11,24 @@ CookMem divides the job of a memory context into three parts.
 3. Logger, which can be used to monitor the allocation / deallocation
    activities.  The primary use of logger is to gather memory statistics.
 
-By decoupling memory arena from memory pool, and having simple interface
-for arena, it is much easier to have a custom memory context that would
-suit one's needs.  It was the primary motivation for this project.
+Separating the memory arena from the memory pool makes it easy to build a
+custom memory context for your needs. See [References](references.md) for
+the available arenas and loggers. CookMem also provides ready-to-use
+memory contexts, including cookmem::SimpleMemContext and
+cookmem::CachedMemContext. This flexibility was a primary motivation for
+the project.
 
-\section ex_1 cookmem::FixedArena
+\section example_FixedArena cookmem::FixedArena
 
 Oftentimes, we want the allocations to be done within a big chunk of
 memory, which can be on stack, pre-allocated memory buffer etc.
 cookmem::FixedArena is for this purpose.
 
-\include ex_1.cpp
+\include example_FixedArena.cpp
 
-\section ex_2 cookmem::MmapArena
+\include example_Allocator.cpp
+
+\section example_simplememcontext cookmem::MmapArena
 
 [mmap](https://en.wikipedia.org/wiki/Mmap) is one way to obtain large
 segments of memory on Unix.  cookmem::MmapArena basically calls ```mmap```
@@ -33,18 +38,18 @@ and ```munmap``` to get and release segments.  On Windows, it uses
 It should be noted that this arena does not track the memory segments
 since cookmem::MemPool already does the tracking.
 
-\include ex_2.cpp
+\include example_simplememcontext.cpp
 
-\section ex_3 cookmem::CachedArena
+\section example_CachedArena cookmem::CachedArena
 
 cookmem::CachedArena basically caches the memory segments released in an
 [red-black tree](https://en.wikipedia.org/wiki/Red%E2%80%93black_tree) and reuses them for
 later requests.  This is useful when it is expensive to request and
 release memory segments.
 
-\include ex_3.cpp
+\include example_CachedArena.cpp
 
-\section ex_4 Copying Data Between Memory Pools
+\section example_child Copying Data Between Memory Pools
 
 cookmem has the ability to determine if a memory pointer is in the
 address space of that memory pool.  Note that the check is done
@@ -53,7 +58,7 @@ by iterating through all the memory segments owned by the memory pool.
 This ability is quite useful to copy needed data out from the memory
 pool that is about to be destroyed.
 
-\include ex_4.cpp
+\include example_child.cpp
 
 \section Querying Pointer Information
 
@@ -67,7 +72,7 @@ Additionally, cookmem has the ability to tell if a pointer is valid.
 
 See the following example.
 
-\include ex_5.cpp
+\include example_getSize.cpp
 
 \section Memory Corruption Detection
 
@@ -83,4 +88,14 @@ However, it is a valuable debugging tool as well.
 Note that once the exception is thrown, the memory context is in
 a bad state.  So it is not good idea to re-use the same memory context.
 
-\include ex_6.cpp
+\include example_boundcheck.cpp
+
+\section STL Allocator
+
+The STL containers can use a custom allocator to bind their storage to a
+memory context.  cookmem::Allocator<T> adapts a cookmem memory context to the
+C++ allocator interface, allowing containers such as ```std::vector```,
+```std::list```, and ```std::basic_string``` to allocate from the same arena
+or pool that is managing the rest of the application state.
+
+\include example_Allocator.cpp
