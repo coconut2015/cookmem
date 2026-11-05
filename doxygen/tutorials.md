@@ -32,8 +32,7 @@ cookmem::FixedArena is for this purpose.
 
 [mmap](https://en.wikipedia.org/wiki/Mmap) is one way to obtain large
 segments of memory on Unix.  cookmem::MmapArena basically calls ```mmap```
-and ```munmap``` to get and release segments.  On Windows, it uses
-```VirtualAlloc``` / ```VirtualFree``` instead.
+and ```munmap``` to get and release segments.  On Windows, it uses ```VirtualAlloc``` / ```VirtualFree``` instead.
 
 It should be noted that this arena does not track the memory segments
 since cookmem::MemPool already does the tracking.
@@ -94,8 +93,8 @@ a bad state.  So it is not good idea to re-use the same memory context.
 
 The STL containers can use a custom allocator to bind their storage to a
 memory context.  cookmem::Allocator<T> adapts a cookmem memory context to the
-C++ allocator interface, allowing containers such as ```std::vector```,
-```std::list```, and ```std::basic_string``` to allocate from the same arena
+C++ allocator interface, allowing containers such as ```std::vector```, ```std::list```,
+and ```std::basic_string``` to allocate from the same arena
 or pool that is managing the rest of the application state.
 
 \include example_Allocator.cpp
