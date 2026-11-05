@@ -28,12 +28,13 @@ var NAVTREE =
     [ "Performance", "index.html#autotoc_md0", null ],
     [ "Links", "index.html#autotoc_md1", null ],
     [ "Tutorials", "tutorials.html", [
-      [ "cookmem::FixedArena", "tutorials.html#ex_1", null ],
-      [ "cookmem::MmapArena", "tutorials.html#ex_2", null ],
-      [ "cookmem::CachedArena", "tutorials.html#ex_3", null ],
-      [ "Copying Data Between Memory Pools", "tutorials.html#ex_4", null ],
+      [ "cookmem::FixedArena", "tutorials.html#example_FixedArena", null ],
+      [ "cookmem::MmapArena", "tutorials.html#example_simplememcontext", null ],
+      [ "cookmem::CachedArena", "tutorials.html#example_CachedArena", null ],
+      [ "Copying Data Between Memory Pools", "tutorials.html#example_child", null ],
       [ "Pointer Information", "tutorials.html#Querying", null ],
-      [ "Corruption Detection", "tutorials.html#Memory", null ]
+      [ "Corruption Detection", "tutorials.html#Memory", null ],
+      [ "Allocator", "tutorials.html#STL", null ]
     ] ],
     [ "Current Limitations", "limitations.html", null ],
     [ "Installation", "install.html", null ],

@@ -10,7 +10,7 @@ var searchData=
   ['memory_20contexts_7',['Memory Contexts',['../references.html#autotoc_md8',1,'']]],
   ['memory_20logger_8',['Memory Logger',['../references.html#autotoc_md6',1,'']]],
   ['memory_20pool_9',['Memory Pool',['../references.html#autotoc_md7',1,'']]],
-  ['memory_20pools_10',['Copying Data Between Memory Pools',['../tutorials.html#ex_4',1,'']]],
+  ['memory_20pools_10',['Copying Data Between Memory Pools',['../tutorials.html#example_child',1,'']]],
   ['mempool_11',['mempool',['../classcookmem_1_1MemPool.html#a98479b71083532ba825c132780c70e51',1,'cookmem::MemPool::MemPool()'],['../classcookmem_1_1MemPool.html',1,'cookmem::MemPool&lt; Arena, Logger, TreeType, T &gt;']]],
   ['mempool_3c_20arena_2c_20logger_2c_20ptrrbtree_2c_20void_20_3e_12',['MemPool&lt; Arena, Logger, PtrRBTree, void &gt;',['../classcookmem_1_1MemPool.html',1,'cookmem']]],
   ['mempool_3c_20cachedarena_3c_20mmaparena_20_3e_2c_20noactionmemlogger_2c_20ptrrbtree_2c_20void_20_3e_13',['MemPool&lt; CachedArena&lt; MmapArena &gt;, NoActionMemLogger, PtrRBTree, void &gt;',['../classcookmem_1_1MemPool.html',1,'cookmem']]],

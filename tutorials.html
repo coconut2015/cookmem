@@ -99,8 +99,8 @@ $(document).ready(function(){initNavTree('tutorials.html',''); initResizable(); 
 <li>Memory pool, which is responsible for managing memory chunks created within memory segments. This component is typically managed and hidden by the memory context.</li>
 <li>Logger, which can be used to monitor the allocation / deallocation activities. The primary use of logger is to gather memory statistics.</li>
 </ol>
-<p>By decoupling memory arena from memory pool, and having simple interface for arena, it is much easier to have a custom memory context that would suit one's needs. It was the primary motivation for this project.</p>
-<h1><a class="anchor" id="ex_1"></a>
+<p>Separating the memory arena from the memory pool makes it easy to build a custom memory context for your needs. See References for the available arenas and loggers. CookMem also provides ready-to-use memory contexts, including <a class="el" href="classcookmem_1_1SimpleMemContext.html">cookmem::SimpleMemContext</a> and <a class="el" href="classcookmem_1_1CachedMemContext.html">cookmem::CachedMemContext</a>. This flexibility was a primary motivation for the project.</p>
+<h1><a class="anchor" id="example_FixedArena"></a>
 cookmem::FixedArena</h1>
 <p>Oftentimes, we want the allocations to be done within a big chunk of memory, which can be on stack, pre-allocated memory buffer etc. <a class="el" href="classcookmem_1_1FixedArena.html">cookmem::FixedArena</a> is for this purpose.</p>
 <div class="fragment"><div class="line"><span class="comment">/*</span></div>
@@ -128,7 +128,7 @@ cookmem::FixedArena</h1>
 <div class="line">    <span class="keywordtype">char</span> buffer[64000];</div>
 <div class="line">    <a class="code hl_class" href="classcookmem_1_1FixedArena.html">cookmem::FixedArena</a> arena (buffer, <span class="keyword">sizeof</span>(buffer));</div>
 <div class="line">    <a class="code hl_class" href="classcookmem_1_1NoActionMemLogger.html">cookmem::NoActionMemLogger</a> logger;</div>
-<div class="line">    <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">cookmem::MemContext&lt;cookmem::FixedArena, cookmem::NoActionMemLogger&gt;</a> memCtx (arena, logger);</div>
+<div class="line">    <a class="code hl_class" href="classcookmem_1_1Allocator.html">cookmem::MemContext&lt;cookmem::FixedArena, cookmem::NoActionMemLogger&gt;</a> memCtx (arena, logger);</div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">// Allocate memory</span></div>
 <div class="line">    <span class="keywordtype">void</span>* ptr = memCtx.allocate (100);</div>
@@ -147,15 +147,11 @@ cookmem::FixedArena</h1>
 <div class="line"> </div>
 <div class="line">    <span class="keywordflow">return</span> 0;</div>
 <div class="line">}</div>
-<div class="ttc" id="aclasscookmem_1_1CookMemAllocator_html"><div class="ttname"><a href="classcookmem_1_1CookMemAllocator.html">cookmem::CookMemAllocator</a></div><div class="ttdef"><b>Definition</b> allocator.h:40</div></div>
+<div class="ttc" id="aclasscookmem_1_1Allocator_html"><div class="ttname"><a href="classcookmem_1_1Allocator.html">cookmem::Allocator</a></div><div class="ttdef"><b>Definition</b> allocator.h:40</div></div>
 <div class="ttc" id="aclasscookmem_1_1FixedArena_html"><div class="ttname"><a href="classcookmem_1_1FixedArena.html">cookmem::FixedArena</a></div><div class="ttdef"><b>Definition</b> arena.h:69</div></div>
 <div class="ttc" id="aclasscookmem_1_1NoActionMemLogger_html"><div class="ttname"><a href="classcookmem_1_1NoActionMemLogger.html">cookmem::NoActionMemLogger</a></div><div class="ttdef"><b>Definition</b> logger.h:144</div></div>
-</div><!-- fragment --><h1><a class="anchor" id="ex_2"></a>
-cookmem::MmapArena</h1>
-<p><a href="https://en.wikipedia.org/wiki/Mmap">mmap</a> is one way to obtain large segments of memory on Unix. <a class="el" href="classcookmem_1_1MmapArena.html">cookmem::MmapArena</a> basically calls <code>mmap</code> and <code>munmap</code> to get and release segments. On Windows, it uses </p><div class="fragment"></div><!-- fragment --><p> / <code>VirtualFree</code> instead.</p>
-<p>It should be noted that this arena does not track the memory segments since <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a> already does the tracking.</p>
-<div class="fragment"><div class="line"><span class="comment">/*</span></div>
-<div class="line"><span class="comment"> * Copyright (c) 2018-2021 Heng Yuan</span></div>
+</div><!-- fragment --><div class="fragment"><div class="line"><span class="comment">/*</span></div>
+<div class="line"><span class="comment"> * Copyright (c) 2026 Heng Yuan</span></div>
 <div class="line"><span class="comment"> *</span></div>
 <div class="line"><span class="comment"> * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span></div>
 <div class="line"><span class="comment"> * you may not use this file except in compliance with the License.</span></div>
@@ -170,27 +166,41 @@ cookmem::MmapArena</h1>
 <div class="line"><span class="comment"> * limitations under the License.</span></div>
 <div class="line"><span class="comment"> */</span></div>
 <div class="line"><span class="preprocessor">#include &lt;iostream&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;list&gt;</span></div>
 <div class="line"> </div>
 <div class="line"><span class="preprocessor">#include &lt;cookmem.h&gt;</span></div>
 <div class="line"> </div>
 <div class="line"><span class="keywordtype">int</span></div>
-<div class="line">main (<span class="keywordtype">int</span> argc, <span class="keyword">const</span> <span class="keywordtype">char</span>* argv[])</div>
+<div class="line">main ()</div>
 <div class="line">{</div>
-<div class="line">    <span class="comment">// Use default arena</span></div>
-<div class="line">    <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">cookmem::SimpleMemContext&lt;cookmem::MmapArena&gt;</a> memCtx;</div>
+<div class="line">    <span class="keyword">typedef</span> <a class="code hl_class" href="classcookmem_1_1Allocator.html">cookmem::CachedMemContext&lt;&gt;</a> MemoryContext;</div>
+<div class="line">    <span class="keyword">typedef</span> <a class="code hl_class" href="classcookmem_1_1Allocator.html">cookmem::Allocator&lt;int&gt;</a> IntAllocator;</div>
 <div class="line"> </div>
-<div class="line">    <span class="comment">// allocate memory</span></div>
-<div class="line">    <span class="keywordtype">void</span>* ptr = memCtx.allocate (100);</div>
+<div class="line">    <span class="comment">// Create a memory context</span></div>
+<div class="line">    MemoryContext context;</div>
+<div class="line">    <span class="comment">// Create an allocator for int type using the memory context</span></div>
+<div class="line">    IntAllocator allocator (context);</div>
+<div class="line">    <span class="comment">// Create a list of int using the custom allocator</span></div>
+<div class="line">    std::list&lt;int, IntAllocator&gt; values (allocator);</div>
 <div class="line"> </div>
-<div class="line">    <span class="comment">// change the size of the memory</span></div>
-<div class="line">    ptr = memCtx.reallocate (ptr, 1000);</div>
+<div class="line">    values.push_back (10);</div>
+<div class="line">    values.push_back (20);</div>
+<div class="line">    values.push_back (30);</div>
 <div class="line"> </div>
-<div class="line">    <span class="comment">// free the memory</span></div>
-<div class="line">    memCtx.deallocate (ptr);</div>
+<div class="line">    <span class="keywordflow">for</span> (std::list&lt;int, IntAllocator&gt;::const_iterator it = values.begin ();</div>
+<div class="line">         it != values.end ();</div>
+<div class="line">         ++it)</div>
+<div class="line">    {</div>
+<div class="line">        std::cout &lt;&lt; *it &lt;&lt; std::endl;</div>
+<div class="line">    }</div>
 <div class="line"> </div>
 <div class="line">    <span class="keywordflow">return</span> 0;</div>
 <div class="line">}</div>
-</div><!-- fragment --><h1><a class="anchor" id="ex_3"></a>
+</div><!-- fragment --><h1><a class="anchor" id="example_simplememcontext"></a>
+cookmem::MmapArena</h1>
+<p><a href="https://en.wikipedia.org/wiki/Mmap">mmap</a> is one way to obtain large segments of memory on Unix. <a class="el" href="classcookmem_1_1MmapArena.html">cookmem::MmapArena</a> basically calls <code>mmap</code> and <code>munmap</code> to get and release segments. On Windows, it uses </p><div class="fragment"></div><!-- fragment --><p> / <code>VirtualFree</code> instead.</p>
+<p>It should be noted that this arena does not track the memory segments since <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a> already does the tracking.</p>
+<div class="fragment"></div><!-- fragment --><h1><a class="anchor" id="example_CachedArena"></a>
 cookmem::CachedArena</h1>
 <p><a class="el" href="classcookmem_1_1CachedArena.html">cookmem::CachedArena</a> basically caches the memory segments released in an <a href="https://en.wikipedia.org/wiki/Red%E2%80%93black_tree">red-black tree</a> and reuses them for later requests. This is useful when it is expensive to request and release memory segments.</p>
 <div class="fragment"><div class="line"><span class="comment">/*</span></div>
@@ -216,10 +226,10 @@ cookmem::CachedArena</h1>
 <div class="line">main (<span class="keywordtype">int</span> argc, <span class="keyword">const</span> <span class="keywordtype">char</span>* argv[])</div>
 <div class="line">{</div>
 <div class="line">    <a class="code hl_class" href="classcookmem_1_1MmapArena.html">cookmem::MmapArena</a> arena;</div>
-<div class="line">    <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">cookmem::CachedArena&lt;cookmem::MmapArena&gt;</a> cachedArena (arena);</div>
+<div class="line">    <a class="code hl_class" href="classcookmem_1_1Allocator.html">cookmem::CachedArena&lt;cookmem::MmapArena&gt;</a> cachedArena (arena);</div>
 <div class="line">    <a class="code hl_class" href="classcookmem_1_1NoActionMemLogger.html">cookmem::NoActionMemLogger</a> logger;</div>
 <div class="line"> </div>
-<div class="line">    <span class="keyword">typedef</span> <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">cookmem::MemContext&lt;cookmem::CachedArena&lt;cookmem::MmapArena&gt;</a>, <a class="code hl_class" href="classcookmem_1_1NoActionMemLogger.html">cookmem::NoActionMemLogger</a>&gt; CachedMemCtx;</div>
+<div class="line">    <span class="keyword">typedef</span> <a class="code hl_class" href="classcookmem_1_1Allocator.html">cookmem::MemContext&lt;cookmem::CachedArena&lt;cookmem::MmapArena&gt;</a>, <a class="code hl_class" href="classcookmem_1_1NoActionMemLogger.html">cookmem::NoActionMemLogger</a>&gt; CachedMemCtx;</div>
 <div class="line"> </div>
 <div class="line">    {</div>
 <div class="line">        CachedMemCtx memCtx (cachedArena, logger);</div>
@@ -255,7 +265,7 @@ cookmem::CachedArena</h1>
 <div class="line">    <span class="keywordflow">return</span> 0;</div>
 <div class="line">}</div>
 <div class="ttc" id="aclasscookmem_1_1MmapArena_html"><div class="ttname"><a href="classcookmem_1_1MmapArena.html">cookmem::MmapArena</a></div><div class="ttdef"><b>Definition</b> mmaparena.h:108</div></div>
-</div><!-- fragment --><h1><a class="anchor" id="ex_4"></a>
+</div><!-- fragment --><h1><a class="anchor" id="example_child"></a>
 Copying Data Between Memory Pools</h1>
 <p>cookmem has the ability to determine if a memory pointer is in the address space of that memory pool. Note that the check is done by iterating through all the memory segments owned by the memory pool.</p>
 <p>This ability is quite useful to copy needed data out from the memory pool that is about to be destroyed.</p>
@@ -282,8 +292,8 @@ Copying Data Between Memory Pools</h1>
 <div class="line">main (<span class="keywordtype">int</span> argc, <span class="keyword">const</span> <span class="keywordtype">char</span>* argv[])</div>
 <div class="line">{</div>
 <div class="line">    <span class="comment">// CachedMemContext is a child class of MemContext</span></div>
-<div class="line">    <span class="keyword">typedef</span> <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">cookmem::CachedMemContext&lt;cookmem::MmapArena, cookmem::NoActionMemLogger&gt;</a> ParentCachedMemCtx;</div>
-<div class="line">    <span class="keyword">typedef</span> <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">cookmem::MemContext&lt;cookmem::CachedArena&lt;cookmem::MmapArena&gt;</a>, <a class="code hl_class" href="classcookmem_1_1NoActionMemLogger.html">cookmem::NoActionMemLogger</a>&gt;   ChildCachedMemCtx;</div>
+<div class="line">    <span class="keyword">typedef</span> <a class="code hl_class" href="classcookmem_1_1Allocator.html">cookmem::CachedMemContext&lt;cookmem::MmapArena, cookmem::NoActionMemLogger&gt;</a> ParentCachedMemCtx;</div>
+<div class="line">    <span class="keyword">typedef</span> <a class="code hl_class" href="classcookmem_1_1Allocator.html">cookmem::MemContext&lt;cookmem::CachedArena&lt;cookmem::MmapArena&gt;</a>, <a class="code hl_class" href="classcookmem_1_1NoActionMemLogger.html">cookmem::NoActionMemLogger</a>&gt;   ChildCachedMemCtx;</div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">// Create the parent ctx</span></div>
 <div class="line">    ParentCachedMemCtx parentCtx;</div>
@@ -373,7 +383,7 @@ Pointer Information</h1>
 <div class="line"><span class="keywordtype">int</span></div>
 <div class="line">main (<span class="keywordtype">int</span> argc, <span class="keyword">const</span> <span class="keywordtype">char</span>* argv[])</div>
 <div class="line">{</div>
-<div class="line">    <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">cookmem::SimpleMemContext&lt;&gt;</a> memCtx;</div>
+<div class="line">    <a class="code hl_class" href="classcookmem_1_1Allocator.html">cookmem::SimpleMemContext&lt;&gt;</a> memCtx;</div>
 <div class="line"> </div>
 <div class="line">    <span class="keywordtype">void</span>* ptr1 = memCtx.allocate (10);</div>
 <div class="line"> </div>
@@ -450,7 +460,7 @@ Corruption Detection</h1>
 <div class="line">        <span class="comment">// Set the number of padding bytes when creating a memory context.</span></div>
 <div class="line">        <span class="comment">//</span></div>
 <div class="line">        <span class="comment">// A value of 0 disables the check; values from 1 to 8 enable it.</span></div>
-<div class="line">        <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">cookmem::SimpleMemContext&lt;&gt;</a> memCtx (1);</div>
+<div class="line">        <a class="code hl_class" href="classcookmem_1_1Allocator.html">cookmem::SimpleMemContext&lt;&gt;</a> memCtx (1);</div>
 <div class="line"> </div>
 <div class="line">        std::cout &lt;&lt; <span class="stringliteral">&quot;Padding enabled: &quot;</span> &lt;&lt; memCtx.isPadding () &lt;&lt; std::endl;</div>
 <div class="line"> </div>
@@ -478,6 +488,56 @@ Corruption Detection</h1>
 <div class="line">}</div>
 <div class="ttc" id="aclasscookmem_1_1Exception_html"><div class="ttname"><a href="classcookmem_1_1Exception.html">cookmem::Exception</a></div><div class="ttdef"><b>Definition</b> exception.h:36</div></div>
 <div class="ttc" id="aclasscookmem_1_1Exception_html_a5ba3630c5291e265bc4b05399cf41e0e"><div class="ttname"><a href="classcookmem_1_1Exception.html#a5ba3630c5291e265bc4b05399cf41e0e">cookmem::Exception::getMessage</a></div><div class="ttdeci">const char * getMessage() const</div><div class="ttdef"><b>Definition</b> exception.h:64</div></div>
+</div><!-- fragment --><h1><a class="anchor" id="STL"></a>
+Allocator</h1>
+<p>The STL containers can use a custom allocator to bind their storage to a memory context. cookmem::Allocator&lt;T&gt; adapts a cookmem memory context to the C++ allocator interface, allowing containers such as <code>std::vector</code>, </p><div class="fragment"><div class="line">::list</div>
+</div><!-- fragment --><p> , and <code>std::basic_string</code> to allocate from the same arena or pool that is managing the rest of the application state.</p>
+<div class="fragment"><div class="line"><span class="comment">/*</span></div>
+<div class="line"><span class="comment"> * Copyright (c) 2026 Heng Yuan</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span></div>
+<div class="line"><span class="comment"> * you may not use this file except in compliance with the License.</span></div>
+<div class="line"><span class="comment"> * You may obtain a copy of the License at</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> *     http://www.apache.org/licenses/LICENSE-2.0</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> * Unless required by applicable law or agreed to in writing, software</span></div>
+<div class="line"><span class="comment"> * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span></div>
+<div class="line"><span class="comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></div>
+<div class="line"><span class="comment"> * See the License for the specific language governing permissions and</span></div>
+<div class="line"><span class="comment"> * limitations under the License.</span></div>
+<div class="line"><span class="comment"> */</span></div>
+<div class="line"><span class="preprocessor">#include &lt;iostream&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;list&gt;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="preprocessor">#include &lt;cookmem.h&gt;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">int</span></div>
+<div class="line">main ()</div>
+<div class="line">{</div>
+<div class="line">    <span class="keyword">typedef</span> <a class="code hl_class" href="classcookmem_1_1Allocator.html">cookmem::CachedMemContext&lt;&gt;</a> MemoryContext;</div>
+<div class="line">    <span class="keyword">typedef</span> <a class="code hl_class" href="classcookmem_1_1Allocator.html">cookmem::Allocator&lt;int&gt;</a> IntAllocator;</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Create a memory context</span></div>
+<div class="line">    MemoryContext context;</div>
+<div class="line">    <span class="comment">// Create an allocator for int type using the memory context</span></div>
+<div class="line">    IntAllocator allocator (context);</div>
+<div class="line">    <span class="comment">// Create a list of int using the custom allocator</span></div>
+<div class="line">    std::list&lt;int, IntAllocator&gt; values (allocator);</div>
+<div class="line"> </div>
+<div class="line">    values.push_back (10);</div>
+<div class="line">    values.push_back (20);</div>
+<div class="line">    values.push_back (30);</div>
+<div class="line"> </div>
+<div class="line">    <span class="keywordflow">for</span> (std::list&lt;int, IntAllocator&gt;::const_iterator it = values.begin ();</div>
+<div class="line">         it != values.end ();</div>
+<div class="line">         ++it)</div>
+<div class="line">    {</div>
+<div class="line">        std::cout &lt;&lt; *it &lt;&lt; std::endl;</div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    <span class="keywordflow">return</span> 0;</div>
+<div class="line">}</div>
 </div><!-- fragment --> </div></div><!-- contents -->
 </div><!-- PageDoc -->
 </div><!-- doc-content -->

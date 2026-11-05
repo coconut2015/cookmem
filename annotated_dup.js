@@ -1,11 +1,11 @@
 var annotated_dup =
 [
     [ "cookmem", null, [
+      [ "Allocator", "classcookmem_1_1Allocator.html", "classcookmem_1_1Allocator" ],
       [ "CachedArena", "classcookmem_1_1CachedArena.html", "classcookmem_1_1CachedArena" ],
       [ "CachedMemContainer", "structcookmem_1_1CachedMemContainer.html", null ],
       [ "CachedMemContext", "classcookmem_1_1CachedMemContext.html", "classcookmem_1_1CachedMemContext" ],
       [ "CircularList", "classcookmem_1_1CircularList.html", "classcookmem_1_1CircularList" ],
-      [ "CookMemAllocator", "classcookmem_1_1CookMemAllocator.html", "classcookmem_1_1CookMemAllocator" ],
       [ "Exception", "classcookmem_1_1Exception.html", "classcookmem_1_1Exception" ],
       [ "FixedArena", "classcookmem_1_1FixedArena.html", "classcookmem_1_1FixedArena" ],
       [ "MallocArena", "classcookmem_1_1MallocArena.html", "classcookmem_1_1MallocArena" ],

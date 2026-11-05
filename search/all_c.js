@@ -1,7 +1,7 @@
 var searchData=
 [
   ['reallocate_0',['reallocate',['../classcookmem_1_1MemContext.html#a586818a5e1d4ff1c562216beb976a655',1,'cookmem::MemContext::reallocate()'],['../classcookmem_1_1MemPool.html#a5eec8adbb528ae7e8907f35540879d46',1,'cookmem::MemPool::reallocate()']]],
-  ['rebind_1',['rebind',['../structcookmem_1_1CookMemAllocator_1_1rebind.html',1,'cookmem::CookMemAllocator']]],
+  ['rebind_1',['rebind',['../structcookmem_1_1Allocator_1_1rebind.html',1,'cookmem::Allocator']]],
   ['redblacktree_2',['RedBlackTree',['../classcookmem_1_1RedBlackTree.html',1,'cookmem']]],
   ['references_3',['References',['../references.html',1,'']]],
   ['releaseall_4',['releaseall',['../classcookmem_1_1MemContext.html#a7ee7fa640486f0a8bddd8a76f4043caf',1,'cookmem::MemContext::releaseAll()'],['../classcookmem_1_1MemPool.html#ac126e2364498d1ac892ef545b02ee5f4',1,'cookmem::MemPool::releaseAll()']]],

@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['rebind_0',['rebind',['../structcookmem_1_1CookMemAllocator_1_1rebind.html',1,'cookmem::CookMemAllocator']]],
-  ['redblacktree_1',['RedBlackTree',['../classcookmem_1_1RedBlackTree.html',1,'cookmem']]]
+  ['ptravltree_0',['PtrAVLTree',['../classcookmem_1_1PtrAVLTree.html',1,'cookmem']]],
+  ['ptrrbnode_1',['PtrRBNode',['../classcookmem_1_1PtrRBNode.html',1,'cookmem']]]
 ];

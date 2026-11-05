@@ -132,10 +132,10 @@ $(document).ready(function(){initNavTree('rbtree_8h_source.html',''); initResiza
 <div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    <span class="keyword">typedef</span> std::size_t     ValueType;</div>
 <div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
 <div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    <span class="keywordtype">void</span></div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    init (ValueType <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">value</a>, <a class="code hl_class" href="classcookmem_1_1PtrRBNode.html">SelfType</a>* <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">parentNode</a>)</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    init (ValueType <a class="code hl_class" href="classcookmem_1_1Allocator.html">value</a>, <a class="code hl_class" href="classcookmem_1_1PtrRBNode.html">SelfType</a>* <a class="code hl_class" href="classcookmem_1_1Allocator.html">parentNode</a>)</div>
 <div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    {</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>        m_size = <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">value</a>;</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>        m_parent = <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">parentNode</a>;</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>        m_size = <a class="code hl_class" href="classcookmem_1_1Allocator.html">value</a>;</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>        m_parent = <a class="code hl_class" href="classcookmem_1_1Allocator.html">parentNode</a>;</div>
 <div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>        m_children[0] = <span class="keyword">nullptr</span>;</div>
 <div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>        m_children[1] = <span class="keyword">nullptr</span>;</div>
 <div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>        m_next = <span class="keyword">nullptr</span>;</div>
@@ -209,9 +209,9 @@ $(document).ready(function(){initNavTree('rbtree_8h_source.html',''); initResiza
 <div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>    }</div>
 <div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span> </div>
 <div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>    <span class="keywordtype">void</span></div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>    setParent (<a class="code hl_class" href="classcookmem_1_1PtrRBNode.html">SelfType</a>* <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">parentNode</a>)</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>    setParent (<a class="code hl_class" href="classcookmem_1_1PtrRBNode.html">SelfType</a>* <a class="code hl_class" href="classcookmem_1_1Allocator.html">parentNode</a>)</div>
 <div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>    {</div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>        m_parent = <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">parentNode</a>;</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>        m_parent = <a class="code hl_class" href="classcookmem_1_1Allocator.html">parentNode</a>;</div>
 <div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>    }</div>
 <div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span> </div>
 <div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>    <span class="keywordtype">void</span></div>
@@ -253,27 +253,27 @@ $(document).ready(function(){initNavTree('rbtree_8h_source.html',''); initResiza
 <div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>    <a class="code hl_class" href="classcookmem_1_1PtrRBNode.html">SelfType</a>*</div>
 <div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>    removeFromList ()</div>
 <div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>    {</div>
-<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>        <a class="code hl_class" href="classcookmem_1_1PtrRBNode.html">SelfType</a>*   <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">retNode</a> = m_next;</div>
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>        <a class="code hl_class" href="classcookmem_1_1PtrRBNode.html">SelfType</a>*   <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">nextNode</a> = m_next-&gt;m_next;</div>
-<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>        m_next = <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">nextNode</a>;</div>
-<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>        <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">retNode</a>-&gt;m_next = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>        <a class="code hl_class" href="classcookmem_1_1PtrRBNode.html">SelfType</a>*   <a class="code hl_class" href="classcookmem_1_1Allocator.html">retNode</a> = m_next;</div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>        <a class="code hl_class" href="classcookmem_1_1PtrRBNode.html">SelfType</a>*   <a class="code hl_class" href="classcookmem_1_1Allocator.html">nextNode</a> = m_next-&gt;m_next;</div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>        m_next = <a class="code hl_class" href="classcookmem_1_1Allocator.html">nextNode</a>;</div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>        <a class="code hl_class" href="classcookmem_1_1Allocator.html">retNode</a>-&gt;m_next = <span class="keyword">nullptr</span>;</div>
 <div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span> </div>
-<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>        <span class="keywordflow">return</span> <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">retNode</a>;</div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>        <span class="keywordflow">return</span> <a class="code hl_class" href="classcookmem_1_1Allocator.html">retNode</a>;</div>
 <div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>    }</div>
 <div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span> </div>
 <div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>    <span class="keywordtype">void</span></div>
 <div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>    removeFromList (<a class="code hl_class" href="classcookmem_1_1PtrRBNode.html">SelfType</a>* node)</div>
 <div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>    {</div>
-<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>        <a class="code hl_class" href="classcookmem_1_1PtrRBNode.html">SelfType</a>*   <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">prevNode</a> = <span class="keyword">this</span>;</div>
-<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>        <span class="keywordflow">for</span> (<a class="code hl_class" href="classcookmem_1_1PtrRBNode.html">SelfType</a>* <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">currNode</a> = m_next; <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">currNode</a> != <span class="keyword">nullptr</span>; <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">currNode</a> = <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">currNode</a>-&gt;m_next)</div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>        <a class="code hl_class" href="classcookmem_1_1PtrRBNode.html">SelfType</a>*   <a class="code hl_class" href="classcookmem_1_1Allocator.html">prevNode</a> = <span class="keyword">this</span>;</div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>        <span class="keywordflow">for</span> (<a class="code hl_class" href="classcookmem_1_1PtrRBNode.html">SelfType</a>* <a class="code hl_class" href="classcookmem_1_1Allocator.html">currNode</a> = m_next; <a class="code hl_class" href="classcookmem_1_1Allocator.html">currNode</a> != <span class="keyword">nullptr</span>; <a class="code hl_class" href="classcookmem_1_1Allocator.html">currNode</a> = <a class="code hl_class" href="classcookmem_1_1Allocator.html">currNode</a>-&gt;m_next)</div>
 <div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>        {</div>
-<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>            <span class="keywordflow">if</span> (<a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">currNode</a> == node)</div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>            <span class="keywordflow">if</span> (<a class="code hl_class" href="classcookmem_1_1Allocator.html">currNode</a> == node)</div>
 <div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>            {</div>
-<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>                <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">prevNode</a>-&gt;m_next = <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">currNode</a>-&gt;m_next;</div>
-<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>                <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">currNode</a>-&gt;m_next = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>                <a class="code hl_class" href="classcookmem_1_1Allocator.html">prevNode</a>-&gt;m_next = <a class="code hl_class" href="classcookmem_1_1Allocator.html">currNode</a>-&gt;m_next;</div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>                <a class="code hl_class" href="classcookmem_1_1Allocator.html">currNode</a>-&gt;m_next = <span class="keyword">nullptr</span>;</div>
 <div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>                <span class="keywordflow">return</span>;</div>
 <div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>            }</div>
-<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>            <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">prevNode</a> = <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">currNode</a>;</div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>            <a class="code hl_class" href="classcookmem_1_1Allocator.html">prevNode</a> = <a class="code hl_class" href="classcookmem_1_1Allocator.html">currNode</a>;</div>
 <div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>        }</div>
 <div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>        COOKMEM_ASSERT (<span class="keyword">false</span>);</div>
 <div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>    }</div>
@@ -285,9 +285,9 @@ $(document).ready(function(){initNavTree('rbtree_8h_source.html',''); initResiza
 <div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>    }</div>
 <div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span> </div>
 <div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>    <span class="keywordtype">void</span></div>
-<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>    setRed (<span class="keywordtype">bool</span> <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">red</a>)</div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>    setRed (<span class="keywordtype">bool</span> <a class="code hl_class" href="classcookmem_1_1Allocator.html">red</a>)</div>
 <div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>    {</div>
-<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>        m_red = <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">red</a>;</div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>        m_red = <a class="code hl_class" href="classcookmem_1_1Allocator.html">red</a>;</div>
 <div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>    }</div>
 <div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span> </div>
 <div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span><span class="keyword">private</span>:</div>
@@ -316,42 +316,42 @@ $(document).ready(function(){initNavTree('rbtree_8h_source.html',''); initResiza
 <div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span> </div>
 <div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>    <span class="keywordtype">void</span></div>
 <div class="foldopen" id="foldopen00237" data-start="{" data-end="}">
-<div class="line"><a id="l00237" name="l00237"></a><span class="lineno"><a class="line" href="classcookmem_1_1RedBlackTree.html#a139ba73fb16fb7fcad433083fe3933cf">  237</a></span>    <a class="code hl_function" href="classcookmem_1_1RedBlackTree.html#a139ba73fb16fb7fcad433083fe3933cf">add</a> (<span class="keywordtype">void</span>* <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">ptr</a>, ValueType <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">value</a>)</div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno"><a class="line" href="classcookmem_1_1RedBlackTree.html#a139ba73fb16fb7fcad433083fe3933cf">  237</a></span>    <a class="code hl_function" href="classcookmem_1_1RedBlackTree.html#a139ba73fb16fb7fcad433083fe3933cf">add</a> (<span class="keywordtype">void</span>* <a class="code hl_class" href="classcookmem_1_1Allocator.html">ptr</a>, ValueType <a class="code hl_class" href="classcookmem_1_1Allocator.html">value</a>)</div>
 <div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>    {</div>
-<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>        NodeType* <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">parentNode</a> = searchClosest (<a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">value</a>);</div>
-<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>        NodeType* <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">newNode</a> = <span class="keyword">reinterpret_cast&lt;</span>NodeType*<span class="keyword">&gt;</span>(<a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">ptr</a>);</div>
-<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>        <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">newNode</a>-&gt;init (<a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">value</a>, <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">parentNode</a>);</div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>        NodeType* <a class="code hl_class" href="classcookmem_1_1Allocator.html">parentNode</a> = searchClosest (<a class="code hl_class" href="classcookmem_1_1Allocator.html">value</a>);</div>
+<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>        NodeType* <a class="code hl_class" href="classcookmem_1_1Allocator.html">newNode</a> = <span class="keyword">reinterpret_cast&lt;</span>NodeType*<span class="keyword">&gt;</span>(<a class="code hl_class" href="classcookmem_1_1Allocator.html">ptr</a>);</div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>        <a class="code hl_class" href="classcookmem_1_1Allocator.html">newNode</a>-&gt;init (<a class="code hl_class" href="classcookmem_1_1Allocator.html">value</a>, <a class="code hl_class" href="classcookmem_1_1Allocator.html">parentNode</a>);</div>
 <div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span> </div>
-<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>        <span class="keywordflow">if</span> (<a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">parentNode</a> == <span class="keyword">nullptr</span>)</div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>        <span class="keywordflow">if</span> (<a class="code hl_class" href="classcookmem_1_1Allocator.html">parentNode</a> == <span class="keyword">nullptr</span>)</div>
 <div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>        {</div>
-<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>            m_root = <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">newNode</a>;</div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>            m_root = <a class="code hl_class" href="classcookmem_1_1Allocator.html">newNode</a>;</div>
 <div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>        }</div>
-<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">value &lt; parentNode-&gt;</a>getValue ())</div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code hl_class" href="classcookmem_1_1Allocator.html">value &lt; parentNode-&gt;</a>getValue ())</div>
 <div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>        {</div>
-<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>            <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">parentNode</a>-&gt;setLeft (<a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">newNode</a>);</div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>            <a class="code hl_class" href="classcookmem_1_1Allocator.html">parentNode</a>-&gt;setLeft (<a class="code hl_class" href="classcookmem_1_1Allocator.html">newNode</a>);</div>
 <div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>        }</div>
-<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">value</a> &gt; <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">parentNode</a>-&gt;getValue ())</div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code hl_class" href="classcookmem_1_1Allocator.html">value</a> &gt; <a class="code hl_class" href="classcookmem_1_1Allocator.html">parentNode</a>-&gt;getValue ())</div>
 <div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>        {</div>
-<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>            <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">parentNode</a>-&gt;setRight (<a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">newNode</a>);</div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>            <a class="code hl_class" href="classcookmem_1_1Allocator.html">parentNode</a>-&gt;setRight (<a class="code hl_class" href="classcookmem_1_1Allocator.html">newNode</a>);</div>
 <div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span>        }</div>
 <div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>        <span class="keywordflow">else</span>    <span class="comment">// value == parentNode-&gt;getValue ()</span></div>
 <div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>        {</div>
 <div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>            <span class="comment">// Equal values are kept in a list and do not affect tree balance.</span></div>
-<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>            <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">parentNode</a>-&gt;addList (<a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">newNode</a>);</div>
+<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>            <a class="code hl_class" href="classcookmem_1_1Allocator.html">parentNode</a>-&gt;addList (<a class="code hl_class" href="classcookmem_1_1Allocator.html">newNode</a>);</div>
 <div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>            <span class="keywordflow">return</span>;</div>
 <div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>        }</div>
 <div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span> </div>
-<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>        <span class="keywordflow">if</span> (<a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">newNode</a>-&gt;getParent () == <span class="keyword">nullptr</span>)</div>
+<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>        <span class="keywordflow">if</span> (<a class="code hl_class" href="classcookmem_1_1Allocator.html">newNode</a>-&gt;getParent () == <span class="keyword">nullptr</span>)</div>
 <div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>        {</div>
-<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span>            <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">newNode</a>-&gt;setRed (<span class="keyword">false</span>);</div>
+<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span>            <a class="code hl_class" href="classcookmem_1_1Allocator.html">newNode</a>-&gt;setRed (<span class="keyword">false</span>);</div>
 <div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span>            <span class="keywordflow">return</span>;</div>
 <div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>        }</div>
-<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>        <span class="keywordflow">if</span> (<a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">newNode</a>-&gt;getParent ()-&gt;getParent () == <span class="keyword">nullptr</span>)</div>
+<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>        <span class="keywordflow">if</span> (<a class="code hl_class" href="classcookmem_1_1Allocator.html">newNode</a>-&gt;getParent ()-&gt;getParent () == <span class="keyword">nullptr</span>)</div>
 <div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>        {</div>
 <div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>            <span class="keywordflow">return</span>;</div>
 <div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>        }</div>
 <div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span> </div>
-<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>        balanceInsert (<a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">newNode</a>);</div>
+<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>        balanceInsert (<a class="code hl_class" href="classcookmem_1_1Allocator.html">newNode</a>);</div>
 <div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>    }</div>
 </div>
 <div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>    NodeType* getRoot()</div>
@@ -363,7 +363,7 @@ $(document).ready(function(){initNavTree('rbtree_8h_source.html',''); initResiza
 <div class="foldopen" id="foldopen00290" data-start="{" data-end="}">
 <div class="line"><a id="l00290" name="l00290"></a><span class="lineno"><a class="line" href="classcookmem_1_1RedBlackTree.html#a47dcc1884aa840a2d2b3e6866fe56eca">  290</a></span>    <a class="code hl_function" href="classcookmem_1_1RedBlackTree.html#a47dcc1884aa840a2d2b3e6866fe56eca">remove</a> (ValueType&amp; size)</div>
 <div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span>    {</div>
-<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>        NodeType*   <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">lastBigNode</a> = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>        NodeType*   <a class="code hl_class" href="classcookmem_1_1Allocator.html">lastBigNode</a> = <span class="keyword">nullptr</span>;</div>
 <div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>        NodeType*   node = m_root;</div>
 <div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span> </div>
 <div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>        <span class="keywordflow">while</span> (node != <span class="keyword">nullptr</span>)</div>
@@ -374,7 +374,7 @@ $(document).ready(function(){initNavTree('rbtree_8h_source.html',''); initResiza
 <div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span>            }</div>
 <div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span>            <span class="keywordflow">else</span> <span class="keywordflow">if</span> (node-&gt;getValue () &gt; size)</div>
 <div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>            {</div>
-<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span>                <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">lastBigNode</a> = node;</div>
+<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span>                <a class="code hl_class" href="classcookmem_1_1Allocator.html">lastBigNode</a> = node;</div>
 <div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span>                node = node-&gt;getLeft ();</div>
 <div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span>            }</div>
 <div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span>            <span class="keywordflow">else</span></div>
@@ -385,21 +385,21 @@ $(document).ready(function(){initNavTree('rbtree_8h_source.html',''); initResiza
 <div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span> </div>
 <div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span>        <span class="keywordflow">if</span> (node == <span class="keyword">nullptr</span>)</div>
 <div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span>        {</div>
-<div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span>            <span class="keywordflow">if</span> (<a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">lastBigNode</a> == <span class="keyword">nullptr</span>)</div>
+<div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span>            <span class="keywordflow">if</span> (<a class="code hl_class" href="classcookmem_1_1Allocator.html">lastBigNode</a> == <span class="keyword">nullptr</span>)</div>
 <div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span>            {</div>
 <div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span>                <span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
 <div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span>            }</div>
 <div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span>            <span class="keywordflow">else</span></div>
 <div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span>            {</div>
-<div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span>                node = <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">lastBigNode</a>;</div>
+<div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span>                node = <a class="code hl_class" href="classcookmem_1_1Allocator.html">lastBigNode</a>;</div>
 <div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span>            }</div>
 <div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span>        }</div>
 <div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span> </div>
 <div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span>        <span class="keywordflow">if</span> (node-&gt;hasList ())</div>
 <div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span>        {</div>
-<div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span>            NodeType* <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">listNode</a> = node-&gt;removeFromList ();</div>
+<div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span>            NodeType* <a class="code hl_class" href="classcookmem_1_1Allocator.html">listNode</a> = node-&gt;removeFromList ();</div>
 <div class="line"><a id="l00327" name="l00327"></a><span class="lineno">  327</span>            size = node-&gt;getValue ();</div>
-<div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span>            <span class="keywordflow">return</span> <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">listNode</a>;</div>
+<div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span>            <span class="keywordflow">return</span> <a class="code hl_class" href="classcookmem_1_1Allocator.html">listNode</a>;</div>
 <div class="line"><a id="l00329" name="l00329"></a><span class="lineno">  329</span>        }</div>
 <div class="line"><a id="l00330" name="l00330"></a><span class="lineno">  330</span> </div>
 <div class="line"><a id="l00331" name="l00331"></a><span class="lineno">  331</span>        size = node-&gt;getValue ();</div>
@@ -411,20 +411,20 @@ $(document).ready(function(){initNavTree('rbtree_8h_source.html',''); initResiza
 <div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span> </div>
 <div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span>    <span class="keywordtype">void</span></div>
 <div class="foldopen" id="foldopen00344" data-start="{" data-end="}">
-<div class="line"><a id="l00344" name="l00344"></a><span class="lineno"><a class="line" href="classcookmem_1_1RedBlackTree.html#a1fc0aa1377876eb572a06fc1d7cf2f5f">  344</a></span>    <a class="code hl_function" href="classcookmem_1_1RedBlackTree.html#a1fc0aa1377876eb572a06fc1d7cf2f5f">remove</a> (<span class="keywordtype">void</span>* <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">ptr</a>)</div>
+<div class="line"><a id="l00344" name="l00344"></a><span class="lineno"><a class="line" href="classcookmem_1_1RedBlackTree.html#a1fc0aa1377876eb572a06fc1d7cf2f5f">  344</a></span>    <a class="code hl_function" href="classcookmem_1_1RedBlackTree.html#a1fc0aa1377876eb572a06fc1d7cf2f5f">remove</a> (<span class="keywordtype">void</span>* <a class="code hl_class" href="classcookmem_1_1Allocator.html">ptr</a>)</div>
 <div class="line"><a id="l00345" name="l00345"></a><span class="lineno">  345</span>    {</div>
-<div class="line"><a id="l00346" name="l00346"></a><span class="lineno">  346</span>        NodeType*   <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">targetNode</a> = <span class="keyword">reinterpret_cast&lt;</span>Node*<span class="keyword">&gt;</span>(<a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">ptr</a>);</div>
-<div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span>        ValueType   <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">key</a> = <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">targetNode</a>-&gt;getValue ();</div>
+<div class="line"><a id="l00346" name="l00346"></a><span class="lineno">  346</span>        NodeType*   <a class="code hl_class" href="classcookmem_1_1Allocator.html">targetNode</a> = <span class="keyword">reinterpret_cast&lt;</span>Node*<span class="keyword">&gt;</span>(<a class="code hl_class" href="classcookmem_1_1Allocator.html">ptr</a>);</div>
+<div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span>        ValueType   <a class="code hl_class" href="classcookmem_1_1Allocator.html">key</a> = <a class="code hl_class" href="classcookmem_1_1Allocator.html">targetNode</a>-&gt;getValue ();</div>
 <div class="line"><a id="l00348" name="l00348"></a><span class="lineno">  348</span> </div>
 <div class="line"><a id="l00349" name="l00349"></a><span class="lineno">  349</span>        NodeType*   node = m_root;</div>
 <div class="line"><a id="l00350" name="l00350"></a><span class="lineno">  350</span> </div>
 <div class="line"><a id="l00351" name="l00351"></a><span class="lineno">  351</span>        <span class="keywordflow">while</span> (node != <span class="keyword">nullptr</span>)</div>
 <div class="line"><a id="l00352" name="l00352"></a><span class="lineno">  352</span>        {</div>
-<div class="line"><a id="l00353" name="l00353"></a><span class="lineno">  353</span>            <span class="keywordflow">if</span> (node-&gt;getValue () &lt; <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">key</a>)</div>
+<div class="line"><a id="l00353" name="l00353"></a><span class="lineno">  353</span>            <span class="keywordflow">if</span> (node-&gt;getValue () &lt; <a class="code hl_class" href="classcookmem_1_1Allocator.html">key</a>)</div>
 <div class="line"><a id="l00354" name="l00354"></a><span class="lineno">  354</span>            {</div>
 <div class="line"><a id="l00355" name="l00355"></a><span class="lineno">  355</span>                node = node-&gt;getRight ();</div>
 <div class="line"><a id="l00356" name="l00356"></a><span class="lineno">  356</span>            }</div>
-<div class="line"><a id="l00357" name="l00357"></a><span class="lineno">  357</span>            <span class="keywordflow">else</span> <span class="keywordflow">if</span> (node-&gt;getValue () &gt; <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">key</a>)</div>
+<div class="line"><a id="l00357" name="l00357"></a><span class="lineno">  357</span>            <span class="keywordflow">else</span> <span class="keywordflow">if</span> (node-&gt;getValue () &gt; <a class="code hl_class" href="classcookmem_1_1Allocator.html">key</a>)</div>
 <div class="line"><a id="l00358" name="l00358"></a><span class="lineno">  358</span>            {</div>
 <div class="line"><a id="l00359" name="l00359"></a><span class="lineno">  359</span>                node = node-&gt;getLeft ();</div>
 <div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span>            }</div>
@@ -436,38 +436,38 @@ $(document).ready(function(){initNavTree('rbtree_8h_source.html',''); initResiza
 <div class="line"><a id="l00366" name="l00366"></a><span class="lineno">  366</span> </div>
 <div class="line"><a id="l00367" name="l00367"></a><span class="lineno">  367</span>        COOKMEM_ASSERT (node != <span class="keyword">nullptr</span>);</div>
 <div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span> </div>
-<div class="line"><a id="l00369" name="l00369"></a><span class="lineno">  369</span>        <span class="keywordflow">if</span> (node != <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">targetNode</a>)</div>
+<div class="line"><a id="l00369" name="l00369"></a><span class="lineno">  369</span>        <span class="keywordflow">if</span> (node != <a class="code hl_class" href="classcookmem_1_1Allocator.html">targetNode</a>)</div>
 <div class="line"><a id="l00370" name="l00370"></a><span class="lineno">  370</span>        {</div>
 <div class="line"><a id="l00371" name="l00371"></a><span class="lineno">  371</span>            COOKMEM_ASSERT (node-&gt;hasList ());</div>
 <div class="line"><a id="l00372" name="l00372"></a><span class="lineno">  372</span> </div>
-<div class="line"><a id="l00373" name="l00373"></a><span class="lineno">  373</span>            node-&gt;removeFromList (<a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">targetNode</a>);</div>
+<div class="line"><a id="l00373" name="l00373"></a><span class="lineno">  373</span>            node-&gt;removeFromList (<a class="code hl_class" href="classcookmem_1_1Allocator.html">targetNode</a>);</div>
 <div class="line"><a id="l00374" name="l00374"></a><span class="lineno">  374</span>            <span class="keywordflow">return</span>;</div>
 <div class="line"><a id="l00375" name="l00375"></a><span class="lineno">  375</span>        }</div>
 <div class="line"><a id="l00376" name="l00376"></a><span class="lineno">  376</span> </div>
-<div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span>        removeNode (<a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">targetNode</a>);</div>
+<div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span>        removeNode (<a class="code hl_class" href="classcookmem_1_1Allocator.html">targetNode</a>);</div>
 <div class="line"><a id="l00378" name="l00378"></a><span class="lineno">  378</span>    }</div>
 </div>
 <div class="line"><a id="l00379" name="l00379"></a><span class="lineno">  379</span> </div>
 <div class="line"><a id="l00386" name="l00386"></a><span class="lineno">  386</span>    <span class="keywordtype">bool</span></div>
 <div class="foldopen" id="foldopen00387" data-start="{" data-end="}">
-<div class="line"><a id="l00387" name="l00387"></a><span class="lineno"><a class="line" href="classcookmem_1_1RedBlackTree.html#aed90099d901e73c92500e17ea908a0a2">  387</a></span>    <a class="code hl_function" href="classcookmem_1_1RedBlackTree.html#aed90099d901e73c92500e17ea908a0a2">contains</a> (<span class="keywordtype">void</span>* <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">ptr</a>)</div>
+<div class="line"><a id="l00387" name="l00387"></a><span class="lineno"><a class="line" href="classcookmem_1_1RedBlackTree.html#aed90099d901e73c92500e17ea908a0a2">  387</a></span>    <a class="code hl_function" href="classcookmem_1_1RedBlackTree.html#aed90099d901e73c92500e17ea908a0a2">contains</a> (<span class="keywordtype">void</span>* <a class="code hl_class" href="classcookmem_1_1Allocator.html">ptr</a>)</div>
 <div class="line"><a id="l00388" name="l00388"></a><span class="lineno">  388</span>    {</div>
 <div class="line"><a id="l00389" name="l00389"></a><span class="lineno">  389</span>        <span class="keywordflow">if</span> (m_root == <span class="keyword">nullptr</span>)</div>
 <div class="line"><a id="l00390" name="l00390"></a><span class="lineno">  390</span>        {</div>
 <div class="line"><a id="l00391" name="l00391"></a><span class="lineno">  391</span>            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a id="l00392" name="l00392"></a><span class="lineno">  392</span>        }</div>
 <div class="line"><a id="l00393" name="l00393"></a><span class="lineno">  393</span> </div>
-<div class="line"><a id="l00394" name="l00394"></a><span class="lineno">  394</span>        NodeType* <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">node2</a> = <span class="keyword">reinterpret_cast&lt;</span>NodeType*<span class="keyword">&gt;</span>(<a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">ptr</a>);</div>
-<div class="line"><a id="l00395" name="l00395"></a><span class="lineno">  395</span>        <span class="keyword">const</span> ValueType <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">value</a> = <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">node2</a>-&gt;getValue ();</div>
+<div class="line"><a id="l00394" name="l00394"></a><span class="lineno">  394</span>        NodeType* <a class="code hl_class" href="classcookmem_1_1Allocator.html">node2</a> = <span class="keyword">reinterpret_cast&lt;</span>NodeType*<span class="keyword">&gt;</span>(<a class="code hl_class" href="classcookmem_1_1Allocator.html">ptr</a>);</div>
+<div class="line"><a id="l00395" name="l00395"></a><span class="lineno">  395</span>        <span class="keyword">const</span> ValueType <a class="code hl_class" href="classcookmem_1_1Allocator.html">value</a> = <a class="code hl_class" href="classcookmem_1_1Allocator.html">node2</a>-&gt;getValue ();</div>
 <div class="line"><a id="l00396" name="l00396"></a><span class="lineno">  396</span> </div>
 <div class="line"><a id="l00397" name="l00397"></a><span class="lineno">  397</span>        NodeType* node = m_root;</div>
 <div class="line"><a id="l00398" name="l00398"></a><span class="lineno">  398</span>        <span class="keywordflow">while</span> (node != <span class="keyword">nullptr</span>)</div>
 <div class="line"><a id="l00399" name="l00399"></a><span class="lineno">  399</span>        {</div>
-<div class="line"><a id="l00400" name="l00400"></a><span class="lineno">  400</span>            <span class="keywordflow">if</span> (<a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">value &lt; node-&gt;</a>getValue ())</div>
+<div class="line"><a id="l00400" name="l00400"></a><span class="lineno">  400</span>            <span class="keywordflow">if</span> (<a class="code hl_class" href="classcookmem_1_1Allocator.html">value &lt; node-&gt;</a>getValue ())</div>
 <div class="line"><a id="l00401" name="l00401"></a><span class="lineno">  401</span>            {</div>
 <div class="line"><a id="l00402" name="l00402"></a><span class="lineno">  402</span>                node = node-&gt;getLeft ();</div>
 <div class="line"><a id="l00403" name="l00403"></a><span class="lineno">  403</span>            }</div>
-<div class="line"><a id="l00404" name="l00404"></a><span class="lineno">  404</span>            <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">value</a> &gt; node-&gt;getValue ())</div>
+<div class="line"><a id="l00404" name="l00404"></a><span class="lineno">  404</span>            <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code hl_class" href="classcookmem_1_1Allocator.html">value</a> &gt; node-&gt;getValue ())</div>
 <div class="line"><a id="l00405" name="l00405"></a><span class="lineno">  405</span>            {</div>
 <div class="line"><a id="l00406" name="l00406"></a><span class="lineno">  406</span>                node = node-&gt;getRight ();</div>
 <div class="line"><a id="l00407" name="l00407"></a><span class="lineno">  407</span>            }</div>
@@ -475,7 +475,7 @@ $(document).ready(function(){initNavTree('rbtree_8h_source.html',''); initResiza
 <div class="line"><a id="l00409" name="l00409"></a><span class="lineno">  409</span>            {</div>
 <div class="line"><a id="l00410" name="l00410"></a><span class="lineno">  410</span>                <span class="keywordflow">do</span></div>
 <div class="line"><a id="l00411" name="l00411"></a><span class="lineno">  411</span>                {</div>
-<div class="line"><a id="l00412" name="l00412"></a><span class="lineno">  412</span>                    <span class="keywordflow">if</span> (node == <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">node2</a>)</div>
+<div class="line"><a id="l00412" name="l00412"></a><span class="lineno">  412</span>                    <span class="keywordflow">if</span> (node == <a class="code hl_class" href="classcookmem_1_1Allocator.html">node2</a>)</div>
 <div class="line"><a id="l00413" name="l00413"></a><span class="lineno">  413</span>                    {</div>
 <div class="line"><a id="l00414" name="l00414"></a><span class="lineno">  414</span>                        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a id="l00415" name="l00415"></a><span class="lineno">  415</span>                    }</div>
@@ -499,12 +499,12 @@ $(document).ready(function(){initNavTree('rbtree_8h_source.html',''); initResiza
 <div class="line"><a id="l00435" name="l00435"></a><span class="lineno">  435</span><span class="keyword">private</span>:</div>
 <div class="line"><a id="l00436" name="l00436"></a><span class="lineno">  436</span> </div>
 <div class="line"><a id="l00437" name="l00437"></a><span class="lineno">  437</span>    <span class="keywordtype">void</span></div>
-<div class="line"><a id="l00438" name="l00438"></a><span class="lineno">  438</span>    updateParent (NodeType* <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">newChildNode</a>, NodeType* <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">oldChildNode</a>)</div>
+<div class="line"><a id="l00438" name="l00438"></a><span class="lineno">  438</span>    updateParent (NodeType* <a class="code hl_class" href="classcookmem_1_1Allocator.html">newChildNode</a>, NodeType* <a class="code hl_class" href="classcookmem_1_1Allocator.html">oldChildNode</a>)</div>
 <div class="line"><a id="l00439" name="l00439"></a><span class="lineno">  439</span>    {</div>
-<div class="line"><a id="l00440" name="l00440"></a><span class="lineno">  440</span>        NodeType* <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">parentNode</a> = <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">oldChildNode</a>-&gt;getParent ();</div>
-<div class="line"><a id="l00441" name="l00441"></a><span class="lineno">  441</span>        <span class="keywordflow">if</span> (<a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">parentNode</a> == <span class="keyword">nullptr</span>)</div>
+<div class="line"><a id="l00440" name="l00440"></a><span class="lineno">  440</span>        NodeType* <a class="code hl_class" href="classcookmem_1_1Allocator.html">parentNode</a> = <a class="code hl_class" href="classcookmem_1_1Allocator.html">oldChildNode</a>-&gt;getParent ();</div>
+<div class="line"><a id="l00441" name="l00441"></a><span class="lineno">  441</span>        <span class="keywordflow">if</span> (<a class="code hl_class" href="classcookmem_1_1Allocator.html">parentNode</a> == <span class="keyword">nullptr</span>)</div>
 <div class="line"><a id="l00442" name="l00442"></a><span class="lineno">  442</span>        {</div>
-<div class="line"><a id="l00443" name="l00443"></a><span class="lineno">  443</span>            m_root = <a class="code hl_class" href="classcookmem_1_1CookMemAllocator.html">newChildNode</a>;</div>
+<div class="line"><a id="l00443" name="l00443"></a><span class="lineno">  443</span>            m_root = <a class="code hl_class" href="classcookmem_1_1Allocator.html">newChildNode</a>;</div>
 <div class="line"><a id="l00444" name="l00444"></a><span class="lineno">  444</span>        }</div>
 <div class="line"><a id="l00445" name="l00445"></a><span class="lineno">  445</span>        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (oldChildNode == parentNode-&gt;getLeft ())</div>
 <div class="line"><a id="l00446" name="l00446"></a><span class="lineno">  446</span>        {</div>
@@ -885,7 +885,7 @@ $(document).ready(function(){initNavTree('rbtree_8h_source.html',''); initResiza
 <div class="line"><a id="l00860" name="l00860"></a><span class="lineno">  860</span>} <span class="comment">// namespace cookmem</span></div>
 <div class="line"><a id="l00861" name="l00861"></a><span class="lineno">  861</span> </div>
 <div class="line"><a id="l00862" name="l00862"></a><span class="lineno">  862</span><span class="preprocessor">#endif </span><span class="comment">// COOK_MEM_RBTREE_H</span></div>
-<div class="ttc" id="aclasscookmem_1_1CookMemAllocator_html"><div class="ttname"><a href="classcookmem_1_1CookMemAllocator.html">cookmem::CookMemAllocator</a></div><div class="ttdef"><b>Definition</b> allocator.h:40</div></div>
+<div class="ttc" id="aclasscookmem_1_1Allocator_html"><div class="ttname"><a href="classcookmem_1_1Allocator.html">cookmem::Allocator</a></div><div class="ttdef"><b>Definition</b> allocator.h:40</div></div>
 <div class="ttc" id="aclasscookmem_1_1PtrRBNode_html"><div class="ttname"><a href="classcookmem_1_1PtrRBNode.html">cookmem::PtrRBNode</a></div><div class="ttdef"><b>Definition</b> rbtree.h:28</div></div>
 <div class="ttc" id="aclasscookmem_1_1RedBlackTree_html"><div class="ttname"><a href="classcookmem_1_1RedBlackTree.html">cookmem::RedBlackTree</a></div><div class="ttdef"><b>Definition</b> rbtree.h:215</div></div>
 <div class="ttc" id="aclasscookmem_1_1RedBlackTree_html_a139ba73fb16fb7fcad433083fe3933cf"><div class="ttname"><a href="classcookmem_1_1RedBlackTree.html#a139ba73fb16fb7fcad433083fe3933cf">cookmem::RedBlackTree::add</a></div><div class="ttdeci">void add(void *ptr, ValueType value)</div><div class="ttdef"><b>Definition</b> rbtree.h:237</div></div>
