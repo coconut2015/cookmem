@@ -11,7 +11,7 @@ var annotated_dup =
       [ "MallocArena", "classcookmem_1_1MallocArena.html", "classcookmem_1_1MallocArena" ],
       [ "MemArena", "classcookmem_1_1MemArena.html", "classcookmem_1_1MemArena" ],
       [ "MemContext", "classcookmem_1_1MemContext.html", "classcookmem_1_1MemContext" ],
-      [ "MemLogger", "classcookmem_1_1MemLogger.html", null ],
+      [ "MemLogger", "classcookmem_1_1MemLogger.html", "classcookmem_1_1MemLogger" ],
       [ "MemPool", "classcookmem_1_1MemPool.html", "classcookmem_1_1MemPool" ],
       [ "MemStatistics", "structcookmem_1_1MemStatistics.html", "structcookmem_1_1MemStatistics" ],
       [ "MmapArena", "classcookmem_1_1MmapArena.html", "classcookmem_1_1MmapArena" ],

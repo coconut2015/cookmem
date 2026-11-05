@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['printgraph_0',['printGraph',['../classcookmem_1_1PtrAVLTree.html#a24696de9988fbfd8a6619c4b4465c4c8',1,'cookmem::PtrAVLTree']]],
-  ['printstats_1',['printStats',['../structcookmem_1_1MemStatistics.html#afb199f0ec1bf2219f581759289d163ef',1,'cookmem::MemStatistics']]],
-  ['ptravltree_2',['PtrAVLTree',['../classcookmem_1_1PtrAVLTree.html#a515e9946b84d94ad6e94051fc364b47c',1,'cookmem::PtrAVLTree']]]
+  ['mallocarena_0',['MallocArena',['../classcookmem_1_1MallocArena.html#a061a4b59df4cb0ba24af03015d2fc930',1,'cookmem::MallocArena']]],
+  ['mempool_1',['MemPool',['../classcookmem_1_1MemPool.html#a98479b71083532ba825c132780c70e51',1,'cookmem::MemPool']]],
+  ['mmaparena_2',['MmapArena',['../classcookmem_1_1MmapArena.html#abece58b7ddeb11ac59519d5dc833bbf7',1,'cookmem::MmapArena']]]
 ];

@@ -91,16 +91,352 @@ $(document).ready(function(){initNavTree('classcookmem_1_1MemLogger.html',''); i
 
 <div class="header">
   <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="classcookmem_1_1MemLogger-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">cookmem::MemLogger Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div></div>
 </div><!--header-->
 <div class="contents">
 
 <p><code>#include &lt;<a class="el" href="logger_8h_source.html">logger.h</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a8e41d49f7cef5bee8b823afcb79ac90e" id="r_a8e41d49f7cef5bee8b823afcb79ac90e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1Allocator.html">virtual</a> <a class="el" href="classcookmem_1_1Allocator.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemLogger.html#a8e41d49f7cef5bee8b823afcb79ac90e">logGetSegment</a> (<a class="el" href="classcookmem_1_1Allocator.html">void</a> *<a class="el" href="classcookmem_1_1Allocator.html">segment</a>, std::size_t <a class="el" href="classcookmem_1_1Allocator.html">segmentSize</a>)=0</td></tr>
+<tr class="separator:a8e41d49f7cef5bee8b823afcb79ac90e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8247970d61c7aab669a5b31cec578ca7" id="r_a8247970d61c7aab669a5b31cec578ca7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1Allocator.html">virtual</a> <a class="el" href="classcookmem_1_1Allocator.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemLogger.html#a8247970d61c7aab669a5b31cec578ca7">logFreeSegment</a> (<a class="el" href="classcookmem_1_1Allocator.html">void</a> *<a class="el" href="classcookmem_1_1Allocator.html">segment</a>, std::size_t <a class="el" href="classcookmem_1_1Allocator.html">segmentSize</a>)=0</td></tr>
+<tr class="separator:a8247970d61c7aab669a5b31cec578ca7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a079dff05ca33181e75fb183cd0ffaf99" id="r_a079dff05ca33181e75fb183cd0ffaf99"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1Allocator.html">virtual</a> <a class="el" href="classcookmem_1_1Allocator.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemLogger.html#a079dff05ca33181e75fb183cd0ffaf99">logCoalesce</a> ()=0</td></tr>
+<tr class="separator:a079dff05ca33181e75fb183cd0ffaf99"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8754b6eb34a4f99ea6df9c72ebd6a179" id="r_a8754b6eb34a4f99ea6df9c72ebd6a179"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1Allocator.html">virtual</a> <a class="el" href="classcookmem_1_1Allocator.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemLogger.html#a8754b6eb34a4f99ea6df9c72ebd6a179">logAllocation</a> (<a class="el" href="classcookmem_1_1Allocator.html">void</a> *<a class="el" href="classcookmem_1_1Allocator.html">userPtr</a>, std::size_t <a class="el" href="classcookmem_1_1Allocator.html">userSize</a>, MemAllocType_et <a class="el" href="classcookmem_1_1Allocator.html">allocType</a>)=0</td></tr>
+<tr class="separator:a8754b6eb34a4f99ea6df9c72ebd6a179"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae7a2543185a5000b3742779d2d2b0362" id="r_ae7a2543185a5000b3742779d2d2b0362"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1Allocator.html">virtual</a> <a class="el" href="classcookmem_1_1Allocator.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemLogger.html#ae7a2543185a5000b3742779d2d2b0362">logReallocation</a> (<a class="el" href="classcookmem_1_1Allocator.html">void</a> *<a class="el" href="classcookmem_1_1Allocator.html">userPtr</a>, std::size_t <a class="el" href="classcookmem_1_1Allocator.html">oldUserSize</a>, std::size_t <a class="el" href="classcookmem_1_1Allocator.html">newUserSize</a>)=0</td></tr>
+<tr class="separator:ae7a2543185a5000b3742779d2d2b0362"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a61adfcbd74119161ad85a8c3427e656b" id="r_a61adfcbd74119161ad85a8c3427e656b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1Allocator.html">virtual</a> <a class="el" href="classcookmem_1_1Allocator.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemLogger.html#a61adfcbd74119161ad85a8c3427e656b">logDeallocation</a> (<a class="el" href="classcookmem_1_1Allocator.html">void</a> *<a class="el" href="classcookmem_1_1Allocator.html">userPtr</a>, std::size_t <a class="el" href="classcookmem_1_1Allocator.html">userSize</a>)=0</td></tr>
+<tr class="separator:a61adfcbd74119161ad85a8c3427e656b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a2145abc5af95b832e7e2c98b6c9108" id="r_a7a2145abc5af95b832e7e2c98b6c9108"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1Allocator.html">virtual</a> <a class="el" href="classcookmem_1_1Allocator.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemLogger.html#a7a2145abc5af95b832e7e2c98b6c9108">logError</a> (<a class="el" href="classcookmem_1_1Allocator.html">void</a> *<a class="el" href="classcookmem_1_1Allocator.html">userPtr</a>, MemError_et <a class="el" href="classcookmem_1_1Allocator.html">error</a>, <a class="el" href="classcookmem_1_1Allocator.html">const</a> <a class="el" href="classcookmem_1_1Allocator.html">char</a> *<a class="el" href="classcookmem_1_1Allocator.html">file</a>=<a class="el" href="classcookmem_1_1Allocator.html">__FILE__</a>, <a class="el" href="classcookmem_1_1Allocator.html">int</a> <a class="el" href="classcookmem_1_1Allocator.html">line</a>=<a class="el" href="classcookmem_1_1Allocator.html">__LINE__</a>)=0</td></tr>
+<tr class="separator:a7a2145abc5af95b832e7e2c98b6c9108"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A <a class="el" href="classcookmem_1_1MemLogger.html">MemLogger</a> logs memory allocation, deallocation, and errors.</p>
 <p>This class here is merely used to define the functions needed to implement a <a class="el" href="classcookmem_1_1MemLogger.html">MemLogger</a>. </p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a8754b6eb34a4f99ea6df9c72ebd6a179" name="a8754b6eb34a4f99ea6df9c72ebd6a179"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8754b6eb34a4f99ea6df9c72ebd6a179">&#9670;&#160;</a></span>logAllocation()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1Allocator.html">virtual</a> <a class="el" href="classcookmem_1_1Allocator.html">void</a> cookmem::MemLogger::logAllocation </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcookmem_1_1Allocator.html">void</a> *&#160;</td>
+          <td class="paramname"><em>userPtr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>userSize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">MemAllocType_et&#160;</td>
+          <td class="paramname"><em>allocType</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Log the memory allocation.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">userPtr</td><td>the user pointer allocated. </td></tr>
+    <tr><td class="paramname">userSize</td><td>the user requested size. </td></tr>
+    <tr><td class="paramname">allocType</td><td>the type of the allocation. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a079dff05ca33181e75fb183cd0ffaf99" name="a079dff05ca33181e75fb183cd0ffaf99"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a079dff05ca33181e75fb183cd0ffaf99">&#9670;&#160;</a></span>logCoalesce()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1Allocator.html">virtual</a> <a class="el" href="classcookmem_1_1Allocator.html">void</a> cookmem::MemLogger::logCoalesce </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Log a pool coalesce call. </p>
+
+</div>
+</div>
+<a id="a61adfcbd74119161ad85a8c3427e656b" name="a61adfcbd74119161ad85a8c3427e656b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a61adfcbd74119161ad85a8c3427e656b">&#9670;&#160;</a></span>logDeallocation()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1Allocator.html">virtual</a> <a class="el" href="classcookmem_1_1Allocator.html">void</a> cookmem::MemLogger::logDeallocation </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcookmem_1_1Allocator.html">void</a> *&#160;</td>
+          <td class="paramname"><em>userPtr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>userSize</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Log the memory deallocation.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">userPtr</td><td>the user pointer allocated. </td></tr>
+    <tr><td class="paramname">userSize</td><td>the user requested size. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a7a2145abc5af95b832e7e2c98b6c9108" name="a7a2145abc5af95b832e7e2c98b6c9108"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a2145abc5af95b832e7e2c98b6c9108">&#9670;&#160;</a></span>logError()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1Allocator.html">virtual</a> <a class="el" href="classcookmem_1_1Allocator.html">void</a> cookmem::MemLogger::logError </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcookmem_1_1Allocator.html">void</a> *&#160;</td>
+          <td class="paramname"><em>userPtr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">MemError_et&#160;</td>
+          <td class="paramname"><em>error</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classcookmem_1_1Allocator.html">const</a> <a class="el" href="classcookmem_1_1Allocator.html">char</a> *&#160;</td>
+          <td class="paramname"><em>file</em> = <code><a class="el" href="classcookmem_1_1Allocator.html">__FILE__</a></code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classcookmem_1_1Allocator.html">int</a>&#160;</td>
+          <td class="paramname"><em>line</em> = <code><a class="el" href="classcookmem_1_1Allocator.html">__LINE__</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Log the memory corruption.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">userPtr</td><td>the user pointer that had the memory corruption. </td></tr>
+    <tr><td class="paramname">error</td><td>the type of the error encountered. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a8247970d61c7aab669a5b31cec578ca7" name="a8247970d61c7aab669a5b31cec578ca7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8247970d61c7aab669a5b31cec578ca7">&#9670;&#160;</a></span>logFreeSegment()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1Allocator.html">virtual</a> <a class="el" href="classcookmem_1_1Allocator.html">void</a> cookmem::MemLogger::logFreeSegment </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcookmem_1_1Allocator.html">void</a> *&#160;</td>
+          <td class="paramname"><em>segment</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>segmentSize</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Log the memory segment release.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">segment</td><td>the segment obtained. </td></tr>
+    <tr><td class="paramname">segmentSize</td><td>the segment size. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a8e41d49f7cef5bee8b823afcb79ac90e" name="a8e41d49f7cef5bee8b823afcb79ac90e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8e41d49f7cef5bee8b823afcb79ac90e">&#9670;&#160;</a></span>logGetSegment()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1Allocator.html">virtual</a> <a class="el" href="classcookmem_1_1Allocator.html">void</a> cookmem::MemLogger::logGetSegment </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcookmem_1_1Allocator.html">void</a> *&#160;</td>
+          <td class="paramname"><em>segment</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>segmentSize</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Log the memory segment allocation.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">segment</td><td>the segment obtained. </td></tr>
+    <tr><td class="paramname">segmentSize</td><td>the segment size. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ae7a2543185a5000b3742779d2d2b0362" name="ae7a2543185a5000b3742779d2d2b0362"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae7a2543185a5000b3742779d2d2b0362">&#9670;&#160;</a></span>logReallocation()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1Allocator.html">virtual</a> <a class="el" href="classcookmem_1_1Allocator.html">void</a> cookmem::MemLogger::logReallocation </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcookmem_1_1Allocator.html">void</a> *&#160;</td>
+          <td class="paramname"><em>userPtr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>oldUserSize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>newUserSize</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Log the memory reallocation. This is only called when the new size is smaller than the original size.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">userPtr</td><td>the user pointer allocated. </td></tr>
+    <tr><td class="paramname">oldUserSize</td><td>the old user size. </td></tr>
+    <tr><td class="paramname">newUserSize</td><td>the new user size. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li><a class="el" href="logger_8h_source.html">logger.h</a></li>
 </ul>
 </div><!-- contents -->
