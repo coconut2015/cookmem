@@ -198,7 +198,7 @@ cookmem::FixedArena</h1>
 <div class="line">}</div>
 </div><!-- fragment --><h1><a class="anchor" id="example_simplememcontext"></a>
 cookmem::MmapArena</h1>
-<p><a href="https://en.wikipedia.org/wiki/Mmap">mmap</a> is one way to obtain large segments of memory on Unix. <a class="el" href="classcookmem_1_1MmapArena.html">cookmem::MmapArena</a> basically calls <code>mmap</code> and <code>munmap</code> to get and release segments. On Windows, it uses </p><div class="fragment"></div><!-- fragment --><p> / <code>VirtualFree</code> instead.</p>
+<p><a href="https://en.wikipedia.org/wiki/Mmap">mmap</a> is one way to obtain large segments of memory on Unix. <a class="el" href="classcookmem_1_1MmapArena.html">cookmem::MmapArena</a> basically calls <code>mmap</code> and <code>munmap</code> to get and release segments. On Windows, it uses <code>VirtualAlloc</code> / <code>VirtualFree</code> instead.</p>
 <p>It should be noted that this arena does not track the memory segments since <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a> already does the tracking.</p>
 <div class="fragment"></div><!-- fragment --><h1><a class="anchor" id="example_CachedArena"></a>
 cookmem::CachedArena</h1>
@@ -490,8 +490,7 @@ Corruption Detection</h1>
 <div class="ttc" id="aclasscookmem_1_1Exception_html_a5ba3630c5291e265bc4b05399cf41e0e"><div class="ttname"><a href="classcookmem_1_1Exception.html#a5ba3630c5291e265bc4b05399cf41e0e">cookmem::Exception::getMessage</a></div><div class="ttdeci">const char * getMessage() const</div><div class="ttdef"><b>Definition</b> exception.h:64</div></div>
 </div><!-- fragment --><h1><a class="anchor" id="STL"></a>
 Allocator</h1>
-<p>The STL containers can use a custom allocator to bind their storage to a memory context. cookmem::Allocator&lt;T&gt; adapts a cookmem memory context to the C++ allocator interface, allowing containers such as <code>std::vector</code>, </p><div class="fragment"><div class="line">::list</div>
-</div><!-- fragment --><p> , and <code>std::basic_string</code> to allocate from the same arena or pool that is managing the rest of the application state.</p>
+<p>The STL containers can use a custom allocator to bind their storage to a memory context. cookmem::Allocator&lt;T&gt; adapts a cookmem memory context to the C++ allocator interface, allowing containers such as <code>std::vector</code>, <code>std::list</code>, and <code>std::basic_string</code> to allocate from the same arena or pool that is managing the rest of the application state.</p>
 <div class="fragment"><div class="line"><span class="comment">/*</span></div>
 <div class="line"><span class="comment"> * Copyright (c) 2026 Heng Yuan</span></div>
 <div class="line"><span class="comment"> *</span></div>
