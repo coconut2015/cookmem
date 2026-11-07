@@ -174,6 +174,46 @@ if (UNIX)
 		performances/perf_cookmem_4.cpp)
 	add_test(NAME perf_cookmem_4
 		COMMAND perf_cookmem_4)
+
+	add_executable(perf_cookmem_5
+		performances/perf_cookmem_5.cpp)
+	add_test(NAME perf_cookmem_5
+		COMMAND perf_cookmem_5)
+
+	add_executable(perf_cookmem_6
+		performances/perf_cookmem_6.cpp)
+	add_test(NAME perf_cookmem_6
+		COMMAND perf_cookmem_6)
+
+	add_executable(perf_cookmem_7
+		performances/perf_cookmem_7.cpp)
+	add_test(NAME perf_cookmem_7
+		COMMAND perf_cookmem_7)
+
+	add_executable(perf_cookmem_8
+		performances/perf_cookmem_8.cpp)
+	add_test(NAME perf_cookmem_8
+		COMMAND perf_cookmem_8)
+
+	add_executable(perf_cookmem_9
+		performances/perf_cookmem_9.cpp)
+	add_test(NAME perf_cookmem_9
+		COMMAND perf_cookmem_9)
+
+	add_executable(perf_cookmem_10
+		performances/perf_cookmem_10.cpp)
+	add_test(NAME perf_cookmem_10
+		COMMAND perf_cookmem_10)
+
+	add_executable(perf_cookmem_11
+		performances/perf_cookmem_11.cpp)
+	add_test(NAME perf_cookmem_11
+		COMMAND perf_cookmem_11)
+
+	add_executable(perf_cookmem_12
+		performances/perf_cookmem_12.cpp)
+	add_test(NAME perf_cookmem_12
+		COMMAND perf_cookmem_12)
 endif (UNIX)
 
 # -- examples -------------------------------------------------------

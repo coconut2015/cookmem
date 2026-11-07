@@ -18,6 +18,7 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <cstdio>
 #include <cstring>
 
 #ifdef WIN32
@@ -26,7 +27,7 @@
 
 #include "config.h"
 #include "exception.h"
-#include "avltree.h"
+#include "logger.h"
 #include "rbtree.h"
 #include "circularlist.h"
 

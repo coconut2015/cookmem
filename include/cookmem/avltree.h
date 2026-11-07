@@ -16,8 +16,9 @@
 #ifndef COOK_PTR_AVLTREE_H
 #define COOK_PTR_AVLTREE_H
 
-#include <cstdio>
+#include <cstddef>
 #include <cstdint>
+#include <cstdio>
 
 #include "exception.h"
 

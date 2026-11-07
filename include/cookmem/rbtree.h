@@ -16,8 +16,7 @@
 #ifndef COOK_MEM_RBTREE_H
 #define COOK_MEM_RBTREE_H
 
-#include <iostream>
-#include <string>
+#include <cstddef>
 
 #include "exception.h"
 
