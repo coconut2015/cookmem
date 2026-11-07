@@ -211,3 +211,8 @@ add_executable(example_Allocator
 	examples/example_Allocator.cpp)
 add_test(NAME example_Allocator
 	COMMAND example_Allocator)
+
+add_executable(example_AllocatorThreadLocal
+	examples/example_AllocatorThreadLocal.cpp)
+add_test(NAME example_AllocatorThreadLocal
+	COMMAND example_AllocatorThreadLocal)

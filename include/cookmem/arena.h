@@ -73,8 +73,12 @@ public:
      *
      * @param   ptr
      *          the memory buffer for memory allocation.
+     *          If it is not 16-byte aligned, the start address is advanced
+     *          to the next 16-byte boundary.
      * @param   size
-     *          the size of the memory pointer.
+     *          The size of the memory buffer. The usable size is reduced by
+     *          any bytes skipped to align the start address, then rounded
+     *          down to a multiple of 16.
      */
     FixedArena (void* ptr, std::size_t size)
     : m_used (false)

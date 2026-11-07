@@ -1,7 +1,6 @@
 .cproject
 .project
 .vs
-/.vscode
 .vagrant
 *.log
 /.settings
@@ -11,6 +10,7 @@ CMakeFiles
 /release
 /profiler
 /doc
+/docs
 /out
 /build
 Makefile

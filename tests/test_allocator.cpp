@@ -22,6 +22,58 @@
 
 #include "unittest.h"
 
+struct StaticAllocatorTestTag;
+typedef cookmem::SimpleMemContext<cookmem::MmapArena> ScopedContext;
+typedef cookmem::Allocator<
+    int,
+    cookmem::TLSContextProvider<
+        ScopedContext,
+        StaticAllocatorTestTag> > StaticIntAllocator;
+
+struct TrackingArena
+{
+    cookmem::MmapArena arena;
+    static std::size_t allocatedSegments;
+    static std::size_t freedSegments;
+
+    void*
+    getSegment (std::size_t& size)
+    {
+        void* ptr = arena.getSegment (size);
+        if (ptr != nullptr)
+        {
+            ++allocatedSegments;
+        }
+        return ptr;
+    }
+
+    bool
+    freeSegment (void* ptr, std::size_t size)
+    {
+        const bool error = arena.freeSegment (ptr, size);
+        if (!error)
+        {
+            ++freedSegments;
+        }
+        return error;
+    }
+};
+
+std::size_t TrackingArena::allocatedSegments = 0;
+std::size_t TrackingArena::freedSegments = 0;
+
+struct ScopedAllocatorTestTag;
+typedef cookmem::SimpleMemContext<TrackingArena> TrackedContext;
+typedef cookmem::Allocator<
+    int,
+    cookmem::TLSContextProvider<TrackedContext, ScopedAllocatorTestTag> > ScopedIntAllocator;
+
+struct SharedArenaTestTag;
+typedef cookmem::CachedMemContext<TrackingArena> SharedArenaContext;
+typedef cookmem::Allocator<
+    int,
+    cookmem::TLSContextProvider<SharedArenaContext, SharedArenaTestTag> > SharedArenaIntAllocator;
+
 static int
 test1 ()
 {
@@ -80,6 +132,100 @@ testAllocatorOperations ()
     int* copiedValue = copiedAllocator.allocate (1);
     ASSERT_NE (nullptr, copiedValue);
     copiedAllocator.deallocate (copiedValue, 1);
+    return 0;
+}
+
+static int
+testStaticProvider ()
+{
+    typedef StaticIntAllocator::rebind<char>::other CharAllocator;
+    StaticIntAllocator allocator;
+    CharAllocator reboundAllocator;
+
+    ASSERT_EQ (&allocator.getContext (), &reboundAllocator.getContext ());
+    ASSERT_EQ (true, allocator == reboundAllocator);
+    ASSERT_EQ (false, StaticIntAllocator::is_always_equal::value);
+    ASSERT_EQ (true, StaticIntAllocator::propagate_on_container_copy_assignment::value);
+    ASSERT_EQ (true, StaticIntAllocator::propagate_on_container_move_assignment::value);
+    ASSERT_EQ (true, StaticIntAllocator::propagate_on_container_swap::value);
+
+    int* value = allocator.allocate (1);
+    ASSERT_NE (nullptr, value);
+    allocator.deallocate (value, 1);
+    return 0;
+}
+
+static int
+testScopedTLSContext ()
+{
+    typedef cookmem::TLSContextProvider<TrackedContext, ScopedAllocatorTestTag> Provider;
+
+    TrackingArena::allocatedSegments = 0;
+    TrackingArena::freedSegments = 0;
+    TrackedContext& threadContext = Provider::getThreadContext ();
+    ASSERT_EQ (&threadContext, &Provider::getThreadContext ());
+    ASSERT_EQ (&threadContext, &Provider::getActiveContext ());
+
+    {
+        cookmem::TLSContextScope<TrackedContext, ScopedAllocatorTestTag> scope;
+        std::vector<int, ScopedIntAllocator> values;
+        ASSERT_EQ (&scope.getContext (), &Provider::getActiveContext ());
+        ASSERT_NE (&threadContext, &Provider::getActiveContext ());
+        for (int i = 0; i < 128; ++i)
+        {
+            values.push_back (i);
+        }
+
+        ScopedIntAllocator outerAllocator;
+        ASSERT_EQ (&scope.getContext (), &outerAllocator.getContext ());
+        ASSERT_EQ (128UL, values.size ());
+
+        {
+            cookmem::TLSContextScope<TrackedContext, ScopedAllocatorTestTag> nestedScope;
+            ScopedIntAllocator nestedAllocator;
+            ASSERT_EQ (&nestedScope.getContext (), &Provider::getActiveContext ());
+            ASSERT_NE (&outerAllocator.getContext (), &nestedAllocator.getContext ());
+        }
+
+        ASSERT_EQ (&scope.getContext (), &Provider::getActiveContext ());
+        ScopedIntAllocator restoredAllocator;
+        ASSERT_EQ (&outerAllocator.getContext (), &restoredAllocator.getContext ());
+    }
+
+    ASSERT_EQ (&threadContext, &Provider::getActiveContext ());
+    ASSERT_EQ (&threadContext, &Provider::getThreadContext ());
+    ASSERT_NE (0UL, TrackingArena::allocatedSegments);
+    ASSERT_EQ (TrackingArena::allocatedSegments, TrackingArena::freedSegments);
+    return 0;
+}
+
+static int
+testScopedSharedArena ()
+{
+    TrackingArena::allocatedSegments = 0;
+
+    SharedArenaIntAllocator threadAllocator;
+    int* ptr = threadAllocator.allocate (128);
+    ASSERT_NE (nullptr, ptr);
+    threadAllocator.getContext ().releaseAll ();
+    const std::size_t allocatedSegments = TrackingArena::allocatedSegments;
+
+    {
+        cookmem::TLSContextScope<SharedArenaContext, SharedArenaTestTag> scope (true);
+        SharedArenaIntAllocator scopeAllocator;
+        ASSERT_EQ (&scope.getContext (), &scopeAllocator.getContext ());
+
+        ptr = scopeAllocator.allocate (128);
+        ASSERT_NE (nullptr, ptr);
+        ASSERT_EQ (allocatedSegments, TrackingArena::allocatedSegments);
+        scopeAllocator.deallocate (ptr, 128);
+    }
+
+    ptr = threadAllocator.allocate (128);
+    ASSERT_NE (nullptr, ptr);
+    ASSERT_EQ (allocatedSegments, TrackingArena::allocatedSegments);
+    threadAllocator.deallocate (ptr, 128);
+    threadAllocator.getContext ().releaseAll ();
     return 0;
 }
 
@@ -148,6 +294,9 @@ main ()
     {
         ASSERT_EQ (0, test1 ());
         ASSERT_EQ (0, testAllocatorOperations ());
+        ASSERT_EQ (0, testStaticProvider ());
+        ASSERT_EQ (0, testScopedTLSContext ());
+        ASSERT_EQ (0, testScopedSharedArena ());
         ASSERT_EQ (0, test2 ());
         ASSERT_EQ (0, test3 ());
         ASSERT_EQ (0, testContainerSwap ());

@@ -19,6 +19,66 @@
 
 #include "unittest.h"
 
+static int
+validateSubtree (
+    const cookmem::PtrRBNode* node,
+    const cookmem::PtrRBNode* parent,
+    const cookmem::PtrRBNode* minNode,
+    const cookmem::PtrRBNode* maxNode)
+{
+    if (node == nullptr)
+    {
+        return 1;
+    }
+
+    ASSERT_EQ (parent, node->getParent ());
+    if (minNode != nullptr)
+    {
+        ASSERT_EQ (true, minNode->getValue () < node->getValue ());
+    }
+    if (maxNode != nullptr)
+    {
+        ASSERT_EQ (true, node->getValue () < maxNode->getValue ());
+    }
+    if (node->isRed ())
+    {
+        ASSERT_EQ (false, node->getLeft () != nullptr && node->getLeft ()->isRed ());
+        ASSERT_EQ (false, node->getRight () != nullptr && node->getRight ()->isRed ());
+    }
+
+    const int leftBlackHeight = validateSubtree (
+        node->getLeft (), node, minNode, node);
+    const int rightBlackHeight = validateSubtree (
+        node->getRight (), node, node, maxNode);
+    ASSERT_EQ (leftBlackHeight, rightBlackHeight);
+
+    return leftBlackHeight + (node->isRed () ? 0 : 1);
+}
+
+static void
+validateTree (cookmem::PtrRBTree& tree)
+{
+    const cookmem::PtrRBNode* root = tree.getRoot ();
+    if (root != nullptr)
+    {
+        ASSERT_EQ (false, root->isRed ());
+    }
+    validateSubtree (root, nullptr, nullptr, nullptr);
+}
+
+static void
+shuffleIndices (int* indices, int count, unsigned int& seed)
+{
+    for (int i = count - 1; i > 0; --i)
+    {
+        seed = seed * 1664525u + 1013904223u;
+        const int j = seed % (i + 1);
+        const int temp = indices[i];
+        indices[i] = indices[j];
+        indices[j] = temp;
+    }
+}
+
 static void
 test1 ()
 {
@@ -204,6 +264,86 @@ test5 ()
     ASSERT_EQ (true, list.isEmpty ());
 }
 
+static void
+test6 ()
+{
+    cookmem::PtrRBNode n[4];
+    cookmem::PtrRBTree tree;
+
+    tree.add (&n[0], 10);
+    tree.add (&n[1], 10);
+    tree.add (&n[2], 10);
+    tree.add (&n[3], 10);
+
+    tree.remove (&n[2]);
+    ASSERT_EQ (false, tree.contains (&n[2]));
+    ASSERT_EQ (true, tree.contains (&n[1]));
+    ASSERT_EQ (true, tree.contains (&n[3]));
+
+    tree.remove (&n[1]);
+    ASSERT_EQ (false, tree.contains (&n[1]));
+    tree.remove (&n[3]);
+    ASSERT_EQ (true, tree.contains (&n[0]));
+    tree.remove (&n[0]);
+    ASSERT_EQ (true, tree.isEmpty ());
+
+    cookmem::PtrRBNode withChildren[4];
+    cookmem::PtrRBTree treeWithDuplicates;
+    treeWithDuplicates.add (&withChildren[0], 20);
+    treeWithDuplicates.add (&withChildren[1], 10);
+    treeWithDuplicates.add (&withChildren[2], 30);
+    treeWithDuplicates.add (&withChildren[3], 20);
+    treeWithDuplicates.remove (&withChildren[0]);
+    ASSERT_EQ (&withChildren[3], treeWithDuplicates.getRoot ());
+    ASSERT_EQ (&withChildren[3], withChildren[1].getParent ());
+    ASSERT_EQ (&withChildren[3], withChildren[2].getParent ());
+    validateTree (treeWithDuplicates);
+}
+
+static void
+test7 ()
+{
+    const int nodeCount = 31;
+    cookmem::PtrRBNode nodes[nodeCount];
+    bool present[nodeCount] = {};
+    cookmem::PtrRBTree tree;
+    unsigned int seed = 0xC001D00Du;
+    int insertionOrder[nodeCount];
+    int removalOrder[nodeCount];
+
+    for (int round = 0; round < 16; ++round)
+    {
+        for (int i = 0; i < nodeCount; ++i)
+        {
+            insertionOrder[i] = i;
+            removalOrder[i] = i;
+        }
+        shuffleIndices (insertionOrder, nodeCount, seed);
+        shuffleIndices (removalOrder, nodeCount, seed);
+
+        for (int i = 0; i < nodeCount; ++i)
+        {
+            const int index = insertionOrder[i];
+            tree.add (&nodes[index], index + 1);
+            present[index] = true;
+            validateTree (tree);
+        }
+
+        for (int i = 0; i < nodeCount; ++i)
+        {
+            const int index = removalOrder[i];
+            tree.remove (&nodes[index]);
+            present[index] = false;
+            validateTree (tree);
+            for (int j = 0; j < nodeCount; ++j)
+            {
+                ASSERT_EQ (present[j], tree.contains (&nodes[j]));
+            }
+        }
+    }
+    ASSERT_EQ (true, tree.isEmpty ());
+}
+
 unittest::TestFunction s_tests[] =
 {
     test1,
@@ -211,6 +351,8 @@ unittest::TestFunction s_tests[] =
     test3,
     test4,
     test5,
+    test6,
+    test7,
 };
 
 int

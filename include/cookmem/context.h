@@ -350,6 +350,14 @@ public:
     {
     }
 
+    SimpleMemContext (SimpleMemContext& other, bool shareArena)
+    : Container (),
+      MemCtx (shareArena ? other.getArena () : Container::arena,
+              Container::logger,
+              other.getPaddingSize ())
+    {
+    }
+
     virtual ~SimpleMemContext ()
     {
     }
@@ -406,6 +414,14 @@ public:
     CachedMemContext (std::uint8_t paddingSize = DEFAULT_PADDING_SIZE)
     : Container (),
       MemCtx (Container::cachedArena, Container::logger, paddingSize)
+    {
+    }
+
+    CachedMemContext (CachedMemContext& other, bool shareArena)
+    : Container (),
+      MemCtx (shareArena ? other.getArena () : Container::cachedArena,
+              Container::logger,
+              other.getPaddingSize ())
     {
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2026 Heng Yuan
+ * Copyright (c) 2025-2026 Heng Yuan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,20 +22,20 @@ int
 main ()
 {
     typedef cookmem::CachedMemContext<> MemoryContext;
-    typedef cookmem::Allocator<int> IntAllocator;
+    typedef cookmem::Allocator<int> IntCallerAllocator;
 
     // Create a memory context
     MemoryContext context;
     // Create an allocator for int type using the memory context
-    IntAllocator allocator (context);
+    IntCallerAllocator allocator (context);
     // Create a list of int using the custom allocator
-    std::list<int, IntAllocator> values (allocator);
+    std::list<int, IntCallerAllocator> values (allocator);
 
     values.push_back (10);
     values.push_back (20);
     values.push_back (30);
 
-    for (std::list<int, IntAllocator>::const_iterator it = values.begin ();
+    for (std::list<int, IntCallerAllocator>::const_iterator it = values.begin ();
          it != values.end ();
          ++it)
     {
