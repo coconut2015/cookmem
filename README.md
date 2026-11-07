@@ -80,8 +80,9 @@ Diagnosing and Debugging
 
 CookMem has built-in diagnostic tools that can help gather memory statistics
 and detect difficult-to-catch out-of-bounds writes without significantly
-slowing down the program. It is not a [Valgrind](https://valgrind.org/)
-replacement, but in many cases it can help catch difficult bugs.
+slowing down the program. It also detects attempts to free an allocation more
+than once. CookMem is not a [Valgrind](https://valgrind.org/) replacement, but
+in many cases it can help catch difficult bugs.
 
 Links
 -----
