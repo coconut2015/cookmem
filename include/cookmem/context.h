@@ -127,10 +127,10 @@ public:
     validate () { m_pool.validate (); }
 
     /**
-     * Forcing the coalescing of free memory fragments.
+     * Release segments that are entirely free.
      */
     inline void
-    coalesce () { m_pool.coalesce (); }
+    trimEmptySegments () { m_pool.trimEmptySegments (); }
 
     /**
      * Check if a pointer is within the address space of segments owned
@@ -205,18 +205,22 @@ public:
     getMaxFootprint () const { return m_pool.getMaxFootprint (); }
 
     /**
-     * Setting the number of deallocations to trigger the coalescing free
-     * memory fragments.
+     * Set the number of deallocations between empty-segment trimming passes.
      */
     void
-    setCoalesceInterval (size_type interval) { m_pool.setCoalesceInterval (interval); }
+    setTrimEmptySegmentsInterval (size_type interval)
+    {
+        m_pool.setTrimEmptySegmentsInterval (interval);
+    }
 
     /**
-     * Setting the number of deallocations to trigger the coalescing free
-     * memory fragments.
+     * Get the number of deallocations between empty-segment trimming passes.
      */
     size_type
-    getCoalesceInterval () { return m_pool.getCoalesceInterval (); }
+    getTrimEmptySegmentsInterval () const
+    {
+        return m_pool.getTrimEmptySegmentsInterval ();
+    }
 
     /**
      * Check whether or not we are storing the exact user size in the memory.

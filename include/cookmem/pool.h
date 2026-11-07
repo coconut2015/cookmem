@@ -515,11 +515,11 @@ private:
      */
     MemSegment*     m_segList;
     /**
-     * The number of deallocations before a full-pool coalescing pass.
+     * The number of deallocations between empty-segment trimming passes.
      */
-    size_type       m_coalesceInterval;
+    size_type       m_trimEmptySegmentsInterval;
     /**
-     * The number of deallocations since the last coalescing.
+     * The number of deallocations since the last empty-segment trimming pass.
      */
     size_type       m_numFrees;
     BinIndexType    m_smallMap;
@@ -581,7 +581,7 @@ public:
       m_logger (logger),
       m_footprintLimit (0),
       m_segList (nullptr),
-      m_coalesceInterval (DEFAULT_COALESCE_INTERVAL),
+      m_trimEmptySegmentsInterval (DEFAULT_TRIM_EMPTY_SEGMENTS_INTERVAL),
       m_numFrees (0),
       m_smallMap (0),
       m_treeMap (0),
@@ -643,24 +643,24 @@ public:
     }
 
     /**
-     * Set the number of deallocations between full-pool coalescing passes.
+     * Set the number of deallocations between empty-segment trimming passes.
      */
     void
-    setCoalesceInterval (size_type interval)
+    setTrimEmptySegmentsInterval (size_type interval)
     {
-        m_coalesceInterval = interval;
+        m_trimEmptySegmentsInterval = interval;
     }
 
     /**
-     * Get the number of deallocations between full-pool coalescing passes.
+     * Get the number of deallocations between empty-segment trimming passes.
      *
-     * @return  the number of deallocations between full-pool coalescing
+     * @return  the number of deallocations between empty-segment trimming
      *          passes.
      */
     size_type
-    getCoalesceInterval () const
+    getTrimEmptySegmentsInterval () const
     {
-        return m_coalesceInterval;
+        return m_trimEmptySegmentsInterval;
     }
 
     /**
@@ -946,9 +946,9 @@ public:
             addChunk (freeChunk);
 
             ++m_numFrees;
-            if (m_numFrees >= m_coalesceInterval)
+            if (m_numFrees >= m_trimEmptySegmentsInterval)
             {
-                coalesce ();
+                trimEmptySegments ();
             }
         }
         else
@@ -1047,9 +1047,9 @@ public:
      * Release segments that are entirely free.
      */
     void
-    coalesce ()
+    trimEmptySegments ()
     {
-        m_logger.logCoalesce ();
+        m_logger.logTrimEmptySegments ();
         MemSegment* seg = m_segList;
         MemSegment* prevSeg = nullptr;
         while (seg)
