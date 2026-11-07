@@ -134,7 +134,7 @@ Restrict Memory Usage</h2>
 <p>For long-running programs that take user inputs, it is possible that even when all input values are validated, edge cases in calculations can still cause the program to accidentally request a very large amount of memory and crash. CookMem provides several ways to restrict memory usage. One can set a memory footprint limit or add code to the segment request logic to restrict large memory requests.</p>
 <h2><a class="anchor" id="autotoc_md4"></a>
 Diagnosing and Debugging</h2>
-<p>CookMem has built-in diagnostic tools that can help gather memory statistics and detect difficult-to-catch out-of-bounds writes without significantly slowing down the program. It is not a <a href="https://valgrind.org/">Valgrind</a> replacement, but in many cases it can help catch difficult bugs.</p>
+<p>CookMem has built-in diagnostic tools that can help gather memory statistics and detect difficult-to-catch out-of-bounds writes without significantly slowing down the program. It also detects attempts to free an allocation more than once. CookMem is not a <a href="https://valgrind.org/">Valgrind</a> replacement, but in many cases it can help catch difficult bugs.</p>
 <h2><a class="anchor" id="autotoc_md5"></a>
 Links</h2>
 <ul>
