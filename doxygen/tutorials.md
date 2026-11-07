@@ -103,16 +103,30 @@ instances when constructing containers.
 
 \include example_Allocator.cpp
 
-\section staticSTLAlloc Thread-local Context STL Allocator
+\section tlsSTLAlloc Thread-local and Scoped Context STL Allocators
 
 cookmem::TLSContextProvider provides one context per thread for each context
-type and tag type. Use a unique tag to keep this allocator group’s context
-separate from other groups. Since the provider supplies the context, the
-allocator can be default-constructed and does not need to be passed to each
-container.
+type and tag type. Use a unique tag to keep allocator groups separate. By
+default, this context lasts for the lifetime of the thread. To limit it to a
+lexical scope instead, declare a cookmem::TLSContextScope before the
+containers. Default-constructed allocators created inside that scope use its
+context, which is destroyed when the scope exits.
 
-An allocator remains bound to the context of the thread where it was created.
-Keep containers and their allocators on that thread; do not transfer their
-allocations to another thread for deallocation.
+Use `TLSContextProvider<Context, Tag>::getActiveContext()` to query the context
+currently used for allocations; when no matching scope is active, it returns
+the persistent thread-local context.
+`TLSContextProvider<Context, Tag>::getThreadContext()` returns the persistent
+thread-local context whether or not a scope is active. The provider instance's
+`get()` still returns the context to which that instance was bound.
 
-\include example_AllocatorStatic.cpp
+The function-scope example uses TLSContextScope to release the context as soon
+as its containers are destroyed. It demonstrates both options: passing `true`
+makes its pool share the thread-local context's arena; with CachedMemContext,
+freed segments can be reused by either context. Passing `false` gives the scope
+its own arena. The thread-local example omits the scope, so the provider uses
+its per-thread context and releases it when the thread exits. In all cases,
+containers must be destroyed before their context ends and remain on the
+thread where their allocator was created. Neither approach requires passing
+allocator instances to containers.
+
+\include example_AllocatorThreadLocal.cpp

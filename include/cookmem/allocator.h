@@ -17,6 +17,7 @@
 #define COOK_MEM_ALLOCATOR_H
 
 #include <cstddef>
+#include <functional>
 #include <limits>
 #include <new>
 #include <type_traits>
@@ -51,13 +52,13 @@ public:
     Context&
     get () const
     {
-        return m_context;
+        return m_context.get ();
     }
 
     bool
     operator== (const MemContextProvider& other) const
     {
-        return &m_context == &other.m_context;
+        return &m_context.get () == &other.m_context.get ();
     }
 
     bool
@@ -67,7 +68,7 @@ public:
     }
 
 private:
-    Context& m_context;
+    std::reference_wrapper<Context> m_context;
 };
 
 /**
@@ -87,20 +88,39 @@ public:
     typedef std::false_type is_always_equal;
 
     TLSContextProvider ()
-    : m_context (getThreadContext ())
+    : m_context (getContextForAllocator ())
     {
+    }
+
+    /**
+     * Returns the active context, or the persistent thread context when no
+     * scope is active.
+     */
+    static Context&
+    getActiveContext ()
+    {
+        return activeContext ();
+    }
+
+    /**
+     * Returns this thread's persistent context, even when a scope is active.
+     */
+    static Context&
+    getThreadContext ()
+    {
+        return getPersistentThreadContext ();
     }
 
     Context&
     get () const
     {
-        return m_context;
+        return m_context.get ();
     }
 
     bool
     operator== (const TLSContextProvider& other) const
     {
-        return &m_context == &other.m_context;
+        return &m_context.get () == &other.m_context.get ();
     }
 
     bool
@@ -110,14 +130,81 @@ public:
     }
 
 private:
+    template<class, class>
+    friend class TLSContextScope;
+
     static Context&
-    getThreadContext ()
+    activeContext ()
+    {
+        Context* context = activeContextStorage ();
+        return context != nullptr ? *context : getPersistentThreadContext ();
+    }
+
+    static Context*&
+    activeContextStorage ()
+    {
+        static thread_local Context* context = nullptr;
+        return context;
+    }
+
+    static Context&
+    getContextForAllocator ()
+    {
+        return activeContext ();
+    }
+
+    static Context&
+    getPersistentThreadContext ()
     {
         static thread_local Context context;
         return context;
     }
 
-    Context& m_context;
+    std::reference_wrapper<Context> m_context;
+};
+
+/**
+ * Temporarily provides a function-scope context to default-constructed
+ * allocators using the matching TLSContextProvider.
+ *
+ * Declare the scope before containers that use the context so those
+ * containers are destroyed before the context.
+ */
+template<class Context, class Tag>
+class TLSContextScope
+{
+public:
+    TLSContextScope ()
+    : m_context (),
+      m_previousContext (TLSContextProvider<Context, Tag>::activeContextStorage ())
+    {
+        TLSContextProvider<Context, Tag>::activeContextStorage () = &m_context;
+    }
+
+    explicit TLSContextScope (bool shareArena)
+    : m_context (TLSContextProvider<Context, Tag>::getPersistentThreadContext (), shareArena),
+      m_previousContext (TLSContextProvider<Context, Tag>::activeContextStorage ())
+    {
+        TLSContextProvider<Context, Tag>::activeContextStorage () = &m_context;
+    }
+
+    ~TLSContextScope ()
+    {
+        TLSContextProvider<Context, Tag>::activeContextStorage () = m_previousContext;
+    }
+
+    TLSContextScope (const TLSContextScope&) = delete;
+    TLSContextScope& operator= (const TLSContextScope&) = delete;
+
+    Context&
+    getContext ()
+    {
+        return m_context;
+    }
+
+private:
+    Context   m_context;
+    Context*  m_previousContext;
 };
 
 /**
