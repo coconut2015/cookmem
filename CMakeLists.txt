@@ -211,3 +211,8 @@ add_executable(example_Allocator
 	examples/example_Allocator.cpp)
 add_test(NAME example_Allocator
 	COMMAND example_Allocator)
+
+add_executable(example_AllocatorStatic
+	examples/example_AllocatorStatic.cpp)
+add_test(NAME example_AllocatorStatic
+	COMMAND example_AllocatorStatic)

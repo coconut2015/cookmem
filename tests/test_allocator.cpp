@@ -22,6 +22,13 @@
 
 #include "unittest.h"
 
+struct StaticAllocatorTestTag;
+typedef cookmem::Allocator<
+    int,
+    cookmem::TLSContextProvider<
+        cookmem::CachedMemContext<>,
+        StaticAllocatorTestTag> > StaticIntAllocator;
+
 static int
 test1 ()
 {
@@ -80,6 +87,26 @@ testAllocatorOperations ()
     int* copiedValue = copiedAllocator.allocate (1);
     ASSERT_NE (nullptr, copiedValue);
     copiedAllocator.deallocate (copiedValue, 1);
+    return 0;
+}
+
+static int
+testStaticProvider ()
+{
+    typedef StaticIntAllocator::rebind<char>::other CharAllocator;
+    StaticIntAllocator allocator;
+    CharAllocator reboundAllocator;
+
+    ASSERT_EQ (&allocator.getContext (), &reboundAllocator.getContext ());
+    ASSERT_EQ (true, allocator == reboundAllocator);
+    ASSERT_EQ (false, StaticIntAllocator::is_always_equal::value);
+    ASSERT_EQ (true, StaticIntAllocator::propagate_on_container_copy_assignment::value);
+    ASSERT_EQ (true, StaticIntAllocator::propagate_on_container_move_assignment::value);
+    ASSERT_EQ (true, StaticIntAllocator::propagate_on_container_swap::value);
+
+    int* value = allocator.allocate (1);
+    ASSERT_NE (nullptr, value);
+    allocator.deallocate (value, 1);
     return 0;
 }
 
@@ -148,6 +175,7 @@ main ()
     {
         ASSERT_EQ (0, test1 ());
         ASSERT_EQ (0, testAllocatorOperations ());
+        ASSERT_EQ (0, testStaticProvider ());
         ASSERT_EQ (0, test2 ());
         ASSERT_EQ (0, test3 ());
         ASSERT_EQ (0, testContainerSwap ());

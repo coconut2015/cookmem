@@ -18,7 +18,7 @@ memory contexts, including cookmem::SimpleMemContext and
 cookmem::CachedMemContext. This flexibility was a primary motivation for
 the project.
 
-\section example_FixedArena cookmem::FixedArena
+\section FixedArena FixedArena
 
 Oftentimes, we want the allocations to be done within a big chunk of
 memory, which can be on stack, pre-allocated memory buffer etc.
@@ -26,9 +26,7 @@ cookmem::FixedArena is for this purpose.
 
 \include example_FixedArena.cpp
 
-\include example_Allocator.cpp
-
-\section example_simplememcontext cookmem::MmapArena
+\section MmapArena MmapArena
 
 [mmap](https://en.wikipedia.org/wiki/Mmap) is one way to obtain large
 segments of memory on Unix.  cookmem::MmapArena basically calls ```mmap```
@@ -37,9 +35,9 @@ and ```munmap``` to get and release segments.  On Windows, it uses ```VirtualAll
 It should be noted that this arena does not track the memory segments
 since cookmem::MemPool already does the tracking.
 
-\include example_simplememcontext.cpp
+\include example_SimpleMemContext.cpp
 
-\section example_CachedArena cookmem::CachedArena
+\section CachedArena CachedArena
 
 cookmem::CachedArena basically caches the memory segments released in an
 [red-black tree](https://en.wikipedia.org/wiki/Red%E2%80%93black_tree) and reuses them for
@@ -48,7 +46,7 @@ release memory segments.
 
 \include example_CachedArena.cpp
 
-\section example_child Copying Data Between Memory Pools
+\section copying Copying Data Between Memory Pools
 
 cookmem has the ability to determine if a memory pointer is in the
 address space of that memory pool.  Note that the check is done
@@ -59,7 +57,7 @@ pool that is about to be destroyed.
 
 \include example_child.cpp
 
-\section Querying Pointer Information
+\section querying Querying Pointer Information
 
 cookmem has the ability to get the allocated size information for a
 pointer.  By default, cookmem does not keep track the exact allocated
@@ -73,7 +71,7 @@ See the following example.
 
 \include example_getSize.cpp
 
-\section Memory Corruption Detection
+\section boundcheck Memory Corruption Detection
 
 Besides various assertions, cookmem has an ability to pad magic bytes
 (between 1 and 8 bytes) after the end of the user allocated memory.
@@ -89,7 +87,7 @@ a bad state.  So it is not good idea to re-use the same memory context.
 
 \include example_boundcheck.cpp
 
-\section STL Allocator
+\section stlallocator STL Allocator
 
 The STL containers can use a custom allocator to bind their storage to a
 memory context.  cookmem::Allocator<T> adapts a cookmem memory context to the
@@ -97,4 +95,12 @@ C++ allocator interface, allowing containers such as ```std::vector```, ```std::
 and ```std::basic_string``` to allocate from the same arena
 or pool that is managing the rest of the application state.
 
+The default provider uses a caller-owned context, so an allocator instance
+must be passed to each container. This avoids global state. For cases where
+default-constructed containers are more convenient, use
+cookmem::TLSContextProvider with a unique tag type; allocators using that
+provider share a thread-local context.
+
 \include example_Allocator.cpp
+
+\include example_AllocatorStatic.cpp
