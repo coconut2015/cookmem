@@ -29,7 +29,7 @@ var NAVTREE =
     [ "Use Cases", "index.html#usecases", [
       [ "Avoiding Synchronization Cost", "index.html#autotoc_md1", null ],
       [ "Avoiding Individual Frees", "index.html#autotoc_md2", null ],
-      [ "Restrict Memory Usage", "index.html#autotoc_md3", null ],
+      [ "Restricting Memory Usage", "index.html#autotoc_md3", null ],
       [ "Diagnosing and Debugging", "index.html#autotoc_md4", null ],
       [ "Links", "index.html#autotoc_md5", null ]
     ] ],

@@ -14,7 +14,7 @@ var searchData=
   ['memory_20logger_11',['Memory Logger',['../references.html#autotoc_md10',1,'']]],
   ['memory_20pool_12',['Memory Pool',['../references.html#autotoc_md11',1,'']]],
   ['memory_20pools_13',['Copying Data Between Memory Pools',['../tutorials.html#copying',1,'']]],
-  ['memory_20usage_14',['Restrict Memory Usage',['../index.html#autotoc_md3',1,'']]],
+  ['memory_20usage_14',['Restricting Memory Usage',['../index.html#autotoc_md3',1,'']]],
   ['mempool_15',['mempool',['../classcookmem_1_1MemPool.html#a98479b71083532ba825c132780c70e51',1,'cookmem::MemPool::MemPool()'],['../classcookmem_1_1MemPool.html',1,'cookmem::MemPool&lt; Arena, Logger, TreeType, T &gt;']]],
   ['mempool_3c_20arena_2c_20logger_2c_20ptrrbtree_2c_20void_20_3e_16',['MemPool&lt; Arena, Logger, PtrRBTree, void &gt;',['../classcookmem_1_1MemPool.html',1,'cookmem']]],
   ['mempool_3c_20cachedarena_3c_20mmaparena_20_3e_2c_20noactionmemlogger_2c_20ptrrbtree_2c_20void_20_3e_17',['MemPool&lt; CachedArena&lt; MmapArena &gt;, NoActionMemLogger, PtrRBTree, void &gt;',['../classcookmem_1_1MemPool.html',1,'cookmem']]],
