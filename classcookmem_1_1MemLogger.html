@@ -105,8 +105,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a8e41d49f7cef5bee8b823afcb79ac90e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8247970d61c7aab669a5b31cec578ca7" id="r_a8247970d61c7aab669a5b31cec578ca7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1Allocator.html">virtual</a> <a class="el" href="classcookmem_1_1Allocator.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemLogger.html#a8247970d61c7aab669a5b31cec578ca7">logFreeSegment</a> (<a class="el" href="classcookmem_1_1Allocator.html">void</a> *<a class="el" href="classcookmem_1_1Allocator.html">segment</a>, std::size_t <a class="el" href="classcookmem_1_1Allocator.html">segmentSize</a>)=0</td></tr>
 <tr class="separator:a8247970d61c7aab669a5b31cec578ca7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a079dff05ca33181e75fb183cd0ffaf99" id="r_a079dff05ca33181e75fb183cd0ffaf99"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1Allocator.html">virtual</a> <a class="el" href="classcookmem_1_1Allocator.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemLogger.html#a079dff05ca33181e75fb183cd0ffaf99">logCoalesce</a> ()=0</td></tr>
-<tr class="separator:a079dff05ca33181e75fb183cd0ffaf99"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac51822ba2461d900457e698a9545459a" id="r_ac51822ba2461d900457e698a9545459a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1Allocator.html">virtual</a> <a class="el" href="classcookmem_1_1Allocator.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemLogger.html#ac51822ba2461d900457e698a9545459a">logTrimEmptySegments</a> ()=0</td></tr>
+<tr class="separator:ac51822ba2461d900457e698a9545459a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8754b6eb34a4f99ea6df9c72ebd6a179" id="r_a8754b6eb34a4f99ea6df9c72ebd6a179"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1Allocator.html">virtual</a> <a class="el" href="classcookmem_1_1Allocator.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemLogger.html#a8754b6eb34a4f99ea6df9c72ebd6a179">logAllocation</a> (<a class="el" href="classcookmem_1_1Allocator.html">void</a> *<a class="el" href="classcookmem_1_1Allocator.html">userPtr</a>, std::size_t <a class="el" href="classcookmem_1_1Allocator.html">userSize</a>, MemAllocType_et <a class="el" href="classcookmem_1_1Allocator.html">allocType</a>)=0</td></tr>
 <tr class="separator:a8754b6eb34a4f99ea6df9c72ebd6a179"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae7a2543185a5000b3742779d2d2b0362" id="r_ae7a2543185a5000b3742779d2d2b0362"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1Allocator.html">virtual</a> <a class="el" href="classcookmem_1_1Allocator.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemLogger.html#ae7a2543185a5000b3742779d2d2b0362">logReallocation</a> (<a class="el" href="classcookmem_1_1Allocator.html">void</a> *<a class="el" href="classcookmem_1_1Allocator.html">userPtr</a>, std::size_t <a class="el" href="classcookmem_1_1Allocator.html">oldUserSize</a>, std::size_t <a class="el" href="classcookmem_1_1Allocator.html">newUserSize</a>)=0</td></tr>
@@ -168,32 +168,6 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-
-</div>
-</div>
-<a id="a079dff05ca33181e75fb183cd0ffaf99" name="a079dff05ca33181e75fb183cd0ffaf99"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a079dff05ca33181e75fb183cd0ffaf99">&#9670;&#160;</a></span>logCoalesce()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classcookmem_1_1Allocator.html">virtual</a> <a class="el" href="classcookmem_1_1Allocator.html">void</a> cookmem::MemLogger::logCoalesce </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Log a pool coalesce call. </p>
 
 </div>
 </div>
@@ -433,6 +407,32 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="ac51822ba2461d900457e698a9545459a" name="ac51822ba2461d900457e698a9545459a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac51822ba2461d900457e698a9545459a">&#9670;&#160;</a></span>logTrimEmptySegments()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1Allocator.html">virtual</a> <a class="el" href="classcookmem_1_1Allocator.html">void</a> cookmem::MemLogger::logTrimEmptySegments </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Log a pool empty-segment trimming pass. </p>
 
 </div>
 </div>
