@@ -87,20 +87,32 @@ a bad state.  So it is not good idea to re-use the same memory context.
 
 \include example_boundcheck.cpp
 
-\section stlallocator STL Allocator
+\section callerSTLAlloc Caller-owned STL Allocator
 
-The STL containers can use a custom allocator to bind their storage to a
-memory context.  cookmem::Allocator<T> adapts a cookmem memory context to the
-C++ allocator interface, allowing containers such as ```std::vector```, ```std::list```,
-and ```std::basic_string``` to allocate from the same arena
-or pool that is managing the rest of the application state.
+The standard library containers accept custom allocators, allowing their
+storage to come from a CookMem memory context. cookmem::Allocator<T> adapts
+a context to the C++ allocator interface. For example, a ```std::vector```, ```std::list```,
+or ```std::basic_string``` can allocate from the same context
+as the rest of the application.
 
-The default provider uses a caller-owned context, so an allocator instance
-must be passed to each container. This avoids global state. For cases where
-default-constructed containers are more convenient, use
-cookmem::TLSContextProvider with a unique tag type; allocators using that
-provider share a thread-local context.
+With the default provider, the application creates and owns the context, then
+passes an allocator bound to it to each container. Containers using allocators
+bound to the same context can share its memory pool. This makes context
+ownership explicit and avoids global state, at the cost of passing allocator
+instances when constructing containers.
 
 \include example_Allocator.cpp
+
+\section staticSTLAlloc Thread-local Context STL Allocator
+
+cookmem::TLSContextProvider provides one context per thread for each context
+type and tag type. Use a unique tag to keep this allocator group’s context
+separate from other groups. Since the provider supplies the context, the
+allocator can be default-constructed and does not need to be passed to each
+container.
+
+An allocator remains bound to the context of the thread where it was created.
+Keep containers and their allocators on that thread; do not transfer their
+allocations to another thread for deallocation.
 
 \include example_AllocatorStatic.cpp
