@@ -66,8 +66,8 @@ There are two sub-cases.
 
 Both cases can be addressed easily by using any of the MemContext classes.
 
-Restrict Memory Usage
----------------------
+Restricting Memory Usage
+------------------------
 
 For long-running programs that take user inputs, it is possible that even when all input
 values are validated, edge cases in calculations can still cause the program to
