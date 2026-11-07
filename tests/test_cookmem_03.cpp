@@ -35,8 +35,8 @@ test1 ()
 
     memCtx.getPool ().print ();
 
-    memCtx.coalesce ();
-    printf ("coalesced\n");
+    memCtx.trimEmptySegments ();
+    printf ("trimmed empty segments\n");
 
     memCtx.getPool ().print ();
 
@@ -61,7 +61,7 @@ test2 ()
 
     memCtx.getPool ().print ();
 
-    memCtx.coalesce ();
+    memCtx.trimEmptySegments ();
 
     memCtx.getPool ().print ();
 
@@ -86,7 +86,7 @@ test3 ()
 
     memCtx.getPool ().print ();
 
-    memCtx.coalesce ();
+    memCtx.trimEmptySegments ();
 
     memCtx.getPool ().print ();
 
@@ -120,7 +120,7 @@ test4 ()
 
     memCtx.getPool ().print ();
 
-    memCtx.coalesce ();
+    memCtx.trimEmptySegments ();
 
     memCtx.getPool ().print ();
 
@@ -153,7 +153,7 @@ test5 ()
     for (int i = 0; i < 10000; ++i)
     {
         memCtx.deallocate (ptr[i]);
-        memCtx.coalesce ();
+        memCtx.trimEmptySegments ();
         memCtx.validate ();
     }
 
@@ -163,7 +163,7 @@ test5 ()
 
     printf ("******** step 3\n");
 
-    memCtx.coalesce ();
+    memCtx.trimEmptySegments ();
 
     printf ("******** step 4\n");
 
@@ -180,10 +180,13 @@ test6 ()
     void* ptr[10000];
 
     memCtx.getLogger ().getStats ().printStats ();
-    std::size_t coalesceCount = memCtx.getLogger ().getStats ().getNumCoalesces ();
-    memCtx.coalesce ();
-    memCtx.coalesce ();
-    assertEquals (coalesceCount + 2, memCtx.getLogger ().getStats ().getNumCoalesces (), __FILE__, __LINE__);
+    std::size_t trimCount = memCtx.getLogger ().getStats ().getNumTrimEmptySegments ();
+    memCtx.trimEmptySegments ();
+    memCtx.trimEmptySegments ();
+    assertEquals (trimCount + 2,
+                  memCtx.getLogger ().getStats ().getNumTrimEmptySegments (),
+                  __FILE__,
+                  __LINE__);
 
     int size = 8;
     for (int i = 0; i < 10000; ++i)
@@ -210,7 +213,7 @@ test6 ()
     printf ("******** step 3\n");
     memCtx.getLogger ().getStats ().printStats ();
 
-    memCtx.coalesce ();
+    memCtx.trimEmptySegments ();
 
     printf ("******** step 4\n");
     memCtx.getLogger ().getStats ().printStats ();
@@ -288,7 +291,7 @@ test6 ()
     printf ("******** step 13\n");
     memCtx.getLogger ().getStats ().printStats ();
 
-    memCtx.coalesce ();
+    memCtx.trimEmptySegments ();
 
     printf ("******** step 14\n");
     memCtx.getLogger ().getStats ().printStats ();

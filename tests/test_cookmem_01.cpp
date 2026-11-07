@@ -120,7 +120,7 @@ test4 ()
 {
     cookmem::SimpleMemContext<cookmem::MallocArena> memCtx;
 
-    memCtx.setCoalesceInterval (2);
+    memCtx.setTrimEmptySegmentsInterval (2);
 
     void* ptr[3];
 
@@ -149,7 +149,7 @@ test5 ()
     cookmem::SimpleMemContext<cookmem::MallocArena> memCtx;
     const int NUM = 3;
 
-    memCtx.setCoalesceInterval (2);
+    memCtx.setTrimEmptySegmentsInterval (2);
 
     void* ptr[NUM];
 
@@ -196,7 +196,7 @@ test6 ()
     cookmem::MemContext<cookmem::MallocArena, cookmem::NoActionMemLogger> memCtx (arena, logger);
 
     memCtx.getPool ().setFootprintLimit (256);
-    memCtx.setCoalesceInterval (100);
+    memCtx.setTrimEmptySegmentsInterval (100);
 
     void* first = memCtx.allocate (8);
     void* second = memCtx.allocate (8);

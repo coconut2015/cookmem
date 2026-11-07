@@ -24,8 +24,8 @@ main ()
     int segment2;
 
     logger.logGetSegment (&segment, 128);
-    logger.logCoalesce ();
-    logger.logCoalesce ();
+    logger.logTrimEmptySegments ();
+    logger.logTrimEmptySegments ();
     logger.logGetSegment (nullptr, 256);
     logger.logGetSegment (&segment2, 64);
     logger.logFreeSegment (nullptr, 512);
@@ -45,7 +45,7 @@ main ()
         stats.getNumDeallocations () != 1 ||
         stats.getNumGetSegments () != 2 ||
         stats.getNumFreeSegments () != 2 ||
-        stats.getNumCoalesces () != 2 ||
+        stats.getNumTrimEmptySegments () != 2 ||
         stats.getTotalAllocated () != 52 ||
         stats.getTotalDeallocated () != 52 ||
         stats.getTotalGetSegmentSize () != 192 ||

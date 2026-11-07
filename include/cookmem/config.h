@@ -23,9 +23,9 @@ namespace cookmem
 {
 
 /**
- * The number of frees between full-pool coalescing passes.
+ * The number of deallocations between automatic empty-segment trimming passes.
  */
-const std::size_t DEFAULT_COALESCE_INTERVAL = 4095 * 1024;
+const std::size_t DEFAULT_TRIM_EMPTY_SEGMENTS_INTERVAL = 4095;
 /**
  * Default minimum memory segment size.
  *

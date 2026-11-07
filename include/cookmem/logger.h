@@ -80,9 +80,9 @@ public:
     virtual void
     logFreeSegment (void* segment, std::size_t segmentSize) = 0;
 
-    /** Log a pool coalesce call. */
+    /** Log a pool empty-segment trimming pass. */
     virtual void
-    logCoalesce () = 0;
+    logTrimEmptySegments () = 0;
 
     /**
      * Log the memory allocation.
@@ -152,7 +152,7 @@ public:
 
     inline void logFreeSegment (void* segment, std::size_t segmentSize) { }
 
-    inline void logCoalesce () { }
+    inline void logTrimEmptySegments () { }
 
     inline void logAllocation (void* userPtr, std::size_t userSize, MemAllocType_et allocType) { }
 
@@ -181,7 +181,7 @@ public:
       m_numDeallocations (0),
       m_numGetSegments (0),
       m_numFreeSegments (0),
-      m_numCoalesces (0),
+      m_numTrimEmptySegments (0),
       m_totalAllocated (0),
       m_totalDeallocated (0),
       m_totalGetSegmentSize (0),
@@ -209,8 +209,8 @@ public:
     std::size_t getNumGetSegments () const { return m_numGetSegments; }
     /** Get the number of released memory segments. */
     std::size_t getNumFreeSegments () const { return m_numFreeSegments; }
-    /** Get the number of pool coalesce calls. */
-    std::size_t getNumCoalesces () const { return m_numCoalesces; }
+    /** Get the number of pool empty-segment trimming passes. */
+    std::size_t getNumTrimEmptySegments () const { return m_numTrimEmptySegments; }
     /** Get the total number of bytes allocated. */
     std::size_t getTotalAllocated () const { return m_totalAllocated; }
     /** Get the total number of bytes deallocated. */
@@ -241,7 +241,7 @@ public:
     void setNumDeallocations (std::size_t value) { m_numDeallocations = value; }
     void setNumGetSegments (std::size_t value) { m_numGetSegments = value; }
     void setNumFreeSegments (std::size_t value) { m_numFreeSegments = value; }
-    void setNumCoalesces (std::size_t value) { m_numCoalesces = value; }
+    void setNumTrimEmptySegments (std::size_t value) { m_numTrimEmptySegments = value; }
     void setTotalAllocated (std::size_t value) { m_totalAllocated = value; }
     void setTotalDeallocated (std::size_t value) { m_totalDeallocated = value; }
     void setTotalGetSegmentSize (std::size_t value) { m_totalGetSegmentSize = value; }
@@ -267,7 +267,7 @@ public:
                      m_currentSegmentSize,
                      m_peakSegments,
                      m_peakSegmentSize);
-        std::printf ("coalesce calls: %zu\n", m_numCoalesces);
+        std::printf ("empty-segment trimming passes: %zu\n", m_numTrimEmptySegments);
 
         std::printf ("allocations by type:\n");
         for (std::size_t i = 0; i < MEM_ALLOC_COUNT; ++i)
@@ -299,7 +299,7 @@ private:
     std::size_t m_numDeallocations;
     std::size_t m_numGetSegments;
     std::size_t m_numFreeSegments;
-    std::size_t m_numCoalesces;
+    std::size_t m_numTrimEmptySegments;
     std::size_t m_totalAllocated;
     std::size_t m_totalDeallocated;
     std::size_t m_totalGetSegmentSize;
@@ -324,9 +324,9 @@ class StatsLogger
 {
 public:
     void
-    logCoalesce ()
+    logTrimEmptySegments ()
     {
-        m_stats.setNumCoalesces (m_stats.getNumCoalesces () + 1);
+        m_stats.setNumTrimEmptySegments (m_stats.getNumTrimEmptySegments () + 1);
     }
 
     void
