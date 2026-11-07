@@ -45,7 +45,7 @@ var NAVTREE =
     ] ],
     [ "Limitations", "limitations.html", null ],
     [ "Installation", "install.html", null ],
-    [ "Test Build Instruction", "build.html", null ],
+    [ "Build Instructions", "build.html", null ],
     [ "References", "references.html", null ],
     [ "License", "license.html", null ],
     [ "Classes", "annotated.html", [

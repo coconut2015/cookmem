@@ -97,48 +97,52 @@ $(document).ready(function(){initNavTree('references.html',''); initResizable();
 Core Backend Components</h2>
 <h3><a class="anchor" id="autotoc_md9"></a>
 Memory Arenas</h3>
-<p>Memory arena classes are used to obtain large chunk of memory. A memory arena can be shared by multiple memory contexts.</p>
-<p>These classes implement <a class="el" href="classcookmem_1_1MemArena.html">cookmem::MemArena</a> interface without explicitly inheriting from it. This is to avoid the overhead of virtual function calls and allows inlining of the functions.</p>
+<p>Memory arena classes are used to obtain large chunks of memory. A memory arena can be shared by multiple memory contexts.</p>
+<p>These classes implement the <a class="el" href="classcookmem_1_1MemArena.html">cookmem::MemArena</a> interface without explicitly inheriting from it. This avoids the overhead of virtual function calls and allows the functions to be inlined.</p>
 <ul>
-<li><a class="el" href="classcookmem_1_1FixedArena.html">cookmem::FixedArena</a> - Wrap around a large chunk of pre-allocated memory and use it as the segment.</li>
-<li><a class="el" href="classcookmem_1_1MallocArena.html">cookmem::MallocArena</a> - Use <code>malloc</code> / <code>free</code> to get a large segment.</li>
-<li><a class="el" href="classcookmem_1_1MmapArena.html">cookmem::MmapArena</a> - Use <code>mmap</code> / <code>munmap</code> on Unix and <code>VirtualAlloc</code> and <code>VirtualFree</code> on Windows to get a large segment.</li>
-<li><a class="el" href="classcookmem_1_1CachedArena.html">cookmem::CachedArena</a> - Cache the segments released to be used later rather than discarding them immediately.</li>
+<li><a class="el" href="classcookmem_1_1FixedArena.html">cookmem::FixedArena</a> - Wraps a large chunk of pre-allocated memory and uses it as the segment.</li>
+<li><a class="el" href="classcookmem_1_1MallocArena.html">cookmem::MallocArena</a> - Uses <code>malloc</code> / <code>free</code> to get a large segment.</li>
+<li><a class="el" href="classcookmem_1_1MmapArena.html">cookmem::MmapArena</a> - Uses <code>mmap</code> / <code>munmap</code> on Unix and <code>VirtualAlloc</code> / <code>VirtualFree</code> on Windows to get a large segment.</li>
+<li><a class="el" href="classcookmem_1_1CachedArena.html">cookmem::CachedArena</a> - Caches released segments for later use rather than discarding them immediately.</li>
 </ul>
 <h3><a class="anchor" id="autotoc_md10"></a>
 Memory Logger</h3>
 <p>Memory logger classes are used to log memory context activities.</p>
-<p>These classes implement <a class="el" href="classcookmem_1_1MemLogger.html">cookmem::MemLogger</a> interface without explicitly inheriting from it. This is to avoid the overhead of virtual function calls and allows inlining of the functions.</p>
+<p>These classes implement the <a class="el" href="classcookmem_1_1MemLogger.html">cookmem::MemLogger</a> interface without explicitly inheriting from it. This avoids the overhead of virtual function calls and allows the functions to be inlined.</p>
 <ul>
 <li><a class="el" href="classcookmem_1_1NoActionMemLogger.html">cookmem::NoActionMemLogger</a> - Do nothing.</li>
 <li><a class="el" href="classcookmem_1_1StatsLogger.html">cookmem::StatsLogger</a> - Mostly for debugging purposes to gather statistics on memory allocations.</li>
 </ul>
 <h3><a class="anchor" id="autotoc_md11"></a>
 Memory Pool</h3>
-<p>Memory pool does the allocation / deallocation of smaller chunks of memory inside the segments obtained from memory arenas.</p>
+<p>The memory pool allocates and deallocates smaller chunks of memory within the segments obtained from memory arenas.</p>
 <p>Currently, there is only a single implementation.</p>
 <ul>
 <li><a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a></li>
 </ul>
 <h2><a class="anchor" id="autotoc_md12"></a>
 Memory Contexts</h2>
-<p>Memory context classes contains the API interfaces users actually call to allocate / deallocate memories. They use the backend <a class="el" href="classcookmem_1_1MemArena.html">cookmem::MemArena</a>, <a class="el" href="classcookmem_1_1MemLogger.html">cookmem::MemLogger</a> and <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a> to do the actual work.</p>
-<p>The idea is that one can mix match different backend components to create a suitable memory context that one needs.</p>
-<p>Furthermore, multiple memory contexts can share the same memory arena. With <a class="el" href="classcookmem_1_1CachedArena.html">cookmem::CachedArena</a>, it is possible that when one memory contexts is done, another memory context can re-use the segments allocated by the previous memory context. Thus, we can further avoid making expensive calls to allocate large segments.</p>
+<p>Memory context classes contain the API that users call to allocate and deallocate memory. They use the backend <a class="el" href="classcookmem_1_1MemArena.html">cookmem::MemArena</a>, <a class="el" href="classcookmem_1_1MemLogger.html">cookmem::MemLogger</a> and <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a> to do the actual work.</p>
+<p>The backend components can be mixed and matched to create a suitable memory context.</p>
+<p>Furthermore, multiple memory contexts can share the same memory arena. With <a class="el" href="classcookmem_1_1CachedArena.html">cookmem::CachedArena</a>, when one memory context is done, another context can reuse the segments allocated by the previous context. Thus, we can further avoid expensive calls to allocate large segments.</p>
 <ul>
 <li><a class="el" href="classcookmem_1_1SimpleMemContext.html">cookmem::SimpleMemContext</a> - Default uses <a class="el" href="classcookmem_1_1MmapArena.html">cookmem::MmapArena</a> + <a class="el" href="classcookmem_1_1NoActionMemLogger.html">cookmem::NoActionMemLogger</a></li>
 <li><a class="el" href="classcookmem_1_1CachedMemContext.html">cookmem::CachedMemContext</a> - Default uses cookmem::CachedArena&lt;cookmem::MmapArena&gt; + <a class="el" href="classcookmem_1_1NoActionMemLogger.html">cookmem::NoActionMemLogger</a></li>
 </ul>
 <h2><a class="anchor" id="autotoc_md13"></a>
 STL Allocator</h2>
-<p>There is one STL allocator implementation, <a class="el" href="classcookmem_1_1Allocator.html">cookmem::Allocator</a>. It depends on memory context provider to provide the <a class="el" href="classcookmem_1_1MemContext.html">cookmem::MemContext</a> instance.</p>
+<p>There is one STL allocator implementation, <a class="el" href="classcookmem_1_1Allocator.html">cookmem::Allocator</a>. It depends on a memory context provider to provide the <a class="el" href="classcookmem_1_1MemContext.html">cookmem::MemContext</a> instance.</p>
 <ul>
 <li><a class="el" href="classcookmem_1_1Allocator.html">cookmem::Allocator</a></li>
 </ul>
 <p>There are two memory context providers.</p>
 <ul>
 <li><a class="el" href="classcookmem_1_1MemContextProvider.html">cookmem::MemContextProvider</a> - caller owned memory context</li>
-<li><a class="el" href="classcookmem_1_1TLSContextProvider.html">cookmem::TLSContextProvider</a> - static thread-local storage memory context </li>
+<li><a class="el" href="classcookmem_1_1TLSContextProvider.html">cookmem::TLSContextProvider</a> - thread-local storage memory context</li>
+</ul>
+<p>The scoped context helper temporarily overrides the context used by default-constructed allocators with the matching <a class="el" href="classcookmem_1_1TLSContextProvider.html">cookmem::TLSContextProvider</a>. Declare it before containers that use the scoped context so the containers are destroyed before the scope ends.</p>
+<ul>
+<li><a class="el" href="classcookmem_1_1TLSContextScope.html">cookmem::TLSContextScope</a> - scopes a context to a lexical block </li>
 </ul>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->

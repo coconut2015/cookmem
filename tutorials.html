@@ -95,14 +95,14 @@ $(document).ready(function(){initNavTree('tutorials.html',''); initResizable(); 
 <div class="contents">
 <div class="textblock"><p>CookMem divides the job of a memory context into three parts.</p>
 <ol type="1">
-<li>Memory arena, which is responsible for providing the API to allocate / deallocate large memory segments.</li>
-<li>Memory pool, which is responsible for managing memory chunks created within memory segments. This component is typically managed and hidden by the memory context.</li>
-<li>Logger, which can be used to monitor the allocation / deallocation activities. The primary use of logger is to gather memory statistics.</li>
+<li>The memory arena provides the API for allocating and deallocating large memory segments.</li>
+<li>The memory pool manages memory chunks within memory segments. This component is typically managed and hidden by the memory context.</li>
+<li>The logger monitors allocation and deallocation activity. Its primary use is to gather memory statistics.</li>
 </ol>
 <p>Separating the memory arena from the memory pool makes it easy to build a custom memory context for your needs. See References for the available arenas and loggers. CookMem also provides ready-to-use memory contexts, including <a class="el" href="classcookmem_1_1SimpleMemContext.html">cookmem::SimpleMemContext</a> and <a class="el" href="classcookmem_1_1CachedMemContext.html">cookmem::CachedMemContext</a>. This flexibility was a primary motivation for the project.</p>
 <h1><a class="anchor" id="FixedArena"></a>
 FixedArena</h1>
-<p>Oftentimes, we want the allocations to be done within a big chunk of memory, which can be on stack, pre-allocated memory buffer etc. <a class="el" href="classcookmem_1_1FixedArena.html">cookmem::FixedArena</a> is for this purpose.</p>
+<p>Often, we want allocations to be done within a large chunk of memory, such as a stack-based or pre-allocated memory buffer. <a class="el" href="classcookmem_1_1FixedArena.html">cookmem::FixedArena</a> is for this purpose.</p>
 <div class="fragment"><div class="line"><span class="comment">/*</span></div>
 <div class="line"><span class="comment"> * Copyright (c) 2018-2026 Heng Yuan</span></div>
 <div class="line"><span class="comment"> *</span></div>
@@ -171,7 +171,7 @@ FixedArena</h1>
 <div class="ttc" id="aclasscookmem_1_1NoActionMemLogger_html"><div class="ttname"><a href="classcookmem_1_1NoActionMemLogger.html">cookmem::NoActionMemLogger</a></div><div class="ttdef"><b>Definition</b> logger.h:145</div></div>
 </div><!-- fragment --><h1><a class="anchor" id="MmapArena"></a>
 MmapArena</h1>
-<p><a href="https://en.wikipedia.org/wiki/Mmap">mmap</a> is one way to obtain large segments of memory on Unix. <a class="el" href="classcookmem_1_1MmapArena.html">cookmem::MmapArena</a> basically calls <code>mmap</code> and <code>munmap</code> to get and release segments. On Windows, it uses <code>VirtualAlloc</code> / <code>VirtualFree</code> instead.</p>
+<p><a href="https://en.wikipedia.org/wiki/Mmap">mmap</a> is one way to obtain large segments of memory on Unix. <a class="el" href="classcookmem_1_1MmapArena.html">cookmem::MmapArena</a> calls <code>mmap</code> and <code>munmap</code> to obtain and release segments. On Windows, it uses <code>VirtualAlloc</code> and <code>VirtualFree</code> instead.</p>
 <p>It should be noted that this arena does not track the memory segments since <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a> already does the tracking.</p>
 <div class="fragment"><div class="line"><span class="comment">/*</span></div>
 <div class="line"><span class="comment"> * Copyright (c) 2018-2021 Heng Yuan</span></div>
@@ -211,7 +211,7 @@ MmapArena</h1>
 <div class="line">}</div>
 </div><!-- fragment --><h1><a class="anchor" id="CachedArena"></a>
 CachedArena</h1>
-<p><a class="el" href="classcookmem_1_1CachedArena.html">cookmem::CachedArena</a> basically caches the memory segments released in an <a href="https://en.wikipedia.org/wiki/Red%E2%80%93black_tree">red-black tree</a> and reuses them for later requests. This is useful when it is expensive to request and release memory segments.</p>
+<p><a class="el" href="classcookmem_1_1CachedArena.html">cookmem::CachedArena</a> caches released memory segments in an <a href="https://en.wikipedia.org/wiki/Red%E2%80%93black_tree">red-black tree</a> and reuses them for later requests. This is useful when it is expensive to request and release memory segments.</p>
 <div class="fragment"><div class="line"><span class="comment">/*</span></div>
 <div class="line"><span class="comment"> * Copyright (c) 2018-2021 Heng Yuan</span></div>
 <div class="line"><span class="comment"> *</span></div>
@@ -276,7 +276,7 @@ CachedArena</h1>
 <div class="ttc" id="aclasscookmem_1_1MmapArena_html"><div class="ttname"><a href="classcookmem_1_1MmapArena.html">cookmem::MmapArena</a></div><div class="ttdef"><b>Definition</b> mmaparena.h:108</div></div>
 </div><!-- fragment --><h1><a class="anchor" id="copying"></a>
 Copying Data Between Memory Pools</h1>
-<p>cookmem has the ability to determine if a memory pointer is in the address space of that memory pool. Note that the check is done by iterating through all the memory segments owned by the memory pool.</p>
+<p>cookmem can determine whether a memory pointer is in the address space of a memory pool. The check iterates through all memory segments owned by the pool.</p>
 <p>This ability is quite useful to copy needed data out from the memory pool that is about to be destroyed.</p>
 <div class="fragment"><div class="line"><span class="comment">/*</span></div>
 <div class="line"><span class="comment"> * Copyright (c) 2018-2021 Heng Yuan</span></div>
@@ -367,8 +367,8 @@ Copying Data Between Memory Pools</h1>
 <div class="line">}</div>
 </div><!-- fragment --><h1><a class="anchor" id="querying"></a>
 Querying Pointer Information</h1>
-<p>cookmem has the ability to get the allocated size information for a pointer. By default, cookmem does not keep track the exact allocated size. However, it is possible to turn on an option to save the exact allocated size. This option does not cost extra memory, but it does take extra time in bookkeeping.</p>
-<p>Additionally, cookmem has the ability to tell if a pointer is valid.</p>
+<p>cookmem can report the allocated size of a pointer. By default, cookmem does not keep track of the exact allocated size. However, an option can be enabled to save the exact size. This option does not use extra memory, but it does require additional bookkeeping time.</p>
+<p>Additionally, cookmem can determine whether a pointer is valid.</p>
 <p>See the following example.</p>
 <div class="fragment"><div class="line"><span class="comment">/*</span></div>
 <div class="line"><span class="comment"> * Copyright (c) 2021 Heng Yuan</span></div>
@@ -439,9 +439,9 @@ Querying Pointer Information</h1>
 <div class="line">}</div>
 </div><!-- fragment --><h1><a class="anchor" id="boundcheck"></a>
 Memory Corruption Detection</h1>
-<p>Besides various assertions, cookmem has an ability to pad magic bytes (between 1 and 8 bytes) after the end of the user allocated memory. When a pointer is explicitly deallocated, a check is performed to see if the padding bytes were overwritten.</p>
-<p>This feature obviously costs performances in memory allocation and deallocation. In some cases can also increase the memory required. However, it is a valuable debugging tool as well.</p>
-<p>Note that once the exception is thrown, the memory context is in a bad state. So it is not good idea to re-use the same memory context.</p>
+<p>In addition to various assertions, cookmem can add padding bytes (between 1 and 8) after the end of the user-allocated memory. When a pointer is explicitly deallocated, a check determines whether the padding bytes were overwritten.</p>
+<p>This feature can reduce allocation and deallocation performance. In some cases, it can also increase memory usage. However, it is a valuable debugging tool.</p>
+<p>Note that once an exception is thrown, the memory context is in a bad state, so it is not a good idea to reuse it.</p>
 <div class="fragment"><div class="line"><span class="comment">/*</span></div>
 <div class="line"><span class="comment"> * Copyright (c) 2021 Heng Yuan</span></div>
 <div class="line"><span class="comment"> *</span></div>
@@ -499,7 +499,7 @@ Memory Corruption Detection</h1>
 <div class="ttc" id="aclasscookmem_1_1Exception_html_a5ba3630c5291e265bc4b05399cf41e0e"><div class="ttname"><a href="classcookmem_1_1Exception.html#a5ba3630c5291e265bc4b05399cf41e0e">cookmem::Exception::getMessage</a></div><div class="ttdeci">const char * getMessage() const</div><div class="ttdef"><b>Definition</b> exception.h:64</div></div>
 </div><!-- fragment --><h1><a class="anchor" id="callerSTLAlloc"></a>
 Caller-owned STL Allocator</h1>
-<p>The standard library containers accept custom allocators, allowing their storage to come from a CookMem memory context. cookmem::Allocator&lt;T&gt; adapts a context to the C++ allocator interface. For example, a <code>std::vector</code>, <code>std::list</code>, or <code>std::basic_string</code> can allocate from the same context as the rest of the application.</p>
+<p>Standard library containers accept custom allocators, allowing their storage to come from a CookMem memory context. cookmem::Allocator&lt;T&gt; adapts a context to the C++ allocator interface. For example, <code>std::vector</code>, <code>std::list</code>, and <code>std::basic_string</code> can allocate from the same context as the rest of the application.</p>
 <p>With the default provider, the application creates and owns the context, then passes an allocator bound to it to each container. Containers using allocators bound to the same context can share its memory pool. This makes context ownership explicit and avoids global state, at the cost of passing allocator instances when constructing containers.</p>
 <div class="fragment"><div class="line"><span class="comment">/*</span></div>
 <div class="line"><span class="comment"> * Copyright (c) 2025-2026 Heng Yuan</span></div>
@@ -550,7 +550,7 @@ Caller-owned STL Allocator</h1>
 </div><!-- fragment --><h1><a class="anchor" id="tlsSTLAlloc"></a>
 Thread-local and Scoped Context STL Allocators</h1>
 <p><a class="el" href="classcookmem_1_1TLSContextProvider.html">cookmem::TLSContextProvider</a> provides one context per thread for each context type and tag type. Use a unique tag to keep allocator groups separate. By default, this context lasts for the lifetime of the thread. To limit it to a lexical scope instead, declare a <a class="el" href="classcookmem_1_1TLSContextScope.html">cookmem::TLSContextScope</a> before the containers. Default-constructed allocators created inside that scope use its context, which is destroyed when the scope exits.</p>
-<p>Use <code>TLSContextProvider&lt;Context, Tag&gt;::getActiveContext()</code> to query the context currently used for allocations; when no matching scope is active, it returns the persistent thread-local context. <code>TLSContextProvider&lt;Context, Tag&gt;::getThreadContext()</code> returns the persistent thread-local context whether or not a scope is active. The provider instance's <code>get()</code> still returns the context to which that instance was bound.</p>
+<p>Use <code>TLSContextProvider&lt;Context, Tag&gt;::getActiveContext()</code> to query the context currently used for allocations. When no matching scope is active, it returns the persistent thread-local context. <code>TLSContextProvider&lt;Context, Tag&gt;::getThreadContext()</code> returns the persistent thread-local context whether or not a scope is active. The provider instance's <code>get()</code> still returns the context to which that instance was bound.</p>
 <p>The function-scope example uses TLSContextScope to release the context as soon as its containers are destroyed. It demonstrates both options: passing <code>true</code> makes its pool share the thread-local context's arena; with CachedMemContext, freed segments can be reused by either context. Passing <code>false</code> gives the scope its own arena. The thread-local example omits the scope, so the provider uses its per-thread context and releases it when the thread exits. In all cases, containers must be destroyed before their context ends and remain on the thread where their allocator was created. Neither approach requires passing allocator instances to containers.</p>
 <div class="fragment"><div class="line"><span class="comment">/*</span></div>
 <div class="line"><span class="comment"> * Copyright (c) 2025-2026 Heng Yuan</span></div>

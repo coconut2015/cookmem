@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['build_20instruction_0',['Test Build Instruction',['../build.html',1,'']]]
+  ['build_20instructions_0',['Build Instructions',['../build.html',1,'']]]
 ];
