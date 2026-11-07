@@ -26,17 +26,24 @@ var NAVTREE =
 [
   [ "CookMem", "index.html", [
     [ "Performance", "index.html#autotoc_md0", null ],
-    [ "Links", "index.html#autotoc_md1", null ],
-    [ "Tutorials", "tutorials.html", [
-      [ "cookmem::FixedArena", "tutorials.html#example_FixedArena", null ],
-      [ "cookmem::MmapArena", "tutorials.html#example_simplememcontext", null ],
-      [ "cookmem::CachedArena", "tutorials.html#example_CachedArena", null ],
-      [ "Copying Data Between Memory Pools", "tutorials.html#example_child", null ],
-      [ "Pointer Information", "tutorials.html#Querying", null ],
-      [ "Corruption Detection", "tutorials.html#Memory", null ],
-      [ "Allocator", "tutorials.html#STL", null ]
+    [ "Use Cases", "index.html#usecases", [
+      [ "Avoiding Synchronization Cost", "index.html#autotoc_md1", null ],
+      [ "Avoiding Individual Frees", "index.html#autotoc_md2", null ],
+      [ "Restrict Memory Usage", "index.html#autotoc_md3", null ],
+      [ "Diagnosing and Debugging", "index.html#autotoc_md4", null ],
+      [ "Links", "index.html#autotoc_md5", null ]
     ] ],
-    [ "Current Limitations", "limitations.html", null ],
+    [ "Tutorials", "tutorials.html", [
+      [ "FixedArena", "tutorials.html#FixedArena", null ],
+      [ "MmapArena", "tutorials.html#MmapArena", null ],
+      [ "CachedArena", "tutorials.html#CachedArena", null ],
+      [ "Copying Data Between Memory Pools", "tutorials.html#copying", null ],
+      [ "Querying Pointer Information", "tutorials.html#querying", null ],
+      [ "Memory Corruption Detection", "tutorials.html#boundcheck", null ],
+      [ "Caller-owned STL Allocator", "tutorials.html#callerSTLAlloc", null ],
+      [ "Thread-local and Scoped Context STL Allocators", "tutorials.html#tlsSTLAlloc", null ]
+    ] ],
+    [ "Limitations", "limitations.html", null ],
     [ "Installation", "install.html", null ],
     [ "Test Build Instruction", "build.html", null ],
     [ "References", "references.html", null ],

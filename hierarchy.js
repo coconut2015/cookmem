@@ -1,6 +1,6 @@
 var hierarchy =
 [
-    [ "cookmem::Allocator< T, Arena, Logger, TreeType >", "classcookmem_1_1Allocator.html", null ],
+    [ "cookmem::Allocator< T, ContextProvider >", "classcookmem_1_1Allocator.html", null ],
     [ "cookmem::CachedArena< Arena, TreeType >", "classcookmem_1_1CachedArena.html", null ],
     [ "cookmem::CachedArena< MmapArena >", "classcookmem_1_1CachedArena.html", null ],
     [ "cookmem::CachedMemContainer< Arena, Logger >", "structcookmem_1_1CachedMemContainer.html", [
@@ -19,6 +19,8 @@ var hierarchy =
     ] ],
     [ "cookmem::MemContext< CachedArena< MmapArena >, NoActionMemLogger, PtrRBTree, void >", "classcookmem_1_1MemContext.html", null ],
     [ "cookmem::MemContext< MmapArena, NoActionMemLogger, PtrRBTree, void >", "classcookmem_1_1MemContext.html", null ],
+    [ "cookmem::MemContextProvider< Context >", "classcookmem_1_1MemContextProvider.html", null ],
+    [ "cookmem::MemContextProvider< CachedMemContext<> >", "classcookmem_1_1MemContextProvider.html", null ],
     [ "cookmem::MemLogger", "classcookmem_1_1MemLogger.html", null ],
     [ "cookmem::MemPool< Arena, Logger, TreeType, T >", "classcookmem_1_1MemPool.html", null ],
     [ "cookmem::MemPool< Arena, Logger, PtrRBTree, void >", "classcookmem_1_1MemPool.html", null ],
@@ -29,11 +31,13 @@ var hierarchy =
     [ "cookmem::NoActionMemLogger", "classcookmem_1_1NoActionMemLogger.html", null ],
     [ "cookmem::PtrAVLTree", "classcookmem_1_1PtrAVLTree.html", null ],
     [ "cookmem::PtrRBNode", "classcookmem_1_1PtrRBNode.html", null ],
-    [ "cookmem::Allocator< T, Arena, Logger, TreeType >::rebind< U >", "structcookmem_1_1Allocator_1_1rebind.html", null ],
+    [ "cookmem::Allocator< T, ContextProvider >::rebind< U >", "structcookmem_1_1Allocator_1_1rebind.html", null ],
     [ "cookmem::RedBlackTree< Node >", "classcookmem_1_1RedBlackTree.html", null ],
     [ "cookmem::SimpleMemContainer< Arena, Logger >", "structcookmem_1_1SimpleMemContainer.html", [
       [ "cookmem::SimpleMemContext< Arena, Logger, TreeType, T >", "classcookmem_1_1SimpleMemContext.html", null ]
     ] ],
     [ "cookmem::SimpleMemContainer< MmapArena, NoActionMemLogger >", "structcookmem_1_1SimpleMemContainer.html", null ],
-    [ "cookmem::StatsLogger", "classcookmem_1_1StatsLogger.html", null ]
+    [ "cookmem::StatsLogger", "classcookmem_1_1StatsLogger.html", null ],
+    [ "cookmem::TLSContextProvider< Context, Tag >", "classcookmem_1_1TLSContextProvider.html", null ],
+    [ "cookmem::TLSContextScope< Context, Tag >", "classcookmem_1_1TLSContextScope.html", null ]
 ];

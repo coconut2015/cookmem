@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>CookMem: cookmem::Allocator&lt; T, Arena, Logger, TreeType &gt; Class Template Reference</title>
+<title>CookMem: cookmem::Allocator&lt; T, ContextProvider &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -95,7 +95,7 @@ $(document).ready(function(){initNavTree('classcookmem_1_1Allocator.html',''); i
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="classcookmem_1_1Allocator-members.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">cookmem::Allocator&lt; T, Arena, Logger, TreeType &gt; Class Template Reference</div></div>
+  <div class="headertitle"><div class="title">cookmem::Allocator&lt; T, ContextProvider &gt; Class Template Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
@@ -108,88 +108,98 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:afcb3d4bf42527cd2fa89fed91b090d27" id="r_afcb3d4bf42527cd2fa89fed91b090d27"><td class="memItemLeft" align="right" valign="top"><a id="afcb3d4bf42527cd2fa89fed91b090d27" name="afcb3d4bf42527cd2fa89fed91b090d27"></a>
-<a class="el" href="classcookmem_1_1Allocator.html">typedef</a> <a class="el" href="classcookmem_1_1CachedMemContext.html">CachedMemContext</a>&lt; <a class="el" href="classcookmem_1_1Allocator.html">Arena</a>, <a class="el" href="classcookmem_1_1Allocator.html">Logger</a>, <a class="el" href="classcookmem_1_1Allocator.html">TreeType</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>context_type</b></td></tr>
-<tr class="separator:afcb3d4bf42527cd2fa89fed91b090d27"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7892eaf8ecbab82a78798e2b6d7df4b1" id="r_a7892eaf8ecbab82a78798e2b6d7df4b1"><td class="memItemLeft" align="right" valign="top"><a id="a7892eaf8ecbab82a78798e2b6d7df4b1" name="a7892eaf8ecbab82a78798e2b6d7df4b1"></a>
+<tr class="memitem:a435904727d58785df46b44bdd3ccacdc" id="r_a435904727d58785df46b44bdd3ccacdc"><td class="memItemLeft" align="right" valign="top"><a id="a435904727d58785df46b44bdd3ccacdc" name="a435904727d58785df46b44bdd3ccacdc"></a>
+<a class="el" href="classcookmem_1_1Allocator.html">typedef</a> <a class="el" href="classcookmem_1_1Allocator.html">ContextProvider</a>&#160;</td><td class="memItemRight" valign="bottom"><b>context_provider_type</b></td></tr>
+<tr class="separator:a435904727d58785df46b44bdd3ccacdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd19c46008b0236c3b56bdced90b85c9" id="r_afd19c46008b0236c3b56bdced90b85c9"><td class="memItemLeft" align="right" valign="top"><a id="afd19c46008b0236c3b56bdced90b85c9" name="afd19c46008b0236c3b56bdced90b85c9"></a>
+<a class="el" href="classcookmem_1_1Allocator.html">typedef</a> ContextProvider::context_type&#160;</td><td class="memItemRight" valign="bottom"><b>context_type</b></td></tr>
+<tr class="separator:afd19c46008b0236c3b56bdced90b85c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a41b93215a53cb1bc118964b6d4bd312e" id="r_a41b93215a53cb1bc118964b6d4bd312e"><td class="memItemLeft" align="right" valign="top"><a id="a41b93215a53cb1bc118964b6d4bd312e" name="a41b93215a53cb1bc118964b6d4bd312e"></a>
 <a class="el" href="classcookmem_1_1Allocator.html">typedef</a> <a class="el" href="classcookmem_1_1Allocator.html">T</a>&#160;</td><td class="memItemRight" valign="bottom"><b>value_type</b></td></tr>
-<tr class="separator:a7892eaf8ecbab82a78798e2b6d7df4b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4578f216188fa6c40d43dd7327e9107b" id="r_a4578f216188fa6c40d43dd7327e9107b"><td class="memItemLeft" align="right" valign="top"><a id="a4578f216188fa6c40d43dd7327e9107b" name="a4578f216188fa6c40d43dd7327e9107b"></a>
+<tr class="separator:a41b93215a53cb1bc118964b6d4bd312e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63ea11986b34d79d892e6667e63066d6" id="r_a63ea11986b34d79d892e6667e63066d6"><td class="memItemLeft" align="right" valign="top"><a id="a63ea11986b34d79d892e6667e63066d6" name="a63ea11986b34d79d892e6667e63066d6"></a>
 <a class="el" href="classcookmem_1_1Allocator.html">typedef</a> <a class="el" href="classcookmem_1_1Allocator.html">T</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>pointer</b></td></tr>
-<tr class="separator:a4578f216188fa6c40d43dd7327e9107b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa8753e26a80ab8849bc55ca79aba7266" id="r_aa8753e26a80ab8849bc55ca79aba7266"><td class="memItemLeft" align="right" valign="top"><a id="aa8753e26a80ab8849bc55ca79aba7266" name="aa8753e26a80ab8849bc55ca79aba7266"></a>
+<tr class="separator:a63ea11986b34d79d892e6667e63066d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac53e0ebd6819c154c6f6d031d665a015" id="r_ac53e0ebd6819c154c6f6d031d665a015"><td class="memItemLeft" align="right" valign="top"><a id="ac53e0ebd6819c154c6f6d031d665a015" name="ac53e0ebd6819c154c6f6d031d665a015"></a>
 <a class="el" href="classcookmem_1_1Allocator.html">typedef</a> <a class="el" href="classcookmem_1_1Allocator.html">const</a> <a class="el" href="classcookmem_1_1Allocator.html">T</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>const_pointer</b></td></tr>
-<tr class="separator:aa8753e26a80ab8849bc55ca79aba7266"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7405974e6d095a0cb7848f264df7d03f" id="r_a7405974e6d095a0cb7848f264df7d03f"><td class="memItemLeft" align="right" valign="top"><a id="a7405974e6d095a0cb7848f264df7d03f" name="a7405974e6d095a0cb7848f264df7d03f"></a>
+<tr class="separator:ac53e0ebd6819c154c6f6d031d665a015"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40d700a719255efe1ff0d47aace6640d" id="r_a40d700a719255efe1ff0d47aace6640d"><td class="memItemLeft" align="right" valign="top"><a id="a40d700a719255efe1ff0d47aace6640d" name="a40d700a719255efe1ff0d47aace6640d"></a>
 <a class="el" href="classcookmem_1_1Allocator.html">typedef</a> <a class="el" href="classcookmem_1_1Allocator.html">T</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>reference</b></td></tr>
-<tr class="separator:a7405974e6d095a0cb7848f264df7d03f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a21e6e6787da625ddb83a4b0baa52879d" id="r_a21e6e6787da625ddb83a4b0baa52879d"><td class="memItemLeft" align="right" valign="top"><a id="a21e6e6787da625ddb83a4b0baa52879d" name="a21e6e6787da625ddb83a4b0baa52879d"></a>
+<tr class="separator:a40d700a719255efe1ff0d47aace6640d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae66b56248ab77ed8120956083497430d" id="r_ae66b56248ab77ed8120956083497430d"><td class="memItemLeft" align="right" valign="top"><a id="ae66b56248ab77ed8120956083497430d" name="ae66b56248ab77ed8120956083497430d"></a>
 <a class="el" href="classcookmem_1_1Allocator.html">typedef</a> <a class="el" href="classcookmem_1_1Allocator.html">const</a> <a class="el" href="classcookmem_1_1Allocator.html">T</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>const_reference</b></td></tr>
-<tr class="separator:a21e6e6787da625ddb83a4b0baa52879d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5f864a69ee41f5c2b0e154bcce1b1363" id="r_a5f864a69ee41f5c2b0e154bcce1b1363"><td class="memItemLeft" align="right" valign="top"><a id="a5f864a69ee41f5c2b0e154bcce1b1363" name="a5f864a69ee41f5c2b0e154bcce1b1363"></a>
+<tr class="separator:ae66b56248ab77ed8120956083497430d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66ac77e61fd393f80206b1699a85341a" id="r_a66ac77e61fd393f80206b1699a85341a"><td class="memItemLeft" align="right" valign="top"><a id="a66ac77e61fd393f80206b1699a85341a" name="a66ac77e61fd393f80206b1699a85341a"></a>
 <a class="el" href="classcookmem_1_1Allocator.html">typedef</a> std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>size_type</b></td></tr>
-<tr class="separator:a5f864a69ee41f5c2b0e154bcce1b1363"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acc80e2539edb34cf0965a59142ab781c" id="r_acc80e2539edb34cf0965a59142ab781c"><td class="memItemLeft" align="right" valign="top"><a id="acc80e2539edb34cf0965a59142ab781c" name="acc80e2539edb34cf0965a59142ab781c"></a>
+<tr class="separator:a66ac77e61fd393f80206b1699a85341a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac23a0e4e15833f76bf355a47dbf1c562" id="r_ac23a0e4e15833f76bf355a47dbf1c562"><td class="memItemLeft" align="right" valign="top"><a id="ac23a0e4e15833f76bf355a47dbf1c562" name="ac23a0e4e15833f76bf355a47dbf1c562"></a>
 <a class="el" href="classcookmem_1_1Allocator.html">typedef</a> std::ptrdiff_t&#160;</td><td class="memItemRight" valign="bottom"><b>difference_type</b></td></tr>
-<tr class="separator:acc80e2539edb34cf0965a59142ab781c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab351c9ac64682cb23a8424c3ab6a38a3" id="r_ab351c9ac64682cb23a8424c3ab6a38a3"><td class="memItemLeft" align="right" valign="top"><a id="ab351c9ac64682cb23a8424c3ab6a38a3" name="ab351c9ac64682cb23a8424c3ab6a38a3"></a>
-<a class="el" href="classcookmem_1_1Allocator.html">typedef</a> std::false_type&#160;</td><td class="memItemRight" valign="bottom"><b>propagate_on_container_copy_assignment</b></td></tr>
-<tr class="separator:ab351c9ac64682cb23a8424c3ab6a38a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a726391afd20fe7ef9b3712c783edbd2e" id="r_a726391afd20fe7ef9b3712c783edbd2e"><td class="memItemLeft" align="right" valign="top"><a id="a726391afd20fe7ef9b3712c783edbd2e" name="a726391afd20fe7ef9b3712c783edbd2e"></a>
-<a class="el" href="classcookmem_1_1Allocator.html">typedef</a> std::false_type&#160;</td><td class="memItemRight" valign="bottom"><b>propagate_on_container_move_assignment</b></td></tr>
-<tr class="separator:a726391afd20fe7ef9b3712c783edbd2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a568c1dcffc5e908a0abf161d3e680675" id="r_a568c1dcffc5e908a0abf161d3e680675"><td class="memItemLeft" align="right" valign="top"><a id="a568c1dcffc5e908a0abf161d3e680675" name="a568c1dcffc5e908a0abf161d3e680675"></a>
-<a class="el" href="classcookmem_1_1Allocator.html">typedef</a> std::false_type&#160;</td><td class="memItemRight" valign="bottom"><b>propagate_on_container_swap</b></td></tr>
-<tr class="separator:a568c1dcffc5e908a0abf161d3e680675"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae68f873468c1981e7404be29760ad91e" id="r_ae68f873468c1981e7404be29760ad91e"><td class="memItemLeft" align="right" valign="top"><a id="ae68f873468c1981e7404be29760ad91e" name="ae68f873468c1981e7404be29760ad91e"></a>
-<a class="el" href="classcookmem_1_1Allocator.html">typedef</a> std::false_type&#160;</td><td class="memItemRight" valign="bottom"><b>is_always_equal</b></td></tr>
-<tr class="separator:ae68f873468c1981e7404be29760ad91e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:ac23a0e4e15833f76bf355a47dbf1c562"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f5e1ed7397e35d59f1da372d93c7d84" id="r_a0f5e1ed7397e35d59f1da372d93c7d84"><td class="memItemLeft" align="right" valign="top"><a id="a0f5e1ed7397e35d59f1da372d93c7d84" name="a0f5e1ed7397e35d59f1da372d93c7d84"></a>
+<a class="el" href="classcookmem_1_1Allocator.html">typedef</a> ContextProvider::propagate_on_container_copy_assignment&#160;</td><td class="memItemRight" valign="bottom"><b>propagate_on_container_copy_assignment</b></td></tr>
+<tr class="separator:a0f5e1ed7397e35d59f1da372d93c7d84"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae101e7107db1cdda0be3fdce5b65089d" id="r_ae101e7107db1cdda0be3fdce5b65089d"><td class="memItemLeft" align="right" valign="top"><a id="ae101e7107db1cdda0be3fdce5b65089d" name="ae101e7107db1cdda0be3fdce5b65089d"></a>
+<a class="el" href="classcookmem_1_1Allocator.html">typedef</a> ContextProvider::propagate_on_container_move_assignment&#160;</td><td class="memItemRight" valign="bottom"><b>propagate_on_container_move_assignment</b></td></tr>
+<tr class="separator:ae101e7107db1cdda0be3fdce5b65089d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af44b3f3b49003fefef53815889e9302e" id="r_af44b3f3b49003fefef53815889e9302e"><td class="memItemLeft" align="right" valign="top"><a id="af44b3f3b49003fefef53815889e9302e" name="af44b3f3b49003fefef53815889e9302e"></a>
+<a class="el" href="classcookmem_1_1Allocator.html">typedef</a> ContextProvider::propagate_on_container_swap&#160;</td><td class="memItemRight" valign="bottom"><b>propagate_on_container_swap</b></td></tr>
+<tr class="separator:af44b3f3b49003fefef53815889e9302e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8eacc3e88132a7edae06b75cab6d452e" id="r_a8eacc3e88132a7edae06b75cab6d452e"><td class="memItemLeft" align="right" valign="top"><a id="a8eacc3e88132a7edae06b75cab6d452e" name="a8eacc3e88132a7edae06b75cab6d452e"></a>
+<a class="el" href="classcookmem_1_1Allocator.html">typedef</a> ContextProvider::is_always_equal&#160;</td><td class="memItemRight" valign="bottom"><b>is_always_equal</b></td></tr>
+<tr class="separator:a8eacc3e88132a7edae06b75cab6d452e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a91be2d1da19f6d15e7c264e9fd21f933" id="r_a91be2d1da19f6d15e7c264e9fd21f933"><td class="memItemLeft" align="right" valign="top"><a id="a91be2d1da19f6d15e7c264e9fd21f933" name="a91be2d1da19f6d15e7c264e9fd21f933"></a>
+<tr class="memitem:af60969e027cbbf301ce3581380af23c8" id="r_af60969e027cbbf301ce3581380af23c8"><td class="memTemplParams" colspan="2"><a id="af60969e027cbbf301ce3581380af23c8" name="af60969e027cbbf301ce3581380af23c8"></a>
+template&lt;<a class="el" href="classcookmem_1_1Allocator.html">class</a> <a class="el" href="classcookmem_1_1Allocator.html">Provider</a>  = ContextProvider&gt; </td></tr>
+<tr class="memitem:af60969e027cbbf301ce3581380af23c8"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><b>Allocator</b> (<a class="el" href="classcookmem_1_1Allocator.html">typename</a> std::enable_if&lt; std::is_default_constructible&lt; <a class="el" href="classcookmem_1_1Allocator.html">Provider</a> &gt;::value, <a class="el" href="classcookmem_1_1Allocator.html">int</a> &gt;::type *=<a class="el" href="classcookmem_1_1Allocator.html">nullptr</a>)</td></tr>
+<tr class="separator:af60969e027cbbf301ce3581380af23c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1aff6485deb75994d17a855bb07f017" id="r_ab1aff6485deb75994d17a855bb07f017"><td class="memItemLeft" align="right" valign="top"><a id="ab1aff6485deb75994d17a855bb07f017" name="ab1aff6485deb75994d17a855bb07f017"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Allocator</b> (context_type &amp;<a class="el" href="classcookmem_1_1Allocator.html">context</a>)</td></tr>
+<tr class="separator:ab1aff6485deb75994d17a855bb07f017"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28914c6ff448d730c61c487bb64a65e9" id="r_a28914c6ff448d730c61c487bb64a65e9"><td class="memItemLeft" align="right" valign="top"><a id="a28914c6ff448d730c61c487bb64a65e9" name="a28914c6ff448d730c61c487bb64a65e9"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Allocator</b> (<a class="el" href="classcookmem_1_1Allocator.html">const</a> <a class="el" href="classcookmem_1_1Allocator.html">ContextProvider</a> &amp;<a class="el" href="classcookmem_1_1Allocator.html">provider</a>)</td></tr>
+<tr class="separator:a28914c6ff448d730c61c487bb64a65e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a77bf5626ba00da68818c49320b086eb0" id="r_a77bf5626ba00da68818c49320b086eb0"><td class="memItemLeft" align="right" valign="top"><a id="a77bf5626ba00da68818c49320b086eb0" name="a77bf5626ba00da68818c49320b086eb0"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Allocator</b> (<a class="el" href="classcookmem_1_1Allocator.html">const</a> <a class="el" href="classcookmem_1_1Allocator.html">Allocator</a> &amp;other)</td></tr>
-<tr class="separator:a91be2d1da19f6d15e7c264e9fd21f933"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a02f9e373285cbc4413d0adee9bc8894b" id="r_a02f9e373285cbc4413d0adee9bc8894b"><td class="memItemLeft" align="right" valign="top"><a id="a02f9e373285cbc4413d0adee9bc8894b" name="a02f9e373285cbc4413d0adee9bc8894b"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Allocator</b> (<a class="el" href="classcookmem_1_1CachedMemContext.html">context_type</a> &amp;<a class="el" href="classcookmem_1_1Allocator.html">context</a>)</td></tr>
-<tr class="separator:a02f9e373285cbc4413d0adee9bc8894b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae75099a29a2beb6d868a0f1c3962a8b4" id="r_ae75099a29a2beb6d868a0f1c3962a8b4"><td class="memTemplParams" colspan="2"><a id="ae75099a29a2beb6d868a0f1c3962a8b4" name="ae75099a29a2beb6d868a0f1c3962a8b4"></a>
+<tr class="separator:a77bf5626ba00da68818c49320b086eb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a17925bd33cbde12f31e4615a36387dec" id="r_a17925bd33cbde12f31e4615a36387dec"><td class="memTemplParams" colspan="2"><a id="a17925bd33cbde12f31e4615a36387dec" name="a17925bd33cbde12f31e4615a36387dec"></a>
 template&lt;<a class="el" href="classcookmem_1_1Allocator.html">class</a> <a class="el" href="classcookmem_1_1Allocator.html">U</a> &gt; </td></tr>
-<tr class="memitem:ae75099a29a2beb6d868a0f1c3962a8b4"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><b>Allocator</b> (<a class="el" href="classcookmem_1_1Allocator.html">const</a> <a class="el" href="classcookmem_1_1Allocator.html">Allocator</a>&lt; <a class="el" href="classcookmem_1_1Allocator.html">U</a>, <a class="el" href="classcookmem_1_1Allocator.html">Arena</a>, <a class="el" href="classcookmem_1_1Allocator.html">Logger</a>, <a class="el" href="classcookmem_1_1Allocator.html">TreeType</a> &gt; &amp;other)</td></tr>
-<tr class="separator:ae75099a29a2beb6d868a0f1c3962a8b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a68b0f012f7979dfe2302b35bafd6588d" id="r_a68b0f012f7979dfe2302b35bafd6588d"><td class="memItemLeft" align="right" valign="top"><a id="a68b0f012f7979dfe2302b35bafd6588d" name="a68b0f012f7979dfe2302b35bafd6588d"></a>
+<tr class="memitem:a17925bd33cbde12f31e4615a36387dec"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><b>Allocator</b> (<a class="el" href="classcookmem_1_1Allocator.html">const</a> <a class="el" href="classcookmem_1_1Allocator.html">Allocator</a>&lt; <a class="el" href="classcookmem_1_1Allocator.html">U</a>, <a class="el" href="classcookmem_1_1Allocator.html">ContextProvider</a> &gt; &amp;other)</td></tr>
+<tr class="separator:a17925bd33cbde12f31e4615a36387dec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38861ea317e62a48008c59d3d3ed6b7d" id="r_a38861ea317e62a48008c59d3d3ed6b7d"><td class="memItemLeft" align="right" valign="top"><a id="a38861ea317e62a48008c59d3d3ed6b7d" name="a38861ea317e62a48008c59d3d3ed6b7d"></a>
 pointer&#160;</td><td class="memItemRight" valign="bottom"><b>allocate</b> (size_type size, <a class="el" href="classcookmem_1_1Allocator.html">const</a> <a class="el" href="classcookmem_1_1Allocator.html">void</a> *=<a class="el" href="classcookmem_1_1Allocator.html">nullptr</a>)</td></tr>
-<tr class="separator:a68b0f012f7979dfe2302b35bafd6588d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac5e0904fc1994a65955866882c468e4d" id="r_ac5e0904fc1994a65955866882c468e4d"><td class="memItemLeft" align="right" valign="top"><a id="ac5e0904fc1994a65955866882c468e4d" name="ac5e0904fc1994a65955866882c468e4d"></a>
+<tr class="separator:a38861ea317e62a48008c59d3d3ed6b7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28e71c9997a19f662c09ad49a768c128" id="r_a28e71c9997a19f662c09ad49a768c128"><td class="memItemLeft" align="right" valign="top"><a id="a28e71c9997a19f662c09ad49a768c128" name="a28e71c9997a19f662c09ad49a768c128"></a>
 <a class="el" href="classcookmem_1_1Allocator.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>deallocate</b> (pointer <a class="el" href="classcookmem_1_1Allocator.html">ptr</a>, size_type)</td></tr>
-<tr class="separator:ac5e0904fc1994a65955866882c468e4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a12158f6e62f61cbcaee98b436c3be6d6" id="r_a12158f6e62f61cbcaee98b436c3be6d6"><td class="memItemLeft" align="right" valign="top"><a id="a12158f6e62f61cbcaee98b436c3be6d6" name="a12158f6e62f61cbcaee98b436c3be6d6"></a>
+<tr class="separator:a28e71c9997a19f662c09ad49a768c128"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81d3a68e167db6cf7fbd0618e6faae90" id="r_a81d3a68e167db6cf7fbd0618e6faae90"><td class="memItemLeft" align="right" valign="top"><a id="a81d3a68e167db6cf7fbd0618e6faae90" name="a81d3a68e167db6cf7fbd0618e6faae90"></a>
 size_type&#160;</td><td class="memItemRight" valign="bottom"><b>max_size</b> () <a class="el" href="classcookmem_1_1Allocator.html">const</a></td></tr>
-<tr class="separator:a12158f6e62f61cbcaee98b436c3be6d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7753eb6fe97126637240e4094e1d5e1a" id="r_a7753eb6fe97126637240e4094e1d5e1a"><td class="memTemplParams" colspan="2"><a id="a7753eb6fe97126637240e4094e1d5e1a" name="a7753eb6fe97126637240e4094e1d5e1a"></a>
+<tr class="separator:a81d3a68e167db6cf7fbd0618e6faae90"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa80f0a5a9941052deac9053d65a82c89" id="r_aa80f0a5a9941052deac9053d65a82c89"><td class="memTemplParams" colspan="2"><a id="aa80f0a5a9941052deac9053d65a82c89" name="aa80f0a5a9941052deac9053d65a82c89"></a>
 template&lt;<a class="el" href="classcookmem_1_1Allocator.html">class</a> <a class="el" href="classcookmem_1_1Allocator.html">U</a> , class... Args&gt; </td></tr>
-<tr class="memitem:a7753eb6fe97126637240e4094e1d5e1a"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1Allocator.html">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>construct</b> (<a class="el" href="classcookmem_1_1Allocator.html">U</a> *<a class="el" href="classcookmem_1_1Allocator.html">ptr</a>, <a class="el" href="classcookmem_1_1Allocator.html">Args</a> &amp;&amp;... <a class="el" href="classcookmem_1_1Allocator.html">args</a>)</td></tr>
-<tr class="separator:a7753eb6fe97126637240e4094e1d5e1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b23a1297f936934088f3d0c307a56b4" id="r_a3b23a1297f936934088f3d0c307a56b4"><td class="memTemplParams" colspan="2"><a id="a3b23a1297f936934088f3d0c307a56b4" name="a3b23a1297f936934088f3d0c307a56b4"></a>
+<tr class="memitem:aa80f0a5a9941052deac9053d65a82c89"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1Allocator.html">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>construct</b> (<a class="el" href="classcookmem_1_1Allocator.html">U</a> *<a class="el" href="classcookmem_1_1Allocator.html">ptr</a>, <a class="el" href="classcookmem_1_1Allocator.html">Args</a> &amp;&amp;... <a class="el" href="classcookmem_1_1Allocator.html">args</a>)</td></tr>
+<tr class="separator:aa80f0a5a9941052deac9053d65a82c89"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a650a7b1462ff1de306a1f86766160180" id="r_a650a7b1462ff1de306a1f86766160180"><td class="memTemplParams" colspan="2"><a id="a650a7b1462ff1de306a1f86766160180" name="a650a7b1462ff1de306a1f86766160180"></a>
 template&lt;<a class="el" href="classcookmem_1_1Allocator.html">class</a> <a class="el" href="classcookmem_1_1Allocator.html">U</a> &gt; </td></tr>
-<tr class="memitem:a3b23a1297f936934088f3d0c307a56b4"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1Allocator.html">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>destroy</b> (<a class="el" href="classcookmem_1_1Allocator.html">U</a> *<a class="el" href="classcookmem_1_1Allocator.html">ptr</a>)</td></tr>
-<tr class="separator:a3b23a1297f936934088f3d0c307a56b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3df5a8a0b227a908d309a729a6149e5f" id="r_a3df5a8a0b227a908d309a729a6149e5f"><td class="memItemLeft" align="right" valign="top"><a id="a3df5a8a0b227a908d309a729a6149e5f" name="a3df5a8a0b227a908d309a729a6149e5f"></a>
-<a class="el" href="classcookmem_1_1Allocator.html">const</a> <a class="el" href="classcookmem_1_1CachedMemContext.html">context_type</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getContext</b> () <a class="el" href="classcookmem_1_1Allocator.html">const</a></td></tr>
-<tr class="separator:a3df5a8a0b227a908d309a729a6149e5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae7f069d9eaab6e56f7c7d17e6e78e1df" id="r_ae7f069d9eaab6e56f7c7d17e6e78e1df"><td class="memTemplParams" colspan="2"><a id="ae7f069d9eaab6e56f7c7d17e6e78e1df" name="ae7f069d9eaab6e56f7c7d17e6e78e1df"></a>
+<tr class="memitem:a650a7b1462ff1de306a1f86766160180"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1Allocator.html">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>destroy</b> (<a class="el" href="classcookmem_1_1Allocator.html">U</a> *<a class="el" href="classcookmem_1_1Allocator.html">ptr</a>)</td></tr>
+<tr class="separator:a650a7b1462ff1de306a1f86766160180"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aecf0ac5dca577377b72536bd7deba02e" id="r_aecf0ac5dca577377b72536bd7deba02e"><td class="memItemLeft" align="right" valign="top"><a id="aecf0ac5dca577377b72536bd7deba02e" name="aecf0ac5dca577377b72536bd7deba02e"></a>
+context_type &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getContext</b> () <a class="el" href="classcookmem_1_1Allocator.html">const</a></td></tr>
+<tr class="separator:aecf0ac5dca577377b72536bd7deba02e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d8c72106989803a4463e013b35296f2" id="r_a9d8c72106989803a4463e013b35296f2"><td class="memTemplParams" colspan="2"><a id="a9d8c72106989803a4463e013b35296f2" name="a9d8c72106989803a4463e013b35296f2"></a>
 template&lt;<a class="el" href="classcookmem_1_1Allocator.html">class</a> <a class="el" href="classcookmem_1_1Allocator.html">U</a> &gt; </td></tr>
-<tr class="memitem:ae7f069d9eaab6e56f7c7d17e6e78e1df"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1Allocator.html">bool</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator==</b> (<a class="el" href="classcookmem_1_1Allocator.html">const</a> <a class="el" href="classcookmem_1_1Allocator.html">Allocator</a>&lt; <a class="el" href="classcookmem_1_1Allocator.html">U</a>, <a class="el" href="classcookmem_1_1Allocator.html">Arena</a>, <a class="el" href="classcookmem_1_1Allocator.html">Logger</a>, <a class="el" href="classcookmem_1_1Allocator.html">TreeType</a> &gt; &amp;other) <a class="el" href="classcookmem_1_1Allocator.html">const</a></td></tr>
-<tr class="separator:ae7f069d9eaab6e56f7c7d17e6e78e1df"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3e3e7463ee1647e3a0d28a1ce9c718f7" id="r_a3e3e7463ee1647e3a0d28a1ce9c718f7"><td class="memTemplParams" colspan="2"><a id="a3e3e7463ee1647e3a0d28a1ce9c718f7" name="a3e3e7463ee1647e3a0d28a1ce9c718f7"></a>
+<tr class="memitem:a9d8c72106989803a4463e013b35296f2"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1Allocator.html">bool</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator==</b> (<a class="el" href="classcookmem_1_1Allocator.html">const</a> <a class="el" href="classcookmem_1_1Allocator.html">Allocator</a>&lt; <a class="el" href="classcookmem_1_1Allocator.html">U</a>, <a class="el" href="classcookmem_1_1Allocator.html">ContextProvider</a> &gt; &amp;other) <a class="el" href="classcookmem_1_1Allocator.html">const</a></td></tr>
+<tr class="separator:a9d8c72106989803a4463e013b35296f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ac5fdb16bbd5a1bc35c8867ad4291e4" id="r_a8ac5fdb16bbd5a1bc35c8867ad4291e4"><td class="memTemplParams" colspan="2"><a id="a8ac5fdb16bbd5a1bc35c8867ad4291e4" name="a8ac5fdb16bbd5a1bc35c8867ad4291e4"></a>
 template&lt;<a class="el" href="classcookmem_1_1Allocator.html">class</a> <a class="el" href="classcookmem_1_1Allocator.html">U</a> &gt; </td></tr>
-<tr class="memitem:a3e3e7463ee1647e3a0d28a1ce9c718f7"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1Allocator.html">bool</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator!=</b> (<a class="el" href="classcookmem_1_1Allocator.html">const</a> <a class="el" href="classcookmem_1_1Allocator.html">Allocator</a>&lt; <a class="el" href="classcookmem_1_1Allocator.html">U</a>, <a class="el" href="classcookmem_1_1Allocator.html">Arena</a>, <a class="el" href="classcookmem_1_1Allocator.html">Logger</a>, <a class="el" href="classcookmem_1_1Allocator.html">TreeType</a> &gt; &amp;other) <a class="el" href="classcookmem_1_1Allocator.html">const</a></td></tr>
-<tr class="separator:a3e3e7463ee1647e3a0d28a1ce9c718f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ac5fdb16bbd5a1bc35c8867ad4291e4"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1Allocator.html">bool</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator!=</b> (<a class="el" href="classcookmem_1_1Allocator.html">const</a> <a class="el" href="classcookmem_1_1Allocator.html">Allocator</a>&lt; <a class="el" href="classcookmem_1_1Allocator.html">U</a>, <a class="el" href="classcookmem_1_1Allocator.html">ContextProvider</a> &gt; &amp;other) <a class="el" href="classcookmem_1_1Allocator.html">const</a></td></tr>
+<tr class="separator:a8ac5fdb16bbd5a1bc35c8867ad4291e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><div class="compoundTemplParams">template&lt;class T, class Arena = MmapArena, class Logger = NoActionMemLogger, class TreeType = PtrRBTree&gt;<br />
-class cookmem::Allocator&lt; T, Arena, Logger, TreeType &gt;</div><p>An allocator backed by a caller-owned CookMem memory context.</p>
-<p><a class="el" href="classcookmem_1_1Allocator.html">Allocator</a> copies and rebound allocators share the same context. </p>
+<div class="textblock"><div class="compoundTemplParams">template&lt;class T, class ContextProvider = MemContextProvider&lt;CachedMemContext&lt;&gt; &gt;&gt;<br />
+class cookmem::Allocator&lt; T, ContextProvider &gt;</div><p>An STL allocator that allocates through its context provider.</p>
+<p><a class="el" href="classcookmem_1_1Allocator.html">Allocator</a> copies and rebound allocators retain the same provider. </p>
 </div><hr/>The documentation for this class was generated from the following file:<ul>
 <li><a class="el" href="allocator_8h_source.html">allocator.h</a></li>
 </ul>

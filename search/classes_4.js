@@ -5,11 +5,13 @@ var searchData=
   ['memcontext_2',['MemContext',['../classcookmem_1_1MemContext.html',1,'cookmem']]],
   ['memcontext_3c_20cachedarena_3c_20mmaparena_20_3e_2c_20noactionmemlogger_2c_20ptrrbtree_2c_20void_20_3e_3',['MemContext&lt; CachedArena&lt; MmapArena &gt;, NoActionMemLogger, PtrRBTree, void &gt;',['../classcookmem_1_1MemContext.html',1,'cookmem']]],
   ['memcontext_3c_20mmaparena_2c_20noactionmemlogger_2c_20ptrrbtree_2c_20void_20_3e_4',['MemContext&lt; MmapArena, NoActionMemLogger, PtrRBTree, void &gt;',['../classcookmem_1_1MemContext.html',1,'cookmem']]],
-  ['memlogger_5',['MemLogger',['../classcookmem_1_1MemLogger.html',1,'cookmem']]],
-  ['mempool_6',['MemPool',['../classcookmem_1_1MemPool.html',1,'cookmem']]],
-  ['mempool_3c_20arena_2c_20logger_2c_20ptrrbtree_2c_20void_20_3e_7',['MemPool&lt; Arena, Logger, PtrRBTree, void &gt;',['../classcookmem_1_1MemPool.html',1,'cookmem']]],
-  ['mempool_3c_20cachedarena_3c_20mmaparena_20_3e_2c_20noactionmemlogger_2c_20ptrrbtree_2c_20void_20_3e_8',['MemPool&lt; CachedArena&lt; MmapArena &gt;, NoActionMemLogger, PtrRBTree, void &gt;',['../classcookmem_1_1MemPool.html',1,'cookmem']]],
-  ['mempool_3c_20mmaparena_2c_20noactionmemlogger_2c_20ptrrbtree_2c_20void_20_3e_9',['MemPool&lt; MmapArena, NoActionMemLogger, PtrRBTree, void &gt;',['../classcookmem_1_1MemPool.html',1,'cookmem']]],
-  ['memstatistics_10',['MemStatistics',['../structcookmem_1_1MemStatistics.html',1,'cookmem']]],
-  ['mmaparena_11',['MmapArena',['../classcookmem_1_1MmapArena.html',1,'cookmem']]]
+  ['memcontextprovider_5',['MemContextProvider',['../classcookmem_1_1MemContextProvider.html',1,'cookmem']]],
+  ['memcontextprovider_3c_20cachedmemcontext_3c_3e_20_3e_6',['MemContextProvider&lt; CachedMemContext&lt;&gt; &gt;',['../classcookmem_1_1MemContextProvider.html',1,'cookmem']]],
+  ['memlogger_7',['MemLogger',['../classcookmem_1_1MemLogger.html',1,'cookmem']]],
+  ['mempool_8',['MemPool',['../classcookmem_1_1MemPool.html',1,'cookmem']]],
+  ['mempool_3c_20arena_2c_20logger_2c_20ptrrbtree_2c_20void_20_3e_9',['MemPool&lt; Arena, Logger, PtrRBTree, void &gt;',['../classcookmem_1_1MemPool.html',1,'cookmem']]],
+  ['mempool_3c_20cachedarena_3c_20mmaparena_20_3e_2c_20noactionmemlogger_2c_20ptrrbtree_2c_20void_20_3e_10',['MemPool&lt; CachedArena&lt; MmapArena &gt;, NoActionMemLogger, PtrRBTree, void &gt;',['../classcookmem_1_1MemPool.html',1,'cookmem']]],
+  ['mempool_3c_20mmaparena_2c_20noactionmemlogger_2c_20ptrrbtree_2c_20void_20_3e_11',['MemPool&lt; MmapArena, NoActionMemLogger, PtrRBTree, void &gt;',['../classcookmem_1_1MemPool.html',1,'cookmem']]],
+  ['memstatistics_12',['MemStatistics',['../structcookmem_1_1MemStatistics.html',1,'cookmem']]],
+  ['mmaparena_13',['MmapArena',['../classcookmem_1_1MmapArena.html',1,'cookmem']]]
 ];

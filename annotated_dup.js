@@ -11,6 +11,7 @@ var annotated_dup =
       [ "MallocArena", "classcookmem_1_1MallocArena.html", "classcookmem_1_1MallocArena" ],
       [ "MemArena", "classcookmem_1_1MemArena.html", "classcookmem_1_1MemArena" ],
       [ "MemContext", "classcookmem_1_1MemContext.html", "classcookmem_1_1MemContext" ],
+      [ "MemContextProvider", "classcookmem_1_1MemContextProvider.html", null ],
       [ "MemLogger", "classcookmem_1_1MemLogger.html", "classcookmem_1_1MemLogger" ],
       [ "MemPool", "classcookmem_1_1MemPool.html", "classcookmem_1_1MemPool" ],
       [ "MemStatistics", "structcookmem_1_1MemStatistics.html", "structcookmem_1_1MemStatistics" ],
@@ -21,6 +22,8 @@ var annotated_dup =
       [ "RedBlackTree", "classcookmem_1_1RedBlackTree.html", "classcookmem_1_1RedBlackTree" ],
       [ "SimpleMemContainer", "structcookmem_1_1SimpleMemContainer.html", null ],
       [ "SimpleMemContext", "classcookmem_1_1SimpleMemContext.html", "classcookmem_1_1SimpleMemContext" ],
-      [ "StatsLogger", "classcookmem_1_1StatsLogger.html", null ]
+      [ "StatsLogger", "classcookmem_1_1StatsLogger.html", null ],
+      [ "TLSContextProvider", "classcookmem_1_1TLSContextProvider.html", null ],
+      [ "TLSContextScope", "classcookmem_1_1TLSContextScope.html", null ]
     ] ]
 ];
