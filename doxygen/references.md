@@ -5,33 +5,33 @@ References {#references}
 
 #### Memory Arenas
 
-Memory arena classes are used to obtain large chunk of memory.  A memory arena can be shared
-by multiple memory contexts.
+Memory arena classes are used to obtain large chunks of memory. A memory arena
+can be shared by multiple memory contexts.
 
-These classes implement cookmem::MemArena interface without explicitly inheriting
-from it.  This is to avoid the overhead of virtual function calls and allows inlining
-of the functions.
+These classes implement the cookmem::MemArena interface without explicitly
+inheriting from it. This avoids the overhead of virtual function calls and
+allows the functions to be inlined.
 
-* cookmem::FixedArena - Wrap around a large chunk of pre-allocated memory and use it as the segment.
-* cookmem::MallocArena - Use `malloc` / `free` to get a large segment.
-* cookmem::MmapArena - Use `mmap` / `munmap` on Unix and `VirtualAlloc` and `VirtualFree` on Windows to get a large segment.
-* cookmem::CachedArena - Cache the segments released to be used later rather than discarding them immediately.
+* cookmem::FixedArena - Wraps a large chunk of pre-allocated memory and uses it as the segment.
+* cookmem::MallocArena - Uses `malloc` / `free` to get a large segment.
+* cookmem::MmapArena - Uses `mmap` / `munmap` on Unix and `VirtualAlloc` / `VirtualFree` on Windows to get a large segment.
+* cookmem::CachedArena - Caches released segments for later use rather than discarding them immediately.
 
 #### Memory Logger
 
 Memory logger classes are used to log memory context activities.
 
-These classes implement cookmem::MemLogger interface without explicitly
-inheriting from it.  This is to avoid the overhead of virtual function
-calls and allows inlining of the functions.
+These classes implement the cookmem::MemLogger interface without explicitly
+inheriting from it. This avoids the overhead of virtual function calls and
+allows the functions to be inlined.
 
 * cookmem::NoActionMemLogger - Do nothing.
 * cookmem::StatsLogger - Mostly for debugging purposes to gather statistics on memory allocations.
 
 #### Memory Pool
 
-Memory pool does the allocation / deallocation of smaller chunks of memory inside the segments
-obtained from memory arenas.
+The memory pool allocates and deallocates smaller chunks of memory within the
+segments obtained from memory arenas.
 
 Currently, there is only a single implementation.
 
@@ -39,30 +39,36 @@ Currently, there is only a single implementation.
 
 ### Memory Contexts
 
-Memory context classes contains the API interfaces users actually call to
-allocate / deallocate memories.  They use the backend cookmem::MemArena,
+Memory context classes contain the API that users call to allocate and
+deallocate memory. They use the backend cookmem::MemArena,
 cookmem::MemLogger and cookmem::MemPool to do the actual work.
 
-The idea is that one can mix match different backend components to create
-a suitable memory context that one needs.
+The backend components can be mixed and matched to create a suitable memory
+context.
 
 Furthermore, multiple memory contexts can share the same memory arena.
-With cookmem::CachedArena, it is possible that when one memory contexts
-is done, another memory context can re-use the segments allocated
-by the previous memory context.  Thus, we can further avoid making
-expensive calls to allocate large segments.
+With cookmem::CachedArena, when one memory context is done, another context
+can reuse the segments allocated by the previous context. Thus, we can further
+avoid expensive calls to allocate large segments.
 
 * cookmem::SimpleMemContext - Default uses cookmem::MmapArena + cookmem::NoActionMemLogger
 * cookmem::CachedMemContext - Default uses cookmem::CachedArena<cookmem::MmapArena> + cookmem::NoActionMemLogger
 
 ### STL Allocator
 
-There is one STL allocator implementation, cookmem::Allocator.  It depends
-on memory context provider to provide the cookmem::MemContext instance.
+There is one STL allocator implementation, cookmem::Allocator. It depends
+on a memory context provider to provide the cookmem::MemContext instance.
 
 * cookmem::Allocator
 
 There are two memory context providers.
 
 * cookmem::MemContextProvider - caller owned memory context
-* cookmem::TLSContextProvider - static thread-local storage memory context
+* cookmem::TLSContextProvider - thread-local storage memory context
+
+The scoped context helper temporarily overrides the context used by
+default-constructed allocators with the matching cookmem::TLSContextProvider.
+Declare it before containers that use the scoped context so the containers
+are destroyed before the scope ends.
+
+* cookmem::TLSContextScope - scopes a context to a lexical block

@@ -1,15 +1,15 @@
-Test Build Instruction {#build}
-----------------------
+Build Instructions {#build}
+------------------
 
 ### Linux
 
-Run the following command to build.
+Run the following command to build:
 
 ```bash
 ./make.sh [type]
 ```
 
-``type`` can be one of the following:
+`type` can be one of the following:
 
 * ``doc`` - for generating Doxygen documents.
 * ``debug`` - for building tests for debugging purposes.  Code coverage report
@@ -20,13 +20,13 @@ Run the following command to build.
 
 ### Windows
 
-Run the following command to build.
+Run the following command to build:
 
 ```bash
 make.cmd [type]
 ```
 
-``type`` can be one of the following:
+`type` can be one of the following:
 
 * ``doc`` - for generating Doxygen documents.
 * ``debug`` - for building tests for debugging purposes.  Code coverage report
