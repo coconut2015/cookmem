@@ -325,8 +325,9 @@ private:
 
     class MemSegment
     {
-    public:
-        static const size_type  SEGMENT_HEADER = offsetof (MemSegment, m_pad);
+        // MemPool takes the offset of m_pad (see SEGMENT_HEADER).
+        friend class MemPool;
+
     private:
         /**
          * Allocated size.
@@ -496,9 +497,15 @@ private:
      */
     static const size_type  MIN_REQUEST = MIN_CHUNK_SIZE - CHUNK_OVERHEAD;
     /**
+     * The size of the segment header before MemSegment::m_pad.  It is
+     * defined here rather than inside MemSegment, because offsetof cannot be
+     * used while the class is still incomplete.
+     */
+    static const size_type  SEGMENT_HEADER = offsetof (MemSegment, m_pad);
+    /**
      * The number of extra bytes needed for a segment.
      */
-    static const size_type  SEGMENT_OVERHEAD = ((((MemSegment::SEGMENT_HEADER + ALIGN_MASK) & ~ALIGN_MASK) + sizeof(MemChunk) + +ALIGN_MASK) & ~ALIGN_MASK);
+    static const size_type  SEGMENT_OVERHEAD = ((((SEGMENT_HEADER + ALIGN_MASK) & ~ALIGN_MASK) + sizeof(MemChunk) + +ALIGN_MASK) & ~ALIGN_MASK);
 private:
     /**
      * The memory arena used to allocate / free large memory segments.
