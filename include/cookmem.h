@@ -17,6 +17,8 @@
 #define COOK_MEM_H
 
 #include "cookmem/exception.h"
+#include "cookmem/avltree.h"
+#include "cookmem/rbtree.h"
 #include "cookmem/mallocarena.h"
 #include "cookmem/mmaparena.h"
 #include "cookmem/context.h"

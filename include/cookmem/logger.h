@@ -17,7 +17,6 @@
 #define COOK_MEM_LOGGER_H
 
 #include <cstddef>
-#include <cstdint>
 #include <cstdio>
 
 #include "exception.h"

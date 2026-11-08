@@ -18,6 +18,7 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <cstdio>
 #include <cstring>
 
 #ifdef WIN32
@@ -26,7 +27,7 @@
 
 #include "config.h"
 #include "exception.h"
-#include "avltree.h"
+#include "logger.h"
 #include "rbtree.h"
 #include "circularlist.h"
 
@@ -925,25 +926,34 @@ public:
             bool        prevChunkUsed = chunk->isPrevChunkUsed ();
             MemChunk*   nextChunk = chunk->getNextChunk (chunkSize);
             bool        nextChunkUsed = nextChunk->isUsed ();
-            MemChunk*   freeChunk = chunk;
-            size_type   freeChunkSize = chunkSize;
 
-            if (!prevChunkUsed)
+            // Fast path: when only the previous chunk is free, it may be able
+            // to absorb this chunk without being moved to a different place.
+            // This is common when memory is freed in allocation order.
+            if (prevChunkUsed ||
+                !nextChunkUsed ||
+                !growFreeChunkInPlace (chunk->getPrevChunk (), chunkSize))
             {
-                MemChunk* prevChunk = chunk->getPrevChunk ();
-                removeChunk (prevChunk);
-                freeChunk = prevChunk;
-                freeChunkSize += prevChunk->getChunkSize ();
-            }
+                MemChunk*   freeChunk = chunk;
+                size_type   freeChunkSize = chunkSize;
 
-            if (!nextChunkUsed)
-            {
-                freeChunkSize += nextChunk->getChunkSize ();
-                removeChunk (nextChunk);
-            }
+                if (!prevChunkUsed)
+                {
+                    MemChunk* prevChunk = chunk->getPrevChunk ();
+                    removeChunk (prevChunk);
+                    freeChunk = prevChunk;
+                    freeChunkSize += prevChunk->getChunkSize ();
+                }
 
-            freeChunk->setFreeChunkSize (freeChunkSize);
-            addChunk (freeChunk);
+                if (!nextChunkUsed)
+                {
+                    freeChunkSize += nextChunk->getChunkSize ();
+                    removeChunk (nextChunk);
+                }
+
+                freeChunk->setFreeChunkSize (freeChunkSize);
+                addChunk (freeChunk);
+            }
 
             ++m_numFrees;
             if (m_numFrees >= m_trimEmptySegmentsInterval)
@@ -1001,6 +1011,13 @@ public:
                         (m_dv != nullptr &&
                          !m_dv->isUsed () &&
                          m_dv->getChunkSize () == m_dvSize));
+
+        // A tree bin is marked in the tree map if and only if its tree is
+        // not empty.
+        for (BinIndexType binIndex = 0; binIndex < NTREEBINS; ++binIndex)
+        {
+            COOKMEM_ASSERT (isTreeMapMarked (binIndex) == !treeAt (binIndex).isEmpty ());
+        }
 
         MemSegment* seg = m_segList;
         while (seg)
@@ -1336,7 +1353,13 @@ private:
             {
                 chunk = reinterpret_cast<MemChunk*>(tree.remove(actualSize));
                 if (chunk != nullptr)
+                {
+                    if (tree.isEmpty ())
+                    {
+                        clearTreeMap (binIndex);
+                    }
                     break;
+                }
             }
         }
 
@@ -1391,15 +1414,30 @@ private:
     {
         MemChunk* chunk = m_dv;
         size_type remainSize = m_dvSize - size;
-        removeChunk (chunk);
 
         if (remainSize >= MIN_CHUNK_SIZE)
         {
             MemChunk* remainChunk = (MemChunk*)((char*)chunk + size);
             chunk->setFreeChunkSize (size);
             remainChunk->setFreeChunkSize (remainSize);
-            addChunk (remainChunk);
+
+            if (!isSmallChunk (remainSize))
+            {
+                // The remainder is still a large chunk, so it simply becomes
+                // the new designated victim.
+                m_dv = remainChunk;
+                m_dvSize = remainSize;
+                return chunk;
+            }
+
+            m_dv = nullptr;
+            m_dvSize = 0;
+            addSmallChunk (remainChunk);
+            return chunk;
         }
+
+        m_dv = nullptr;
+        m_dvSize = 0;
         return chunk;
     }
 
@@ -1598,6 +1636,61 @@ private:
             PtrTreeType& tree = treeAt (treeBinIndex);
             return tree.contains (chunk);
         }
+    }
+
+    /**
+     * Try to grow a free chunk in place, so that it absorbs the memory that
+     * immediately follows it.  This avoids removing the chunk from its bin
+     * and adding it back.
+     *
+     * This is done only when the chunk can stay where it is: it is the
+     * designated victim, or it is a large chunk that stays in the same tree
+     * bin and the same position within the tree.
+     *
+     * @param   chunk
+     *          a free chunk.
+     * @param   extraSize
+     *          the size of the memory immediately following the chunk.
+     * @return  true if the chunk was grown.  false if nothing was changed.
+     */
+    inline bool
+    growFreeChunkInPlace (MemChunk* chunk, size_type extraSize)
+    {
+        size_type oldSize = chunk->getChunkSize ();
+        size_type newSize = oldSize + extraSize;
+
+        if (chunk == m_dv)
+        {
+            chunk->setFreeChunkSize (newSize);
+            m_dvSize = newSize;
+            return true;
+        }
+
+        if (isSmallChunk (oldSize))
+        {
+            return false;
+        }
+
+        // The tree bin is determined by the two most significant bits of the
+        // size (see cookmem_getLargeBinIndex).  If the bits that differ are
+        // all below oldSize / 4, the two most significant bits are unchanged,
+        // so the chunk stays in the same bin.  This check is conservative.
+        if ((oldSize ^ newSize) > (oldSize >> 2))
+        {
+            return false;
+        }
+
+        BinIndexType treeBinIndex;
+        cookmem_getLargeBinIndex (oldSize, treeBinIndex);
+        if (!treeAt (treeBinIndex).canGrowInPlace (chunk, newSize))
+        {
+            return false;
+        }
+
+        // The size field of the chunk is also the value of its tree node, so
+        // this updates the tree as well.
+        chunk->setFreeChunkSize (newSize);
+        return true;
     }
 
     inline void

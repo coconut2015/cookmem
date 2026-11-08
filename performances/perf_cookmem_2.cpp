@@ -22,6 +22,12 @@
 
 #include "perftest.h"
 
+/**
+ * Fill, clear and fill again.
+ *
+ * Same as perf_cookmem_1, but the vector is cleared and filled a second
+ * time, so the second pass reuses the chunks freed by the first.
+ */
 struct Test1
 {
     void

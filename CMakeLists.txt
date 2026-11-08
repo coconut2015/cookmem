@@ -1,6 +1,12 @@
-CMAKE_MINIMUM_REQUIRED (VERSION 3.1)
+CMAKE_MINIMUM_REQUIRED (VERSION 3.12)
+
+# The version number is kept in version.txt.  Editing it re-runs CMake.
+file (STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/version.txt" COOKMEM_VERSION LIMIT_COUNT 1)
+string (STRIP "${COOKMEM_VERSION}" COOKMEM_VERSION)
+set_property (DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/version.txt")
+
 project (CookMem
-	VERSION 0.0.0.1
+	VERSION ${COOKMEM_VERSION}
 	LANGUAGES CXX
 )
 
@@ -29,6 +35,7 @@ if (UNIX)
 			NAME test_coverage
 			EXECUTABLE ctest
 			DEPENDENCIES ctest
+			EXCLUDE "/usr/*" "tests/*" "examples/*" "performances/*"
 		)
 
 		APPEND_COVERAGE_COMPILER_FLAGS()
@@ -66,6 +73,10 @@ if (BUILD_DOC)
 endif (BUILD_DOC)
 
 include_directories(include/)
+
+# Debug builds define COOKMEM_DEBUG so that the internal assertions
+# (COOKMEM_ASSERT) are checked.  Release builds are free of assertions.
+add_compile_definitions ($<$<CONFIG:Debug>:COOKMEM_DEBUG=1>)
 
 #add_library(cookmem STATIC
 #)
@@ -174,6 +185,46 @@ if (UNIX)
 		performances/perf_cookmem_4.cpp)
 	add_test(NAME perf_cookmem_4
 		COMMAND perf_cookmem_4)
+
+	add_executable(perf_cookmem_5
+		performances/perf_cookmem_5.cpp)
+	add_test(NAME perf_cookmem_5
+		COMMAND perf_cookmem_5)
+
+	add_executable(perf_cookmem_6
+		performances/perf_cookmem_6.cpp)
+	add_test(NAME perf_cookmem_6
+		COMMAND perf_cookmem_6)
+
+	add_executable(perf_cookmem_7
+		performances/perf_cookmem_7.cpp)
+	add_test(NAME perf_cookmem_7
+		COMMAND perf_cookmem_7)
+
+	add_executable(perf_cookmem_8
+		performances/perf_cookmem_8.cpp)
+	add_test(NAME perf_cookmem_8
+		COMMAND perf_cookmem_8)
+
+	add_executable(perf_cookmem_9
+		performances/perf_cookmem_9.cpp)
+	add_test(NAME perf_cookmem_9
+		COMMAND perf_cookmem_9)
+
+	add_executable(perf_cookmem_10
+		performances/perf_cookmem_10.cpp)
+	add_test(NAME perf_cookmem_10
+		COMMAND perf_cookmem_10)
+
+	add_executable(perf_cookmem_11
+		performances/perf_cookmem_11.cpp)
+	add_test(NAME perf_cookmem_11
+		COMMAND perf_cookmem_11)
+
+	add_executable(perf_cookmem_12
+		performances/perf_cookmem_12.cpp)
+	add_test(NAME perf_cookmem_12
+		COMMAND perf_cookmem_12)
 endif (UNIX)
 
 # -- examples -------------------------------------------------------

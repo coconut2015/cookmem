@@ -16,8 +16,7 @@
 #ifndef COOK_MEM_RBTREE_H
 #define COOK_MEM_RBTREE_H
 
-#include <iostream>
-#include <string>
+#include <cstddef>
 
 #include "exception.h"
 
@@ -39,6 +38,7 @@ public:
         m_children[1] = nullptr;
         m_next = nullptr;
         m_red = true;
+        m_inList = false;
     }
 
     ValueType
@@ -113,28 +113,40 @@ public:
         m_parent = parentNode;
     }
 
+    /**
+     * Add a node of the same value to the DLL of this tree node.
+     *
+     * A list node uses m_children[0] as the pointer to its previous node,
+     * which is either another list node or the tree node itself.  List
+     * nodes do not use m_parent or m_children[1].
+     */
     void
     addList (SelfType* other)
     {
         other->m_next = m_next;
+        other->m_children[0] = this;
+        other->m_inList = true;
+        if (m_next != nullptr)
+        {
+            m_next->m_children[0] = other;
+        }
         m_next = other;
     }
 
-    void
-    takeListFrom (SelfType* other)
-    {
-        m_next = other->m_next;
-        other->m_next = nullptr;
-        for (SelfType* node = m_next; node != nullptr; node = node->m_next)
-        {
-            node->m_parent = this;
-        }
-    }
-
     bool
-    hasList ()
+    hasList () const
     {
         return m_next != nullptr;
+    }
+
+    /**
+     * Check if this node is in the DLL of a tree node, rather than being
+     * a node of the tree itself.
+     */
+    bool
+    isInList () const
+    {
+        return m_inList;
     }
 
     SelfType*
@@ -149,32 +161,69 @@ public:
         return m_next;
     }
 
+    /**
+     * Remove the first node in the DLL of this tree node.  The list must
+     * not be empty.
+     *
+     * @return  the node removed.
+     */
     SelfType*
     removeFromList ()
     {
         SelfType*   retNode = m_next;
-        SelfType*   nextNode = m_next->m_next;
+        SelfType*   nextNode = retNode->m_next;
         m_next = nextNode;
+        if (nextNode != nullptr)
+        {
+            nextNode->m_children[0] = this;
+        }
         retNode->m_next = nullptr;
+        retNode->m_inList = false;
 
         return retNode;
     }
 
+    /**
+     * Unlink this list node from the DLL it is in.
+     */
     void
-    removeFromList (SelfType* node)
+    unlinkFromList ()
     {
-        SelfType*   prevNode = this;
-        for (SelfType* currNode = m_next; currNode != nullptr; currNode = currNode->m_next)
+        COOKMEM_ASSERT (m_inList);
+
+        SelfType*   prevNode = m_children[0];
+        SelfType*   nextNode = m_next;
+        prevNode->m_next = nextNode;
+        if (nextNode != nullptr)
         {
-            if (currNode == node)
-            {
-                prevNode->m_next = currNode->m_next;
-                currNode->m_next = nullptr;
-                return;
-            }
-            prevNode = currNode;
+            nextNode->m_children[0] = prevNode;
         }
-        COOKMEM_ASSERT (false);
+        m_next = nullptr;
+        m_inList = false;
+    }
+
+    /**
+     * Replace the tree node with the first node in its DLL.  The first
+     * list node takes over the position, color and the rest of the list,
+     * so this takes constant time.  The list must not be empty.
+     *
+     * @return  the replacement node, which is now a tree node.
+     */
+    SelfType*
+    promoteFirstListNode ()
+    {
+        SelfType*   replacementNode = m_next;
+
+        // The rest of the list stays attached to replacementNode, and the
+        // first node of the rest already points back to replacementNode.
+        replacementNode->m_parent = m_parent;
+        replacementNode->m_children[0] = m_children[0];
+        replacementNode->m_children[1] = m_children[1];
+        replacementNode->m_red = m_red;
+        replacementNode->m_inList = false;
+
+        m_next = nullptr;
+        return replacementNode;
     }
 
     bool
@@ -198,10 +247,12 @@ private:
     SelfType*       m_children[2];
     /** parent */
     SelfType*       m_parent;
-    /** SLL of same sized nodes. */
+    /** DLL of same sized nodes.  The prev pointer of a list node is m_children[0]. */
     SelfType*       m_next;
     /** Whether this node is red. */
     bool            m_red;
+    /** Whether this node is in the DLL of a tree node. */
+    bool            m_inList;
 };
 
 /**
@@ -343,37 +394,17 @@ public:
     void
     remove (void* ptr)
     {
-        NodeType*   targetNode = reinterpret_cast<Node*>(ptr);
-        ValueType   key = targetNode->getValue ();
+        NodeType*   targetNode = reinterpret_cast<NodeType*>(ptr);
 
-        NodeType*   node = m_root;
-
-        while (node != nullptr)
+        if (targetNode->isInList ())
         {
-            if (node->getValue () < key)
-            {
-                node = node->getRight ();
-            }
-            else if (node->getValue () > key)
-            {
-                node = node->getLeft ();
-            }
-            else
-            {
-                break;
-            }
-        }
-
-        COOKMEM_ASSERT (node != nullptr);
-
-        if (node != targetNode)
-        {
-            COOKMEM_ASSERT (node->hasList ());
-
-            node->removeFromList (targetNode);
+            // The node is in the DLL of a tree node.  Just unlink it.
+            targetNode->unlinkFromList ();
             return;
         }
 
+        // The node is in the tree.  Since nodes have parent pointers, there
+        // is no need to search from the root.
         removeNode (targetNode);
     }
 
@@ -419,6 +450,43 @@ public:
             }
         }
         return false;
+    }
+
+    /**
+     * Check if a node in the tree can take a larger value without changing
+     * its position in the tree.  If so, the caller can update the value in
+     * place instead of removing the node and adding it back.
+     *
+     * @param   ptr
+     *          the pointer stored in the tree.
+     * @param   newValue
+     *          the new value, which must be larger than the current value.
+     * @return  true if the value can be updated in place.
+     */
+    bool
+    canGrowInPlace (void* ptr, ValueType newValue)
+    {
+        NodeType* node = reinterpret_cast<NodeType*>(ptr);
+
+        // All nodes in a list must have the same value.
+        if (node->isInList () || node->hasList ())
+        {
+            return false;
+        }
+
+        // The new value must stay below the value of the next larger node.
+        if (node->getRight () != nullptr)
+        {
+            return newValue < getLeftMostNode (node->getRight ())->getValue ();
+        }
+
+        NodeType* parentNode = node->getParent ();
+        while (parentNode != nullptr && node == parentNode->getRight ())
+        {
+            node = parentNode;
+            parentNode = node->getParent ();
+        }
+        return parentNode == nullptr || newValue < parentNode->getValue ();
     }
 
     /**
@@ -585,24 +653,16 @@ private:
     {
         if (node->hasList ())
         {
-            NodeType* replacementNode = node->removeFromList ();
-            NodeType* parentNode = node->getParent ();
-            NodeType* leftNode = node->getLeft ();
-            NodeType* rightNode = node->getRight ();
-            bool red = node->isRed ();
-
-            replacementNode->init (node->getValue (), parentNode);
-            replacementNode->takeListFrom (node);
-            replacementNode->setLeft (leftNode);
-            replacementNode->setRight (rightNode);
-            replacementNode->setRed (red);
-            if (leftNode != nullptr)
+            // Replace the node with the first node of its list.  The tree
+            // structure and colors do not change.
+            NodeType* replacementNode = node->promoteFirstListNode ();
+            if (replacementNode->getLeft () != nullptr)
             {
-                leftNode->setParent (replacementNode);
+                replacementNode->getLeft ()->setParent (replacementNode);
             }
-            if (rightNode != nullptr)
+            if (replacementNode->getRight () != nullptr)
             {
-                rightNode->setParent (replacementNode);
+                replacementNode->getRight ()->setParent (replacementNode);
             }
             updateParent (replacementNode, node);
             return;

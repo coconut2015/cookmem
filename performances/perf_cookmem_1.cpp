@@ -22,6 +22,13 @@
 
 #include "perftest.h"
 
+/**
+ * Many copies of the same string.
+ *
+ * A 200-character string is copied into a std::vector one million times.
+ * Each string buffer comes from the small bins, while the vector storage
+ * grows into large blocks.
+ */
 struct Test1
 {
     void

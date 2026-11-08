@@ -22,6 +22,13 @@
 
 #include "perftest.h"
 
+/**
+ * Strings of growing length.
+ *
+ * 10000 strings are created, each one character longer than the previous
+ * one (1 to 10000 characters).  Most of the allocations come from the
+ * tree bins.
+ */
 struct Test1
 {
     void
