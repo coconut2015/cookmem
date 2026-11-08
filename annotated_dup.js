@@ -18,7 +18,7 @@ var annotated_dup =
       [ "MmapArena", "classcookmem_1_1MmapArena.html", "classcookmem_1_1MmapArena" ],
       [ "NoActionMemLogger", "classcookmem_1_1NoActionMemLogger.html", null ],
       [ "PtrAVLTree", "classcookmem_1_1PtrAVLTree.html", "classcookmem_1_1PtrAVLTree" ],
-      [ "PtrRBNode", "classcookmem_1_1PtrRBNode.html", null ],
+      [ "PtrRBNode", "classcookmem_1_1PtrRBNode.html", "classcookmem_1_1PtrRBNode" ],
       [ "RedBlackTree", "classcookmem_1_1RedBlackTree.html", "classcookmem_1_1RedBlackTree" ],
       [ "SimpleMemContainer", "structcookmem_1_1SimpleMemContainer.html", null ],
       [ "SimpleMemContext", "classcookmem_1_1SimpleMemContext.html", "classcookmem_1_1SimpleMemContext" ],

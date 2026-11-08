@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CookMem
+   <div id="projectname">CookMem<span id="projectnumber">&#160;0.1.0.0</span>
    </div>
    <div id="projectbrief">A C++ memory context / allocator</div>
   </td>
@@ -114,6 +114,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a9d6610fde92e680ecf18d83caa41448e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adb8387b9a0c60f2229b5214546073665" id="r_adb8387b9a0c60f2229b5214546073665"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1Allocator.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1PtrAVLTree.html#adb8387b9a0c60f2229b5214546073665">contains</a> (<a class="el" href="classcookmem_1_1Allocator.html">void</a> *<a class="el" href="classcookmem_1_1Allocator.html">ptr</a>)</td></tr>
 <tr class="separator:adb8387b9a0c60f2229b5214546073665"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f127423dc78c6a86646d5031ffbe8cc" id="r_a8f127423dc78c6a86646d5031ffbe8cc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1Allocator.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1PtrAVLTree.html#a8f127423dc78c6a86646d5031ffbe8cc">canGrowInPlace</a> (<a class="el" href="classcookmem_1_1Allocator.html">void</a> *<a class="el" href="classcookmem_1_1Allocator.html">ptr</a>, std::size_t <a class="el" href="classcookmem_1_1Allocator.html">newSize</a>)</td></tr>
+<tr class="separator:a8f127423dc78c6a86646d5031ffbe8cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a24a16d1a2d9a70f5b96b9f78b354598b" id="r_a24a16d1a2d9a70f5b96b9f78b354598b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1Allocator.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1PtrAVLTree.html#a24a16d1a2d9a70f5b96b9f78b354598b">isEmpty</a> ()</td></tr>
 <tr class="separator:a24a16d1a2d9a70f5b96b9f78b354598b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a24696de9988fbfd8a6619c4b4465c4c8" id="r_a24696de9988fbfd8a6619c4b4465c4c8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1Allocator.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1PtrAVLTree.html#a24696de9988fbfd8a6619c4b4465c4c8">printGraph</a> ()</td></tr>
@@ -217,6 +219,51 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a8f127423dc78c6a86646d5031ffbe8cc" name="a8f127423dc78c6a86646d5031ffbe8cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8f127423dc78c6a86646d5031ffbe8cc">&#9670;&#160;</a></span>canGrowInPlace()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1Allocator.html">bool</a> cookmem::PtrAVLTree::canGrowInPlace </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcookmem_1_1Allocator.html">void</a> *&#160;</td>
+          <td class="paramname"><em>ptr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>newSize</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Check if a node in the tree can take a larger size without changing its position in the tree. If so, the caller can update the size in place instead of removing the node and adding it back.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ptr</td><td>the pointer stored in the tree. </td></tr>
+    <tr><td class="paramname">newSize</td><td>the new size, which must be larger than the current size. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the size can be updated in place. </dd></dl>
 
 </div>
 </div>

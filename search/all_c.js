@@ -7,6 +7,7 @@ var searchData=
   ['pools_4',['Copying Data Between Memory Pools',['../tutorials.html#copying',1,'']]],
   ['printgraph_5',['printGraph',['../classcookmem_1_1PtrAVLTree.html#a24696de9988fbfd8a6619c4b4465c4c8',1,'cookmem::PtrAVLTree']]],
   ['printstats_6',['printStats',['../structcookmem_1_1MemStatistics.html#afb199f0ec1bf2219f581759289d163ef',1,'cookmem::MemStatistics']]],
-  ['ptravltree_7',['ptravltree',['../classcookmem_1_1PtrAVLTree.html',1,'cookmem::PtrAVLTree'],['../classcookmem_1_1PtrAVLTree.html#a515e9946b84d94ad6e94051fc364b47c',1,'cookmem::PtrAVLTree::PtrAVLTree()']]],
-  ['ptrrbnode_8',['PtrRBNode',['../classcookmem_1_1PtrRBNode.html',1,'cookmem']]]
+  ['promotefirstlistnode_7',['promoteFirstListNode',['../classcookmem_1_1PtrRBNode.html#a2f8b089140ed372c50fc353cca9364a4',1,'cookmem::PtrRBNode']]],
+  ['ptravltree_8',['ptravltree',['../classcookmem_1_1PtrAVLTree.html',1,'cookmem::PtrAVLTree'],['../classcookmem_1_1PtrAVLTree.html#a515e9946b84d94ad6e94051fc364b47c',1,'cookmem::PtrAVLTree::PtrAVLTree()']]],
+  ['ptrrbnode_9',['PtrRBNode',['../classcookmem_1_1PtrRBNode.html',1,'cookmem']]]
 ];

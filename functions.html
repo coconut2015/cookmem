@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CookMem
+   <div id="projectname">CookMem<span id="projectnumber">&#160;0.1.0.0</span>
    </div>
    <div id="projectbrief">A C++ memory context / allocator</div>
   </td>
@@ -94,6 +94,7 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 
 <h3><a id="index_a" name="index_a"></a>- a -</h3><ul>
 <li>add()&#160;:&#160;<a class="el" href="classcookmem_1_1CircularList.html#ae570b1a71b333d95b74bdf7a01911207">cookmem::CircularList&lt; Node &gt;</a>, <a class="el" href="classcookmem_1_1PtrAVLTree.html#a4ca63ce0ed6058944c1337480fcb86e1">cookmem::PtrAVLTree</a>, <a class="el" href="classcookmem_1_1RedBlackTree.html#a139ba73fb16fb7fcad433083fe3933cf">cookmem::RedBlackTree&lt; Node &gt;</a></li>
+<li>addList()&#160;:&#160;<a class="el" href="classcookmem_1_1PtrRBNode.html#a287db238b214f9d990602e4dfdec3b71">cookmem::PtrRBNode</a></li>
 <li>allocate()&#160;:&#160;<a class="el" href="classcookmem_1_1MemContext.html#afb7b98ac1304907fadf9194533080917">cookmem::MemContext&lt; Arena, Logger, TreeType, T &gt;</a>, <a class="el" href="classcookmem_1_1MemPool.html#af6af6ba215f60234e4efc1e5cba10075">cookmem::MemPool&lt; Arena, Logger, TreeType, T &gt;</a></li>
 </ul>
 
@@ -101,6 +102,7 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 <h3><a id="index_c" name="index_c"></a>- c -</h3><ul>
 <li>CachedArena()&#160;:&#160;<a class="el" href="classcookmem_1_1CachedArena.html#a7bd04dab4ccf676b1fde813ca273c11d">cookmem::CachedArena&lt; Arena, TreeType &gt;</a></li>
 <li>callocate()&#160;:&#160;<a class="el" href="classcookmem_1_1MemContext.html#a7ec4fa5c035ba4d143f5abe8ab41a543">cookmem::MemContext&lt; Arena, Logger, TreeType, T &gt;</a>, <a class="el" href="classcookmem_1_1MemPool.html#a4cdd4d40e3d8ffe8b61b8599e7318c5b">cookmem::MemPool&lt; Arena, Logger, TreeType, T &gt;</a></li>
+<li>canGrowInPlace()&#160;:&#160;<a class="el" href="classcookmem_1_1PtrAVLTree.html#a8f127423dc78c6a86646d5031ffbe8cc">cookmem::PtrAVLTree</a>, <a class="el" href="classcookmem_1_1RedBlackTree.html#a9039bee4c9bf48e9236677b09877281d">cookmem::RedBlackTree&lt; Node &gt;</a></li>
 <li>const_pointer&#160;:&#160;<a class="el" href="classcookmem_1_1CachedMemContext.html#a069c081d7ff93e93066b449bff8cd096">cookmem::CachedMemContext&lt; Arena, Logger, TreeType, T &gt;</a>, <a class="el" href="classcookmem_1_1MemContext.html#adb3518b7bac1c62ccce1b8833f70f91d">cookmem::MemContext&lt; Arena, Logger, TreeType, T &gt;</a>, <a class="el" href="classcookmem_1_1MemPool.html#aa1c56a1add59242dd71edca0dfcb9ada">cookmem::MemPool&lt; Arena, Logger, TreeType, T &gt;</a>, <a class="el" href="classcookmem_1_1SimpleMemContext.html#a35244c605b4f14e07ddf0e7dd71eec89">cookmem::SimpleMemContext&lt; Arena, Logger, TreeType, T &gt;</a></li>
 <li>contains()&#160;:&#160;<a class="el" href="classcookmem_1_1CircularList.html#a9ce8043532cec4724b8d3cf3e52cf851">cookmem::CircularList&lt; Node &gt;</a>, <a class="el" href="classcookmem_1_1MemContext.html#a1f22eb4d92f78a10392b8538246fa1f5">cookmem::MemContext&lt; Arena, Logger, TreeType, T &gt;</a>, <a class="el" href="classcookmem_1_1MemPool.html#a0fdcfc548d9769f63893d802194b8a7b">cookmem::MemPool&lt; Arena, Logger, TreeType, T &gt;</a>, <a class="el" href="classcookmem_1_1PtrAVLTree.html#adb8387b9a0c60f2229b5214546073665">cookmem::PtrAVLTree</a>, <a class="el" href="classcookmem_1_1RedBlackTree.html#aed90099d901e73c92500e17ea908a0a2">cookmem::RedBlackTree&lt; Node &gt;</a></li>
 </ul>
@@ -162,6 +164,7 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 
 <h3><a id="index_i" name="index_i"></a>- i -</h3><ul>
 <li>isEmpty()&#160;:&#160;<a class="el" href="classcookmem_1_1CircularList.html#ae0cf87b31cf44696f816dc4376728eb2">cookmem::CircularList&lt; Node &gt;</a>, <a class="el" href="classcookmem_1_1PtrAVLTree.html#a24a16d1a2d9a70f5b96b9f78b354598b">cookmem::PtrAVLTree</a>, <a class="el" href="classcookmem_1_1RedBlackTree.html#a433d142cd824a294ca99f8bea6494821">cookmem::RedBlackTree&lt; Node &gt;</a></li>
+<li>isInList()&#160;:&#160;<a class="el" href="classcookmem_1_1PtrRBNode.html#aa8ca34756cf6f2c18ee280b954b46e4a">cookmem::PtrRBNode</a></li>
 <li>isPadding()&#160;:&#160;<a class="el" href="classcookmem_1_1MemContext.html#acff532437c19cf40211c3da5bfdfac8e">cookmem::MemContext&lt; Arena, Logger, TreeType, T &gt;</a>, <a class="el" href="classcookmem_1_1MemPool.html#aed666b7675d158353e04c8cf247becb9">cookmem::MemPool&lt; Arena, Logger, TreeType, T &gt;</a></li>
 <li>isStoringExactSize()&#160;:&#160;<a class="el" href="classcookmem_1_1MemContext.html#afa66cd66a401426a8233ac2c6dd9c94d">cookmem::MemContext&lt; Arena, Logger, TreeType, T &gt;</a>, <a class="el" href="classcookmem_1_1MemPool.html#a16f0144772e5a83db8b69adc606faf29">cookmem::MemPool&lt; Arena, Logger, TreeType, T &gt;</a></li>
 </ul>
@@ -189,6 +192,7 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 <li>pointer&#160;:&#160;<a class="el" href="classcookmem_1_1CachedMemContext.html#a13c0e307cf87c47e0eb810a46b02fffb">cookmem::CachedMemContext&lt; Arena, Logger, TreeType, T &gt;</a>, <a class="el" href="classcookmem_1_1MemContext.html#a4831e190cd7ed0c9d380983262e08c34">cookmem::MemContext&lt; Arena, Logger, TreeType, T &gt;</a>, <a class="el" href="classcookmem_1_1MemPool.html#af9efe4d87381763062297389fc5adb7d">cookmem::MemPool&lt; Arena, Logger, TreeType, T &gt;</a>, <a class="el" href="classcookmem_1_1SimpleMemContext.html#a27bff01af2f1861ea706087892f1087c">cookmem::SimpleMemContext&lt; Arena, Logger, TreeType, T &gt;</a></li>
 <li>printGraph()&#160;:&#160;<a class="el" href="classcookmem_1_1PtrAVLTree.html#a24696de9988fbfd8a6619c4b4465c4c8">cookmem::PtrAVLTree</a></li>
 <li>printStats()&#160;:&#160;<a class="el" href="structcookmem_1_1MemStatistics.html#afb199f0ec1bf2219f581759289d163ef">cookmem::MemStatistics</a></li>
+<li>promoteFirstListNode()&#160;:&#160;<a class="el" href="classcookmem_1_1PtrRBNode.html#a2f8b089140ed372c50fc353cca9364a4">cookmem::PtrRBNode</a></li>
 <li>PtrAVLTree()&#160;:&#160;<a class="el" href="classcookmem_1_1PtrAVLTree.html#a515e9946b84d94ad6e94051fc364b47c">cookmem::PtrAVLTree</a></li>
 </ul>
 
@@ -197,6 +201,7 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 <li>reallocate()&#160;:&#160;<a class="el" href="classcookmem_1_1MemContext.html#a586818a5e1d4ff1c562216beb976a655">cookmem::MemContext&lt; Arena, Logger, TreeType, T &gt;</a>, <a class="el" href="classcookmem_1_1MemPool.html#a5eec8adbb528ae7e8907f35540879d46">cookmem::MemPool&lt; Arena, Logger, TreeType, T &gt;</a></li>
 <li>releaseAll()&#160;:&#160;<a class="el" href="classcookmem_1_1MemContext.html#a7ee7fa640486f0a8bddd8a76f4043caf">cookmem::MemContext&lt; Arena, Logger, TreeType, T &gt;</a>, <a class="el" href="classcookmem_1_1MemPool.html#ac126e2364498d1ac892ef545b02ee5f4">cookmem::MemPool&lt; Arena, Logger, TreeType, T &gt;</a></li>
 <li>remove()&#160;:&#160;<a class="el" href="classcookmem_1_1CircularList.html#a294a5f91969056c1034e61b676385674">cookmem::CircularList&lt; Node &gt;</a>, <a class="el" href="classcookmem_1_1PtrAVLTree.html#a03dece4089837d9baaaa8a183d041b44">cookmem::PtrAVLTree</a>, <a class="el" href="classcookmem_1_1RedBlackTree.html#a47dcc1884aa840a2d2b3e6866fe56eca">cookmem::RedBlackTree&lt; Node &gt;</a></li>
+<li>removeFromList()&#160;:&#160;<a class="el" href="classcookmem_1_1PtrRBNode.html#aa8d8a1c5572c405c271940f5c7ee9e0b">cookmem::PtrRBNode</a></li>
 </ul>
 
 
@@ -211,6 +216,11 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 
 <h3><a id="index_t" name="index_t"></a>- t -</h3><ul>
 <li>trimEmptySegments()&#160;:&#160;<a class="el" href="classcookmem_1_1MemContext.html#a88e10ddda4619fa53a2116d307656b7c">cookmem::MemContext&lt; Arena, Logger, TreeType, T &gt;</a>, <a class="el" href="classcookmem_1_1MemPool.html#a4e6b0a6ee3ec8b536497ca1f0a67267c">cookmem::MemPool&lt; Arena, Logger, TreeType, T &gt;</a></li>
+</ul>
+
+
+<h3><a id="index_u" name="index_u"></a>- u -</h3><ul>
+<li>unlinkFromList()&#160;:&#160;<a class="el" href="classcookmem_1_1PtrRBNode.html#adaa41bf5a2cb029a12158df3e55100c7">cookmem::PtrRBNode</a></li>
 </ul>
 
 

@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CookMem
+   <div id="projectname">CookMem<span id="projectnumber">&#160;0.1.0.0</span>
    </div>
    <div id="projectbrief">A C++ memory context / allocator</div>
   </td>
@@ -168,7 +168,7 @@ FixedArena</h1>
 <div class="line">}</div>
 <div class="ttc" id="aclasscookmem_1_1Allocator_html"><div class="ttname"><a href="classcookmem_1_1Allocator.html">cookmem::Allocator</a></div><div class="ttdef"><b>Definition</b> allocator.h:218</div></div>
 <div class="ttc" id="aclasscookmem_1_1FixedArena_html"><div class="ttname"><a href="classcookmem_1_1FixedArena.html">cookmem::FixedArena</a></div><div class="ttdef"><b>Definition</b> arena.h:69</div></div>
-<div class="ttc" id="aclasscookmem_1_1NoActionMemLogger_html"><div class="ttname"><a href="classcookmem_1_1NoActionMemLogger.html">cookmem::NoActionMemLogger</a></div><div class="ttdef"><b>Definition</b> logger.h:145</div></div>
+<div class="ttc" id="aclasscookmem_1_1NoActionMemLogger_html"><div class="ttname"><a href="classcookmem_1_1NoActionMemLogger.html">cookmem::NoActionMemLogger</a></div><div class="ttdef"><b>Definition</b> logger.h:144</div></div>
 </div><!-- fragment --><h1><a class="anchor" id="MmapArena"></a>
 MmapArena</h1>
 <p><a href="https://en.wikipedia.org/wiki/Mmap">mmap</a> is one way to obtain large segments of memory on Unix. <a class="el" href="classcookmem_1_1MmapArena.html">cookmem::MmapArena</a> calls <code>mmap</code> and <code>munmap</code> to obtain and release segments. On Windows, it uses <code>VirtualAlloc</code> and <code>VirtualFree</code> instead.</p>

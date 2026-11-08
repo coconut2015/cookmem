@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['_7emempool_0',['~MemPool',['../classcookmem_1_1MemPool.html#a19b3ce416b2ec240c606e07118e21442',1,'cookmem::MemPool']]],
-  ['_7eptravltree_1',['~PtrAVLTree',['../classcookmem_1_1PtrAVLTree.html#ae1a88304f7310bfd7cc330a6b099f35d',1,'cookmem::PtrAVLTree']]]
+  ['validate_0',['validate',['../classcookmem_1_1MemContext.html#a4daba21af7408782d8cd0badf6abab73',1,'cookmem::MemContext::validate()'],['../classcookmem_1_1MemPool.html#a5d3fb53e2fd1b8089f32d42776bf13bb',1,'cookmem::MemPool::validate()']]]
 ];
