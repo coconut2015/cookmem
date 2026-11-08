@@ -1,6 +1,12 @@
-CMAKE_MINIMUM_REQUIRED (VERSION 3.1)
+CMAKE_MINIMUM_REQUIRED (VERSION 3.10)
+
+# The version number is kept in version.txt.  Editing it re-runs CMake.
+file (STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/version.txt" COOKMEM_VERSION LIMIT_COUNT 1)
+string (STRIP "${COOKMEM_VERSION}" COOKMEM_VERSION)
+set_property (DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/version.txt")
+
 project (CookMem
-	VERSION 0.0.0.1
+	VERSION ${COOKMEM_VERSION}
 	LANGUAGES CXX
 )
 
@@ -29,6 +35,7 @@ if (UNIX)
 			NAME test_coverage
 			EXECUTABLE ctest
 			DEPENDENCIES ctest
+			EXCLUDE "/usr/*" "tests/*" "examples/*" "performances/*"
 		)
 
 		APPEND_COVERAGE_COMPILER_FLAGS()
