@@ -11,7 +11,7 @@ CookMem divides the job of a memory context into three parts.
    is to gather memory statistics.
 
 Separating the memory arena from the memory pool makes it easy to build a
-custom memory context for your needs. See [References](references.md) for
+custom memory context for your needs. See \ref references "References" for
 the available arenas and loggers. CookMem also provides ready-to-use
 memory contexts, including cookmem::SimpleMemContext and
 cookmem::CachedMemContext. This flexibility was a primary motivation for
@@ -38,10 +38,14 @@ since cookmem::MemPool already does the tracking.
 
 \section CachedArena CachedArena
 
-cookmem::CachedArena caches released memory segments in an
+cookmem::CachedArena caches released memory segments in a
 [red-black tree](https://en.wikipedia.org/wiki/Red%E2%80%93black_tree) and reuses them for
 later requests.  This is useful when it is expensive to request and
 release memory segments.
+
+Note that the memory pool does not release a segment to the arena as soon as
+the segment becomes free.  It keeps free segments for later allocations, and
+releases them periodically, after a number of deallocations.
 
 \include example_CachedArena.cpp
 
@@ -67,6 +71,34 @@ Additionally, cookmem can determine whether a pointer is valid.
 See the following example.
 
 \include example_getSize.cpp
+
+\section footprint Restricting Memory Usage
+
+A memory context can limit the total size of the memory segments it obtains,
+which is its footprint.  An allocation that would need memory beyond the
+limit fails and returns `nullptr`, while the context remains usable.  This
+protects long-running programs from accidentally requesting a very large
+amount of memory.
+
+* `setFootprintLimit ()` sets the limit in bytes.  0, the default, means no
+  limit.
+* `getFootprint ()` returns the current footprint, and `getMaxFootprint ()`
+  returns the largest footprint so far.
+
+The footprint includes the overhead of the segments, so slightly less memory
+than the limit is available for allocations.
+
+\include example_footprintLimit.cpp
+
+\section statistics Memory Statistics
+
+cookmem::StatsLogger gathers statistics on allocations and memory segments:
+counts, current and peak sizes, and how the allocations were satisfied.  Use
+it as the logger of a memory context and read the statistics with
+`getLogger ().getStats ()`.  The default logger, cookmem::NoActionMemLogger,
+does nothing, so the statistics cost nothing unless you ask for them.
+
+\include example_StatsLogger.cpp
 
 \section boundcheck Memory Corruption Detection
 

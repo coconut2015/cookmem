@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright (c) 2018 Heng Yuan
+# Copyright (c) 2018-2026 Heng Yuan
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,70 +19,47 @@ usage ()
 {
 	cat <<EOF
 Usage:
-    ./make.sh [build] [options] arguments
+    ./make.sh [build]
 
 build:
+    debug               - debug build, then run the tests (default).
+    cov                 - debug build with code coverage, then run the tests
+                          and generate the report in cov/test_coverage.
+    release             - release build, then run the tests, including the
+                          performance tests.
+    profiler            - release build with -pg for gprof, then run the tests.
+    docs                - generate Doxygen documents into docs.
     help                - print this help message.
-    debug               - debug build.
-    profiler            - make profiler build.
-    release             - make release build.
-    docs                - generate Doxygen documents.
-
-options
-    -h                  - print this help message.
-    -t                  - specify the test in the arguments.
 EOF
-}
-
-runMake ()
-{
-	make $@
-}
-
-runTest ()
-{
-	ctest -R $@
 }
 
 BUILD=debug
 
-if [ $# -gt 0 ]; then
-	BUILD=$1
-	shift
+if [ $# -gt 1 ]; then
+	usage
+	exit 1
 fi
 
-TEST=
-
-while getopts "ht:" OPT; do
-	case $OPT in
-	h)
-		usage
-		exit 0
-	;;
-	t)
-		TEST=$OPTARG
-	;;
-	*)
-		echo "Unknown option: $OPT"
-		exit 1
-	;;
-	esac
-done
+if [ $# -eq 1 ]; then
+	BUILD=$1
+fi
 
 CMAKE_BUILD_TYPE=
-COVERAGE=
+# Turn coverage off explicitly, since CMake caches it in the build directory.
+COVERAGE=-DCOVERAGE=0
 BUILD_DOC=
 PROFILER=
 
 case "$BUILD" in
-	release)
-		CMAKE_BUILD_TYPE=Release
-	;;
 	debug)
 		CMAKE_BUILD_TYPE=Debug
-		if [ -z "$TEST" ]; then
-			COVERAGE=-DCOVERAGE=1
-		fi
+	;;
+	cov)
+		CMAKE_BUILD_TYPE=Debug
+		COVERAGE=-DCOVERAGE=1
+	;;
+	release)
+		CMAKE_BUILD_TYPE=Release
 	;;
 	profiler)
 		CMAKE_BUILD_TYPE=Release
@@ -93,12 +70,13 @@ case "$BUILD" in
 		CMAKE_BUILD_TYPE=Release
 		BUILD_DOC=-DBUILD_DOC=1
 	;;
-	help)
+	help|-h|--help)
 		usage
 		exit 0
 	;;
 	*)
 		echo "Unknown build option: $BUILD"
+		usage
 		exit 1
 	;;
 esac
@@ -109,28 +87,22 @@ fi
 
 cd $BUILD
 
-cmake -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE $COVERAGE $PROFILER $BUILD_DOC ..|| exit $?
+# Build in parallel, using all the processors.
+JOBS=$(nproc 2>/dev/null || echo 2)
+
+cmake -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE $COVERAGE $PROFILER $BUILD_DOC .. || exit $?
 
 case "$BUILD" in
-	release)
-		runMake $TEST && runTest $TEST
+	debug|release|profiler)
+		make -j$JOBS && ctest
 	;;
-	debug)
-		runMake $TEST && runTest $TEST
-		if [ $? -eq 0 -a -z "$TEST" ]; then
-			make test_coverage
-		fi
-	;;
-	profiler)
-		runMake $TEST && runTest $TEST
+	cov)
+		# test_coverage runs the tests itself, so there is no separate ctest.
+		make -j$JOBS && make test_coverage
 	;;
 	doc)
-		make doc_doxygen
+		make doc_doxygen || exit $?
 		rm -rf ../docs
 		mv html ../docs
-	;;
-	*)
-		echo "Unknown build option: $BUILD"
-	exit 1
 	;;
 esac

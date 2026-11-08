@@ -27,6 +27,9 @@ test1 ()
 
     cookmem::SimpleMemContext<cookmem::MallocArena> memCtx;
 
+    // Release empty segments on every deallocation.
+    memCtx.setTrimEmptySegmentsInterval (1);
+
     void* p1 = memCtx.allocate (32);
     printf ("allocated %p\n", p1);
 
@@ -35,8 +38,6 @@ test1 ()
 
     memCtx.getPool ().print ();
 
-    memCtx.trimEmptySegments ();
-    printf ("trimmed empty segments\n");
 
     memCtx.getPool ().print ();
 
@@ -51,6 +52,9 @@ test2 ()
 
     cookmem::SimpleMemContext<cookmem::MallocArena> memCtx;
 
+    // Release empty segments on every deallocation.
+    memCtx.setTrimEmptySegmentsInterval (1);
+
     void* p1 = memCtx.allocate (32);
     void* p2 = memCtx.allocate (32);
 
@@ -61,7 +65,6 @@ test2 ()
 
     memCtx.getPool ().print ();
 
-    memCtx.trimEmptySegments ();
 
     memCtx.getPool ().print ();
 
@@ -75,6 +78,9 @@ test3 ()
 
     cookmem::SimpleMemContext<cookmem::MallocArena> memCtx;
 
+    // Release empty segments on every deallocation.
+    memCtx.setTrimEmptySegmentsInterval (1);
+
     memCtx.allocate (32);
 
     void* p1 = memCtx.allocate (32);
@@ -86,7 +92,6 @@ test3 ()
 
     memCtx.getPool ().print ();
 
-    memCtx.trimEmptySegments ();
 
     memCtx.getPool ().print ();
 
@@ -101,6 +106,9 @@ test4 ()
     printf ("== %s ==\n", __FUNCTION__);
 
     cookmem::SimpleMemContext<cookmem::MallocArena> memCtx;
+
+    // Release empty segments on every deallocation.
+    memCtx.setTrimEmptySegmentsInterval (1);
 
     void* p1 = memCtx.allocate (32);
     void* p2 = memCtx.allocate (32);
@@ -120,7 +128,6 @@ test4 ()
 
     memCtx.getPool ().print ();
 
-    memCtx.trimEmptySegments ();
 
     memCtx.getPool ().print ();
 
@@ -136,6 +143,9 @@ test5 ()
     printf ("== %s ==\n", __FUNCTION__);
 
     cookmem::SimpleMemContext<cookmem::MallocArena> memCtx;
+
+    // Release empty segments on every deallocation.
+    memCtx.setTrimEmptySegmentsInterval (1);
 
     void* ptr[10000];
 
@@ -153,7 +163,6 @@ test5 ()
     for (int i = 0; i < 10000; ++i)
     {
         memCtx.deallocate (ptr[i]);
-        memCtx.trimEmptySegments ();
         memCtx.validate ();
     }
 
@@ -163,7 +172,6 @@ test5 ()
 
     printf ("******** step 3\n");
 
-    memCtx.trimEmptySegments ();
 
     printf ("******** step 4\n");
 
@@ -180,9 +188,12 @@ test6 ()
     void* ptr[10000];
 
     memCtx.getLogger ().getStats ().printStats ();
+
+    // With an interval of 1, every deallocation runs a trimming pass.
+    memCtx.setTrimEmptySegmentsInterval (1);
     std::size_t trimCount = memCtx.getLogger ().getStats ().getNumTrimEmptySegments ();
-    memCtx.trimEmptySegments ();
-    memCtx.trimEmptySegments ();
+    memCtx.deallocate (memCtx.allocate (100));
+    memCtx.deallocate (memCtx.allocate (100));
     assertEquals (trimCount + 2,
                   memCtx.getLogger ().getStats ().getNumTrimEmptySegments (),
                   __FILE__,
@@ -213,7 +224,6 @@ test6 ()
     printf ("******** step 3\n");
     memCtx.getLogger ().getStats ().printStats ();
 
-    memCtx.trimEmptySegments ();
 
     printf ("******** step 4\n");
     memCtx.getLogger ().getStats ().printStats ();
@@ -291,7 +301,6 @@ test6 ()
     printf ("******** step 13\n");
     memCtx.getLogger ().getStats ().printStats ();
 
-    memCtx.trimEmptySegments ();
 
     printf ("******** step 14\n");
     memCtx.getLogger ().getStats ().printStats ();

@@ -21,12 +21,15 @@
 namespace cookmem
 {
 
+/**
+ * The type of a memory error reported by Exception.
+ */
 typedef enum
 {
-    MEM_ERROR_GENERAL,      // general error
-    MEM_ERROR_ASSERT,       // assertion failure
-    MEM_ERROR_DOUBLE_FREE,  // freeing an already free pointer
-    MEM_ERROR_PADDING,      // padding byte error
+    MEM_ERROR_GENERAL,      ///< general error
+    MEM_ERROR_ASSERT,       ///< assertion failure (COOKMEM_DEBUG builds only)
+    MEM_ERROR_DOUBLE_FREE,  ///< freeing an already free pointer
+    MEM_ERROR_PADDING,      ///< padding bytes after an allocation were overwritten
 }  MemError_et;
 
 /**
@@ -38,8 +41,14 @@ public:
     /**
      * Constructor.
      *
+     * @param   error
+     *          the type of the error.
      * @param   msg
      *          the message associated with this exception.
+     * @param   file
+     *          the source file where the error was detected.
+     * @param   line
+     *          the line number where the error was detected.
      */
     Exception (MemError_et error, const char* msg, const char* file = nullptr, int line = 0)
     : m_error (error),
@@ -54,7 +63,7 @@ public:
      *
      * @return  the exception error.
      */
-    const MemError_et getError () const { return m_error; }
+    MemError_et getError () const { return m_error; }
 
     /**
      * Get the exception message.

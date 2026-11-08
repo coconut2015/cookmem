@@ -37,7 +37,9 @@ template<class Arena, class Logger, class TreeType = PtrRBTree, class T=void>
 class MemContext
 {
 public:
+    /** The type of this memory context. */
     typedef MemContext<Arena, Logger, TreeType, T>  MemCtx;
+    /** The type of the memory pool that does the actual work. */
     typedef MemPool<Arena, Logger, TreeType, T>     Pool;
 
     /** size type */
@@ -52,6 +54,19 @@ public:
     typedef typename Pool::const_pointer    const_pointer;
 
 public:
+    /**
+     * Constructor.
+     *
+     * @param   arena
+     *          the arena to obtain memory segments from.  It must outlive
+     *          this context.
+     * @param   logger
+     *          the logger for memory activities.  It must outlive this
+     *          context.
+     * @param   paddingSize
+     *          the number of padding bytes (0 to MAX_PADDING_SIZE) added
+     *          after each allocation to detect out-of-bounds writes.
+     */
     MemContext (Arena&          arena,
                 Logger&         logger,
                 std::uint8_t    paddingSize = DEFAULT_PADDING_SIZE)
@@ -61,6 +76,14 @@ public:
     {
     }
 
+    /**
+     * Create a new, empty memory context that shares the arena and the
+     * logger of another context and uses the same padding size.  No memory
+     * is copied.
+     *
+     * @param   other
+     *          the context whose arena and logger are shared.
+     */
     MemContext (MemCtx& other)
     : m_arena (other.getArena ()),
       m_logger (other.getLogger ()),
@@ -127,12 +150,6 @@ public:
     validate () { m_pool.validate (); }
 
     /**
-     * Release segments that are entirely free.
-     */
-    inline void
-    trimEmptySegments () { m_pool.trimEmptySegments (); }
-
-    /**
      * Check if a pointer is within the address space of segments owned
      * by this MemPool.
      *
@@ -177,13 +194,15 @@ public:
      * @return  the memory footprint limit
      */
     inline size_type
-    getFootPrintLimit () const { return m_pool.getFootPrintLimit (); }
+    getFootprintLimit () const { return m_pool.getFootprintLimit (); }
 
     /**
-     * Set the maximum memory footprint limit.
+     * Set the maximum memory footprint limit.  Allocations that would need
+     * new memory segments beyond this limit fail and return nullptr.
      *
      * @param   footprintLimit
-     *
+     *          the maximum total size of the memory segments in bytes.
+     *          0 means no limit.
      */
     inline void
     setFootprintLimit (size_type footprintLimit) { m_pool.setFootprintLimit (footprintLimit); }
@@ -194,7 +213,7 @@ public:
      * @return  the current memory footprint.
      */
     inline size_type
-    getFootprint () const { return m_pool.getFootPrint (); }
+    getFootprint () const { return m_pool.getFootprint (); }
 
     /**
      * Get the maximum memory footprint.
@@ -206,6 +225,16 @@ public:
 
     /**
      * Set the number of deallocations between empty-segment trimming passes.
+     *
+     * Memory segments that become entirely free are kept for later
+     * allocations.  After every interval deallocations, the segments that
+     * are entirely free are released to the arena.  A smaller interval keeps
+     * the footprint smaller, but releases and obtains segments more often.
+     *
+     * @param   interval
+     *          the number of deallocations between the passes.  The default
+     *          is DEFAULT_TRIM_EMPTY_SEGMENTS_INTERVAL.  1 (or 0) releases
+     *          empty segments on every deallocation.
      */
     void
     setTrimEmptySegmentsInterval (size_type interval)
@@ -308,7 +337,9 @@ private:
 template<class Arena, class Logger>
 struct SimpleMemContainer
 {
+    /** the arena owned by the memory context */
     Arena   arena;
+    /** the logger owned by the memory context */
     Logger  logger;
 
     SimpleMemContainer ()
@@ -333,7 +364,9 @@ template<class Arena = MmapArena, class Logger = NoActionMemLogger, class TreeTy
 class SimpleMemContext : private SimpleMemContainer<Arena, Logger>, public MemContext<Arena, Logger, TreeType, T>
 {
 public:
+    /** The type that holds the arena and the logger. */
     typedef SimpleMemContainer<Arena, Logger>   Container;
+    /** The type of the base memory context. */
     typedef MemContext<Arena, Logger, TreeType, T>  MemCtx;
 
     /** size type */
@@ -348,12 +381,30 @@ public:
     typedef typename MemCtx::const_pointer      const_pointer;
 
 public:
+    /**
+     * Constructor.
+     *
+     * @param   paddingSize
+     *          the number of padding bytes (0 to MAX_PADDING_SIZE) added
+     *          after each allocation to detect out-of-bounds writes.
+     */
     SimpleMemContext (std::uint8_t paddingSize = DEFAULT_PADDING_SIZE)
     : Container (),
       MemCtx (Container::arena, Container::logger, paddingSize)
     {
     }
 
+    /**
+     * Create a new, empty memory context with the same padding size as
+     * another context.  No memory is copied, and the new context has its
+     * own logger.
+     *
+     * @param   other
+     *          the other memory context.
+     * @param   shareArena
+     *          true to obtain segments from the arena of the other context.
+     *          false to use the arena of the new context.
+     */
     SimpleMemContext (SimpleMemContext& other, bool shareArena)
     : Container (),
       MemCtx (shareArena ? other.getArena () : Container::arena,
@@ -373,8 +424,11 @@ public:
 template<class Arena, class Logger>
 struct CachedMemContainer
 {
+    /** the arena that obtains new segments */
     Arena               arena;
+    /** the arena that caches released segments on top of arena */
     CachedArena<Arena>  cachedArena;
+    /** the logger owned by the memory context */
     Logger              logger;
 
     CachedMemContainer ()
@@ -400,7 +454,9 @@ template<class Arena = MmapArena, class Logger = NoActionMemLogger, class TreeTy
 class CachedMemContext : private CachedMemContainer<Arena, Logger>, public MemContext<CachedArena<Arena>, Logger, TreeType, T>
 {
 public:
+    /** The type that holds the arenas and the logger. */
     typedef CachedMemContainer<Arena, Logger>   Container;
+    /** The type of the base memory context. */
     typedef MemContext<CachedArena<Arena>, Logger, TreeType, T> MemCtx;
 
     /** size type */
@@ -415,12 +471,31 @@ public:
     typedef typename MemCtx::const_pointer      const_pointer;
 
 public:
+    /**
+     * Constructor.
+     *
+     * @param   paddingSize
+     *          the number of padding bytes (0 to MAX_PADDING_SIZE) added
+     *          after each allocation to detect out-of-bounds writes.
+     */
     CachedMemContext (std::uint8_t paddingSize = DEFAULT_PADDING_SIZE)
     : Container (),
       MemCtx (Container::cachedArena, Container::logger, paddingSize)
     {
     }
 
+    /**
+     * Create a new, empty memory context with the same padding size as
+     * another context.  No memory is copied, and the new context has its
+     * own logger.
+     *
+     * @param   other
+     *          the other memory context.
+     * @param   shareArena
+     *          true to share the cached arena of the other context, so that
+     *          segments released by either context can be reused by the
+     *          other.  false to use the cached arena of the new context.
+     */
     CachedMemContext (CachedMemContext& other, bool shareArena)
     : Container (),
       MemCtx (shareArena ? other.getArena () : Container::cachedArena,

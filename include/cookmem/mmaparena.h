@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2021 Heng Yuan
+ * Copyright (c) 2018-2026 Heng Yuan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 #ifndef COOK_MMAP_MEM_ARENA_H
 #define COOK_MMAP_MEM_ARENA_H
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
-#else   // WIN32
+#else   // _WIN32
 #include <sys/mman.h>
-#endif  // WIN32
+#endif  // _WIN32
 
 #include "config.h"
 #include "arena.h"
@@ -28,7 +28,7 @@
 namespace cookmem
 {
 
-#ifdef WIN32
+#ifdef _WIN32
 /**
  * An mmap/munmap based memory arena adapted for Windows.
  * Instead of using mmap/munmap, it uses VirtualAlloc/VirtualFree.
@@ -77,16 +77,14 @@ public:
     }
 
     /**
-     * Free an arena segment using munamp().
+     * Free an arena segment using VirtualFree().
      *
      * @param   ptr
      *          the pointer to be freed.
-     * @param   size
-     *          the size of the pointer.
      * @return  true if there is an error.  false is okay.
      */
     bool
-    freeSegment (void* ptr, std::size_t size)
+    freeSegment (void* ptr, std::size_t)
     {
         return VirtualFree (ptr, 0, MEM_RELEASE) == 0;
     }
@@ -96,7 +94,7 @@ private:
     DWORD       m_prot;
     DWORD       m_type;
 };
-#else   // WIN32
+#else   // _WIN32
 /**
  * An mmap/munmap based memory arena.
  *
@@ -168,7 +166,7 @@ private:
     int         m_prot;
     int         m_flag;
 };
-#endif  // WIN32
+#endif  // _WIN32
 
 }   // namespace cookmem
 

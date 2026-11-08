@@ -21,9 +21,9 @@
 #include <cstdio>
 #include <cstring>
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
-#endif /* WIN32 */
+#endif /* _WIN32 */
 
 #include "config.h"
 #include "exception.h"
@@ -34,6 +34,8 @@
 namespace cookmem
 {
 
+/// @cond INTERNAL
+// Bit helpers used by the bin maps (from dlmalloc).
 template<class T>
 T least_bit(T x)
 {
@@ -45,6 +47,7 @@ T left_bits(T x)
 {
     return ((x << 1) | -static_cast<int>(x << 1));
 }
+/// @endcond
 
 /* assign tree index for size S to variable I. Use x86 asm if possible  */
 #if defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
@@ -304,7 +307,7 @@ private:
         print () const
         {
             printf ("-- chunk[ %p ]: size: %zu, used = %s, exact size: %zu\n",
-                    this,
+                    static_cast<const void*> (this),
                     getChunkSize (),
                     (isUsed () ? "true " : "false"),
                     getUserSize ());
@@ -322,8 +325,9 @@ private:
 
     class MemSegment
     {
-    public:
-        static const size_type  SEGMENT_HEADER = offsetof (MemSegment, m_pad);
+        // MemPool takes the offset of m_pad (see SEGMENT_HEADER).
+        friend class MemPool;
+
     private:
         /**
          * Allocated size.
@@ -415,7 +419,7 @@ private:
         void
         print () const
         {
-            printf ("== segment %p, size: %zu, header: %zu, footer: %zu\n", this, m_size, offsetof(MemSegment, m_pad), sizeof(MemChunk));
+            printf ("== segment %p, size: %zu, header: %zu, footer: %zu\n", static_cast<const void*> (this), m_size, offsetof(MemSegment, m_pad), sizeof(MemChunk));
             const MemChunk* chunk = getFirstChunk ();
             const MemChunk* lastChunk = getPastLastChunk ();
             for (;;)
@@ -428,7 +432,7 @@ private:
                 else
                 {
                     printf ("-- chunk[ %p ]: size: %zu\n",
-                            chunk,
+                            static_cast<const void*> (chunk),
                             chunk->getChunkSize ());
                     break;
                 }
@@ -438,12 +442,12 @@ private:
 
 private:
     /**
-     * Use 16 byte alignment.
+     * The alignment of allocations (see ALLOCATION_ALIGNMENT).
      *
      * The result is that all the pointers allocated and corresponding sizes
-     * would have the lower 4 bits free.
+     * would have the lower bits free.
      */
-    static const size_type  ALIGNMENT = sizeof(size_type) * 2;
+    static const size_type  ALIGNMENT = ALLOCATION_ALIGNMENT;
     /**
      * The mask used to calculate the alignment.
      */
@@ -493,9 +497,15 @@ private:
      */
     static const size_type  MIN_REQUEST = MIN_CHUNK_SIZE - CHUNK_OVERHEAD;
     /**
+     * The size of the segment header before MemSegment::m_pad.  It is
+     * defined here rather than inside MemSegment, because offsetof cannot be
+     * used while the class is still incomplete.
+     */
+    static const size_type  SEGMENT_HEADER = offsetof (MemSegment, m_pad);
+    /**
      * The number of extra bytes needed for a segment.
      */
-    static const size_type  SEGMENT_OVERHEAD = ((((MemSegment::SEGMENT_HEADER + ALIGN_MASK) & ~ALIGN_MASK) + sizeof(MemChunk) + +ALIGN_MASK) & ~ALIGN_MASK);
+    static const size_type  SEGMENT_OVERHEAD = ((((SEGMENT_HEADER + ALIGN_MASK) & ~ALIGN_MASK) + sizeof(MemChunk) + +ALIGN_MASK) & ~ALIGN_MASK);
 private:
     /**
      * The memory arena used to allocate / free large memory segments.
@@ -621,10 +631,12 @@ public:
     }
 
     /**
-     * Set the maximum memory footprint limit.
+     * Set the maximum memory footprint limit.  Allocations that would need
+     * new memory segments beyond this limit fail and return nullptr.
      *
      * @param   footprintLimit
-     *
+     *          the maximum total size of the memory segments in bytes.
+     *          0 means no limit.
      */
     void
     setFootprintLimit (size_type footprintLimit)
@@ -638,13 +650,23 @@ public:
      * @return  the memory footprint limit
      */
     size_type
-    getFootPrintLimit () const
+    getFootprintLimit () const
     {
         return m_footprintLimit;
     }
 
     /**
      * Set the number of deallocations between empty-segment trimming passes.
+     *
+     * Memory segments that become entirely free are kept for later
+     * allocations.  After every interval deallocations, the segments that
+     * are entirely free are released to the arena.  A smaller interval keeps
+     * the footprint smaller, but releases and obtains segments more often.
+     *
+     * @param   interval
+     *          the number of deallocations between the passes.  The default
+     *          is DEFAULT_TRIM_EMPTY_SEGMENTS_INTERVAL.  1 (or 0) releases
+     *          empty segments on every deallocation.
      */
     void
     setTrimEmptySegmentsInterval (size_type interval)
@@ -667,7 +689,7 @@ public:
     /**
      * Allocate memory from the memory pool.
      *
-     * @param   size
+     * @param   userSize
      *          memory request size.
      * @return  the memory region that is at least the request size.
      *          nullptr if the request cannot be satisfied.
@@ -1061,52 +1083,6 @@ public:
 
 
     /**
-     * Release segments that are entirely free.
-     */
-    void
-    trimEmptySegments ()
-    {
-        m_logger.logTrimEmptySegments ();
-        MemSegment* seg = m_segList;
-        MemSegment* prevSeg = nullptr;
-        while (seg)
-        {
-            MemSegment* nextSeg = seg->getNext ();
-
-            size_type   segSize = seg->getSize ();
-            MemChunk*   firstChunk = seg->getFirstChunk ();
-            if (!firstChunk->isUsed () &&
-                firstChunk->getChunkSize () == seg->getMaxChunkSize ())
-            {
-                // The entire segment is free, so we can just release the
-                // segment.
-                //
-                // If users want to keep the segment around for caching, they
-                // can always use CacheMemArena.
-                removeChunk (firstChunk);
-
-                m_logger.logFreeSegment (seg, segSize);
-                m_arena.freeSegment (seg, segSize);
-
-                if (prevSeg == nullptr)
-                {
-                    m_segList = nextSeg;
-                }
-                if (prevSeg != nullptr)
-                {
-                    prevSeg->setNext (nextSeg);
-                }
-            }
-            else
-            {
-                prevSeg = seg;
-            }
-            seg = nextSeg;
-        }
-        m_numFrees = 0;
-    }
-
-    /**
      * Gets the allocated size for a pointer.
      *
      * If we are storing the exact size of the pointer, then the result
@@ -1255,10 +1231,14 @@ public:
         m_paddingByte = (char)paddingByte;
     }
 
+    /**
+     * Print the memory segments and chunks of the pool to stdout.  This is
+     * for debugging.
+     */
     void
     print () const
     {
-        printf ("**** context: %p ****\n", this);
+        printf ("**** context: %p ****\n", static_cast<const void*> (this));
 
         MemSegment* seg = m_segList;
         while (seg)
@@ -1269,6 +1249,55 @@ public:
     }
 
 private:
+    /**
+     * Release segments that are entirely free.  This is called automatically
+     * after every m_trimEmptySegmentsInterval deallocations (see
+     * setTrimEmptySegmentsInterval ()).
+     */
+    void
+    trimEmptySegments ()
+    {
+        m_logger.logTrimEmptySegments ();
+        MemSegment* seg = m_segList;
+        MemSegment* prevSeg = nullptr;
+        while (seg)
+        {
+            MemSegment* nextSeg = seg->getNext ();
+
+            size_type   segSize = seg->getSize ();
+            MemChunk*   firstChunk = seg->getFirstChunk ();
+            if (!firstChunk->isUsed () &&
+                firstChunk->getChunkSize () == seg->getMaxChunkSize ())
+            {
+                // The entire segment is free, so we can just release the
+                // segment.
+                //
+                // If users want to keep the segment around for caching, they
+                // can always use CacheMemArena.
+                removeChunk (firstChunk);
+
+                m_footprint -= segSize;
+                m_logger.logFreeSegment (seg, segSize);
+                m_arena.freeSegment (seg, segSize);
+
+                if (prevSeg == nullptr)
+                {
+                    m_segList = nextSeg;
+                }
+                if (prevSeg != nullptr)
+                {
+                    prevSeg->setNext (nextSeg);
+                }
+            }
+            else
+            {
+                prevSeg = seg;
+            }
+            seg = nextSeg;
+        }
+        m_numFrees = 0;
+    }
+
     static inline BinIndexType
     idx2bit (BinIndexType binIndex)
     {
