@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['references_0',['References',['../references.html',1,'']]]
+  ['license_0',['License',['../license.html',1,'']]],
+  ['limitations_1',['Limitations',['../limitations.html',1,'']]]
 ];

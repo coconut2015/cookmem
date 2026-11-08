@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CookMem<span id="projectnumber">&#160;0.1.0.0</span>
+   <div id="projectname">CookMem<span id="projectnumber">&#160;1.0.0</span>
    </div>
    <div id="projectbrief">A C++ memory context / allocator</div>
   </td>
@@ -93,28 +93,50 @@ $(document).ready(function(){initNavTree('build.html',''); initResizable(); });
   <div class="headertitle"><div class="title">Build Instructions</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h2><a class="anchor" id="autotoc_md6"></a>
+<div class="textblock"><p>CookMem is header-only, so building is only needed to run the tests, examples and performance tests, or to generate the documentation. To use CookMem in your own project, see <a class="el" href="install.html">Installation</a>.</p>
+<h2><a class="anchor" id="autotoc_md17"></a>
+Prerequisites</h2>
+<ul>
+<li><a href="https://cmake.org/">CMake</a> 3.12 or later.</li>
+<li>A C++11 compiler, such as GCC, Clang or Visual Studio.</li>
+<li>For code coverage (<code>cov</code> builds on Linux): <code>gcov</code>, <code>lcov</code> and <code>genhtml</code>.</li>
+<li>For documentation: <a href="https://www.doxygen.nl/">Doxygen</a> and <a href="https://graphviz.org/">Graphviz</a> (for the class diagrams).</li>
+</ul>
+<p>On Ubuntu, for example:</p>
+<div class="fragment"><div class="line">sudo apt-get install g++ cmake lcov doxygen graphviz</div>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md18"></a>
 Linux</h2>
-<p>Run the following command to build:</p>
 <div class="fragment"><div class="line">./make.sh [type]</div>
-</div><!-- fragment --><p><code>type</code> can be one of the following:</p>
+</div><!-- fragment --><p><code>type</code> can be one of the following. The default is <code>debug</code>. Each type builds in a directory of the same name.</p>
 <ul>
-<li><code>doc</code> - for generating Doxygen documents.</li>
-<li><code>debug</code> - for building tests for debugging purposes. Code coverage report can be seen at debug/test_coverage/index.html</li>
-<li><code>profiler</code> - for building tests with profilers.</li>
-<li><code>release</code> - for building tests with optimization enabled. It is for building internal performance tests.</li>
+<li><code>debug</code> - builds with debug information and runs the tests. The internal assertions are enabled (<code>COOKMEM_DEBUG</code>).</li>
+<li><code>cov</code> - like <code>debug</code>, but with code coverage. The performance tests are skipped. The report is generated at <code>cov/test_coverage/index.html</code>.</li>
+<li><code>release</code> - builds with optimization and runs the tests, including the performance tests.</li>
+<li><code>profiler</code> - like <code>release</code>, but built with <code>-pg</code> for profiling with <code>gprof</code>.</li>
+<li><code>docs</code> - generates the Doxygen documentation into the <code>docs</code> directory.</li>
+<li><code>help</code> - prints the usage.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md7"></a>
+<p>To run a single test, use <code>ctest</code> in the build directory, for example <code>cd debug &amp;&amp; ctest -R test_rbtree</code>.</p>
+<h2><a class="anchor" id="autotoc_md19"></a>
 Windows</h2>
-<p>Run the following command to build:</p>
 <div class="fragment"><div class="line">make.cmd [type]</div>
-</div><!-- fragment --><p><code>type</code> can be one of the following:</p>
-<ul>
-<li><code>doc</code> - for generating Doxygen documents.</li>
-<li><code>debug</code> - for building tests for debugging purposes. Code coverage report can be seen at debug/test_coverage/index.html</li>
-<li><code>profiler</code> - for building tests with profilers.</li>
-<li><code>release</code> - for building tests with optimization enabled. It is for building internal performance tests. </li>
-</ul>
+</div><!-- fragment --><p><code>type</code> can be <code>debug</code> (the default), <code>release</code> or <code>profiler</code>. It builds with CMake's default generator, normally Visual Studio, and runs the tests.</p>
+<p>Code coverage, documentation and the performance tests are only available on Linux.</p>
+<h2><a class="anchor" id="autotoc_md20"></a>
+Using CMake Directly</h2>
+<p>The scripts are wrappers around CMake. For example:</p>
+<div class="fragment"><div class="line">mkdir build</div>
+<div class="line">cd build</div>
+<div class="line">cmake -DCMAKE_BUILD_TYPE=Release ..</div>
+<div class="line">cmake --build .</div>
+<div class="line">ctest</div>
+</div><!-- fragment --><p>Pass <code>-DCOVERAGE=1</code> for code coverage (with a <code>Debug</code> build) or <code>-DBUILD_DOC=1</code> for documentation.</p>
+<h2><a class="anchor" id="autotoc_md21"></a>
+Performance Tests</h2>
+<p>The performance tests compare CookMem with <a href="http://gee.cs.oswego.edu/dl/html/malloc.html">dlmalloc</a>, using both the red-black tree and the AVL tree. They are built by the <code>release</code> type and only run on Linux.</p>
+<div class="fragment"><div class="line">./make.sh release</div>
+<div class="line">./perftest.sh [build directory] [report file]</div>
+</div><!-- fragment --><p><code>perftest.sh</code> runs each test 5 times (set <code>RUNS</code> to change this), drops the best and the worst time of each allocator, and averages the rest. It prints a markdown table that can be pasted into <code>README.md</code>. It also writes the results to <code>performances/perfdata.js</code>, which the <a href="performance.html">performance chart</a> displays. </p>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 </div><!-- doc-content -->

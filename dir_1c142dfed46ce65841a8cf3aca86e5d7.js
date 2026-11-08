@@ -11,5 +11,6 @@ var dir_1c142dfed46ce65841a8cf3aca86e5d7 =
     [ "mallocarena.h", "mallocarena_8h_source.html", null ],
     [ "mmaparena.h", "mmaparena_8h_source.html", null ],
     [ "pool.h", "pool_8h_source.html", null ],
-    [ "rbtree.h", "rbtree_8h_source.html", null ]
+    [ "rbtree.h", "rbtree_8h_source.html", null ],
+    [ "version.h", "version_8h.html", "version_8h" ]
 ];

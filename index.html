@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CookMem<span id="projectnumber">&#160;0.1.0.0</span>
+   <div id="projectname">CookMem<span id="projectnumber">&#160;1.0.0</span>
    </div>
    <div id="projectbrief">A C++ memory context / allocator</div>
   </td>
@@ -93,69 +93,110 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
   <div class="headertitle"><div class="title">CookMem </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="mainpage"></a></p>
+<div class="textblock"><p><a class="anchor" id="md__2home_2runner_2work_2cookmem_2cookmem_2README"></a></p>
 <p><a href="https://app.circleci.com/pipelines/github/coconut2015/cookmem"><img src="https://circleci.com/gh/coconut2015/cookmem.svg?style=shield" alt="Build Status" style="pointer-events: none;" class="inline"/></a><a href="https://codecov.io/gh/coconut2015/cookmem"><img src="https://codecov.io/gh/coconut2015/cookmem/branch/master/graph/badge.svg" alt="codecov" style="pointer-events: none;" class="inline"/></a><a href="http://www.apache.org/licenses/LICENSE-2.0"><img src="https://img.shields.io/badge/license-Apache--2.0-blue.svg" alt="Apache License, Version 2.0" style="pointer-events: none;" class="inline"/></a></p>
 <p>CookMem is a general-purpose <a href="https://en.wikipedia.org/wiki/Region-based_memory_management">memory context</a> and allocator written in C++11. It can be cleaned up quickly by freeing segments rather than freeing allocations individually.</p>
 <p>Unlike projects such as <a href="https://www.nedprod.com/programs/portable/nedmalloc/">nedmalloc</a>, which is intended to replace <code>malloc</code> / <code>free</code> in multithreaded applications, CookMem focuses on single-thread performance. It is intended for use within a thread in an MPP process, avoiding synchronization costs for most allocations and deallocations. There are other use cases as well.</p>
 <p>CookMem separates the logic for obtaining large memory segments, allowing users to easily create a version of the memory context for their specific needs.</p>
 <p>The algorithms and some code used here are based on <a href="http://gee.cs.oswego.edu/dl/html/malloc.html">dlmalloc</a>. I took the time to understand dlmalloc and rewrite its logic in C++. Some key calculations remain the same as in dlmalloc because there is no need to reinvent the wheel.</p>
 <h1><a class="anchor" id="autotoc_md0"></a>
+Quick Start</h1>
+<p>CookMem is header-only. Add the <code>include</code> directory to your include path and include <code><a class="el" href="cookmem_8h_source.html">cookmem.h</a></code>.</p>
+<div class="fragment"><div class="line"><span class="preprocessor">#include &lt;cookmem.h&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">int</span> main ()</div>
+<div class="line">{</div>
+<div class="line">    <span class="comment">// A memory context that obtains large memory segments from the system</span></div>
+<div class="line">    <span class="comment">// (mmap or VirtualAlloc) and caches released segments for reuse.</span></div>
+<div class="line">    <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">cookmem::CachedMemContext&lt;&gt;</a> memCtx;</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Allocate and deallocate like malloc and free.</span></div>
+<div class="line">    <span class="keywordtype">void</span>* ptr = memCtx.allocate (100);</div>
+<div class="line">    memCtx.deallocate (ptr);</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Standard containers can allocate from the same context.</span></div>
+<div class="line">    <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">cookmem::Allocator&lt;int&gt;</a> allocator (memCtx);</div>
+<div class="line">    std::vector&lt;int, cookmem::Allocator&lt;int&gt;&gt; numbers (allocator);</div>
+<div class="line">    numbers.push_back (42);</div>
+<div class="line"> </div>
+<div class="line">    <span class="keywordflow">return</span> 0;</div>
+<div class="line">}   <span class="comment">// Destroying memCtx releases all of its memory at once.</span></div>
+<div class="ttc" id="aclasscookmem_1_1MemContextProvider_html"><div class="ttname"><a href="classcookmem_1_1MemContextProvider.html">cookmem::MemContextProvider</a></div><div class="ttdef"><b>Definition</b> allocator.h:39</div></div>
+</div><!-- fragment --><p>See the <a href="https://coconut2015.github.io/cookmem/tutorials.html">tutorials</a> for more.</p>
+<h1><a class="anchor" id="autotoc_md1"></a>
+Requirements</h1>
+<ul>
+<li>A C++11 compiler. CookMem is tested with GCC 13 on Linux and with Visual Studio 2022 on Windows.</li>
+<li>A 64-bit platform.</li>
+<li><a href="https://cmake.org/">CMake</a> 3.12 or later, only to build the tests, examples and documentation. See <a href="https://coconut2015.github.io/cookmem/build.html">Build Instructions</a>.</li>
+</ul>
+<h1><a class="anchor" id="autotoc_md2"></a>
 Performance</h1>
-<p>The performance of CookMem is comparable to, if not faster than, dlmalloc. Neither dlmalloc nor CookMem uses locks. For CookMem, I also tested red-black tree (RB-tree) which is the default, and AVL-tree backend.</p>
-<p>An <a href="http://coconut2015.github.io/cookmem/performance.html">interactive chart</a> of these results is available with the documentation.</p>
-<p>Each test was run 5 times. For each column, the best and the worst times were dropped and the remaining times were averaged. The numbers are in seconds.</p>
+<p>CookMem is faster than dlmalloc in most of the tests below, up to about 13 times faster for large blocks that come straight from the arena (perf_cookmem_10), and about the same in the others. dlmalloc is faster for small blocks of the same size that are allocated and freed repeatedly (perf_cookmem_5), and for a sliding window of blocks of mixed sizes (perf_cookmem_11). Neither dlmalloc nor CookMem uses locks. CookMem was tested with both of its large chunk bins: the red-black tree (RB-tree), which is the default, and the AVL tree.</p>
+<p>An <a href="https://coconut2015.github.io/cookmem/performance.html">interactive chart</a> of these results is available with the documentation.</p>
+<p>The tests were run on an AMD Ryzen 7 5800H with Ubuntu 24.04 (WSL2), built by GCC 13.3 with <code>-O3</code>. Times vary between runs by about 10%, so small differences are not significant. Each test was run 5 times. For each column, the best and the worst times were dropped and the remaining times were averaged. The numbers are in seconds.</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Test   </th><th class="markdownTableHeadNone">What it covers   </th><th class="markdownTableHeadRight">dlmalloc   </th><th class="markdownTableHeadRight">CookMem (RB-tree)   </th><th class="markdownTableHeadRight">CookMem (AVL-tree)    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">perf_cookmem_1   </td><td class="markdownTableBodyNone">Copy a 200-character string into a vector 1M times (small bins, plus large vector growth)   </td><td class="markdownTableBodyRight">0.126525   </td><td class="markdownTableBodyRight">0.101618   </td><td class="markdownTableBodyRight">0.099559    </td></tr>
+<td class="markdownTableBodyNone">perf_cookmem_1   </td><td class="markdownTableBodyNone">Copy a 200-character string into a vector 1M times (small bins, plus large vector growth)   </td><td class="markdownTableBodyRight">0.137765   </td><td class="markdownTableBodyRight">0.112946   </td><td class="markdownTableBodyRight">0.131251    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">perf_cookmem_2   </td><td class="markdownTableBodyNone">Same as perf_cookmem_1, then clear and fill again (reuse of freed chunks)   </td><td class="markdownTableBodyRight">0.233960   </td><td class="markdownTableBodyRight">0.140242   </td><td class="markdownTableBodyRight">0.141031    </td></tr>
+<td class="markdownTableBodyNone">perf_cookmem_2   </td><td class="markdownTableBodyNone">Same as perf_cookmem_1, then clear and fill again (reuse of freed chunks)   </td><td class="markdownTableBodyRight">0.253331   </td><td class="markdownTableBodyRight">0.168729   </td><td class="markdownTableBodyRight">0.178487    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">perf_cookmem_3   </td><td class="markdownTableBodyNone">10k strings of growing length 1 to 10000 (mostly tree bins)   </td><td class="markdownTableBodyRight">0.022157   </td><td class="markdownTableBodyRight">0.020473   </td><td class="markdownTableBodyRight">0.020203    </td></tr>
+<td class="markdownTableBodyNone">perf_cookmem_3   </td><td class="markdownTableBodyNone">10k strings of growing length 1 to 10000 (mostly tree bins)   </td><td class="markdownTableBodyRight">0.024164   </td><td class="markdownTableBodyRight">0.022851   </td><td class="markdownTableBodyRight">0.022613    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">perf_cookmem_4   </td><td class="markdownTableBodyNone">Same as perf_cookmem_3, then clear and build again (reuse of freed tree chunks)   </td><td class="markdownTableBodyRight">0.033466   </td><td class="markdownTableBodyRight">0.025645   </td><td class="markdownTableBodyRight">0.025124    </td></tr>
+<td class="markdownTableBodyNone">perf_cookmem_4   </td><td class="markdownTableBodyNone">Same as perf_cookmem_3, then clear and build again (reuse of freed tree chunks)   </td><td class="markdownTableBodyRight">0.036800   </td><td class="markdownTableBodyRight">0.026149   </td><td class="markdownTableBodyRight">0.026622    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">perf_cookmem_5   </td><td class="markdownTableBodyNone">Small same-size churn (<code>std::list&lt;int&gt;</code>, small bins)   </td><td class="markdownTableBodyRight">0.068185   </td><td class="markdownTableBodyRight">0.074804   </td><td class="markdownTableBodyRight">0.079774    </td></tr>
+<td class="markdownTableBodyNone">perf_cookmem_5   </td><td class="markdownTableBodyNone">Small same-size churn (<code>std::list&lt;int&gt;</code>, small bins)   </td><td class="markdownTableBodyRight">0.069674   </td><td class="markdownTableBodyRight">0.079835   </td><td class="markdownTableBodyRight">0.084755    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">perf_cookmem_6   </td><td class="markdownTableBodyNone">Mixed sizes (<code>std::map&lt;int, std::string&gt;</code>, values 0-999 chars, erase and re-insert)   </td><td class="markdownTableBodyRight">0.160800   </td><td class="markdownTableBodyRight">0.149217   </td><td class="markdownTableBodyRight">0.153573    </td></tr>
+<td class="markdownTableBodyNone">perf_cookmem_6   </td><td class="markdownTableBodyNone">Mixed sizes (<code>std::map&lt;int, std::string&gt;</code>, values 0-999 chars, erase and re-insert)   </td><td class="markdownTableBodyRight">0.149489   </td><td class="markdownTableBodyRight">0.164420   </td><td class="markdownTableBodyRight">0.161334    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">perf_cookmem_7   </td><td class="markdownTableBodyNone">50k free chunks of the same 1KB size, then merging with free neighbors   </td><td class="markdownTableBodyRight">0.045228   </td><td class="markdownTableBodyRight">0.022644   </td><td class="markdownTableBodyRight">0.023003    </td></tr>
+<td class="markdownTableBodyNone">perf_cookmem_7   </td><td class="markdownTableBodyNone">50k free chunks of the same 1KB size, then merging with free neighbors   </td><td class="markdownTableBodyRight">0.045692   </td><td class="markdownTableBodyRight">0.022891   </td><td class="markdownTableBodyRight">0.022319    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">perf_cookmem_8   </td><td class="markdownTableBodyNone">Fragmentation and best-fit search (sizes 256 B-8 KB, refill the holes)   </td><td class="markdownTableBodyRight">0.079755   </td><td class="markdownTableBodyRight">0.070487   </td><td class="markdownTableBodyRight">0.069969    </td></tr>
+<td class="markdownTableBodyNone">perf_cookmem_8   </td><td class="markdownTableBodyNone">Fragmentation and best-fit search (sizes 256 B-8 KB, refill the holes)   </td><td class="markdownTableBodyRight">0.081027   </td><td class="markdownTableBodyRight">0.071846   </td><td class="markdownTableBodyRight">0.077851    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">perf_cookmem_9   </td><td class="markdownTableBodyNone">Interleaved <code>realloc</code> growth up to 32KB   </td><td class="markdownTableBodyRight">0.579950   </td><td class="markdownTableBodyRight">0.590824   </td><td class="markdownTableBodyRight">0.580901    </td></tr>
+<td class="markdownTableBodyNone">perf_cookmem_9   </td><td class="markdownTableBodyNone">Interleaved <code>realloc</code> growth up to 32KB   </td><td class="markdownTableBodyRight">0.598881   </td><td class="markdownTableBodyRight">0.567728   </td><td class="markdownTableBodyRight">0.585602    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">perf_cookmem_10   </td><td class="markdownTableBodyNone">Large blocks (128KB-4MB) going straight to the arena   </td><td class="markdownTableBodyRight">0.029976   </td><td class="markdownTableBodyRight">0.002192   </td><td class="markdownTableBodyRight">0.002443    </td></tr>
+<td class="markdownTableBodyNone">perf_cookmem_10   </td><td class="markdownTableBodyNone">Large blocks (128KB-4MB) going straight to the arena   </td><td class="markdownTableBodyRight">0.029663   </td><td class="markdownTableBodyRight">0.002250   </td><td class="markdownTableBodyRight">0.002693    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">perf_cookmem_11   </td><td class="markdownTableBodyNone">Sliding window (FIFO) of 1024 live blocks, 16-2047 bytes   </td><td class="markdownTableBodyRight">0.091809   </td><td class="markdownTableBodyRight">0.115924   </td><td class="markdownTableBodyRight">0.130731    </td></tr>
+<td class="markdownTableBodyNone">perf_cookmem_11   </td><td class="markdownTableBodyNone">Sliding window (FIFO) of 1024 live blocks, 16-2047 bytes   </td><td class="markdownTableBodyRight">0.087624   </td><td class="markdownTableBodyRight">0.109254   </td><td class="markdownTableBodyRight">0.122220    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">perf_cookmem_12   </td><td class="markdownTableBodyNone">10k vectors grown in interleaved order   </td><td class="markdownTableBodyRight">0.023595   </td><td class="markdownTableBodyRight">0.022747   </td><td class="markdownTableBodyRight">0.023023   </td></tr>
+<td class="markdownTableBodyNone">perf_cookmem_12   </td><td class="markdownTableBodyNone">10k vectors grown in interleaved order   </td><td class="markdownTableBodyRight">0.023026   </td><td class="markdownTableBodyRight">0.022922   </td><td class="markdownTableBodyRight">0.022312   </td></tr>
 </table>
-<h1><a class="anchor" id="usecases"></a>
+<h1><a class="anchor" id="autotoc_md3"></a>
 Use Cases</h1>
-<h2><a class="anchor" id="autotoc_md1"></a>
+<h2><a class="anchor" id="autotoc_md4"></a>
 Avoiding Synchronization Cost</h2>
 <p>In multithreaded applications, <code>malloc</code> / <code>free</code> or <code>new</code> / <code>delete</code> must synchronize on each call. This synchronization cost can be significant. nedmalloc exists to reduce the synchronization costs of naive implementations and thereby increase performance.</p>
-<p>For performance-critical applications, eliminating much of this synchronization cost can be even more beneficial. With CookMem, obtaining large segments using calls such as <code>mmap</code> may require synchronization, but allocations within those segments do not.</p>
-<h2><a class="anchor" id="autotoc_md2"></a>
+<p>For performance-critical applications, eliminating much of this synchronization cost can be even more beneficial. With CookMem, obtaining large segments using calls such as <code>mmap</code> may require synchronization, but allocations within those segments do not. See <a href="https://coconut2015.github.io/cookmem/tutorials.html#tlsSTLAlloc">Thread-local and Scoped Context STL Allocators</a>.</p>
+<h2><a class="anchor" id="autotoc_md5"></a>
 Avoiding Individual Frees</h2>
 <p>There are two sub-cases.</p>
 <ol type="1">
 <li>Doing individual frees can reduce performance.</li>
 <li>A complex pointer graph containing trees or cycles can make it very difficult to free pointers in the correct order. Yet, the memory has to be released to avoid memory leaks.</li>
 </ol>
-<p>Both cases can be addressed easily by using any of the MemContext classes.</p>
-<h2><a class="anchor" id="autotoc_md3"></a>
+<p>Both cases can be addressed easily by using any of the MemContext classes. Destroying a memory context releases all of its memory at once. See <a href="https://coconut2015.github.io/cookmem/behavior.html">Detailed Behavior</a> for the details.</p>
+<h2><a class="anchor" id="autotoc_md6"></a>
 Restricting Memory Usage</h2>
-<p>For long-running programs that take user inputs, it is possible that even when all input values are validated, edge cases in calculations can still cause the program to accidentally request a very large amount of memory and crash. CookMem provides several ways to restrict memory usage. One can set a memory footprint limit or add code to the segment request logic to restrict large memory requests.</p>
-<h2><a class="anchor" id="autotoc_md4"></a>
+<p>For long-running programs that take user inputs, it is possible that even when all input values are validated, edge cases in calculations can still cause the program to accidentally request a very large amount of memory and crash. CookMem provides several ways to restrict memory usage. One can set a memory footprint limit or add code to the segment request logic to restrict large memory requests. See <a href="https://coconut2015.github.io/cookmem/tutorials.html#footprint">Restricting Memory Usage</a>.</p>
+<h2><a class="anchor" id="autotoc_md7"></a>
 Diagnosing and Debugging</h2>
-<p>CookMem has built-in diagnostic tools that can help gather memory statistics and detect difficult-to-catch out-of-bounds writes without significantly slowing down the program. It also detects attempts to free an allocation more than once. CookMem is not a <a href="https://valgrind.org/">Valgrind</a> replacement, but in many cases it can help catch difficult bugs.</p>
-<h2><a class="anchor" id="autotoc_md5"></a>
+<p>CookMem has built-in diagnostic tools that can help gather memory statistics and detect difficult-to-catch out-of-bounds writes without significantly slowing down the program. It also detects attempts to free an allocation more than once. CookMem is not a <a href="https://valgrind.org/">Valgrind</a> replacement, but in many cases it can help catch difficult bugs. See <a href="https://coconut2015.github.io/cookmem/tutorials.html#statistics">Memory Statistics</a> and <a href="https://coconut2015.github.io/cookmem/tutorials.html#boundcheck">Memory Corruption Detection</a>.</p>
+<h2><a class="anchor" id="autotoc_md8"></a>
 Links</h2>
 <ul>
-<li>Documentation: <a href="http://coconut2015.github.io/cookmem/">http://coconut2015.github.io/cookmem/</a></li>
+<li>Documentation: <a href="https://coconut2015.github.io/cookmem/">https://coconut2015.github.io/cookmem/</a><ul>
+<li><a href="https://coconut2015.github.io/cookmem/tutorials.html">Tutorials</a></li>
+<li><a href="https://coconut2015.github.io/cookmem/behavior.html">Detailed Behavior</a></li>
+<li><a href="https://coconut2015.github.io/cookmem/limitations.html">Limitations</a></li>
+<li><a href="https://coconut2015.github.io/cookmem/install.html">Installation</a></li>
+<li><a href="https://coconut2015.github.io/cookmem/build.html">Build Instructions</a></li>
+<li><a href="https://coconut2015.github.io/cookmem/references.html">References</a></li>
+<li><a href="https://coconut2015.github.io/cookmem/performance.html">Performance Chart</a></li>
+</ul>
+</li>
 <li>Source: <a href="https://github.com/coconut2015/cookmem">https://github.com/coconut2015/cookmem</a> </li>
 </ul>
 </div></div><!-- PageDoc -->

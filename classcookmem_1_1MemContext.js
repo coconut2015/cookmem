@@ -2,16 +2,20 @@ var classcookmem_1_1MemContext =
 [
     [ "const_pointer", "classcookmem_1_1MemContext.html#adb3518b7bac1c62ccce1b8833f70f91d", null ],
     [ "difference_type", "classcookmem_1_1MemContext.html#ab686cd72d67fd70be4de46e666de1d9d", null ],
+    [ "MemCtx", "classcookmem_1_1MemContext.html#a32463f7b99aa5dd40500241020b56d23", null ],
     [ "pointer", "classcookmem_1_1MemContext.html#a4831e190cd7ed0c9d380983262e08c34", null ],
+    [ "Pool", "classcookmem_1_1MemContext.html#a0067e2f72e25097e61f305b0fbf2a462", null ],
     [ "size_type", "classcookmem_1_1MemContext.html#a755605b35d1e22ad5e61f10a08b26e84", null ],
     [ "value_type", "classcookmem_1_1MemContext.html#a5ac606a228e7f23a892db1d38273b8fd", null ],
+    [ "MemContext", "classcookmem_1_1MemContext.html#af6f56f169ab75f1e7c494df7c6dfc9f6", null ],
+    [ "MemContext", "classcookmem_1_1MemContext.html#abe4e9f425e10164ca0d5271f4df360be", null ],
     [ "allocate", "classcookmem_1_1MemContext.html#afb7b98ac1304907fadf9194533080917", null ],
     [ "callocate", "classcookmem_1_1MemContext.html#a7ec4fa5c035ba4d143f5abe8ab41a543", null ],
     [ "contains", "classcookmem_1_1MemContext.html#a1f22eb4d92f78a10392b8538246fa1f5", null ],
     [ "deallocate", "classcookmem_1_1MemContext.html#a56b82d97972ea6d1c8b3cae4a532a6ff", null ],
     [ "getArena", "classcookmem_1_1MemContext.html#a1e36c00c180d9c934fc40ccd4c7f9a26", null ],
     [ "getFootprint", "classcookmem_1_1MemContext.html#a9f08636c45cdc60279af67760e80e8c1", null ],
-    [ "getFootPrintLimit", "classcookmem_1_1MemContext.html#abb2d2bbcc889560e3d9aa016696c98dc", null ],
+    [ "getFootprintLimit", "classcookmem_1_1MemContext.html#ab260be11297c8ef76f228369ec6935ab", null ],
     [ "getLogger", "classcookmem_1_1MemContext.html#abb543b0c8868e53d5eb381ad4170018b", null ],
     [ "getMaxFootprint", "classcookmem_1_1MemContext.html#a058b6c729d7f7fd661c331a801dcd5fa", null ],
     [ "getPaddingByte", "classcookmem_1_1MemContext.html#a454e01e7ab1d4dd37049326ff90b79f3", null ],
@@ -27,6 +31,5 @@ var classcookmem_1_1MemContext =
     [ "setPaddingByte", "classcookmem_1_1MemContext.html#ad5a23c07b12dab6162054dbbcccf9723", null ],
     [ "setStoringExactSize", "classcookmem_1_1MemContext.html#a1fbd6a1736b7e4f5529ecdcc77767813", null ],
     [ "setTrimEmptySegmentsInterval", "classcookmem_1_1MemContext.html#ad6a131734c7b8a9bc0133c78a4d67fca", null ],
-    [ "trimEmptySegments", "classcookmem_1_1MemContext.html#a88e10ddda4619fa53a2116d307656b7c", null ],
     [ "validate", "classcookmem_1_1MemContext.html#a4daba21af7408782d8cd0badf6abab73", null ]
 ];

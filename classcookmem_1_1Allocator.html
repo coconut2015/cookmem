@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CookMem<span id="projectnumber">&#160;0.1.0.0</span>
+   <div id="projectname">CookMem<span id="projectnumber">&#160;1.0.0</span>
    </div>
    <div id="projectbrief">A C++ memory context / allocator</div>
   </td>
@@ -109,98 +109,651 @@ Classes</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr class="memitem:a435904727d58785df46b44bdd3ccacdc" id="r_a435904727d58785df46b44bdd3ccacdc"><td class="memItemLeft" align="right" valign="top"><a id="a435904727d58785df46b44bdd3ccacdc" name="a435904727d58785df46b44bdd3ccacdc"></a>
-<a class="el" href="classcookmem_1_1Allocator.html">typedef</a> <a class="el" href="classcookmem_1_1Allocator.html">ContextProvider</a>&#160;</td><td class="memItemRight" valign="bottom"><b>context_provider_type</b></td></tr>
+<a class="el" href="classcookmem_1_1MemContextProvider.html">typedef</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a>&#160;</td><td class="memItemRight" valign="bottom"><b>context_provider_type</b></td></tr>
+<tr class="memdesc:a435904727d58785df46b44bdd3ccacdc"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type of the context provider. <br /></td></tr>
 <tr class="separator:a435904727d58785df46b44bdd3ccacdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd19c46008b0236c3b56bdced90b85c9" id="r_afd19c46008b0236c3b56bdced90b85c9"><td class="memItemLeft" align="right" valign="top"><a id="afd19c46008b0236c3b56bdced90b85c9" name="afd19c46008b0236c3b56bdced90b85c9"></a>
-<a class="el" href="classcookmem_1_1Allocator.html">typedef</a> ContextProvider::context_type&#160;</td><td class="memItemRight" valign="bottom"><b>context_type</b></td></tr>
+<a class="el" href="classcookmem_1_1MemContextProvider.html">typedef</a> ContextProvider::context_type&#160;</td><td class="memItemRight" valign="bottom"><b>context_type</b></td></tr>
+<tr class="memdesc:afd19c46008b0236c3b56bdced90b85c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type of the memory context. <br /></td></tr>
 <tr class="separator:afd19c46008b0236c3b56bdced90b85c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a41b93215a53cb1bc118964b6d4bd312e" id="r_a41b93215a53cb1bc118964b6d4bd312e"><td class="memItemLeft" align="right" valign="top"><a id="a41b93215a53cb1bc118964b6d4bd312e" name="a41b93215a53cb1bc118964b6d4bd312e"></a>
-<a class="el" href="classcookmem_1_1Allocator.html">typedef</a> <a class="el" href="classcookmem_1_1Allocator.html">T</a>&#160;</td><td class="memItemRight" valign="bottom"><b>value_type</b></td></tr>
+<a class="el" href="classcookmem_1_1MemContextProvider.html">typedef</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a>&#160;</td><td class="memItemRight" valign="bottom"><b>value_type</b></td></tr>
+<tr class="memdesc:a41b93215a53cb1bc118964b6d4bd312e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type of the allocated objects. <br /></td></tr>
 <tr class="separator:a41b93215a53cb1bc118964b6d4bd312e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a63ea11986b34d79d892e6667e63066d6" id="r_a63ea11986b34d79d892e6667e63066d6"><td class="memItemLeft" align="right" valign="top"><a id="a63ea11986b34d79d892e6667e63066d6" name="a63ea11986b34d79d892e6667e63066d6"></a>
-<a class="el" href="classcookmem_1_1Allocator.html">typedef</a> <a class="el" href="classcookmem_1_1Allocator.html">T</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>pointer</b></td></tr>
+<a class="el" href="classcookmem_1_1MemContextProvider.html">typedef</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>pointer</b></td></tr>
+<tr class="memdesc:a63ea11986b34d79d892e6667e63066d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pointer to an allocated object. <br /></td></tr>
 <tr class="separator:a63ea11986b34d79d892e6667e63066d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac53e0ebd6819c154c6f6d031d665a015" id="r_ac53e0ebd6819c154c6f6d031d665a015"><td class="memItemLeft" align="right" valign="top"><a id="ac53e0ebd6819c154c6f6d031d665a015" name="ac53e0ebd6819c154c6f6d031d665a015"></a>
-<a class="el" href="classcookmem_1_1Allocator.html">typedef</a> <a class="el" href="classcookmem_1_1Allocator.html">const</a> <a class="el" href="classcookmem_1_1Allocator.html">T</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>const_pointer</b></td></tr>
+<a class="el" href="classcookmem_1_1MemContextProvider.html">typedef</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">const</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>const_pointer</b></td></tr>
+<tr class="memdesc:ac53e0ebd6819c154c6f6d031d665a015"><td class="mdescLeft">&#160;</td><td class="mdescRight">Const pointer to an allocated object. <br /></td></tr>
 <tr class="separator:ac53e0ebd6819c154c6f6d031d665a015"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a40d700a719255efe1ff0d47aace6640d" id="r_a40d700a719255efe1ff0d47aace6640d"><td class="memItemLeft" align="right" valign="top"><a id="a40d700a719255efe1ff0d47aace6640d" name="a40d700a719255efe1ff0d47aace6640d"></a>
-<a class="el" href="classcookmem_1_1Allocator.html">typedef</a> <a class="el" href="classcookmem_1_1Allocator.html">T</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>reference</b></td></tr>
+<a class="el" href="classcookmem_1_1MemContextProvider.html">typedef</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>reference</b></td></tr>
+<tr class="memdesc:a40d700a719255efe1ff0d47aace6640d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reference to an allocated object. <br /></td></tr>
 <tr class="separator:a40d700a719255efe1ff0d47aace6640d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae66b56248ab77ed8120956083497430d" id="r_ae66b56248ab77ed8120956083497430d"><td class="memItemLeft" align="right" valign="top"><a id="ae66b56248ab77ed8120956083497430d" name="ae66b56248ab77ed8120956083497430d"></a>
-<a class="el" href="classcookmem_1_1Allocator.html">typedef</a> <a class="el" href="classcookmem_1_1Allocator.html">const</a> <a class="el" href="classcookmem_1_1Allocator.html">T</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>const_reference</b></td></tr>
+<a class="el" href="classcookmem_1_1MemContextProvider.html">typedef</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">const</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>const_reference</b></td></tr>
+<tr class="memdesc:ae66b56248ab77ed8120956083497430d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Const reference to an allocated object. <br /></td></tr>
 <tr class="separator:ae66b56248ab77ed8120956083497430d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a66ac77e61fd393f80206b1699a85341a" id="r_a66ac77e61fd393f80206b1699a85341a"><td class="memItemLeft" align="right" valign="top"><a id="a66ac77e61fd393f80206b1699a85341a" name="a66ac77e61fd393f80206b1699a85341a"></a>
-<a class="el" href="classcookmem_1_1Allocator.html">typedef</a> std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>size_type</b></td></tr>
+<a class="el" href="classcookmem_1_1MemContextProvider.html">typedef</a> std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>size_type</b></td></tr>
+<tr class="memdesc:a66ac77e61fd393f80206b1699a85341a"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type of object counts. <br /></td></tr>
 <tr class="separator:a66ac77e61fd393f80206b1699a85341a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac23a0e4e15833f76bf355a47dbf1c562" id="r_ac23a0e4e15833f76bf355a47dbf1c562"><td class="memItemLeft" align="right" valign="top"><a id="ac23a0e4e15833f76bf355a47dbf1c562" name="ac23a0e4e15833f76bf355a47dbf1c562"></a>
-<a class="el" href="classcookmem_1_1Allocator.html">typedef</a> std::ptrdiff_t&#160;</td><td class="memItemRight" valign="bottom"><b>difference_type</b></td></tr>
+<a class="el" href="classcookmem_1_1MemContextProvider.html">typedef</a> std::ptrdiff_t&#160;</td><td class="memItemRight" valign="bottom"><b>difference_type</b></td></tr>
+<tr class="memdesc:ac23a0e4e15833f76bf355a47dbf1c562"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type of pointer differences. <br /></td></tr>
 <tr class="separator:ac23a0e4e15833f76bf355a47dbf1c562"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0f5e1ed7397e35d59f1da372d93c7d84" id="r_a0f5e1ed7397e35d59f1da372d93c7d84"><td class="memItemLeft" align="right" valign="top"><a id="a0f5e1ed7397e35d59f1da372d93c7d84" name="a0f5e1ed7397e35d59f1da372d93c7d84"></a>
-<a class="el" href="classcookmem_1_1Allocator.html">typedef</a> ContextProvider::propagate_on_container_copy_assignment&#160;</td><td class="memItemRight" valign="bottom"><b>propagate_on_container_copy_assignment</b></td></tr>
+<tr class="memitem:a0f5e1ed7397e35d59f1da372d93c7d84" id="r_a0f5e1ed7397e35d59f1da372d93c7d84"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">typedef</a> ContextProvider::propagate_on_container_copy_assignment&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1Allocator.html#a0f5e1ed7397e35d59f1da372d93c7d84">propagate_on_container_copy_assignment</a></td></tr>
 <tr class="separator:a0f5e1ed7397e35d59f1da372d93c7d84"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae101e7107db1cdda0be3fdce5b65089d" id="r_ae101e7107db1cdda0be3fdce5b65089d"><td class="memItemLeft" align="right" valign="top"><a id="ae101e7107db1cdda0be3fdce5b65089d" name="ae101e7107db1cdda0be3fdce5b65089d"></a>
-<a class="el" href="classcookmem_1_1Allocator.html">typedef</a> ContextProvider::propagate_on_container_move_assignment&#160;</td><td class="memItemRight" valign="bottom"><b>propagate_on_container_move_assignment</b></td></tr>
+<tr class="memitem:ae101e7107db1cdda0be3fdce5b65089d" id="r_ae101e7107db1cdda0be3fdce5b65089d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">typedef</a> ContextProvider::propagate_on_container_move_assignment&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1Allocator.html#ae101e7107db1cdda0be3fdce5b65089d">propagate_on_container_move_assignment</a></td></tr>
 <tr class="separator:ae101e7107db1cdda0be3fdce5b65089d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af44b3f3b49003fefef53815889e9302e" id="r_af44b3f3b49003fefef53815889e9302e"><td class="memItemLeft" align="right" valign="top"><a id="af44b3f3b49003fefef53815889e9302e" name="af44b3f3b49003fefef53815889e9302e"></a>
-<a class="el" href="classcookmem_1_1Allocator.html">typedef</a> ContextProvider::propagate_on_container_swap&#160;</td><td class="memItemRight" valign="bottom"><b>propagate_on_container_swap</b></td></tr>
+<tr class="memitem:af44b3f3b49003fefef53815889e9302e" id="r_af44b3f3b49003fefef53815889e9302e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">typedef</a> ContextProvider::propagate_on_container_swap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1Allocator.html#af44b3f3b49003fefef53815889e9302e">propagate_on_container_swap</a></td></tr>
 <tr class="separator:af44b3f3b49003fefef53815889e9302e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8eacc3e88132a7edae06b75cab6d452e" id="r_a8eacc3e88132a7edae06b75cab6d452e"><td class="memItemLeft" align="right" valign="top"><a id="a8eacc3e88132a7edae06b75cab6d452e" name="a8eacc3e88132a7edae06b75cab6d452e"></a>
-<a class="el" href="classcookmem_1_1Allocator.html">typedef</a> ContextProvider::is_always_equal&#160;</td><td class="memItemRight" valign="bottom"><b>is_always_equal</b></td></tr>
+<tr class="memitem:a8eacc3e88132a7edae06b75cab6d452e" id="r_a8eacc3e88132a7edae06b75cab6d452e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">typedef</a> ContextProvider::is_always_equal&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1Allocator.html#a8eacc3e88132a7edae06b75cab6d452e">is_always_equal</a></td></tr>
 <tr class="separator:a8eacc3e88132a7edae06b75cab6d452e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:af60969e027cbbf301ce3581380af23c8" id="r_af60969e027cbbf301ce3581380af23c8"><td class="memTemplParams" colspan="2"><a id="af60969e027cbbf301ce3581380af23c8" name="af60969e027cbbf301ce3581380af23c8"></a>
-template&lt;<a class="el" href="classcookmem_1_1Allocator.html">class</a> <a class="el" href="classcookmem_1_1Allocator.html">Provider</a>  = ContextProvider&gt; </td></tr>
-<tr class="memitem:af60969e027cbbf301ce3581380af23c8"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><b>Allocator</b> (<a class="el" href="classcookmem_1_1Allocator.html">typename</a> std::enable_if&lt; std::is_default_constructible&lt; <a class="el" href="classcookmem_1_1Allocator.html">Provider</a> &gt;::value, <a class="el" href="classcookmem_1_1Allocator.html">int</a> &gt;::type *=<a class="el" href="classcookmem_1_1Allocator.html">nullptr</a>)</td></tr>
+<tr class="memitem:af60969e027cbbf301ce3581380af23c8" id="r_af60969e027cbbf301ce3581380af23c8"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">Provider</a>  = ContextProvider&gt; </td></tr>
+<tr class="memitem:af60969e027cbbf301ce3581380af23c8"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classcookmem_1_1Allocator.html#af60969e027cbbf301ce3581380af23c8">Allocator</a> (<a class="el" href="classcookmem_1_1MemContextProvider.html">typename</a> std::enable_if&lt; std::is_default_constructible&lt; <a class="el" href="classcookmem_1_1MemContextProvider.html">Provider</a> &gt;::value, <a class="el" href="classcookmem_1_1MemContextProvider.html">int</a> &gt;::type *=<a class="el" href="classcookmem_1_1MemContextProvider.html">nullptr</a>)</td></tr>
 <tr class="separator:af60969e027cbbf301ce3581380af23c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab1aff6485deb75994d17a855bb07f017" id="r_ab1aff6485deb75994d17a855bb07f017"><td class="memItemLeft" align="right" valign="top"><a id="ab1aff6485deb75994d17a855bb07f017" name="ab1aff6485deb75994d17a855bb07f017"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Allocator</b> (context_type &amp;<a class="el" href="classcookmem_1_1Allocator.html">context</a>)</td></tr>
+<tr class="memitem:ab1aff6485deb75994d17a855bb07f017" id="r_ab1aff6485deb75994d17a855bb07f017"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1Allocator.html#ab1aff6485deb75994d17a855bb07f017">Allocator</a> (<a class="el" href="classcookmem_1_1Allocator.html#afd19c46008b0236c3b56bdced90b85c9">context_type</a> &amp;<a class="el" href="classcookmem_1_1MemContextProvider.html">context</a>)</td></tr>
 <tr class="separator:ab1aff6485deb75994d17a855bb07f017"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a28914c6ff448d730c61c487bb64a65e9" id="r_a28914c6ff448d730c61c487bb64a65e9"><td class="memItemLeft" align="right" valign="top"><a id="a28914c6ff448d730c61c487bb64a65e9" name="a28914c6ff448d730c61c487bb64a65e9"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Allocator</b> (<a class="el" href="classcookmem_1_1Allocator.html">const</a> <a class="el" href="classcookmem_1_1Allocator.html">ContextProvider</a> &amp;<a class="el" href="classcookmem_1_1Allocator.html">provider</a>)</td></tr>
+<tr class="memitem:a28914c6ff448d730c61c487bb64a65e9" id="r_a28914c6ff448d730c61c487bb64a65e9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1Allocator.html#a28914c6ff448d730c61c487bb64a65e9">Allocator</a> (<a class="el" href="classcookmem_1_1MemContextProvider.html">const</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a> &amp;<a class="el" href="classcookmem_1_1MemContextProvider.html">provider</a>)</td></tr>
 <tr class="separator:a28914c6ff448d730c61c487bb64a65e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a77bf5626ba00da68818c49320b086eb0" id="r_a77bf5626ba00da68818c49320b086eb0"><td class="memItemLeft" align="right" valign="top"><a id="a77bf5626ba00da68818c49320b086eb0" name="a77bf5626ba00da68818c49320b086eb0"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Allocator</b> (<a class="el" href="classcookmem_1_1Allocator.html">const</a> <a class="el" href="classcookmem_1_1Allocator.html">Allocator</a> &amp;other)</td></tr>
+<tr class="memitem:a77bf5626ba00da68818c49320b086eb0" id="r_a77bf5626ba00da68818c49320b086eb0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1Allocator.html#a77bf5626ba00da68818c49320b086eb0">Allocator</a> (<a class="el" href="classcookmem_1_1MemContextProvider.html">const</a> <a class="el" href="classcookmem_1_1Allocator.html">Allocator</a> &amp;other)</td></tr>
 <tr class="separator:a77bf5626ba00da68818c49320b086eb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a17925bd33cbde12f31e4615a36387dec" id="r_a17925bd33cbde12f31e4615a36387dec"><td class="memTemplParams" colspan="2"><a id="a17925bd33cbde12f31e4615a36387dec" name="a17925bd33cbde12f31e4615a36387dec"></a>
-template&lt;<a class="el" href="classcookmem_1_1Allocator.html">class</a> <a class="el" href="classcookmem_1_1Allocator.html">U</a> &gt; </td></tr>
-<tr class="memitem:a17925bd33cbde12f31e4615a36387dec"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><b>Allocator</b> (<a class="el" href="classcookmem_1_1Allocator.html">const</a> <a class="el" href="classcookmem_1_1Allocator.html">Allocator</a>&lt; <a class="el" href="classcookmem_1_1Allocator.html">U</a>, <a class="el" href="classcookmem_1_1Allocator.html">ContextProvider</a> &gt; &amp;other)</td></tr>
+<tr class="memitem:a17925bd33cbde12f31e4615a36387dec" id="r_a17925bd33cbde12f31e4615a36387dec"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">U</a> &gt; </td></tr>
+<tr class="memitem:a17925bd33cbde12f31e4615a36387dec"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classcookmem_1_1Allocator.html#a17925bd33cbde12f31e4615a36387dec">Allocator</a> (<a class="el" href="classcookmem_1_1MemContextProvider.html">const</a> <a class="el" href="classcookmem_1_1Allocator.html">Allocator</a>&lt; <a class="el" href="classcookmem_1_1MemContextProvider.html">U</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a> &gt; &amp;other)</td></tr>
 <tr class="separator:a17925bd33cbde12f31e4615a36387dec"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a38861ea317e62a48008c59d3d3ed6b7d" id="r_a38861ea317e62a48008c59d3d3ed6b7d"><td class="memItemLeft" align="right" valign="top"><a id="a38861ea317e62a48008c59d3d3ed6b7d" name="a38861ea317e62a48008c59d3d3ed6b7d"></a>
-pointer&#160;</td><td class="memItemRight" valign="bottom"><b>allocate</b> (size_type size, <a class="el" href="classcookmem_1_1Allocator.html">const</a> <a class="el" href="classcookmem_1_1Allocator.html">void</a> *=<a class="el" href="classcookmem_1_1Allocator.html">nullptr</a>)</td></tr>
+<tr class="memitem:a38861ea317e62a48008c59d3d3ed6b7d" id="r_a38861ea317e62a48008c59d3d3ed6b7d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1Allocator.html#a63ea11986b34d79d892e6667e63066d6">pointer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1Allocator.html#a38861ea317e62a48008c59d3d3ed6b7d">allocate</a> (<a class="el" href="classcookmem_1_1Allocator.html#a66ac77e61fd393f80206b1699a85341a">size_type</a> size, <a class="el" href="classcookmem_1_1MemContextProvider.html">const</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">void</a> *=<a class="el" href="classcookmem_1_1MemContextProvider.html">nullptr</a>)</td></tr>
 <tr class="separator:a38861ea317e62a48008c59d3d3ed6b7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a28e71c9997a19f662c09ad49a768c128" id="r_a28e71c9997a19f662c09ad49a768c128"><td class="memItemLeft" align="right" valign="top"><a id="a28e71c9997a19f662c09ad49a768c128" name="a28e71c9997a19f662c09ad49a768c128"></a>
-<a class="el" href="classcookmem_1_1Allocator.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>deallocate</b> (pointer <a class="el" href="classcookmem_1_1Allocator.html">ptr</a>, size_type)</td></tr>
+<tr class="memitem:a28e71c9997a19f662c09ad49a768c128" id="r_a28e71c9997a19f662c09ad49a768c128"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1Allocator.html#a28e71c9997a19f662c09ad49a768c128">deallocate</a> (<a class="el" href="classcookmem_1_1Allocator.html#a63ea11986b34d79d892e6667e63066d6">pointer</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">ptr</a>, <a class="el" href="classcookmem_1_1Allocator.html#a66ac77e61fd393f80206b1699a85341a">size_type</a>)</td></tr>
 <tr class="separator:a28e71c9997a19f662c09ad49a768c128"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a81d3a68e167db6cf7fbd0618e6faae90" id="r_a81d3a68e167db6cf7fbd0618e6faae90"><td class="memItemLeft" align="right" valign="top"><a id="a81d3a68e167db6cf7fbd0618e6faae90" name="a81d3a68e167db6cf7fbd0618e6faae90"></a>
-size_type&#160;</td><td class="memItemRight" valign="bottom"><b>max_size</b> () <a class="el" href="classcookmem_1_1Allocator.html">const</a></td></tr>
+<tr class="memitem:a81d3a68e167db6cf7fbd0618e6faae90" id="r_a81d3a68e167db6cf7fbd0618e6faae90"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1Allocator.html#a66ac77e61fd393f80206b1699a85341a">size_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1Allocator.html#a81d3a68e167db6cf7fbd0618e6faae90">max_size</a> () <a class="el" href="classcookmem_1_1MemContextProvider.html">const</a></td></tr>
 <tr class="separator:a81d3a68e167db6cf7fbd0618e6faae90"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa80f0a5a9941052deac9053d65a82c89" id="r_aa80f0a5a9941052deac9053d65a82c89"><td class="memTemplParams" colspan="2"><a id="aa80f0a5a9941052deac9053d65a82c89" name="aa80f0a5a9941052deac9053d65a82c89"></a>
-template&lt;<a class="el" href="classcookmem_1_1Allocator.html">class</a> <a class="el" href="classcookmem_1_1Allocator.html">U</a> , class... Args&gt; </td></tr>
-<tr class="memitem:aa80f0a5a9941052deac9053d65a82c89"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1Allocator.html">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>construct</b> (<a class="el" href="classcookmem_1_1Allocator.html">U</a> *<a class="el" href="classcookmem_1_1Allocator.html">ptr</a>, <a class="el" href="classcookmem_1_1Allocator.html">Args</a> &amp;&amp;... <a class="el" href="classcookmem_1_1Allocator.html">args</a>)</td></tr>
+<tr class="memitem:aa80f0a5a9941052deac9053d65a82c89" id="r_aa80f0a5a9941052deac9053d65a82c89"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">U</a> , class... Args&gt; </td></tr>
+<tr class="memitem:aa80f0a5a9941052deac9053d65a82c89"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classcookmem_1_1Allocator.html#aa80f0a5a9941052deac9053d65a82c89">construct</a> (<a class="el" href="classcookmem_1_1MemContextProvider.html">U</a> *<a class="el" href="classcookmem_1_1MemContextProvider.html">ptr</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">Args</a> &amp;&amp;... <a class="el" href="classcookmem_1_1MemContextProvider.html">args</a>)</td></tr>
 <tr class="separator:aa80f0a5a9941052deac9053d65a82c89"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a650a7b1462ff1de306a1f86766160180" id="r_a650a7b1462ff1de306a1f86766160180"><td class="memTemplParams" colspan="2"><a id="a650a7b1462ff1de306a1f86766160180" name="a650a7b1462ff1de306a1f86766160180"></a>
-template&lt;<a class="el" href="classcookmem_1_1Allocator.html">class</a> <a class="el" href="classcookmem_1_1Allocator.html">U</a> &gt; </td></tr>
-<tr class="memitem:a650a7b1462ff1de306a1f86766160180"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1Allocator.html">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>destroy</b> (<a class="el" href="classcookmem_1_1Allocator.html">U</a> *<a class="el" href="classcookmem_1_1Allocator.html">ptr</a>)</td></tr>
+<tr class="memitem:a650a7b1462ff1de306a1f86766160180" id="r_a650a7b1462ff1de306a1f86766160180"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">U</a> &gt; </td></tr>
+<tr class="memitem:a650a7b1462ff1de306a1f86766160180"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classcookmem_1_1Allocator.html#a650a7b1462ff1de306a1f86766160180">destroy</a> (<a class="el" href="classcookmem_1_1MemContextProvider.html">U</a> *<a class="el" href="classcookmem_1_1MemContextProvider.html">ptr</a>)</td></tr>
 <tr class="separator:a650a7b1462ff1de306a1f86766160180"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aecf0ac5dca577377b72536bd7deba02e" id="r_aecf0ac5dca577377b72536bd7deba02e"><td class="memItemLeft" align="right" valign="top"><a id="aecf0ac5dca577377b72536bd7deba02e" name="aecf0ac5dca577377b72536bd7deba02e"></a>
-context_type &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getContext</b> () <a class="el" href="classcookmem_1_1Allocator.html">const</a></td></tr>
+<tr class="memitem:aecf0ac5dca577377b72536bd7deba02e" id="r_aecf0ac5dca577377b72536bd7deba02e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1Allocator.html#afd19c46008b0236c3b56bdced90b85c9">context_type</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1Allocator.html#aecf0ac5dca577377b72536bd7deba02e">getContext</a> () <a class="el" href="classcookmem_1_1MemContextProvider.html">const</a></td></tr>
 <tr class="separator:aecf0ac5dca577377b72536bd7deba02e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d8c72106989803a4463e013b35296f2" id="r_a9d8c72106989803a4463e013b35296f2"><td class="memTemplParams" colspan="2"><a id="a9d8c72106989803a4463e013b35296f2" name="a9d8c72106989803a4463e013b35296f2"></a>
-template&lt;<a class="el" href="classcookmem_1_1Allocator.html">class</a> <a class="el" href="classcookmem_1_1Allocator.html">U</a> &gt; </td></tr>
-<tr class="memitem:a9d8c72106989803a4463e013b35296f2"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1Allocator.html">bool</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator==</b> (<a class="el" href="classcookmem_1_1Allocator.html">const</a> <a class="el" href="classcookmem_1_1Allocator.html">Allocator</a>&lt; <a class="el" href="classcookmem_1_1Allocator.html">U</a>, <a class="el" href="classcookmem_1_1Allocator.html">ContextProvider</a> &gt; &amp;other) <a class="el" href="classcookmem_1_1Allocator.html">const</a></td></tr>
+<tr class="memitem:a9d8c72106989803a4463e013b35296f2" id="r_a9d8c72106989803a4463e013b35296f2"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">U</a> &gt; </td></tr>
+<tr class="memitem:a9d8c72106989803a4463e013b35296f2"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">bool</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classcookmem_1_1Allocator.html#a9d8c72106989803a4463e013b35296f2">operator==</a> (<a class="el" href="classcookmem_1_1MemContextProvider.html">const</a> <a class="el" href="classcookmem_1_1Allocator.html">Allocator</a>&lt; <a class="el" href="classcookmem_1_1MemContextProvider.html">U</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a> &gt; &amp;other) <a class="el" href="classcookmem_1_1MemContextProvider.html">const</a></td></tr>
 <tr class="separator:a9d8c72106989803a4463e013b35296f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8ac5fdb16bbd5a1bc35c8867ad4291e4" id="r_a8ac5fdb16bbd5a1bc35c8867ad4291e4"><td class="memTemplParams" colspan="2"><a id="a8ac5fdb16bbd5a1bc35c8867ad4291e4" name="a8ac5fdb16bbd5a1bc35c8867ad4291e4"></a>
-template&lt;<a class="el" href="classcookmem_1_1Allocator.html">class</a> <a class="el" href="classcookmem_1_1Allocator.html">U</a> &gt; </td></tr>
-<tr class="memitem:a8ac5fdb16bbd5a1bc35c8867ad4291e4"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1Allocator.html">bool</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator!=</b> (<a class="el" href="classcookmem_1_1Allocator.html">const</a> <a class="el" href="classcookmem_1_1Allocator.html">Allocator</a>&lt; <a class="el" href="classcookmem_1_1Allocator.html">U</a>, <a class="el" href="classcookmem_1_1Allocator.html">ContextProvider</a> &gt; &amp;other) <a class="el" href="classcookmem_1_1Allocator.html">const</a></td></tr>
+<tr class="memitem:a8ac5fdb16bbd5a1bc35c8867ad4291e4" id="r_a8ac5fdb16bbd5a1bc35c8867ad4291e4"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">U</a> &gt; </td></tr>
+<tr class="memitem:a8ac5fdb16bbd5a1bc35c8867ad4291e4"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">bool</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classcookmem_1_1Allocator.html#a8ac5fdb16bbd5a1bc35c8867ad4291e4">operator!=</a> (<a class="el" href="classcookmem_1_1MemContextProvider.html">const</a> <a class="el" href="classcookmem_1_1Allocator.html">Allocator</a>&lt; <a class="el" href="classcookmem_1_1MemContextProvider.html">U</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a> &gt; &amp;other) <a class="el" href="classcookmem_1_1MemContextProvider.html">const</a></td></tr>
 <tr class="separator:a8ac5fdb16bbd5a1bc35c8867ad4291e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><div class="compoundTemplParams">template&lt;class T, class ContextProvider = MemContextProvider&lt;CachedMemContext&lt;&gt; &gt;&gt;<br />
+<div class="textblock"><div class="compoundTemplParams">template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a> = MemContextProvider&lt;CachedMemContext&lt;&gt; &gt;&gt;<br />
 class cookmem::Allocator&lt; T, ContextProvider &gt;</div><p>An STL allocator that allocates through its context provider.</p>
-<p><a class="el" href="classcookmem_1_1Allocator.html">Allocator</a> copies and rebound allocators retain the same provider. </p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
+<p><a class="el" href="classcookmem_1_1Allocator.html">Allocator</a> copies and rebound allocators retain the same provider.</p>
+<p>T must not require an alignment larger than ALLOCATION_ALIGNMENT. Using such a type causes a compile error when memory is allocated. </p>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="a8eacc3e88132a7edae06b75cab6d452e" name="a8eacc3e88132a7edae06b75cab6d452e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8eacc3e88132a7edae06b75cab6d452e">&#9670;&#160;</a></span>is_always_equal</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> , <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a>  = MemContextProvider&lt;CachedMemContext&lt;&gt; &gt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1MemContextProvider.html">typedef</a> ContextProvider::is_always_equal <a class="el" href="classcookmem_1_1Allocator.html">cookmem::Allocator</a>&lt; <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a> &gt;::is_always_equal</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Same as the context provider. </p>
+
+</div>
+</div>
+<a id="a0f5e1ed7397e35d59f1da372d93c7d84" name="a0f5e1ed7397e35d59f1da372d93c7d84"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f5e1ed7397e35d59f1da372d93c7d84">&#9670;&#160;</a></span>propagate_on_container_copy_assignment</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> , <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a>  = MemContextProvider&lt;CachedMemContext&lt;&gt; &gt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1MemContextProvider.html">typedef</a> ContextProvider::propagate_on_container_copy_assignment <a class="el" href="classcookmem_1_1Allocator.html">cookmem::Allocator</a>&lt; <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a> &gt;::propagate_on_container_copy_assignment</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Same as the context provider. </p>
+
+</div>
+</div>
+<a id="ae101e7107db1cdda0be3fdce5b65089d" name="ae101e7107db1cdda0be3fdce5b65089d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae101e7107db1cdda0be3fdce5b65089d">&#9670;&#160;</a></span>propagate_on_container_move_assignment</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> , <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a>  = MemContextProvider&lt;CachedMemContext&lt;&gt; &gt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1MemContextProvider.html">typedef</a> ContextProvider::propagate_on_container_move_assignment <a class="el" href="classcookmem_1_1Allocator.html">cookmem::Allocator</a>&lt; <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a> &gt;::propagate_on_container_move_assignment</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Same as the context provider. </p>
+
+</div>
+</div>
+<a id="af44b3f3b49003fefef53815889e9302e" name="af44b3f3b49003fefef53815889e9302e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af44b3f3b49003fefef53815889e9302e">&#9670;&#160;</a></span>propagate_on_container_swap</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> , <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a>  = MemContextProvider&lt;CachedMemContext&lt;&gt; &gt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1MemContextProvider.html">typedef</a> ContextProvider::propagate_on_container_swap <a class="el" href="classcookmem_1_1Allocator.html">cookmem::Allocator</a>&lt; <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a> &gt;::propagate_on_container_swap</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Same as the context provider. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="af60969e027cbbf301ce3581380af23c8" name="af60969e027cbbf301ce3581380af23c8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af60969e027cbbf301ce3581380af23c8">&#9670;&#160;</a></span>Allocator() <span class="overload">[1/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> , <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a>  = MemContextProvider&lt;CachedMemContext&lt;&gt; &gt;&gt; </div>
+<div class="memtemplate">
+template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">Provider</a>  = ContextProvider&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1Allocator.html">cookmem::Allocator</a>&lt; <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a> &gt;::Allocator </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcookmem_1_1MemContextProvider.html">typename</a> std::enable_if&lt; std::is_default_constructible&lt; <a class="el" href="classcookmem_1_1MemContextProvider.html">Provider</a> &gt;::value, <a class="el" href="classcookmem_1_1MemContextProvider.html">int</a> &gt;::type *&#160;</td>
+          <td class="paramname"> = <code><a class="el" href="classcookmem_1_1MemContextProvider.html">nullptr</a></code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Default constructor. It is available only when the context provider is default constructible, such as <a class="el" href="classcookmem_1_1TLSContextProvider.html">TLSContextProvider</a>. </p>
+
+</div>
+</div>
+<a id="ab1aff6485deb75994d17a855bb07f017" name="ab1aff6485deb75994d17a855bb07f017"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab1aff6485deb75994d17a855bb07f017">&#9670;&#160;</a></span>Allocator() <span class="overload">[2/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> , <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a>  = MemContextProvider&lt;CachedMemContext&lt;&gt; &gt;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1Allocator.html">cookmem::Allocator</a>&lt; <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a> &gt;::Allocator </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcookmem_1_1Allocator.html#afd19c46008b0236c3b56bdced90b85c9">context_type</a> &amp;&#160;</td>
+          <td class="paramname"><em>context</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Constructor.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">context</td><td>the memory context to allocate from. It must outlive every container that uses this allocator. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a28914c6ff448d730c61c487bb64a65e9" name="a28914c6ff448d730c61c487bb64a65e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a28914c6ff448d730c61c487bb64a65e9">&#9670;&#160;</a></span>Allocator() <span class="overload">[3/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> , <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a>  = MemContextProvider&lt;CachedMemContext&lt;&gt; &gt;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1Allocator.html">cookmem::Allocator</a>&lt; <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a> &gt;::Allocator </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcookmem_1_1MemContextProvider.html">const</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a> &amp;&#160;</td>
+          <td class="paramname"><em>provider</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Constructor.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">provider</td><td>the context provider to copy. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a77bf5626ba00da68818c49320b086eb0" name="a77bf5626ba00da68818c49320b086eb0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a77bf5626ba00da68818c49320b086eb0">&#9670;&#160;</a></span>Allocator() <span class="overload">[4/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> , <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a>  = MemContextProvider&lt;CachedMemContext&lt;&gt; &gt;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1Allocator.html">cookmem::Allocator</a>&lt; <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a> &gt;::Allocator </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcookmem_1_1MemContextProvider.html">const</a> <a class="el" href="classcookmem_1_1Allocator.html">Allocator</a>&lt; <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Copy constructor. The copy uses the same memory context.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>the allocator to copy. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a17925bd33cbde12f31e4615a36387dec" name="a17925bd33cbde12f31e4615a36387dec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a17925bd33cbde12f31e4615a36387dec">&#9670;&#160;</a></span>Allocator() <span class="overload">[5/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> , <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a>  = MemContextProvider&lt;CachedMemContext&lt;&gt; &gt;&gt; </div>
+<div class="memtemplate">
+template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">U</a> &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1Allocator.html">cookmem::Allocator</a>&lt; <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a> &gt;::Allocator </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcookmem_1_1MemContextProvider.html">const</a> <a class="el" href="classcookmem_1_1Allocator.html">Allocator</a>&lt; <a class="el" href="classcookmem_1_1MemContextProvider.html">U</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Converting constructor from an allocator for a different object type. The new allocator uses the same memory context.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>the allocator to copy. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a38861ea317e62a48008c59d3d3ed6b7d" name="a38861ea317e62a48008c59d3d3ed6b7d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a38861ea317e62a48008c59d3d3ed6b7d">&#9670;&#160;</a></span>allocate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> , <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a>  = MemContextProvider&lt;CachedMemContext&lt;&gt; &gt;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1Allocator.html#a63ea11986b34d79d892e6667e63066d6">pointer</a> <a class="el" href="classcookmem_1_1Allocator.html">cookmem::Allocator</a>&lt; <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a> &gt;::allocate </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcookmem_1_1Allocator.html#a66ac77e61fd393f80206b1699a85341a">size_type</a>&#160;</td>
+          <td class="paramname"><em>size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classcookmem_1_1MemContextProvider.html">const</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">void</a> *&#160;</td>
+          <td class="paramname"> = <code><a class="el" href="classcookmem_1_1MemContextProvider.html">nullptr</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Allocate memory for a number of objects. The objects are not constructed.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">size</td><td>the number of objects. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the allocated memory, or nullptr if size is 0. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::bad_alloc</td><td>if the memory cannot be allocated. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aa80f0a5a9941052deac9053d65a82c89" name="aa80f0a5a9941052deac9053d65a82c89"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa80f0a5a9941052deac9053d65a82c89">&#9670;&#160;</a></span>construct()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> , <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a>  = MemContextProvider&lt;CachedMemContext&lt;&gt; &gt;&gt; </div>
+<div class="memtemplate">
+template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">U</a> , class... Args&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1MemContextProvider.html">void</a> <a class="el" href="classcookmem_1_1Allocator.html">cookmem::Allocator</a>&lt; <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a> &gt;::construct </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcookmem_1_1MemContextProvider.html">U</a> *&#160;</td>
+          <td class="paramname"><em>ptr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classcookmem_1_1MemContextProvider.html">Args</a> &amp;&amp;...&#160;</td>
+          <td class="paramname"><em>args</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Construct an object in allocated memory.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ptr</td><td>where to construct the object. </td></tr>
+    <tr><td class="paramname">args</td><td>the constructor arguments. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a28e71c9997a19f662c09ad49a768c128" name="a28e71c9997a19f662c09ad49a768c128"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a28e71c9997a19f662c09ad49a768c128">&#9670;&#160;</a></span>deallocate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> , <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a>  = MemContextProvider&lt;CachedMemContext&lt;&gt; &gt;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1MemContextProvider.html">void</a> <a class="el" href="classcookmem_1_1Allocator.html">cookmem::Allocator</a>&lt; <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a> &gt;::deallocate </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcookmem_1_1Allocator.html#a63ea11986b34d79d892e6667e63066d6">pointer</a>&#160;</td>
+          <td class="paramname"><em>ptr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classcookmem_1_1Allocator.html#a66ac77e61fd393f80206b1699a85341a">size_type</a>&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Deallocate memory obtained from allocate (). The objects must have been destroyed already.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ptr</td><td>the memory to deallocate. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a650a7b1462ff1de306a1f86766160180" name="a650a7b1462ff1de306a1f86766160180"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a650a7b1462ff1de306a1f86766160180">&#9670;&#160;</a></span>destroy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> , <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a>  = MemContextProvider&lt;CachedMemContext&lt;&gt; &gt;&gt; </div>
+<div class="memtemplate">
+template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">U</a> &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1MemContextProvider.html">void</a> <a class="el" href="classcookmem_1_1Allocator.html">cookmem::Allocator</a>&lt; <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a> &gt;::destroy </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcookmem_1_1MemContextProvider.html">U</a> *&#160;</td>
+          <td class="paramname"><em>ptr</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Destroy an object without deallocating its memory.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ptr</td><td>the object to destroy. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aecf0ac5dca577377b72536bd7deba02e" name="aecf0ac5dca577377b72536bd7deba02e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aecf0ac5dca577377b72536bd7deba02e">&#9670;&#160;</a></span>getContext()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> , <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a>  = MemContextProvider&lt;CachedMemContext&lt;&gt; &gt;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1Allocator.html#afd19c46008b0236c3b56bdced90b85c9">context_type</a> &amp; <a class="el" href="classcookmem_1_1Allocator.html">cookmem::Allocator</a>&lt; <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a> &gt;::getContext </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Get the memory context.</p>
+<dl class="section return"><dt>Returns</dt><dd>the memory context this allocator allocates from. </dd></dl>
+
+</div>
+</div>
+<a id="a81d3a68e167db6cf7fbd0618e6faae90" name="a81d3a68e167db6cf7fbd0618e6faae90"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a81d3a68e167db6cf7fbd0618e6faae90">&#9670;&#160;</a></span>max_size()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> , <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a>  = MemContextProvider&lt;CachedMemContext&lt;&gt; &gt;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1Allocator.html#a66ac77e61fd393f80206b1699a85341a">size_type</a> <a class="el" href="classcookmem_1_1Allocator.html">cookmem::Allocator</a>&lt; <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a> &gt;::max_size </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Get the largest number of objects that could be requested.</p>
+<dl class="section return"><dt>Returns</dt><dd>the largest number of objects that allocate () accepts. </dd></dl>
+
+</div>
+</div>
+<a id="a8ac5fdb16bbd5a1bc35c8867ad4291e4" name="a8ac5fdb16bbd5a1bc35c8867ad4291e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ac5fdb16bbd5a1bc35c8867ad4291e4">&#9670;&#160;</a></span>operator!=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> , <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a>  = MemContextProvider&lt;CachedMemContext&lt;&gt; &gt;&gt; </div>
+<div class="memtemplate">
+template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">U</a> &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1MemContextProvider.html">bool</a> <a class="el" href="classcookmem_1_1Allocator.html">cookmem::Allocator</a>&lt; <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a> &gt;::operator!= </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcookmem_1_1MemContextProvider.html">const</a> <a class="el" href="classcookmem_1_1Allocator.html">Allocator</a>&lt; <a class="el" href="classcookmem_1_1MemContextProvider.html">U</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Check if two allocators use different memory contexts.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>the allocator to compare with. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the allocators use different memory contexts. </dd></dl>
+
+</div>
+</div>
+<a id="a9d8c72106989803a4463e013b35296f2" name="a9d8c72106989803a4463e013b35296f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9d8c72106989803a4463e013b35296f2">&#9670;&#160;</a></span>operator==()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> , <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a>  = MemContextProvider&lt;CachedMemContext&lt;&gt; &gt;&gt; </div>
+<div class="memtemplate">
+template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">U</a> &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1MemContextProvider.html">bool</a> <a class="el" href="classcookmem_1_1Allocator.html">cookmem::Allocator</a>&lt; <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a> &gt;::operator== </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcookmem_1_1MemContextProvider.html">const</a> <a class="el" href="classcookmem_1_1Allocator.html">Allocator</a>&lt; <a class="el" href="classcookmem_1_1MemContextProvider.html">U</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">ContextProvider</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Check if memory allocated by one allocator can be deallocated by the other.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>the allocator to compare with. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if both allocators use the same memory context. </dd></dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li><a class="el" href="allocator_8h_source.html">allocator.h</a></li>
 </ul>
 </div><!-- contents -->
@@ -208,7 +761,7 @@ class cookmem::Allocator&lt; T, ContextProvider &gt;</div><p>An STL allocator th
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><b>cookmem</b></li><li class="navelem"><a class="el" href="classcookmem_1_1Allocator.html">Allocator</a></li>
+    <li class="navelem"><a class="el" href="namespacecookmem.html">cookmem</a></li><li class="navelem"><a class="el" href="classcookmem_1_1Allocator.html">Allocator</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
   </ul>
 </div>

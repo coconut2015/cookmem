@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['validate_0',['validate',['../classcookmem_1_1MemContext.html#a4daba21af7408782d8cd0badf6abab73',1,'cookmem::MemContext::validate()'],['../classcookmem_1_1MemPool.html#a5d3fb53e2fd1b8089f32d42776bf13bb',1,'cookmem::MemPool::validate()']]],
-  ['value_5ftype_1',['value_type',['../classcookmem_1_1MemContext.html#a5ac606a228e7f23a892db1d38273b8fd',1,'cookmem::MemContext::value_type'],['../classcookmem_1_1SimpleMemContext.html#a45c35d06077aca8b8ba422b842f252df',1,'cookmem::SimpleMemContext::value_type'],['../classcookmem_1_1CachedMemContext.html#abf4d859f551a7da67bf1c3cc882850d5',1,'cookmem::CachedMemContext::value_type'],['../classcookmem_1_1MemPool.html#af967f6efc600625255a20308c183dc0c',1,'cookmem::MemPool::value_type']]]
+  ['unlinkfromlist_0',['unlinkFromList',['../classcookmem_1_1PtrRBNode.html#adaa41bf5a2cb029a12158df3e55100c7',1,'cookmem::PtrRBNode']]],
+  ['usage_1',['usage',['../index.html#autotoc_md6',1,'Restricting Memory Usage'],['../tutorials.html#footprint',1,'Restricting Memory Usage']]],
+  ['use_20cases_2',['Use Cases',['../index.html#autotoc_md3',1,'']]],
+  ['using_20cmake_20directly_3',['Using CMake Directly',['../build.html#autotoc_md20',1,'']]]
 ];

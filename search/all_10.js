@@ -1,8 +1,24 @@
 var searchData=
 [
-  ['thread_20local_20and_20scoped_20context_20stl_20allocators_0',['Thread-local and Scoped Context STL Allocators',['../tutorials.html#tlsSTLAlloc',1,'']]],
-  ['tlscontextprovider_1',['TLSContextProvider',['../classcookmem_1_1TLSContextProvider.html',1,'cookmem']]],
-  ['tlscontextscope_2',['TLSContextScope',['../classcookmem_1_1TLSContextScope.html',1,'cookmem']]],
-  ['trimemptysegments_3',['trimemptysegments',['../classcookmem_1_1MemContext.html#a88e10ddda4619fa53a2116d307656b7c',1,'cookmem::MemContext::trimEmptySegments()'],['../classcookmem_1_1MemPool.html#a4e6b0a6ee3ec8b536497ca1f0a67267c',1,'cookmem::MemPool::trimEmptySegments()']]],
-  ['tutorials_4',['Tutorials',['../tutorials.html',1,'']]]
+  ['safety_0',['No Thread Safety',['../limitations.html#autotoc_md14',1,'']]],
+  ['scoped_20context_20stl_20allocators_1',['Thread-local and Scoped Context STL Allocators',['../tutorials.html#tlsSTLAlloc',1,'']]],
+  ['selftype_2',['SelfType',['../classcookmem_1_1PtrRBNode.html#ac3fdc7ee89d4210de15065e5ee942b08',1,'cookmem::PtrRBNode']]],
+  ['setfootprintlimit_3',['setfootprintlimit',['../classcookmem_1_1MemContext.html#a665586811361b929428e1899e4f33f8b',1,'cookmem::MemContext::setFootprintLimit()'],['../classcookmem_1_1MemPool.html#aff7415be899841ea19b711c8f8234468',1,'cookmem::MemPool::setFootprintLimit()']]],
+  ['setleft_4',['setLeft',['../classcookmem_1_1PtrRBNode.html#afb7f65722fc2902e4b44891dd87dfafb',1,'cookmem::PtrRBNode']]],
+  ['setpaddingbyte_5',['setpaddingbyte',['../classcookmem_1_1MemContext.html#ad5a23c07b12dab6162054dbbcccf9723',1,'cookmem::MemContext::setPaddingByte()'],['../classcookmem_1_1MemPool.html#ad087d5db6eae0727de9e069fe7623c8b',1,'cookmem::MemPool::setPaddingByte()']]],
+  ['setparent_6',['setParent',['../classcookmem_1_1PtrRBNode.html#a39ad61463c3610e0165e61e758dc071f',1,'cookmem::PtrRBNode']]],
+  ['setred_7',['setRed',['../classcookmem_1_1PtrRBNode.html#ac323962cf0370908ab407890d07e7176',1,'cookmem::PtrRBNode']]],
+  ['setright_8',['setRight',['../classcookmem_1_1PtrRBNode.html#a168f37f3bd3eb58e87798cc9503458ac',1,'cookmem::PtrRBNode']]],
+  ['setstoringexactsize_9',['setstoringexactsize',['../classcookmem_1_1MemContext.html#a1fbd6a1736b7e4f5529ecdcc77767813',1,'cookmem::MemContext::setStoringExactSize()'],['../classcookmem_1_1MemPool.html#a50f47eb19492ae1ef2aa5d05c467e317',1,'cookmem::MemPool::setStoringExactSize(bool b)']]],
+  ['settrimemptysegmentsinterval_10',['settrimemptysegmentsinterval',['../classcookmem_1_1MemPool.html#a0802fdc36fd8924ea2b539dd4f679072',1,'cookmem::MemPool::setTrimEmptySegmentsInterval()'],['../classcookmem_1_1MemContext.html#ad6a131734c7b8a9bc0133c78a4d67fca',1,'cookmem::MemContext::setTrimEmptySegmentsInterval()']]],
+  ['simplememcontainer_11',['SimpleMemContainer',['../structcookmem_1_1SimpleMemContainer.html',1,'cookmem']]],
+  ['simplememcontainer_3c_20mmaparena_2c_20noactionmemlogger_20_3e_12',['SimpleMemContainer&lt; MmapArena, NoActionMemLogger &gt;',['../structcookmem_1_1SimpleMemContainer.html',1,'cookmem']]],
+  ['simplememcontext_13',['simplememcontext',['../classcookmem_1_1SimpleMemContext.html#a07aee4e5e8f46c0ab509d4038054ba52',1,'cookmem::SimpleMemContext::SimpleMemContext(std::uint8_t paddingSize=DEFAULT_PADDING_SIZE)'],['../classcookmem_1_1SimpleMemContext.html#ade9f6a91870533552021aaf31c9a753d',1,'cookmem::SimpleMemContext::SimpleMemContext(SimpleMemContext &amp;other, bool shareArena)'],['../classcookmem_1_1SimpleMemContext.html',1,'cookmem::SimpleMemContext&lt; Arena, Logger, TreeType, T &gt;']]],
+  ['size_5ftype_14',['size_type',['../classcookmem_1_1Allocator.html#a66ac77e61fd393f80206b1699a85341a',1,'cookmem::Allocator::size_type'],['../classcookmem_1_1MemContext.html#a755605b35d1e22ad5e61f10a08b26e84',1,'cookmem::MemContext::size_type'],['../classcookmem_1_1SimpleMemContext.html#a3b2236a6ff95fa9f1dfdc3efa89ff20e',1,'cookmem::SimpleMemContext::size_type'],['../classcookmem_1_1CachedMemContext.html#a3cc65b09ba58ba85187fae6c83589a48',1,'cookmem::CachedMemContext::size_type'],['../classcookmem_1_1MemPool.html#a904544e49e74d27f33a7e4d617aef701',1,'cookmem::MemPool::size_type']]],
+  ['start_15',['Quick Start',['../index.html#autotoc_md0',1,'']]],
+  ['statistics_16',['Memory Statistics',['../tutorials.html#statistics',1,'']]],
+  ['statslogger_17',['StatsLogger',['../classcookmem_1_1StatsLogger.html',1,'cookmem']]],
+  ['stl_20allocator_18',['stl allocator',['../tutorials.html#callerSTLAlloc',1,'Caller-owned STL Allocator'],['../references.html#autotoc_md27',1,'STL Allocator']]],
+  ['stl_20allocators_19',['Thread-local and Scoped Context STL Allocators',['../tutorials.html#tlsSTLAlloc',1,'']]],
+  ['synchronization_20cost_20',['Avoiding Synchronization Cost',['../index.html#autotoc_md4',1,'']]]
 ];

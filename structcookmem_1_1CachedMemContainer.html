@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CookMem<span id="projectnumber">&#160;0.1.0.0</span>
+   <div id="projectname">CookMem<span id="projectnumber">&#160;1.0.0</span>
    </div>
    <div id="projectbrief">A C++ memory context / allocator</div>
   </td>
@@ -111,20 +111,69 @@ Inheritance diagram for cookmem::CachedMemContainer&lt; Arena, Logger &gt;:</div
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:ac8eab35fc6b782614e7b6ef0654b69f0" id="r_ac8eab35fc6b782614e7b6ef0654b69f0"><td class="memItemLeft" align="right" valign="top"><a id="ac8eab35fc6b782614e7b6ef0654b69f0" name="ac8eab35fc6b782614e7b6ef0654b69f0"></a>
-<a class="el" href="classcookmem_1_1Allocator.html">Arena</a>&#160;</td><td class="memItemRight" valign="bottom"><b>arena</b></td></tr>
+<tr class="memitem:ac8eab35fc6b782614e7b6ef0654b69f0" id="r_ac8eab35fc6b782614e7b6ef0654b69f0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">Arena</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcookmem_1_1CachedMemContainer.html#ac8eab35fc6b782614e7b6ef0654b69f0">arena</a></td></tr>
 <tr class="separator:ac8eab35fc6b782614e7b6ef0654b69f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab38d0fe7ff3db3ba176a8d69535ff68d" id="r_ab38d0fe7ff3db3ba176a8d69535ff68d"><td class="memItemLeft" align="right" valign="top"><a id="ab38d0fe7ff3db3ba176a8d69535ff68d" name="ab38d0fe7ff3db3ba176a8d69535ff68d"></a>
-<a class="el" href="classcookmem_1_1CachedArena.html">CachedArena</a>&lt; <a class="el" href="classcookmem_1_1Allocator.html">Arena</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>cachedArena</b></td></tr>
+<tr class="memitem:ab38d0fe7ff3db3ba176a8d69535ff68d" id="r_ab38d0fe7ff3db3ba176a8d69535ff68d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1CachedArena.html">CachedArena</a>&lt; <a class="el" href="classcookmem_1_1MemContextProvider.html">Arena</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcookmem_1_1CachedMemContainer.html#ab38d0fe7ff3db3ba176a8d69535ff68d">cachedArena</a></td></tr>
 <tr class="separator:ab38d0fe7ff3db3ba176a8d69535ff68d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a840cd0ac5249eae10b5b7c986955ef61" id="r_a840cd0ac5249eae10b5b7c986955ef61"><td class="memItemLeft" align="right" valign="top"><a id="a840cd0ac5249eae10b5b7c986955ef61" name="a840cd0ac5249eae10b5b7c986955ef61"></a>
-<a class="el" href="classcookmem_1_1Allocator.html">Logger</a>&#160;</td><td class="memItemRight" valign="bottom"><b>logger</b></td></tr>
+<tr class="memitem:a840cd0ac5249eae10b5b7c986955ef61" id="r_a840cd0ac5249eae10b5b7c986955ef61"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">Logger</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcookmem_1_1CachedMemContainer.html#a840cd0ac5249eae10b5b7c986955ef61">logger</a></td></tr>
 <tr class="separator:a840cd0ac5249eae10b5b7c986955ef61"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><div class="compoundTemplParams">template&lt;<a class="el" href="classcookmem_1_1Allocator.html">class</a> <a class="el" href="classcookmem_1_1Allocator.html">Arena</a>, <a class="el" href="classcookmem_1_1Allocator.html">class</a> <a class="el" href="classcookmem_1_1Allocator.html">Logger</a>&gt;<br />
+<div class="textblock"><div class="compoundTemplParams">template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">Arena</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">Logger</a>&gt;<br />
 struct cookmem::CachedMemContainer&lt; Arena, Logger &gt;</div><p>Internal use. </p>
-</div><hr/>The documentation for this struct was generated from the following file:<ul>
+</div><h2 class="groupheader">Member Data Documentation</h2>
+<a id="ac8eab35fc6b782614e7b6ef0654b69f0" name="ac8eab35fc6b782614e7b6ef0654b69f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac8eab35fc6b782614e7b6ef0654b69f0">&#9670;&#160;</a></span>arena</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">Arena</a> , <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">Logger</a> &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1MemContextProvider.html">Arena</a> <a class="el" href="structcookmem_1_1CachedMemContainer.html">cookmem::CachedMemContainer</a>&lt; <a class="el" href="classcookmem_1_1MemContextProvider.html">Arena</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">Logger</a> &gt;::arena</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>the arena that obtains new segments </p>
+
+</div>
+</div>
+<a id="ab38d0fe7ff3db3ba176a8d69535ff68d" name="ab38d0fe7ff3db3ba176a8d69535ff68d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab38d0fe7ff3db3ba176a8d69535ff68d">&#9670;&#160;</a></span>cachedArena</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">Arena</a> , <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">Logger</a> &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1CachedArena.html">CachedArena</a>&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">Arena</a>&gt; <a class="el" href="structcookmem_1_1CachedMemContainer.html">cookmem::CachedMemContainer</a>&lt; <a class="el" href="classcookmem_1_1MemContextProvider.html">Arena</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">Logger</a> &gt;::cachedArena</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>the arena that caches released segments on top of arena </p>
+
+</div>
+</div>
+<a id="a840cd0ac5249eae10b5b7c986955ef61" name="a840cd0ac5249eae10b5b7c986955ef61"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a840cd0ac5249eae10b5b7c986955ef61">&#9670;&#160;</a></span>logger</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">Arena</a> , <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">Logger</a> &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1MemContextProvider.html">Logger</a> <a class="el" href="structcookmem_1_1CachedMemContainer.html">cookmem::CachedMemContainer</a>&lt; <a class="el" href="classcookmem_1_1MemContextProvider.html">Arena</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">Logger</a> &gt;::logger</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>the logger owned by the memory context </p>
+
+</div>
+</div>
+<hr/>The documentation for this struct was generated from the following file:<ul>
 <li><a class="el" href="context_8h_source.html">context.h</a></li>
 </ul>
 </div><!-- contents -->
@@ -132,7 +181,7 @@ struct cookmem::CachedMemContainer&lt; Arena, Logger &gt;</div><p>Internal use. 
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><b>cookmem</b></li><li class="navelem"><a class="el" href="structcookmem_1_1CachedMemContainer.html">CachedMemContainer</a></li>
+    <li class="navelem"><a class="el" href="namespacecookmem.html">cookmem</a></li><li class="navelem"><a class="el" href="structcookmem_1_1CachedMemContainer.html">CachedMemContainer</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
   </ul>
 </div>

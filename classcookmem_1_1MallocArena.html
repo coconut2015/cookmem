@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CookMem<span id="projectnumber">&#160;0.1.0.0</span>
+   <div id="projectname">CookMem<span id="projectnumber">&#160;1.0.0</span>
    </div>
    <div id="projectbrief">A C++ memory context / allocator</div>
   </td>
@@ -101,12 +101,12 @@ $(document).ready(function(){initNavTree('classcookmem_1_1MallocArena.html','');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a061a4b59df4cb0ba24af03015d2fc930" id="r_a061a4b59df4cb0ba24af03015d2fc930"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MallocArena.html#a061a4b59df4cb0ba24af03015d2fc930">MallocArena</a> (std::size_t <a class="el" href="classcookmem_1_1Allocator.html">minSize</a>=DEFAULT_MIN_SEGMENT_SIZE)</td></tr>
+<tr class="memitem:a061a4b59df4cb0ba24af03015d2fc930" id="r_a061a4b59df4cb0ba24af03015d2fc930"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MallocArena.html#a061a4b59df4cb0ba24af03015d2fc930">MallocArena</a> (std::size_t <a class="el" href="classcookmem_1_1MemContextProvider.html">minSize</a>=<a class="el" href="namespacecookmem.html#af2366620901d1a61342ac5f0960c6404">DEFAULT_MIN_SEGMENT_SIZE</a>)</td></tr>
 <tr class="separator:a061a4b59df4cb0ba24af03015d2fc930"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa63ea73e4fb9eddf193dfc51ec8ecdc0" id="r_aa63ea73e4fb9eddf193dfc51ec8ecdc0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1Allocator.html">void</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MallocArena.html#aa63ea73e4fb9eddf193dfc51ec8ecdc0">getSegment</a> (std::size_t &amp;size)</td></tr>
+<tr class="memitem:aa63ea73e4fb9eddf193dfc51ec8ecdc0" id="r_aa63ea73e4fb9eddf193dfc51ec8ecdc0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">void</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MallocArena.html#aa63ea73e4fb9eddf193dfc51ec8ecdc0">getSegment</a> (std::size_t &amp;size)</td></tr>
 <tr class="separator:aa63ea73e4fb9eddf193dfc51ec8ecdc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acac8a7323ef49767fbd3da699c5c975a" id="r_acac8a7323ef49767fbd3da699c5c975a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1Allocator.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MallocArena.html#acac8a7323ef49767fbd3da699c5c975a">freeSegment</a> (<a class="el" href="classcookmem_1_1Allocator.html">void</a> *<a class="el" href="classcookmem_1_1Allocator.html">ptr</a>, std::size_t size)</td></tr>
-<tr class="separator:acac8a7323ef49767fbd3da699c5c975a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae44cf2cf1c84c608b69ab5f6c353682c" id="r_ae44cf2cf1c84c608b69ab5f6c353682c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MallocArena.html#ae44cf2cf1c84c608b69ab5f6c353682c">freeSegment</a> (<a class="el" href="classcookmem_1_1MemContextProvider.html">void</a> *<a class="el" href="classcookmem_1_1MemContextProvider.html">ptr</a>, std::size_t)</td></tr>
+<tr class="separator:ae44cf2cf1c84c608b69ab5f6c353682c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>An malloc/free based memory arena.</p>
@@ -125,7 +125,7 @@ Public Member Functions</h2></td></tr>
           <td class="memname">cookmem::MallocArena::MallocArena </td>
           <td>(</td>
           <td class="paramtype">std::size_t&#160;</td>
-          <td class="paramname"><em>minSize</em> = <code>DEFAULT_MIN_SEGMENT_SIZE</code></td><td>)</td>
+          <td class="paramname"><em>minSize</em> = <code><a class="el" href="namespacecookmem.html#af2366620901d1a61342ac5f0960c6404">DEFAULT_MIN_SEGMENT_SIZE</a></code></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -146,8 +146,8 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="acac8a7323ef49767fbd3da699c5c975a" name="acac8a7323ef49767fbd3da699c5c975a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acac8a7323ef49767fbd3da699c5c975a">&#9670;&#160;</a></span>freeSegment()</h2>
+<a id="ae44cf2cf1c84c608b69ab5f6c353682c" name="ae44cf2cf1c84c608b69ab5f6c353682c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae44cf2cf1c84c608b69ab5f6c353682c">&#9670;&#160;</a></span>freeSegment()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -156,16 +156,16 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classcookmem_1_1Allocator.html">bool</a> cookmem::MallocArena::freeSegment </td>
+          <td class="memname"><a class="el" href="classcookmem_1_1MemContextProvider.html">bool</a> cookmem::MallocArena::freeSegment </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classcookmem_1_1Allocator.html">void</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="classcookmem_1_1MemContextProvider.html">void</a> *&#160;</td>
           <td class="paramname"><em>ptr</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">std::size_t&#160;</td>
-          <td class="paramname"><em>size</em>&#160;</td>
+          <td class="paramname">&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -183,7 +183,6 @@ Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">ptr</td><td>the pointer to be freed. </td></tr>
-    <tr><td class="paramname">size</td><td>the size of the pointer. </td></tr>
   </table>
   </dd>
 </dl>
@@ -201,7 +200,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classcookmem_1_1Allocator.html">void</a> * cookmem::MallocArena::getSegment </td>
+          <td class="memname"><a class="el" href="classcookmem_1_1MemContextProvider.html">void</a> * cookmem::MallocArena::getSegment </td>
           <td>(</td>
           <td class="paramtype">std::size_t &amp;&#160;</td>
           <td class="paramname"><em>size</em></td><td>)</td>
@@ -233,7 +232,7 @@ Public Member Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><b>cookmem</b></li><li class="navelem"><a class="el" href="classcookmem_1_1MallocArena.html">MallocArena</a></li>
+    <li class="navelem"><a class="el" href="namespacecookmem.html">cookmem</a></li><li class="navelem"><a class="el" href="classcookmem_1_1MallocArena.html">MallocArena</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
   </ul>
 </div>

@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CookMem<span id="projectnumber">&#160;0.1.0.0</span>
+   <div id="projectname">CookMem<span id="projectnumber">&#160;1.0.0</span>
    </div>
    <div id="projectbrief">A C++ memory context / allocator</div>
   </td>
@@ -93,8 +93,17 @@ $(document).ready(function(){initNavTree('install.html',''); initResizable(); })
   <div class="headertitle"><div class="title">Installation</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>CookMem is a collection of C++ header files, so there are no libraries to install. Put <code><a class="el" href="cookmem_8h_source.html">cookmem.h</a></code> and the <code>cookmem/</code> directory in a suitable include directory, then include <code><a class="el" href="cookmem_8h_source.html">cookmem.h</a></code> in your code. </p>
-</div></div><!-- contents -->
+<div class="textblock"><p>CookMem is a collection of C++ header files, so there are no libraries to install. Put <code><a class="el" href="cookmem_8h_source.html">cookmem.h</a></code> and the <code>cookmem/</code> directory in a suitable include directory, then include <code><a class="el" href="cookmem_8h_source.html">cookmem.h</a></code> in your code.</p>
+<p>The version of CookMem is available through the macros in <code><a class="el" href="version_8h.html">cookmem/version.h</a></code>, which every CookMem header includes:</p>
+<ul>
+<li><code>COOKMEM_VERSION_MAJOR</code>, <code>COOKMEM_VERSION_MINOR</code> and <code>COOKMEM_VERSION_PATCH</code></li>
+<li><code>COOKMEM_VERSION</code> - a single number for comparisons, such as 10203 for 1.2.3</li>
+<li><code>COOKMEM_VERSION_STRING</code> - a string such as "1.2.3"</li>
+</ul>
+<div class="fragment"><div class="line"><span class="preprocessor">#if COOKMEM_VERSION &lt; 10000</span></div>
+<div class="line"><span class="preprocessor">#error &quot;CookMem 1.0 or later is required.&quot;</span></div>
+<div class="line"><span class="preprocessor">#endif</span></div>
+</div><!-- fragment --> </div></div><!-- contents -->
 </div><!-- PageDoc -->
 </div><!-- doc-content -->
 <!-- start footer part -->

@@ -12,7 +12,7 @@ var classcookmem_1_1MemPool =
     [ "contains", "classcookmem_1_1MemPool.html#a0fdcfc548d9769f63893d802194b8a7b", null ],
     [ "deallocate", "classcookmem_1_1MemPool.html#aaccf54a257600e92899622796ac04c37", null ],
     [ "getFootprint", "classcookmem_1_1MemPool.html#abc097b770d0f8a2f6b258e12bb67e6f6", null ],
-    [ "getFootPrintLimit", "classcookmem_1_1MemPool.html#a6cd459ffddf7ff41b9e5af44c1a7cb36", null ],
+    [ "getFootprintLimit", "classcookmem_1_1MemPool.html#a076acbaee2327f5e33d816e5c23fb3b8", null ],
     [ "getMaxFootprint", "classcookmem_1_1MemPool.html#acfc4adf04cb224fc39d12e2c31b42879", null ],
     [ "getPaddingByte", "classcookmem_1_1MemPool.html#a7c71e29b7223f709400b593dcc6a0d77", null ],
     [ "getPaddingSize", "classcookmem_1_1MemPool.html#a77d91bd104fbfda5d4dbf7edf7b7e7a6", null ],
@@ -20,12 +20,12 @@ var classcookmem_1_1MemPool =
     [ "getUserSize", "classcookmem_1_1MemPool.html#a3229e2814b85151a1e5019c6a56ff002", null ],
     [ "isPadding", "classcookmem_1_1MemPool.html#aed666b7675d158353e04c8cf247becb9", null ],
     [ "isStoringExactSize", "classcookmem_1_1MemPool.html#a16f0144772e5a83db8b69adc606faf29", null ],
+    [ "print", "classcookmem_1_1MemPool.html#a674ce26fbd8a472054c8b3b282640e04", null ],
     [ "reallocate", "classcookmem_1_1MemPool.html#a5eec8adbb528ae7e8907f35540879d46", null ],
     [ "releaseAll", "classcookmem_1_1MemPool.html#ac126e2364498d1ac892ef545b02ee5f4", null ],
     [ "setFootprintLimit", "classcookmem_1_1MemPool.html#aff7415be899841ea19b711c8f8234468", null ],
     [ "setPaddingByte", "classcookmem_1_1MemPool.html#ad087d5db6eae0727de9e069fe7623c8b", null ],
     [ "setStoringExactSize", "classcookmem_1_1MemPool.html#a50f47eb19492ae1ef2aa5d05c467e317", null ],
     [ "setTrimEmptySegmentsInterval", "classcookmem_1_1MemPool.html#a0802fdc36fd8924ea2b539dd4f679072", null ],
-    [ "trimEmptySegments", "classcookmem_1_1MemPool.html#a4e6b0a6ee3ec8b536497ca1f0a67267c", null ],
     [ "validate", "classcookmem_1_1MemPool.html#a5d3fb53e2fd1b8089f32d42776bf13bb", null ]
 ];

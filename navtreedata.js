@@ -25,13 +25,15 @@
 var NAVTREE =
 [
   [ "CookMem", "index.html", [
-    [ "Performance", "index.html#autotoc_md0", null ],
-    [ "Use Cases", "index.html#usecases", [
-      [ "Avoiding Synchronization Cost", "index.html#autotoc_md1", null ],
-      [ "Avoiding Individual Frees", "index.html#autotoc_md2", null ],
-      [ "Restricting Memory Usage", "index.html#autotoc_md3", null ],
-      [ "Diagnosing and Debugging", "index.html#autotoc_md4", null ],
-      [ "Links", "index.html#autotoc_md5", null ]
+    [ "Quick Start", "index.html#autotoc_md0", null ],
+    [ "Requirements", "index.html#autotoc_md1", null ],
+    [ "Performance", "index.html#autotoc_md2", null ],
+    [ "Use Cases", "index.html#autotoc_md3", [
+      [ "Avoiding Synchronization Cost", "index.html#autotoc_md4", null ],
+      [ "Avoiding Individual Frees", "index.html#autotoc_md5", null ],
+      [ "Restricting Memory Usage", "index.html#autotoc_md6", null ],
+      [ "Diagnosing and Debugging", "index.html#autotoc_md7", null ],
+      [ "Links", "index.html#autotoc_md8", null ]
     ] ],
     [ "Tutorials", "tutorials.html", [
       [ "FixedArena", "tutorials.html#FixedArena", null ],
@@ -39,34 +41,54 @@ var NAVTREE =
       [ "CachedArena", "tutorials.html#CachedArena", null ],
       [ "Copying Data Between Memory Pools", "tutorials.html#copying", null ],
       [ "Querying Pointer Information", "tutorials.html#querying", null ],
+      [ "Restricting Memory Usage", "tutorials.html#footprint", null ],
+      [ "Memory Statistics", "tutorials.html#statistics", null ],
       [ "Memory Corruption Detection", "tutorials.html#boundcheck", null ],
       [ "Caller-owned STL Allocator", "tutorials.html#callerSTLAlloc", null ],
       [ "Thread-local and Scoped Context STL Allocators", "tutorials.html#tlsSTLAlloc", null ]
     ] ],
+    [ "Detailed Behavior", "behavior.html", null ],
     [ "Limitations", "limitations.html", null ],
     [ "Installation", "install.html", null ],
     [ "Build Instructions", "build.html", null ],
     [ "References", "references.html", null ],
     [ "License", "license.html", null ],
+    [ "Namespaces", "namespaces.html", [
+      [ "Namespace List", "namespaces.html", "namespaces_dup" ],
+      [ "Namespace Members", "namespacemembers.html", [
+        [ "All", "namespacemembers.html", null ],
+        [ "Variables", "namespacemembers_vars.html", null ],
+        [ "Typedefs", "namespacemembers_type.html", null ],
+        [ "Enumerations", "namespacemembers_enum.html", null ],
+        [ "Enumerator", "namespacemembers_eval.html", null ]
+      ] ]
+    ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],
       [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
       [ "Class Members", "functions.html", [
-        [ "All", "functions.html", null ],
+        [ "All", "functions.html", "functions_dup" ],
         [ "Functions", "functions_func.html", null ],
+        [ "Variables", "functions_vars.html", null ],
         [ "Typedefs", "functions_type.html", null ]
       ] ]
     ] ],
     [ "Files", "files.html", [
-      [ "File List", "files.html", "files_dup" ]
+      [ "File List", "files.html", "files_dup" ],
+      [ "File Members", "globals.html", [
+        [ "All", "globals.html", null ],
+        [ "Macros", "globals_defs.html", null ]
+      ] ]
     ] ]
   ] ]
 ];
 
 var NAVTREEINDEX =
 [
-"allocator_8h_source.html"
+"allocator_8h_source.html",
+"classcookmem_1_1MemPool.html#a19b3ce416b2ec240c606e07118e21442",
+"functions_i.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

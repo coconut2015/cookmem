@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CookMem<span id="projectnumber">&#160;0.1.0.0</span>
+   <div id="projectname">CookMem<span id="projectnumber">&#160;1.0.0</span>
    </div>
    <div id="projectbrief">A C++ memory context / allocator</div>
   </td>
@@ -101,11 +101,11 @@ $(document).ready(function(){initNavTree('classcookmem_1_1FixedArena.html',''); 
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a878d9e502bd53fb2ad46380765f52c81" id="r_a878d9e502bd53fb2ad46380765f52c81"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1FixedArena.html#a878d9e502bd53fb2ad46380765f52c81">FixedArena</a> (<a class="el" href="classcookmem_1_1Allocator.html">void</a> *<a class="el" href="classcookmem_1_1Allocator.html">ptr</a>, std::size_t size)</td></tr>
+<tr class="memitem:a878d9e502bd53fb2ad46380765f52c81" id="r_a878d9e502bd53fb2ad46380765f52c81"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1FixedArena.html#a878d9e502bd53fb2ad46380765f52c81">FixedArena</a> (<a class="el" href="classcookmem_1_1MemContextProvider.html">void</a> *<a class="el" href="classcookmem_1_1MemContextProvider.html">ptr</a>, std::size_t size)</td></tr>
 <tr class="separator:a878d9e502bd53fb2ad46380765f52c81"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7f0c164daed205b28dbaf445e37be53" id="r_ac7f0c164daed205b28dbaf445e37be53"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1Allocator.html">void</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1FixedArena.html#ac7f0c164daed205b28dbaf445e37be53">getSegment</a> (std::size_t &amp;size)</td></tr>
+<tr class="memitem:ac7f0c164daed205b28dbaf445e37be53" id="r_ac7f0c164daed205b28dbaf445e37be53"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">void</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1FixedArena.html#ac7f0c164daed205b28dbaf445e37be53">getSegment</a> (std::size_t &amp;size)</td></tr>
 <tr class="separator:ac7f0c164daed205b28dbaf445e37be53"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae62bd3a59110add2dfcf7f553d72ab24" id="r_ae62bd3a59110add2dfcf7f553d72ab24"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1Allocator.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1FixedArena.html#ae62bd3a59110add2dfcf7f553d72ab24">freeSegment</a> (<a class="el" href="classcookmem_1_1Allocator.html">void</a> *<a class="el" href="classcookmem_1_1Allocator.html">ptr</a>, std::size_t size)</td></tr>
+<tr class="memitem:ae62bd3a59110add2dfcf7f553d72ab24" id="r_ae62bd3a59110add2dfcf7f553d72ab24"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1FixedArena.html#ae62bd3a59110add2dfcf7f553d72ab24">freeSegment</a> (<a class="el" href="classcookmem_1_1MemContextProvider.html">void</a> *<a class="el" href="classcookmem_1_1MemContextProvider.html">ptr</a>, std::size_t size)</td></tr>
 <tr class="separator:ae62bd3a59110add2dfcf7f553d72ab24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -124,7 +124,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">cookmem::FixedArena::FixedArena </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classcookmem_1_1Allocator.html">void</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="classcookmem_1_1MemContextProvider.html">void</a> *&#160;</td>
           <td class="paramname"><em>ptr</em>, </td>
         </tr>
         <tr>
@@ -167,9 +167,9 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classcookmem_1_1Allocator.html">bool</a> cookmem::FixedArena::freeSegment </td>
+          <td class="memname"><a class="el" href="classcookmem_1_1MemContextProvider.html">bool</a> cookmem::FixedArena::freeSegment </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classcookmem_1_1Allocator.html">void</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="classcookmem_1_1MemContextProvider.html">void</a> *&#160;</td>
           <td class="paramname"><em>ptr</em>, </td>
         </tr>
         <tr>
@@ -212,7 +212,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classcookmem_1_1Allocator.html">void</a> * cookmem::FixedArena::getSegment </td>
+          <td class="memname"><a class="el" href="classcookmem_1_1MemContextProvider.html">void</a> * cookmem::FixedArena::getSegment </td>
           <td>(</td>
           <td class="paramtype">std::size_t &amp;&#160;</td>
           <td class="paramname"><em>size</em></td><td>)</td>
@@ -244,7 +244,7 @@ Public Member Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><b>cookmem</b></li><li class="navelem"><a class="el" href="classcookmem_1_1FixedArena.html">FixedArena</a></li>
+    <li class="navelem"><a class="el" href="namespacecookmem.html">cookmem</a></li><li class="navelem"><a class="el" href="classcookmem_1_1FixedArena.html">FixedArena</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
   </ul>
 </div>

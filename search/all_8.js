@@ -1,16 +1,14 @@
 var searchData=
 [
-  ['license_0',['License',['../license.html',1,'']]],
-  ['limitations_1',['Limitations',['../limitations.html',1,'']]],
-  ['links_2',['Links',['../index.html#autotoc_md5',1,'']]],
-  ['linux_3',['Linux',['../build.html#autotoc_md6',1,'']]],
-  ['local_20and_20scoped_20context_20stl_20allocators_4',['Thread-local and Scoped Context STL Allocators',['../tutorials.html#tlsSTLAlloc',1,'']]],
-  ['logallocation_5',['logAllocation',['../classcookmem_1_1MemLogger.html#a8754b6eb34a4f99ea6df9c72ebd6a179',1,'cookmem::MemLogger']]],
-  ['logdeallocation_6',['logDeallocation',['../classcookmem_1_1MemLogger.html#a61adfcbd74119161ad85a8c3427e656b',1,'cookmem::MemLogger']]],
-  ['logerror_7',['logError',['../classcookmem_1_1MemLogger.html#a7a2145abc5af95b832e7e2c98b6c9108',1,'cookmem::MemLogger']]],
-  ['logfreesegment_8',['logFreeSegment',['../classcookmem_1_1MemLogger.html#a8247970d61c7aab669a5b31cec578ca7',1,'cookmem::MemLogger']]],
-  ['logger_9',['Memory Logger',['../references.html#autotoc_md10',1,'']]],
-  ['loggetsegment_10',['logGetSegment',['../classcookmem_1_1MemLogger.html#a8e41d49f7cef5bee8b823afcb79ac90e',1,'cookmem::MemLogger']]],
-  ['logreallocation_11',['logReallocation',['../classcookmem_1_1MemLogger.html#ae7a2543185a5000b3742779d2d2b0362',1,'cookmem::MemLogger']]],
-  ['logtrimemptysegments_12',['logTrimEmptySegments',['../classcookmem_1_1MemLogger.html#ac51822ba2461d900457e698a9545459a',1,'cookmem::MemLogger']]]
+  ['individual_20frees_0',['Avoiding Individual Frees',['../index.html#autotoc_md5',1,'']]],
+  ['information_1',['Querying Pointer Information',['../tutorials.html#querying',1,'']]],
+  ['init_2',['init',['../classcookmem_1_1PtrRBNode.html#a57d880bcaed293a0d8c326ed0a48160d',1,'cookmem::PtrRBNode']]],
+  ['installation_3',['Installation',['../install.html',1,'']]],
+  ['instructions_4',['Build Instructions',['../build.html',1,'']]],
+  ['is_5falways_5fequal_5',['is_always_equal',['../classcookmem_1_1MemContextProvider.html#a928edb0c6ff77d318f25c001302c5266',1,'cookmem::MemContextProvider::is_always_equal'],['../classcookmem_1_1Allocator.html#a8eacc3e88132a7edae06b75cab6d452e',1,'cookmem::Allocator::is_always_equal'],['../classcookmem_1_1TLSContextProvider.html#aee37ad73e8faffa846471f7f9b5bda93',1,'cookmem::TLSContextProvider::is_always_equal']]],
+  ['isempty_6',['isempty',['../classcookmem_1_1RedBlackTree.html#a433d142cd824a294ca99f8bea6494821',1,'cookmem::RedBlackTree::isEmpty()'],['../classcookmem_1_1CircularList.html#ae0cf87b31cf44696f816dc4376728eb2',1,'cookmem::CircularList::isEmpty()'],['../classcookmem_1_1PtrAVLTree.html#a24a16d1a2d9a70f5b96b9f78b354598b',1,'cookmem::PtrAVLTree::isEmpty()']]],
+  ['isinlist_7',['isInList',['../classcookmem_1_1PtrRBNode.html#aa8ca34756cf6f2c18ee280b954b46e4a',1,'cookmem::PtrRBNode']]],
+  ['ispadding_8',['ispadding',['../classcookmem_1_1MemContext.html#acff532437c19cf40211c3da5bfdfac8e',1,'cookmem::MemContext::isPadding()'],['../classcookmem_1_1MemPool.html#aed666b7675d158353e04c8cf247becb9',1,'cookmem::MemPool::isPadding()']]],
+  ['isred_9',['isRed',['../classcookmem_1_1PtrRBNode.html#a0ea827e9b6ee505729d319a510a5a5a4',1,'cookmem::PtrRBNode']]],
+  ['isstoringexactsize_10',['isstoringexactsize',['../classcookmem_1_1MemContext.html#afa66cd66a401426a8233ac2c6dd9c94d',1,'cookmem::MemContext::isStoringExactSize()'],['../classcookmem_1_1MemPool.html#a16f0144772e5a83db8b69adc606faf29',1,'cookmem::MemPool::isStoringExactSize()']]]
 ];

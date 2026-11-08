@@ -1,10 +1,9 @@
 var searchData=
 [
-  ['logallocation_0',['logAllocation',['../classcookmem_1_1MemLogger.html#a8754b6eb34a4f99ea6df9c72ebd6a179',1,'cookmem::MemLogger']]],
-  ['logdeallocation_1',['logDeallocation',['../classcookmem_1_1MemLogger.html#a61adfcbd74119161ad85a8c3427e656b',1,'cookmem::MemLogger']]],
-  ['logerror_2',['logError',['../classcookmem_1_1MemLogger.html#a7a2145abc5af95b832e7e2c98b6c9108',1,'cookmem::MemLogger']]],
-  ['logfreesegment_3',['logFreeSegment',['../classcookmem_1_1MemLogger.html#a8247970d61c7aab669a5b31cec578ca7',1,'cookmem::MemLogger']]],
-  ['loggetsegment_4',['logGetSegment',['../classcookmem_1_1MemLogger.html#a8e41d49f7cef5bee8b823afcb79ac90e',1,'cookmem::MemLogger']]],
-  ['logreallocation_5',['logReallocation',['../classcookmem_1_1MemLogger.html#ae7a2543185a5000b3742779d2d2b0362',1,'cookmem::MemLogger']]],
-  ['logtrimemptysegments_6',['logTrimEmptySegments',['../classcookmem_1_1MemLogger.html#ac51822ba2461d900457e698a9545459a',1,'cookmem::MemLogger']]]
+  ['init_0',['init',['../classcookmem_1_1PtrRBNode.html#a57d880bcaed293a0d8c326ed0a48160d',1,'cookmem::PtrRBNode']]],
+  ['isempty_1',['isempty',['../classcookmem_1_1PtrAVLTree.html#a24a16d1a2d9a70f5b96b9f78b354598b',1,'cookmem::PtrAVLTree::isEmpty()'],['../classcookmem_1_1CircularList.html#ae0cf87b31cf44696f816dc4376728eb2',1,'cookmem::CircularList::isEmpty()'],['../classcookmem_1_1RedBlackTree.html#a433d142cd824a294ca99f8bea6494821',1,'cookmem::RedBlackTree::isEmpty()']]],
+  ['isinlist_2',['isInList',['../classcookmem_1_1PtrRBNode.html#aa8ca34756cf6f2c18ee280b954b46e4a',1,'cookmem::PtrRBNode']]],
+  ['ispadding_3',['ispadding',['../classcookmem_1_1MemContext.html#acff532437c19cf40211c3da5bfdfac8e',1,'cookmem::MemContext::isPadding()'],['../classcookmem_1_1MemPool.html#aed666b7675d158353e04c8cf247becb9',1,'cookmem::MemPool::isPadding()']]],
+  ['isred_4',['isRed',['../classcookmem_1_1PtrRBNode.html#a0ea827e9b6ee505729d319a510a5a5a4',1,'cookmem::PtrRBNode']]],
+  ['isstoringexactsize_5',['isstoringexactsize',['../classcookmem_1_1MemContext.html#afa66cd66a401426a8233ac2c6dd9c94d',1,'cookmem::MemContext::isStoringExactSize()'],['../classcookmem_1_1MemPool.html#a16f0144772e5a83db8b69adc606faf29',1,'cookmem::MemPool::isStoringExactSize()']]]
 ];
