@@ -22,34 +22,81 @@ I took the time to understand dlmalloc and rewrite its logic in C++. Some key
 calculations remain the same as in dlmalloc because there is no need to
 reinvent the wheel.
 
+Quick Start
+-----------
+
+CookMem is header-only.  Add the `include` directory to your include path and
+include `cookmem.h`.
+
+```cpp
+#include <cookmem.h>
+#include <vector>
+
+int main ()
+{
+    // A memory context that obtains large memory segments from the system
+    // (mmap or VirtualAlloc) and caches released segments for reuse.
+    cookmem::CachedMemContext<> memCtx;
+
+    // Allocate and deallocate like malloc and free.
+    void* ptr = memCtx.allocate (100);
+    memCtx.deallocate (ptr);
+
+    // Standard containers can allocate from the same context.
+    cookmem::Allocator<int> allocator (memCtx);
+    std::vector<int, cookmem::Allocator<int>> numbers (allocator);
+    numbers.push_back (42);
+
+    return 0;
+}   // Destroying memCtx releases all of its memory at once.
+```
+
+See the [tutorials](https://coconut2015.github.io/cookmem/tutorials.html) for more.
+
+Requirements
+------------
+
+* A C++11 compiler.  CookMem is tested with GCC 13 on Linux and with
+  Visual Studio 2022 on Windows.
+* A 64-bit platform.
+* [CMake](https://cmake.org/) 3.12 or later, only to build the tests,
+  examples and documentation.  See [Build Instructions](https://coconut2015.github.io/cookmem/build.html).
+
 Performance
 -----------
 
-The performance of CookMem is comparable to, if not faster than, dlmalloc.
-Neither dlmalloc nor CookMem uses locks. For CookMem, I also tested red-black
-tree (RB-tree) which is the default, and AVL-tree backend.
+CookMem is faster than dlmalloc in most of the tests below, up to about 13
+times faster for large blocks that come straight from the arena
+(perf_cookmem_10), and about the same in the others.  dlmalloc is faster for
+small blocks of the same size that are allocated and freed repeatedly
+(perf_cookmem_5), and for a sliding window of blocks of mixed sizes
+(perf_cookmem_11).  Neither dlmalloc nor CookMem uses locks.  CookMem was
+tested with both of its large chunk bins: the red-black tree (RB-tree), which
+is the default, and the AVL tree.
 
-An [interactive chart](http://coconut2015.github.io/cookmem/performance.html)
-of these results is available with the documentation.
+An [interactive chart](https://coconut2015.github.io/cookmem/performance.html) of these results is
+available with the documentation.
 
-Each test was run 5 times. For each column, the best and the worst
+The tests were run on an AMD Ryzen 7 5800H with Ubuntu 24.04 (WSL2), built by
+GCC 13.3 with `-O3`.  Times vary between runs by about 10%, so small
+differences are not significant.  Each test was run 5 times. For each column, the best and the worst
 times were dropped and the remaining times were averaged. The numbers are
 in seconds.
 
 | Test | What it covers | dlmalloc | CookMem (RB-tree) | CookMem (AVL-tree) |
 |------|----------------|---------:|------------------:|-------------------:|
-| perf_cookmem_1 | Copy a 200-character string into a vector 1M times (small bins, plus large vector growth) | 0.126525 | 0.101618 | 0.099559 |
-| perf_cookmem_2 | Same as perf_cookmem_1, then clear and fill again (reuse of freed chunks) | 0.233960 | 0.140242 | 0.141031 |
-| perf_cookmem_3 | 10k strings of growing length 1 to 10000 (mostly tree bins) | 0.022157 | 0.020473 | 0.020203 |
-| perf_cookmem_4 | Same as perf_cookmem_3, then clear and build again (reuse of freed tree chunks) | 0.033466 | 0.025645 | 0.025124 |
-| perf_cookmem_5 | Small same-size churn (`std::list<int>`, small bins) | 0.068185 | 0.074804 | 0.079774 |
-| perf_cookmem_6 | Mixed sizes (`std::map<int, std::string>`, values 0-999 chars, erase and re-insert) | 0.160800 | 0.149217 | 0.153573 |
-| perf_cookmem_7 | 50k free chunks of the same 1KB size, then merging with free neighbors | 0.045228 | 0.022644 | 0.023003 |
-| perf_cookmem_8 | Fragmentation and best-fit search (sizes 256 B-8 KB, refill the holes) | 0.079755 | 0.070487 | 0.069969 |
-| perf_cookmem_9 | Interleaved `realloc` growth up to 32KB | 0.579950 | 0.590824 | 0.580901 |
-| perf_cookmem_10 | Large blocks (128KB-4MB) going straight to the arena | 0.029976 | 0.002192 | 0.002443 |
-| perf_cookmem_11 | Sliding window (FIFO) of 1024 live blocks, 16-2047 bytes | 0.091809 | 0.115924 | 0.130731 |
-| perf_cookmem_12 | 10k vectors grown in interleaved order | 0.023595 | 0.022747 | 0.023023 |
+| perf_cookmem_1 | Copy a 200-character string into a vector 1M times (small bins, plus large vector growth) | 0.137765 | 0.112946 | 0.131251 |
+| perf_cookmem_2 | Same as perf_cookmem_1, then clear and fill again (reuse of freed chunks) | 0.253331 | 0.168729 | 0.178487 |
+| perf_cookmem_3 | 10k strings of growing length 1 to 10000 (mostly tree bins) | 0.024164 | 0.022851 | 0.022613 |
+| perf_cookmem_4 | Same as perf_cookmem_3, then clear and build again (reuse of freed tree chunks) | 0.036800 | 0.026149 | 0.026622 |
+| perf_cookmem_5 | Small same-size churn (`std::list<int>`, small bins) | 0.069674 | 0.079835 | 0.084755 |
+| perf_cookmem_6 | Mixed sizes (`std::map<int, std::string>`, values 0-999 chars, erase and re-insert) | 0.149489 | 0.164420 | 0.161334 |
+| perf_cookmem_7 | 50k free chunks of the same 1KB size, then merging with free neighbors | 0.045692 | 0.022891 | 0.022319 |
+| perf_cookmem_8 | Fragmentation and best-fit search (sizes 256 B-8 KB, refill the holes) | 0.081027 | 0.071846 | 0.077851 |
+| perf_cookmem_9 | Interleaved `realloc` growth up to 32KB | 0.598881 | 0.567728 | 0.585602 |
+| perf_cookmem_10 | Large blocks (128KB-4MB) going straight to the arena | 0.029663 | 0.002250 | 0.002693 |
+| perf_cookmem_11 | Sliding window (FIFO) of 1024 live blocks, 16-2047 bytes | 0.087624 | 0.109254 | 0.122220 |
+| perf_cookmem_12 | 10k vectors grown in interleaved order | 0.023026 | 0.022922 | 0.022312 |
 
 Use Cases
 =========
@@ -65,7 +112,8 @@ and thereby increase performance.
 For performance-critical applications, eliminating much of this synchronization
 cost can be even more beneficial. With CookMem, obtaining large segments using
 calls such as `mmap` may require synchronization, but allocations within those
-segments do not.
+segments do not.  See
+[Thread-local and Scoped Context STL Allocators](https://coconut2015.github.io/cookmem/tutorials.html#tlsSTLAlloc).
 
 Avoiding Individual Frees
 -------------------------
@@ -78,6 +126,8 @@ There are two sub-cases.
    avoid memory leaks.
 
 Both cases can be addressed easily by using any of the MemContext classes.
+Destroying a memory context releases all of its memory at once.  See
+[Detailed Behavior](https://coconut2015.github.io/cookmem/behavior.html) for the details.
 
 Restricting Memory Usage
 ------------------------
@@ -87,6 +137,7 @@ values are validated, edge cases in calculations can still cause the program to
 accidentally request a very large amount of memory and crash. CookMem provides
 several ways to restrict memory usage. One can set a memory footprint limit or
 add code to the segment request logic to restrict large memory requests.
+See [Restricting Memory Usage](https://coconut2015.github.io/cookmem/tutorials.html#footprint).
 
 Diagnosing and Debugging
 ------------------------
@@ -95,10 +146,19 @@ CookMem has built-in diagnostic tools that can help gather memory statistics
 and detect difficult-to-catch out-of-bounds writes without significantly
 slowing down the program. It also detects attempts to free an allocation more
 than once. CookMem is not a [Valgrind](https://valgrind.org/) replacement, but
-in many cases it can help catch difficult bugs.
+in many cases it can help catch difficult bugs.  See
+[Memory Statistics](https://coconut2015.github.io/cookmem/tutorials.html#statistics) and
+[Memory Corruption Detection](https://coconut2015.github.io/cookmem/tutorials.html#boundcheck).
 
 Links
 -----
 
-* Documentation: http://coconut2015.github.io/cookmem/
+* Documentation: https://coconut2015.github.io/cookmem/
+  * [Tutorials](https://coconut2015.github.io/cookmem/tutorials.html)
+  * [Detailed Behavior](https://coconut2015.github.io/cookmem/behavior.html)
+  * [Limitations](https://coconut2015.github.io/cookmem/limitations.html)
+  * [Installation](https://coconut2015.github.io/cookmem/install.html)
+  * [Build Instructions](https://coconut2015.github.io/cookmem/build.html)
+  * [References](https://coconut2015.github.io/cookmem/references.html)
+  * [Performance Chart](https://coconut2015.github.io/cookmem/performance.html)
 * Source: https://github.com/coconut2015/cookmem
