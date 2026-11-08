@@ -179,6 +179,22 @@ target_compile_definitions(test_version PRIVATE
 add_test(NAME test_version
 	COMMAND test_version)
 
+# .. test_allocator_alignment
+# Allocator must reject types that require a larger alignment than CookMem
+# provides.  The source must fail to compile, so it is not part of the normal
+# build.  The test builds it and passes only if the compiler reports the
+# static_assert message.
+add_executable(test_allocator_alignment EXCLUDE_FROM_ALL
+	tests/compile_fail_allocator_alignment.cpp)
+set_target_properties(test_allocator_alignment PROPERTIES
+	EXCLUDE_FROM_DEFAULT_BUILD TRUE)
+
+add_test(NAME test_allocator_alignment
+	COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR}
+	        --target test_allocator_alignment --config $<CONFIG>)
+set_tests_properties(test_allocator_alignment PROPERTIES
+	PASS_REGULAR_EXPRESSION "does not support types that require an alignment larger than")
+
 # -- performance tests -------------------------------------------------------
 # Until I figure out how to replace malloc / free on Windows, these tests
 # can only be done on Linux.
@@ -269,6 +285,21 @@ add_executable(example_getSize
 	examples/example_getSize.cpp)
 add_test(NAME example_getSize
 	COMMAND example_getSize)
+
+add_executable(example_footprintLimit
+	examples/example_footprintLimit.cpp)
+add_test(NAME example_footprintLimit
+	COMMAND example_footprintLimit)
+
+add_executable(example_StatsLogger
+	examples/example_StatsLogger.cpp)
+add_test(NAME example_StatsLogger
+	COMMAND example_StatsLogger)
+
+add_executable(example_trimEmptySegments
+	examples/example_trimEmptySegments.cpp)
+add_test(NAME example_trimEmptySegments
+	COMMAND example_trimEmptySegments)
 
 add_executable(example_boundcheck
 	examples/example_boundcheck.cpp)

@@ -960,6 +960,10 @@ private:
     NodeType *m_root;
 };
 
+/**
+ * The red-black tree used for the large chunk bins of MemPool and for
+ * CachedArena by default.
+ */
 typedef RedBlackTree<PtrRBNode> PtrRBTree;
 
 } // namespace cookmem

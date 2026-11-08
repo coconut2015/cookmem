@@ -21,9 +21,9 @@
 #include <cstdio>
 #include <cstring>
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
-#endif /* WIN32 */
+#endif /* _WIN32 */
 
 #include "config.h"
 #include "exception.h"
@@ -34,6 +34,8 @@
 namespace cookmem
 {
 
+/// @cond INTERNAL
+// Bit helpers used by the bin maps (from dlmalloc).
 template<class T>
 T least_bit(T x)
 {
@@ -45,6 +47,7 @@ T left_bits(T x)
 {
     return ((x << 1) | -static_cast<int>(x << 1));
 }
+/// @endcond
 
 /* assign tree index for size S to variable I. Use x86 asm if possible  */
 #if defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
@@ -438,12 +441,12 @@ private:
 
 private:
     /**
-     * Use 16 byte alignment.
+     * The alignment of allocations (see ALLOCATION_ALIGNMENT).
      *
      * The result is that all the pointers allocated and corresponding sizes
-     * would have the lower 4 bits free.
+     * would have the lower bits free.
      */
-    static const size_type  ALIGNMENT = sizeof(size_type) * 2;
+    static const size_type  ALIGNMENT = ALLOCATION_ALIGNMENT;
     /**
      * The mask used to calculate the alignment.
      */
@@ -621,10 +624,12 @@ public:
     }
 
     /**
-     * Set the maximum memory footprint limit.
+     * Set the maximum memory footprint limit.  Allocations that would need
+     * new memory segments beyond this limit fail and return nullptr.
      *
      * @param   footprintLimit
-     *
+     *          the maximum total size of the memory segments in bytes.
+     *          0 means no limit.
      */
     void
     setFootprintLimit (size_type footprintLimit)
@@ -638,7 +643,7 @@ public:
      * @return  the memory footprint limit
      */
     size_type
-    getFootPrintLimit () const
+    getFootprintLimit () const
     {
         return m_footprintLimit;
     }
@@ -1085,6 +1090,7 @@ public:
                 // can always use CacheMemArena.
                 removeChunk (firstChunk);
 
+                m_footprint -= segSize;
                 m_logger.logFreeSegment (seg, segSize);
                 m_arena.freeSegment (seg, segSize);
 

@@ -292,6 +292,9 @@ private:
  * An STL allocator that allocates through its context provider.
  *
  * Allocator copies and rebound allocators retain the same provider.
+ *
+ * T must not require an alignment larger than ALLOCATION_ALIGNMENT.  Using
+ * such a type causes a compile error when memory is allocated.
  */
 template<class T,
          class ContextProvider = MemContextProvider<CachedMemContext<> > >
@@ -403,6 +406,12 @@ public:
     pointer
     allocate (size_type size, const void* = nullptr)
     {
+        // Checked here rather than in the class body, so that the allocator
+        // can still be named for an incomplete type T.
+        static_assert (alignof (T) <= ALLOCATION_ALIGNMENT,
+                       "cookmem::Allocator does not support types that require "
+                       "an alignment larger than cookmem::ALLOCATION_ALIGNMENT.");
+
         if (size > (std::numeric_limits<size_type>::max) () / sizeof (T))
         {
             throw std::bad_alloc ();

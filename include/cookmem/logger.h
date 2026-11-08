@@ -24,6 +24,9 @@
 namespace cookmem
 {
 
+/**
+ * How an allocation was satisfied.  StatsLogger counts allocations by type.
+ */
 typedef enum
 {
     /** No allocation */

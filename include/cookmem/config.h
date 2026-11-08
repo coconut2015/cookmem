@@ -21,8 +21,19 @@
 
 #include "version.h"
 
+/**
+ * All CookMem classes, functions and constants are in this namespace.
+ */
 namespace cookmem
 {
+
+/**
+ * The alignment of every pointer returned by a memory context: twice the
+ * size of std::size_t, which is 16 bytes on 64-bit platforms and 8 bytes on
+ * 32-bit platforms.  Types that require a larger alignment, such as types
+ * declared with alignas(32), are not supported.
+ */
+const std::size_t ALLOCATION_ALIGNMENT = sizeof (std::size_t) * 2;
 
 /**
  * The number of deallocations between automatic empty-segment trimming passes.

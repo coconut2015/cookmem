@@ -1,4 +1,4 @@
-CookMem {#mainpage}
+CookMem
 =======
 
 [![Build Status](https://circleci.com/gh/coconut2015/cookmem.svg?style=shield)](https://app.circleci.com/pipelines/github/coconut2015/cookmem)[![codecov](https://codecov.io/gh/coconut2015/cookmem/branch/master/graph/badge.svg)](https://codecov.io/gh/coconut2015/cookmem)[![Apache License, Version 2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
@@ -51,7 +51,7 @@ in seconds.
 | perf_cookmem_11 | Sliding window (FIFO) of 1024 live blocks, 16-2047 bytes | 0.091809 | 0.115924 | 0.130731 |
 | perf_cookmem_12 | 10k vectors grown in interleaved order | 0.023595 | 0.022747 | 0.023023 |
 
-Use Cases {#usecases}
+Use Cases
 =========
 
 Avoiding Synchronization Cost

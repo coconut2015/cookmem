@@ -200,13 +200,15 @@ public:
      * @return  the memory footprint limit
      */
     inline size_type
-    getFootPrintLimit () const { return m_pool.getFootPrintLimit (); }
+    getFootprintLimit () const { return m_pool.getFootprintLimit (); }
 
     /**
-     * Set the maximum memory footprint limit.
+     * Set the maximum memory footprint limit.  Allocations that would need
+     * new memory segments beyond this limit fail and return nullptr.
      *
      * @param   footprintLimit
-     *
+     *          the maximum total size of the memory segments in bytes.
+     *          0 means no limit.
      */
     inline void
     setFootprintLimit (size_type footprintLimit) { m_pool.setFootprintLimit (footprintLimit); }
@@ -217,7 +219,7 @@ public:
      * @return  the current memory footprint.
      */
     inline size_type
-    getFootprint () const { return m_pool.getFootPrint (); }
+    getFootprint () const { return m_pool.getFootprint (); }
 
     /**
      * Get the maximum memory footprint.

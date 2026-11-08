@@ -68,6 +68,50 @@ See the following example.
 
 \include example_getSize.cpp
 
+\section footprint Restricting Memory Usage
+
+A memory context can limit the total size of the memory segments it obtains,
+which is its footprint.  An allocation that would need memory beyond the
+limit fails and returns `nullptr`, while the context remains usable.  This
+protects long-running programs from accidentally requesting a very large
+amount of memory.
+
+* `setFootprintLimit ()` sets the limit in bytes.  0, the default, means no
+  limit.
+* `getFootprint ()` returns the current footprint, and `getMaxFootprint ()`
+  returns the largest footprint so far.
+
+The footprint includes the overhead of the segments, so slightly less memory
+than the limit is available for allocations.
+
+\include example_footprintLimit.cpp
+
+\section statistics Memory Statistics
+
+cookmem::StatsLogger gathers statistics on allocations and memory segments:
+counts, current and peak sizes, and how the allocations were satisfied.  Use
+it as the logger of a memory context and read the statistics with
+`getLogger ().getStats ()`.  The default logger, cookmem::NoActionMemLogger,
+does nothing, so the statistics cost nothing unless you ask for them.
+
+\include example_StatsLogger.cpp
+
+\section trimming Releasing Empty Segments
+
+When memory is freed, the memory pool keeps the memory segments for later
+allocations instead of releasing them right away.  Every few thousand
+deallocations (4095 by default), it releases the segments that are entirely
+free back to the arena.
+
+* `trimEmptySegments ()` releases the empty segments immediately.
+* `setTrimEmptySegmentsInterval ()` changes how many deallocations happen
+  between the automatic checks.  A smaller interval keeps the footprint
+  smaller, but releases and obtains segments more often.  With
+  cookmem::CachedMemContext, released segments are cached by the arena and
+  reused, so a small interval costs less.
+
+\include example_trimEmptySegments.cpp
+
 \section boundcheck Memory Corruption Detection
 
 In addition to various assertions, cookmem can add padding bytes (between 1

@@ -15,6 +15,7 @@
  */
 #include <cookmem/allocator.h>
 
+#include <cstdint>
 #include <list>
 #include <limits>
 #include <new>
@@ -269,6 +270,56 @@ test3 ()
     return 0;
 }
 
+/**
+ * A type that requires the largest supported alignment.
+ */
+struct alignas(cookmem::ALLOCATION_ALIGNMENT) MaxAligned
+{
+    char data[cookmem::ALLOCATION_ALIGNMENT];
+};
+
+static bool
+isAligned (const void* ptr)
+{
+    return reinterpret_cast<std::uintptr_t> (ptr) % cookmem::ALLOCATION_ALIGNMENT == 0;
+}
+
+/**
+ * Every allocation is aligned to ALLOCATION_ALIGNMENT, so types that require
+ * that alignment work with Allocator.
+ */
+static int
+testAlignment ()
+{
+    cookmem::CachedMemContext<> context;
+
+    // Raw allocations of many sizes.
+    for (std::size_t size = 1; size < 3000; size += 7)
+    {
+        void* ptr = context.allocate (size);
+        ASSERT_NE (nullptr, ptr);
+        ASSERT_EQ (true, isAligned (ptr));
+    }
+
+    // Containers of a type that requires the largest supported alignment.
+    typedef cookmem::Allocator<MaxAligned> MaxAlignedAllocator;
+    MaxAlignedAllocator allocator (context);
+    std::vector<MaxAligned, MaxAlignedAllocator> values (allocator);
+    for (int i = 0; i < 1000; ++i)
+    {
+        values.push_back (MaxAligned ());
+        ASSERT_EQ (true, isAligned (values.data ()));
+    }
+
+    std::list<MaxAligned, MaxAlignedAllocator> nodes (allocator);
+    for (int i = 0; i < 100; ++i)
+    {
+        nodes.push_back (MaxAligned ());
+        ASSERT_EQ (true, isAligned (&nodes.back ()));
+    }
+    return 0;
+}
+
 static int
 testContainerSwap ()
 {
@@ -300,6 +351,7 @@ main ()
         ASSERT_EQ (0, test2 ());
         ASSERT_EQ (0, test3 ());
         ASSERT_EQ (0, testContainerSwap ());
+        ASSERT_EQ (0, testAlignment ());
     }
     catch (const unittest::UnitTestException& ex)
     {
