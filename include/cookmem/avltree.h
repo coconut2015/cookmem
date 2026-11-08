@@ -356,6 +356,63 @@ public:
     }
 
     /**
+     * Check if a node in the tree can take a larger size without changing
+     * its position in the tree.  If so, the caller can update the size in
+     * place instead of removing the node and adding it back.
+     *
+     * @param   ptr
+     *          the pointer stored in the tree.
+     * @param   newSize
+     *          the new size, which must be larger than the current size.
+     * @return  true if the size can be updated in place.
+     */
+    bool
+    canGrowInPlace (void* ptr, std::size_t newSize)
+    {
+        Node* node = reinterpret_cast<Node*>(ptr);
+
+        // All nodes in a DLL must have the same size.
+        if (node->height == -1 || node->next != nullptr)
+        {
+            return false;
+        }
+
+        // Find the next larger node.  There are no parent pointers, so
+        // search from the root and remember the last node where the search
+        // went left.
+        std::size_t size = node->size;
+        Node* nextLarger = nullptr;
+        Node* root = m_root;
+        while (root != node)
+        {
+            if (root == nullptr)
+            {
+                return false;
+            }
+            if (size < root->size)
+            {
+                nextLarger = root;
+                root = root->left;
+            }
+            else
+            {
+                root = root->right;
+            }
+        }
+
+        if (node->right != nullptr)
+        {
+            nextLarger = node->right;
+            while (nextLarger->left != nullptr)
+            {
+                nextLarger = nextLarger->left;
+            }
+        }
+
+        return nextLarger == nullptr || newSize < nextLarger->size;
+    }
+
+    /**
      * Check if the tree is empty.
      *
      * @return  true if the tree is empty.  false otherwise.

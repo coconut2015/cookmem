@@ -22,6 +22,12 @@
 
 #include "perftest.h"
 
+/**
+ * Strings of growing length, built twice.
+ *
+ * Same as perf_cookmem_3, but the strings are cleared and built a second
+ * time, so the second pass reuses the tree chunks freed by the first.
+ */
 struct Test1
 {
     void

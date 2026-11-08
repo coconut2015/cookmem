@@ -330,6 +330,65 @@ test6 ()
     return 0;
 }
 
+/**
+ * canGrowInPlace: a node can grow only up to (not including) the next
+ * larger size, and never when it has a list or is in a list.
+ */
+static int
+test7 ()
+{
+    const int count = 15;
+    // insertion order that creates nodes with and without right subtrees
+    const int order[count] = { 7, 3, 11, 1, 5, 9, 13, 0, 2, 4, 6, 8, 10, 12, 14 };
+    Node nodes[count];
+    Node duplicate;
+    Node outsider;
+    cookmem::PtrAVLTree list;
+
+    // sizes are 100, 200, ..., 1500
+    for (int i = 0; i < count; ++i)
+    {
+        list.add (&nodes[order[i]], (order[i] + 1) * 100);
+    }
+
+    for (int i = 0; i < count - 1; ++i)
+    {
+        const std::size_t nextSize = (i + 2) * 100;
+        ASSERT_EQ (true, list.canGrowInPlace (&nodes[i], nextSize - 1));
+        ASSERT_EQ (false, list.canGrowInPlace (&nodes[i], nextSize));
+    }
+    // The largest node can grow to any size.
+    ASSERT_EQ (true, list.canGrowInPlace (&nodes[count - 1], 1000000));
+
+    // Nodes with the same size are kept in a list, so neither the tree node
+    // nor the list node can grow in place.
+    list.add (&duplicate, 300);
+    ASSERT_EQ (false, list.canGrowInPlace (&nodes[2], 350));
+    ASSERT_EQ (false, list.canGrowInPlace (&duplicate, 350));
+    list.remove (&duplicate);
+    ASSERT_EQ (true, list.canGrowInPlace (&nodes[2], 350));
+
+    // A node that is not in the tree cannot grow.
+    list.add (&outsider, 2000);
+    list.remove (&outsider);
+    ASSERT_EQ (false, list.canGrowInPlace (&outsider, 2100));
+
+    // The memory pool grows a node by updating the size field of the chunk,
+    // which is the size of the node (the second word).  The tree must stay
+    // valid afterward.
+    nodes[2].dummy[1] = 350;
+    for (int i = 0; i < count; ++i)
+    {
+        ASSERT_EQ (true, list.contains (&nodes[i]));
+    }
+
+    std::size_t size = 301;
+    ASSERT_EQ (&nodes[2], static_cast<Node*> (list.remove (size)));
+    ASSERT_EQ (std::size_t (350), size);
+
+    return 0;
+}
+
 int
 main (int argc, const char* argv[])
 {
@@ -341,6 +400,7 @@ main (int argc, const char* argv[])
         ASSERT_EQ (0, test4 ());
         ASSERT_EQ (0, test5 ());
         ASSERT_EQ (0, test6 ());
+        ASSERT_EQ (0, test7 ());
     }
     catch (const unittest::UnitTestException& ex)
     {

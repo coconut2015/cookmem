@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 #include <iostream>
+#include <set>
 
 #include <cookmem/rbtree.h>
 
@@ -24,7 +25,8 @@ validateSubtree (
     const cookmem::PtrRBNode* node,
     const cookmem::PtrRBNode* parent,
     const cookmem::PtrRBNode* minNode,
-    const cookmem::PtrRBNode* maxNode)
+    const cookmem::PtrRBNode* maxNode,
+    std::size_t& nodeCount)
 {
     if (node == nullptr)
     {
@@ -32,6 +34,23 @@ validateSubtree (
     }
 
     ASSERT_EQ (parent, node->getParent ());
+    ASSERT_EQ (false, node->isInList ());
+    ++nodeCount;
+
+    // Check the DLL of same sized nodes.  The prev pointer of a list node
+    // is its left child pointer.
+    const cookmem::PtrRBNode* prevNode = node;
+    for (const cookmem::PtrRBNode* listNode = node->getNext ();
+         listNode != nullptr;
+         listNode = listNode->getNext ())
+    {
+        ASSERT_EQ (true, listNode->isInList ());
+        ASSERT_EQ (prevNode, listNode->getLeft ());
+        ASSERT_EQ (node->getValue (), listNode->getValue ());
+        ++nodeCount;
+        prevNode = listNode;
+    }
+
     if (minNode != nullptr)
     {
         ASSERT_EQ (true, minNode->getValue () < node->getValue ());
@@ -47,15 +66,21 @@ validateSubtree (
     }
 
     const int leftBlackHeight = validateSubtree (
-        node->getLeft (), node, minNode, node);
+        node->getLeft (), node, minNode, node, nodeCount);
     const int rightBlackHeight = validateSubtree (
-        node->getRight (), node, node, maxNode);
+        node->getRight (), node, node, maxNode, nodeCount);
     ASSERT_EQ (leftBlackHeight, rightBlackHeight);
 
     return leftBlackHeight + (node->isRed () ? 0 : 1);
 }
 
-static void
+/**
+ * Validate the red-black tree properties, the parent pointers and the DLLs
+ * of same sized nodes.
+ *
+ * @return  the number of nodes in the tree, including the list nodes.
+ */
+static std::size_t
 validateTree (cookmem::PtrRBTree& tree)
 {
     const cookmem::PtrRBNode* root = tree.getRoot ();
@@ -63,7 +88,9 @@ validateTree (cookmem::PtrRBTree& tree)
     {
         ASSERT_EQ (false, root->isRed ());
     }
-    validateSubtree (root, nullptr, nullptr, nullptr);
+    std::size_t nodeCount = 0;
+    validateSubtree (root, nullptr, nullptr, nullptr, nodeCount);
+    return nodeCount;
 }
 
 static void
@@ -344,6 +371,170 @@ test7 ()
     ASSERT_EQ (true, tree.isEmpty ());
 }
 
+/**
+ * Random mix of add, remove by size, remove by pointer and contains,
+ * checked against a std::multiset.  Small key ranges create long lists of
+ * same sized nodes, while large key ranges create mostly unique nodes.
+ */
+static void
+test8 ()
+{
+    const int nodeCount = 256;
+    const std::size_t keyRanges[] = { 4, 16, 64, 100000 };
+    cookmem::PtrRBNode nodes[nodeCount];
+    unsigned int seed = 0x5EEDF00Du;
+
+    for (std::size_t keyRange : keyRanges)
+    {
+        for (int round = 0; round < 4; ++round)
+        {
+            cookmem::PtrRBTree tree;
+            std::multiset<std::size_t> expected;
+            bool present[nodeCount] = {};
+            int freeNodes[nodeCount];
+            int numFree = nodeCount;
+            int usedNodes[nodeCount];
+            int numUsed = 0;
+
+            for (int i = 0; i < nodeCount; ++i)
+            {
+                freeNodes[i] = i;
+            }
+
+            for (int step = 0; step < 5000; ++step)
+            {
+                seed = seed * 1664525u + 1013904223u;
+                const unsigned int op = (seed >> 16) % 10;
+                seed = seed * 1664525u + 1013904223u;
+                const unsigned int r = seed >> 8;
+
+                if (op < 5 && numFree > 0)
+                {
+                    // add
+                    const int index = freeNodes[--numFree];
+                    const std::size_t value = 1 + r % keyRange;
+                    tree.add (&nodes[index], value);
+                    expected.insert (value);
+                    present[index] = true;
+                    usedNodes[numUsed++] = index;
+                }
+                else if (op < 8 && numUsed > 0)
+                {
+                    // remove by pointer
+                    const int slot = r % numUsed;
+                    const int index = usedNodes[slot];
+                    usedNodes[slot] = usedNodes[--numUsed];
+
+                    ASSERT_EQ (true, tree.contains (&nodes[index]));
+                    const std::size_t value = nodes[index].getValue ();
+                    tree.remove (&nodes[index]);
+                    ASSERT_EQ (false, tree.contains (&nodes[index]));
+
+                    expected.erase (expected.find (value));
+                    present[index] = false;
+                    freeNodes[numFree++] = index;
+                }
+                else
+                {
+                    // remove by size (best fit)
+                    const std::size_t key = 1 + r % (keyRange + 2);
+                    std::size_t size = key;
+                    cookmem::PtrRBNode* node = tree.remove (size);
+                    std::multiset<std::size_t>::iterator it = expected.lower_bound (key);
+                    if (it == expected.end ())
+                    {
+                        ASSERT_EQ (nullptr, node);
+                    }
+                    else
+                    {
+                        ASSERT_EQ (true, node != nullptr);
+                        ASSERT_EQ (*it, size);
+                        ASSERT_EQ (size, node->getValue ());
+
+                        const int index = static_cast<int> (node - nodes);
+                        ASSERT_EQ (true, present[index]);
+                        ASSERT_EQ (false, tree.contains (node));
+
+                        expected.erase (it);
+                        present[index] = false;
+                        for (int i = 0; i < numUsed; ++i)
+                        {
+                            if (usedNodes[i] == index)
+                            {
+                                usedNodes[i] = usedNodes[--numUsed];
+                                break;
+                            }
+                        }
+                        freeNodes[numFree++] = index;
+                    }
+                }
+
+                ASSERT_EQ (expected.size (), validateTree (tree));
+            }
+        }
+    }
+}
+
+/**
+ * canGrowInPlace: a node can grow only up to (not including) the next
+ * larger value, and never when it has a list or is in a list.
+ */
+static void
+test9 ()
+{
+    const int nodeCount = 15;
+    cookmem::PtrRBNode nodes[nodeCount];
+    cookmem::PtrRBNode duplicate;
+    cookmem::PtrRBTree tree;
+    int insertionOrder[nodeCount];
+    unsigned int seed = 0x6A0Du;
+
+    for (int i = 0; i < nodeCount; ++i)
+    {
+        insertionOrder[i] = i;
+    }
+    shuffleIndices (insertionOrder, nodeCount, seed);
+
+    // values are 100, 200, ..., 1500
+    for (int i = 0; i < nodeCount; ++i)
+    {
+        const int index = insertionOrder[i];
+        tree.add (&nodes[index], (index + 1) * 100);
+    }
+    validateTree (tree);
+
+    // This covers both nodes with a right subtree and nodes whose next
+    // larger value is an ancestor.
+    for (int i = 0; i < nodeCount - 1; ++i)
+    {
+        const std::size_t nextValue = (i + 2) * 100;
+        ASSERT_EQ (true, tree.canGrowInPlace (&nodes[i], nextValue - 1));
+        ASSERT_EQ (false, tree.canGrowInPlace (&nodes[i], nextValue));
+    }
+    // The largest node can grow to any value.
+    ASSERT_EQ (true, tree.canGrowInPlace (&nodes[nodeCount - 1], 1000000));
+
+    // Nodes with the same value are kept in a list, so neither the tree node
+    // nor the list node can grow in place.
+    tree.add (&duplicate, 300);
+    ASSERT_EQ (false, tree.canGrowInPlace (&nodes[2], 350));
+    ASSERT_EQ (false, tree.canGrowInPlace (&duplicate, 350));
+    tree.remove (&duplicate);
+    ASSERT_EQ (true, tree.canGrowInPlace (&nodes[2], 350));
+
+    // The memory pool grows a node by updating the size field of the chunk,
+    // which is the value of the node (the second word).  The tree must stay
+    // valid afterward.
+    reinterpret_cast<std::size_t*> (&nodes[2])[1] = 350;
+    ASSERT_EQ (std::size_t (350), nodes[2].getValue ());
+    ASSERT_EQ (std::size_t (nodeCount), validateTree (tree));
+
+    std::size_t size = 301;
+    ASSERT_EQ (&nodes[2], tree.remove (size));
+    ASSERT_EQ (std::size_t (350), size);
+    validateTree (tree);
+}
+
 unittest::TestFunction s_tests[] =
 {
     test1,
@@ -353,6 +544,8 @@ unittest::TestFunction s_tests[] =
     test5,
     test6,
     test7,
+    test8,
+    test9,
 };
 
 int

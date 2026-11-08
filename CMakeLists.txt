@@ -1,4 +1,4 @@
-CMAKE_MINIMUM_REQUIRED (VERSION 3.10)
+CMAKE_MINIMUM_REQUIRED (VERSION 3.12)
 
 # The version number is kept in version.txt.  Editing it re-runs CMake.
 file (STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/version.txt" COOKMEM_VERSION LIMIT_COUNT 1)
@@ -73,6 +73,10 @@ if (BUILD_DOC)
 endif (BUILD_DOC)
 
 include_directories(include/)
+
+# Debug builds define COOKMEM_DEBUG so that the internal assertions
+# (COOKMEM_ASSERT) are checked.  Release builds are free of assertions.
+add_compile_definitions ($<$<CONFIG:Debug>:COOKMEM_DEBUG=1>)
 
 #add_library(cookmem STATIC
 #)

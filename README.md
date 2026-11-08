@@ -35,18 +35,18 @@ in seconds.
 
 | Test | What it covers | dlmalloc | CookMem (RB-tree) | CookMem (AVL-tree) |
 |------|----------------|---------:|------------------:|-------------------:|
-| perf_cookmem_1 | Copy a 200-character string into a vector 1M times (small bins, plus large vector growth) | 0.124261 | 0.104597 | 0.121582 |
-| perf_cookmem_2 | Same as perf_cookmem_1, then clear and fill again (reuse of freed chunks) | 0.224176 | 0.141896 | 0.153736 |
-| perf_cookmem_3 | 10k strings of growing length 1 to 10000 (mostly tree bins) | 0.020189 | 0.019054 | 0.018793 |
-| perf_cookmem_4 | Same as perf_cookmem_3, then clear and build again (reuse of freed tree chunks) | 0.032461 | 0.025253 | 0.026043 |
-| perf_cookmem_5 | Small same-size churn (`std::list<int>`, small bins) | 0.071312 | 0.102002 | 0.105786 |
-| perf_cookmem_6 | Mixed sizes (`std::map<int, std::string>`, values 0-999 chars, erase and re-insert) | 0.117218 | 0.373125 | 0.136716 |
-| perf_cookmem_7 | 50k free chunks of the same 1KB size, then merging with free neighbors | 0.043288 | 3.378030 | 0.021372 |
-| perf_cookmem_8 | Fragmentation and best-fit search (sizes 256 B-8 KB, refill the holes) | 0.073540 | 0.081929 | 0.071711 |
-| perf_cookmem_9 | Interleaved `realloc` growth up to 32KB | 0.472895 | 0.890904 | 0.461019 |
-| perf_cookmem_10 | Large blocks (128KB-4MB) going straight to the arena | 0.027562 | 0.001948 | 0.002031 |
-| perf_cookmem_11 | Sliding window (FIFO) of 1024 live blocks, 16-2047 bytes | 0.085572 | 0.106292 | 0.119713 |
-| perf_cookmem_12 | 10k vectors grown in interleaved order | 0.020115 | 0.021706 | 0.019583 |
+| perf_cookmem_1 | Copy a 200-character string into a vector 1M times (small bins, plus large vector growth) | 0.125316 | 0.103427 | 0.127226 |
+| perf_cookmem_2 | Same as perf_cookmem_1, then clear and fill again (reuse of freed chunks) | 0.216856 | 0.132041 | 0.144146 |
+| perf_cookmem_3 | 10k strings of growing length 1 to 10000 (mostly tree bins) | 0.020329 | 0.018636 | 0.018519 |
+| perf_cookmem_4 | Same as perf_cookmem_3, then clear and build again (reuse of freed tree chunks) | 0.031650 | 0.024199 | 0.023639 |
+| perf_cookmem_5 | Small same-size churn (`std::list<int>`, small bins) | 0.067721 | 0.077204 | 0.079071 |
+| perf_cookmem_6 | Mixed sizes (`std::map<int, std::string>`, values 0-999 chars, erase and re-insert) | 0.150048 | 0.147546 | 0.159161 |
+| perf_cookmem_7 | 50k free chunks of the same 1KB size, then merging with free neighbors | 0.044344 | 0.022699 | 0.020860 |
+| perf_cookmem_8 | Fragmentation and best-fit search (sizes 256 B-8 KB, refill the holes) | 0.080835 | 0.071338 | 0.079966 |
+| perf_cookmem_9 | Interleaved `realloc` growth up to 32KB | 0.573000 | 0.532141 | 0.557398 |
+| perf_cookmem_10 | Large blocks (128KB-4MB) going straight to the arena | 0.028470 | 0.002208 | 0.002144 |
+| perf_cookmem_11 | Sliding window (FIFO) of 1024 live blocks, 16-2047 bytes | 0.086800 | 0.111278 | 0.122336 |
+| perf_cookmem_12 | 10k vectors grown in interleaved order | 0.024444 | 0.022651 | 0.022907 |
 
 Use Cases {#usecases}
 =========
