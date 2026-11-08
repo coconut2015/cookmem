@@ -422,18 +422,18 @@ test9 ()
     ASSERT_EQ (true, footprint <= limit);
     ASSERT_EQ (footprint, memCtx.getMaxFootprint ());
 
+    // Release empty segments on every deallocation.
+    memCtx.setTrimEmptySegmentsInterval (1);
     for (int i = 0; i < 4; ++i)
     {
         memCtx.deallocate (ptrs[i]);
     }
-    memCtx.trimEmptySegments ();
     ASSERT_EQ (std::size_t (0), memCtx.getFootprint ());
     ASSERT_EQ (footprint, memCtx.getMaxFootprint ());
     memCtx.validate ();
 
     // Allocate and free repeatedly, releasing the segment every time.  The
     // footprint must not keep growing toward the limit.
-    memCtx.setTrimEmptySegmentsInterval (1);
     for (int round = 0; round < 50; ++round)
     {
         void* ptr = memCtx.allocate (500 * 1024);

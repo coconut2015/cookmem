@@ -12,12 +12,12 @@ jobs:
           command: sudo apt-get update && sudo apt-get install -y g++ cmake lcov
       - run:
           name: Build and test
-          command: chmod +x make.sh && ./make.sh debug
+          command: chmod +x make.sh && ./make.sh cov
       # Upload only the lcov report created by "make test_coverage", which
       # already excludes system headers, tests, examples and performance
       # tests.  Requires CODECOV_TOKEN in the CircleCI project settings.
       - codecov/upload:
-          files: debug/test_coverage.info
+          files: cov/test_coverage.info
           disable_search: true
           plugins: noop
           fail_on_error: true

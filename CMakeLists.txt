@@ -37,20 +37,16 @@ endif (MSVC)
 if (UNIX)
 	if(COVERAGE)
 		include(CodeCoverage)
-
-		setup_target_for_coverage_lcov (
-			NAME test_coverage
-			EXECUTABLE ctest
-			DEPENDENCIES ctest
-			EXCLUDE "/usr/*" "tests/*" "examples/*" "performances/*"
-		)
-
 		APPEND_COVERAGE_COMPILER_FLAGS()
+		# The test_coverage target is defined at the end of this file, after
+		# the targets it depends on.
 	endif(COVERAGE)
 endif (UNIX)
 
 if (VCPROFILER)
-	set(LINK_OPTIONS "/PROFILE")
+	# /PROFILE makes the executables usable with the Visual Studio profiling
+	# tools.
+	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /PROFILE")
 endif (VCPROFILER)
 
 #
@@ -197,8 +193,9 @@ set_tests_properties(test_allocator_alignment PROPERTIES
 
 # -- performance tests -------------------------------------------------------
 # Until I figure out how to replace malloc / free on Windows, these tests
-# can only be done on Linux.
-if (UNIX)
+# can only be done on Linux.  They are skipped in code coverage builds, since
+# they are not part of the coverage report and only take time.
+if (UNIX AND NOT COVERAGE)
 	add_executable(perf_cookmem_1
 		performances/perf_cookmem_1.cpp)
 	add_test(NAME perf_cookmem_1
@@ -258,7 +255,7 @@ if (UNIX)
 		performances/perf_cookmem_12.cpp)
 	add_test(NAME perf_cookmem_12
 		COMMAND perf_cookmem_12)
-endif (UNIX)
+endif (UNIX AND NOT COVERAGE)
 
 # -- examples -------------------------------------------------------
 add_executable(example_FixedArena
@@ -296,11 +293,6 @@ add_executable(example_StatsLogger
 add_test(NAME example_StatsLogger
 	COMMAND example_StatsLogger)
 
-add_executable(example_trimEmptySegments
-	examples/example_trimEmptySegments.cpp)
-add_test(NAME example_trimEmptySegments
-	COMMAND example_trimEmptySegments)
-
 add_executable(example_boundcheck
 	examples/example_boundcheck.cpp)
 add_test(NAME example_boundcheck
@@ -315,3 +307,27 @@ add_executable(example_AllocatorThreadLocal
 	examples/example_AllocatorThreadLocal.cpp)
 add_test(NAME example_AllocatorThreadLocal
 	COMMAND example_AllocatorThreadLocal)
+
+# -- code coverage -----------------------------------------------------------
+# test_coverage builds the test and example executables, runs the tests once
+# with ctest and generates the report.
+if (UNIX AND COVERAGE)
+	get_property (COOKMEM_TARGETS DIRECTORY PROPERTY BUILDSYSTEM_TARGETS)
+	set (COOKMEM_COVERAGE_DEPENDENCIES)
+	foreach (target ${COOKMEM_TARGETS})
+		get_target_property (target_type ${target} TYPE)
+		get_target_property (target_excluded ${target} EXCLUDE_FROM_ALL)
+		if (target_type STREQUAL "EXECUTABLE" AND NOT target_excluded)
+			list (APPEND COOKMEM_COVERAGE_DEPENDENCIES ${target})
+		endif ()
+	endforeach ()
+
+	setup_target_for_coverage_lcov (
+		NAME test_coverage
+		EXECUTABLE ctest
+		DEPENDENCIES ${COOKMEM_COVERAGE_DEPENDENCIES}
+		# The performance tests are not built in coverage builds, and lcov
+		# reports an exclude pattern that matches nothing as an error.
+		EXCLUDE "/usr/*" "tests/*" "examples/*"
+	)
+endif ()

@@ -37,6 +37,28 @@ be destroyed.
 
 ### Releasing Memory
 
+When memory is deallocated, the memory pool does not release memory segments
+to the arena right away, even when a segment becomes entirely free.  Free
+segments are kept for later allocations.  After every
+cookmem::DEFAULT_TRIM_EMPTY_SEGMENTS_INTERVAL (4095) deallocations, the pool
+runs a trimming pass that releases the segments that are entirely free to the
+arena, which reduces the footprint.  As a result:
+
+* The footprint can stay higher than the memory in use until the next
+  trimming pass.
+* With cookmem::CachedArena, the released segments are cached by the arena
+  and reused for later requests, including requests from other memory
+  contexts that share the arena.
+* `setTrimEmptySegmentsInterval ()` changes the number of deallocations
+  between trimming passes.  The default suits most programs.  A smaller
+  interval keeps the footprint smaller, but releases and obtains segments
+  more often.
+* cookmem::StatsLogger counts the trimming passes
+  (`getNumTrimEmptySegments ()`).
+
+`releaseAll ()` releases all memory segments of a context at once.  Every
+pointer allocated from the context becomes invalid.
+
 Destroying a memory context releases all of its memory segments at once,
 without deallocating each allocation.  Destructors of objects still in that
 memory are not called, so destroy any objects that own other resources (such

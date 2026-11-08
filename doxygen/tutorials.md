@@ -38,10 +38,14 @@ since cookmem::MemPool already does the tracking.
 
 \section CachedArena CachedArena
 
-cookmem::CachedArena caches released memory segments in an
+cookmem::CachedArena caches released memory segments in a
 [red-black tree](https://en.wikipedia.org/wiki/Red%E2%80%93black_tree) and reuses them for
 later requests.  This is useful when it is expensive to request and
 release memory segments.
+
+Note that the memory pool does not release a segment to the arena as soon as
+the segment becomes free.  It keeps free segments for later allocations, and
+releases them periodically, after a number of deallocations.
 
 \include example_CachedArena.cpp
 
@@ -95,22 +99,6 @@ it as the logger of a memory context and read the statistics with
 does nothing, so the statistics cost nothing unless you ask for them.
 
 \include example_StatsLogger.cpp
-
-\section trimming Releasing Empty Segments
-
-When memory is freed, the memory pool keeps the memory segments for later
-allocations instead of releasing them right away.  Every few thousand
-deallocations (4095 by default), it releases the segments that are entirely
-free back to the arena.
-
-* `trimEmptySegments ()` releases the empty segments immediately.
-* `setTrimEmptySegmentsInterval ()` changes how many deallocations happen
-  between the automatic checks.  A smaller interval keeps the footprint
-  smaller, but releases and obtains segments more often.  With
-  cookmem::CachedMemContext, released segments are cached by the arena and
-  reused, so a small interval costs less.
-
-\include example_trimEmptySegments.cpp
 
 \section boundcheck Memory Corruption Detection
 

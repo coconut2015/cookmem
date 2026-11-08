@@ -657,6 +657,16 @@ public:
 
     /**
      * Set the number of deallocations between empty-segment trimming passes.
+     *
+     * Memory segments that become entirely free are kept for later
+     * allocations.  After every interval deallocations, the segments that
+     * are entirely free are released to the arena.  A smaller interval keeps
+     * the footprint smaller, but releases and obtains segments more often.
+     *
+     * @param   interval
+     *          the number of deallocations between the passes.  The default
+     *          is DEFAULT_TRIM_EMPTY_SEGMENTS_INTERVAL.  1 (or 0) releases
+     *          empty segments on every deallocation.
      */
     void
     setTrimEmptySegmentsInterval (size_type interval)
@@ -1073,53 +1083,6 @@ public:
 
 
     /**
-     * Release segments that are entirely free.
-     */
-    void
-    trimEmptySegments ()
-    {
-        m_logger.logTrimEmptySegments ();
-        MemSegment* seg = m_segList;
-        MemSegment* prevSeg = nullptr;
-        while (seg)
-        {
-            MemSegment* nextSeg = seg->getNext ();
-
-            size_type   segSize = seg->getSize ();
-            MemChunk*   firstChunk = seg->getFirstChunk ();
-            if (!firstChunk->isUsed () &&
-                firstChunk->getChunkSize () == seg->getMaxChunkSize ())
-            {
-                // The entire segment is free, so we can just release the
-                // segment.
-                //
-                // If users want to keep the segment around for caching, they
-                // can always use CacheMemArena.
-                removeChunk (firstChunk);
-
-                m_footprint -= segSize;
-                m_logger.logFreeSegment (seg, segSize);
-                m_arena.freeSegment (seg, segSize);
-
-                if (prevSeg == nullptr)
-                {
-                    m_segList = nextSeg;
-                }
-                if (prevSeg != nullptr)
-                {
-                    prevSeg->setNext (nextSeg);
-                }
-            }
-            else
-            {
-                prevSeg = seg;
-            }
-            seg = nextSeg;
-        }
-        m_numFrees = 0;
-    }
-
-    /**
      * Gets the allocated size for a pointer.
      *
      * If we are storing the exact size of the pointer, then the result
@@ -1286,6 +1249,55 @@ public:
     }
 
 private:
+    /**
+     * Release segments that are entirely free.  This is called automatically
+     * after every m_trimEmptySegmentsInterval deallocations (see
+     * setTrimEmptySegmentsInterval ()).
+     */
+    void
+    trimEmptySegments ()
+    {
+        m_logger.logTrimEmptySegments ();
+        MemSegment* seg = m_segList;
+        MemSegment* prevSeg = nullptr;
+        while (seg)
+        {
+            MemSegment* nextSeg = seg->getNext ();
+
+            size_type   segSize = seg->getSize ();
+            MemChunk*   firstChunk = seg->getFirstChunk ();
+            if (!firstChunk->isUsed () &&
+                firstChunk->getChunkSize () == seg->getMaxChunkSize ())
+            {
+                // The entire segment is free, so we can just release the
+                // segment.
+                //
+                // If users want to keep the segment around for caching, they
+                // can always use CacheMemArena.
+                removeChunk (firstChunk);
+
+                m_footprint -= segSize;
+                m_logger.logFreeSegment (seg, segSize);
+                m_arena.freeSegment (seg, segSize);
+
+                if (prevSeg == nullptr)
+                {
+                    m_segList = nextSeg;
+                }
+                if (prevSeg != nullptr)
+                {
+                    prevSeg->setNext (nextSeg);
+                }
+            }
+            else
+            {
+                prevSeg = seg;
+            }
+            seg = nextSeg;
+        }
+        m_numFrees = 0;
+    }
+
     static inline BinIndexType
     idx2bit (BinIndexType binIndex)
     {

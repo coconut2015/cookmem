@@ -150,12 +150,6 @@ public:
     validate () { m_pool.validate (); }
 
     /**
-     * Release segments that are entirely free.
-     */
-    inline void
-    trimEmptySegments () { m_pool.trimEmptySegments (); }
-
-    /**
      * Check if a pointer is within the address space of segments owned
      * by this MemPool.
      *
@@ -231,6 +225,16 @@ public:
 
     /**
      * Set the number of deallocations between empty-segment trimming passes.
+     *
+     * Memory segments that become entirely free are kept for later
+     * allocations.  After every interval deallocations, the segments that
+     * are entirely free are released to the arena.  A smaller interval keeps
+     * the footprint smaller, but releases and obtains segments more often.
+     *
+     * @param   interval
+     *          the number of deallocations between the passes.  The default
+     *          is DEFAULT_TRIM_EMPTY_SEGMENTS_INTERVAL.  1 (or 0) releases
+     *          empty segments on every deallocation.
      */
     void
     setTrimEmptySegmentsInterval (size_type interval)

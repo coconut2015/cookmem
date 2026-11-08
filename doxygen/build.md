@@ -9,7 +9,7 @@ CookMem in your own project, see \ref install "Installation".
 
 * [CMake](https://cmake.org/) 3.12 or later.
 * A C++11 compiler, such as GCC, Clang or Visual Studio.
-* For code coverage (Linux `debug` builds): `gcov`, `lcov` and `genhtml`.
+* For code coverage (`cov` builds on Linux): `gcov`, `lcov` and `genhtml`.
 * For documentation: [Doxygen](https://www.doxygen.nl/) and
   [Graphviz](https://graphviz.org/) (for the class diagrams).
 
@@ -22,15 +22,16 @@ sudo apt-get install g++ cmake lcov doxygen graphviz
 ### Linux
 
 ```bash
-./make.sh [type] [-t test]
+./make.sh [type]
 ```
 
 `type` can be one of the following.  The default is `debug`.  Each type
 builds in a directory of the same name.
 
 * `debug` - builds with debug information and runs the tests.  The internal
-  assertions are enabled (`COOKMEM_DEBUG`), and a code coverage report is
-  generated at `debug/test_coverage/index.html`.
+  assertions are enabled (`COOKMEM_DEBUG`).
+* `cov` - like `debug`, but with code coverage.  The performance tests are
+  skipped.  The report is generated at `cov/test_coverage/index.html`.
 * `release` - builds with optimization and runs the tests, including the
   performance tests.
 * `profiler` - like `release`, but built with `-pg` for profiling with
@@ -38,9 +39,8 @@ builds in a directory of the same name.
 * `docs` - generates the Doxygen documentation into the `docs` directory.
 * `help` - prints the usage.
 
-`-t test` builds and runs only one test, for example
-`./make.sh debug -t test_rbtree`.  No coverage report is generated in this
-case.
+To run a single test, use `ctest` in the build directory, for example
+`cd debug && ctest -R test_rbtree`.
 
 ### Windows
 
