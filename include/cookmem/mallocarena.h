@@ -69,12 +69,10 @@ public:
      *
      * @param   ptr
      *          the pointer to be freed.
-     * @param   size
-     *          the size of the pointer.
      * @return  true if there is an error.  false is okay.
      */
     bool
-    freeSegment (void* ptr, std::size_t size)
+    freeSegment (void* ptr, std::size_t)
     {
         free (ptr);
         return false;

@@ -72,7 +72,7 @@ public:
      * Log the memory segment release.
      *
      * @param   segment
-     *          the segment obtained.
+     *          the segment released.
      * @param   segmentSize
      *          the segment size.
      */
@@ -128,6 +128,10 @@ public:
      *          the user pointer that had the memory corruption.
      * @param   error
      *          the type of the error encountered.
+     * @param   file
+     *          the source file where the error was detected.
+     * @param   line
+     *          the line number where the error was detected.
      */
     virtual void
     logError (void* userPtr, MemError_et error, const char* file = __FILE__, int line = __LINE__) = 0;
@@ -143,24 +147,43 @@ public:
 class NoActionMemLogger
 {
 public:
+    /** Constructor. */
     NoActionMemLogger ()
     {
     }
 
-    inline void logGetSegment (void* segment, std::size_t segmentSize) { }
+    /** Does nothing.  See MemLogger::logGetSegment(). */
+    inline void logGetSegment (void*, std::size_t) { }
 
-    inline void logFreeSegment (void* segment, std::size_t segmentSize) { }
+    /** Does nothing.  See MemLogger::logFreeSegment(). */
+    inline void logFreeSegment (void*, std::size_t) { }
 
+    /** Does nothing.  See MemLogger::logTrimEmptySegments(). */
     inline void logTrimEmptySegments () { }
 
-    inline void logAllocation (void* userPtr, std::size_t userSize, MemAllocType_et allocType) { }
+    /** Does nothing.  See MemLogger::logAllocation(). */
+    inline void logAllocation (void*, std::size_t, MemAllocType_et) { }
 
-    inline void logReallocation (void* userPtr, std::size_t oldUserSize, std::size_t newUserSize) { }
+    /** Does nothing.  See MemLogger::logReallocation(). */
+    inline void logReallocation (void*, std::size_t, std::size_t) { }
 
-    inline void logDeallocation (void* userPtr, std::size_t userSize) { }
+    /** Does nothing.  See MemLogger::logDeallocation(). */
+    inline void logDeallocation (void*, std::size_t) { }
 
+    /**
+     * Report a memory error by throwing an exception.
+     *
+     * @param   error
+     *          the type of the error encountered.
+     * @param   file
+     *          the source file where the error was detected.
+     * @param   line
+     *          the line number where the error was detected.
+     * @throws  Exception
+     *          always.
+     */
     inline void
-    logError (void* userPtr,
+    logError (void*,
               MemError_et error,
               const char* file = __FILE__,
               int line = __LINE__)
@@ -231,7 +254,8 @@ public:
     /** Get the peak size of active memory segments. */
     std::size_t getPeakSegmentSize () const { return m_peakSegmentSize; }
 
-    // Internal use only; ordinary comments keep these setters out of Doxygen output.
+    /// @cond INTERNAL
+    // Internal use only.  These setters are used by StatsLogger.
     void setNumAllocations (std::size_t value) { m_numAllocations = value; }
     void setNumAllocations (MemAllocType_et allocType, std::size_t value)
     {
@@ -251,6 +275,7 @@ public:
     void setPeakSegments (std::size_t value) { m_peakSegments = value; }
     void setCurrentSegmentSize (std::size_t value) { m_currentSegmentSize = value; }
     void setPeakSegmentSize (std::size_t value) { m_peakSegmentSize = value; }
+    /// @endcond
 
     /**
      * Print the statistics to stdout.
@@ -277,6 +302,13 @@ public:
         }
     }
 
+    /**
+     * Get a short name for an allocation type, as printed by printStats ().
+     *
+     * @param   allocType
+     *          the allocation type.
+     * @return  the name of the allocation type, or "unknown".
+     */
     static const char*
     getAllocationTypeName (MemAllocType_et allocType)
     {
@@ -322,12 +354,14 @@ private:
 class StatsLogger
 {
 public:
+    /** @copydoc MemLogger::logTrimEmptySegments */
     void
     logTrimEmptySegments ()
     {
         m_stats.setNumTrimEmptySegments (m_stats.getNumTrimEmptySegments () + 1);
     }
 
+    /** @copydoc MemLogger::logGetSegment */
     void
     logGetSegment (void* segment, std::size_t segmentSize)
     {
@@ -352,6 +386,7 @@ public:
         }
     }
 
+    /** @copydoc MemLogger::logFreeSegment */
     void
     logFreeSegment (void* segment, std::size_t segmentSize)
     {
@@ -365,6 +400,7 @@ public:
         m_stats.setCurrentSegmentSize (m_stats.getCurrentSegmentSize () - segmentSize);
     }
 
+    /** @copydoc MemLogger::logAllocation */
     void
     logAllocation (void* userPtr, std::size_t userSize, MemAllocType_et allocType)
     {
@@ -383,6 +419,7 @@ public:
         }
     }
 
+    /** @copydoc MemLogger::logReallocation */
     void
     logReallocation (void* userPtr, std::size_t oldUserSize, std::size_t newUserSize)
     {
@@ -405,6 +442,7 @@ public:
         }
     }
 
+    /** @copydoc MemLogger::logDeallocation */
     void
     logDeallocation (void* userPtr, std::size_t userSize)
     {
@@ -416,6 +454,7 @@ public:
         }
     }
 
+    /** @copydoc NoActionMemLogger::logError */
     void
     logError (void*,
               MemError_et error,
@@ -425,7 +464,18 @@ public:
         throw Exception (error, "memory corruption detected.", file, line);
     }
 
+    /**
+     * Get the statistics.
+     *
+     * @return  the statistics gathered so far.
+     */
     MemStatistics& getStats () { return m_stats; }
+
+    /**
+     * Get the statistics.
+     *
+     * @return  the statistics gathered so far.
+     */
     const MemStatistics& getStats () const { return m_stats; }
 
 private:

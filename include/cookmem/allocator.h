@@ -38,29 +38,60 @@ template<class Context>
 class MemContextProvider
 {
 public:
+    /** The type of the memory context. */
     typedef Context context_type;
+    /** Containers keep their own allocator when copy-assigned. */
     typedef std::false_type propagate_on_container_copy_assignment;
+    /** Containers keep their own allocator when move-assigned. */
     typedef std::false_type propagate_on_container_move_assignment;
+    /** Containers keep their own allocator when swapped. */
     typedef std::false_type propagate_on_container_swap;
+    /** Providers are equal only when they refer to the same context. */
     typedef std::false_type is_always_equal;
 
+    /**
+     * Constructor.
+     *
+     * @param   context
+     *          the memory context to provide.  The caller owns it, and it
+     *          must outlive every allocator that uses this provider.
+     */
     explicit MemContextProvider (Context& context)
     : m_context (context)
     {
     }
 
+    /**
+     * Get the memory context.
+     *
+     * @return  the memory context this provider refers to.
+     */
     Context&
     get () const
     {
         return m_context.get ();
     }
 
+    /**
+     * Check if two providers refer to the same memory context.
+     *
+     * @param   other
+     *          the provider to compare with.
+     * @return  true if both providers refer to the same context.
+     */
     bool
     operator== (const MemContextProvider& other) const
     {
         return &m_context.get () == &other.m_context.get ();
     }
 
+    /**
+     * Check if two providers refer to different memory contexts.
+     *
+     * @param   other
+     *          the provider to compare with.
+     * @return  true if the providers refer to different contexts.
+     */
     bool
     operator!= (const MemContextProvider& other) const
     {
@@ -81,12 +112,22 @@ template<class Context, class Tag>
 class TLSContextProvider
 {
 public:
+    /** The type of the memory context. */
     typedef Context context_type;
+    /** Containers take the allocator of the source when copy-assigned. */
     typedef std::true_type propagate_on_container_copy_assignment;
+    /** Containers take the allocator of the source when move-assigned. */
     typedef std::true_type propagate_on_container_move_assignment;
+    /** Containers exchange allocators when swapped. */
     typedef std::true_type propagate_on_container_swap;
+    /** Providers are equal only when they refer to the same context. */
     typedef std::false_type is_always_equal;
 
+    /**
+     * Constructor.  The provider refers to the active context of the
+     * current thread: the context of the innermost matching TLSContextScope
+     * if there is one, or the persistent thread-local context otherwise.
+     */
     TLSContextProvider ()
     : m_context (getContextForAllocator ())
     {
@@ -111,18 +152,38 @@ public:
         return getPersistentThreadContext ();
     }
 
+    /**
+     * Get the memory context.
+     *
+     * @return  the context this provider was bound to when it was
+     *          constructed.
+     */
     Context&
     get () const
     {
         return m_context.get ();
     }
 
+    /**
+     * Check if two providers refer to the same memory context.
+     *
+     * @param   other
+     *          the provider to compare with.
+     * @return  true if both providers refer to the same context.
+     */
     bool
     operator== (const TLSContextProvider& other) const
     {
         return &m_context.get () == &other.m_context.get ();
     }
 
+    /**
+     * Check if two providers refer to different memory contexts.
+     *
+     * @param   other
+     *          the provider to compare with.
+     * @return  true if the providers refer to different contexts.
+     */
     bool
     operator!= (const TLSContextProvider& other) const
     {
@@ -174,6 +235,10 @@ template<class Context, class Tag>
 class TLSContextScope
 {
 public:
+    /**
+     * Constructor.  Creates a new context with its own arena and makes it
+     * the active context of the current thread until the scope ends.
+     */
     TLSContextScope ()
     : m_context (),
       m_previousContext (TLSContextProvider<Context, Tag>::activeContextStorage ())
@@ -181,6 +246,17 @@ public:
         TLSContextProvider<Context, Tag>::activeContextStorage () = &m_context;
     }
 
+    /**
+     * Constructor.  Creates a new context based on the persistent
+     * thread-local context and makes it the active context of the current
+     * thread until the scope ends.
+     *
+     * @param   shareArena
+     *          true to share the arena of the persistent thread-local
+     *          context.  With CachedMemContext, segments freed by either
+     *          context can then be reused by the other.  false to give the
+     *          new context its own arena.
+     */
     explicit TLSContextScope (bool shareArena)
     : m_context (TLSContextProvider<Context, Tag>::getPersistentThreadContext (), shareArena),
       m_previousContext (TLSContextProvider<Context, Tag>::activeContextStorage ())
@@ -196,6 +272,11 @@ public:
     TLSContextScope (const TLSContextScope&) = delete;
     TLSContextScope& operator= (const TLSContextScope&) = delete;
 
+    /**
+     * Get the memory context of this scope.
+     *
+     * @return  the context that is active while this scope exists.
+     */
     Context&
     getContext ()
     {
@@ -217,26 +298,42 @@ template<class T,
 class Allocator
 {
 public:
-    typedef ContextProvider          context_provider_type;
-    typedef typename ContextProvider::context_type context_type;
-    typedef T                       value_type;
-    typedef T*                      pointer;
-    typedef const T*                const_pointer;
-    typedef T&                      reference;
-    typedef const T&                const_reference;
-    typedef std::size_t             size_type;
-    typedef std::ptrdiff_t          difference_type;
+    typedef ContextProvider          context_provider_type;  ///< The type of the context provider.
+    typedef typename ContextProvider::context_type context_type;  ///< The type of the memory context.
+    typedef T                       value_type;         ///< The type of the allocated objects.
+    typedef T*                      pointer;            ///< Pointer to an allocated object.
+    typedef const T*                const_pointer;      ///< Const pointer to an allocated object.
+    typedef T&                      reference;          ///< Reference to an allocated object.
+    typedef const T&                const_reference;    ///< Const reference to an allocated object.
+    typedef std::size_t             size_type;          ///< The type of object counts.
+    typedef std::ptrdiff_t          difference_type;    ///< The type of pointer differences.
+    /** Same as the context provider. */
     typedef typename ContextProvider::propagate_on_container_copy_assignment propagate_on_container_copy_assignment;
+    /** Same as the context provider. */
     typedef typename ContextProvider::propagate_on_container_move_assignment propagate_on_container_move_assignment;
+    /** Same as the context provider. */
     typedef typename ContextProvider::propagate_on_container_swap propagate_on_container_swap;
+    /** Same as the context provider. */
     typedef typename ContextProvider::is_always_equal is_always_equal;
 
+    /**
+     * Obtains the allocator type for a different object type that uses the
+     * same context provider.
+     *
+     * @tparam  U
+     *          the other object type.
+     */
     template<class U>
     struct rebind
     {
+        /** The allocator type for objects of type U. */
         typedef Allocator<U, ContextProvider> other;
     };
 
+    /**
+     * Default constructor.  It is available only when the context provider
+     * is default constructible, such as TLSContextProvider.
+     */
     template<class Provider = ContextProvider>
     Allocator (
         typename std::enable_if<
@@ -246,27 +343,63 @@ public:
     {
     }
 
+    /**
+     * Constructor.
+     *
+     * @param   context
+     *          the memory context to allocate from.  It must outlive every
+     *          container that uses this allocator.
+     */
     explicit Allocator (context_type& context)
     : m_provider (context)
     {
     }
 
+    /**
+     * Constructor.
+     *
+     * @param   provider
+     *          the context provider to copy.
+     */
     explicit Allocator (const ContextProvider& provider)
     : m_provider (provider)
     {
     }
 
+    /**
+     * Copy constructor.  The copy uses the same memory context.
+     *
+     * @param   other
+     *          the allocator to copy.
+     */
     Allocator (const Allocator& other)
     : m_provider (other.m_provider)
     {
     }
 
+    /**
+     * Converting constructor from an allocator for a different object type.
+     * The new allocator uses the same memory context.
+     *
+     * @param   other
+     *          the allocator to copy.
+     */
     template<class U>
     Allocator (const Allocator<U, ContextProvider>& other)
     : m_provider (other.m_provider)
     {
     }
 
+    /**
+     * Allocate memory for a number of objects.  The objects are not
+     * constructed.
+     *
+     * @param   size
+     *          the number of objects.
+     * @return  the allocated memory, or nullptr if size is 0.
+     * @throws  std::bad_alloc
+     *          if the memory cannot be allocated.
+     */
     pointer
     allocate (size_type size, const void* = nullptr)
     {
@@ -287,18 +420,38 @@ public:
         return static_cast<pointer> (ptr);
     }
 
+    /**
+     * Deallocate memory obtained from allocate ().  The objects must have
+     * been destroyed already.
+     *
+     * @param   ptr
+     *          the memory to deallocate.
+     */
     void
     deallocate (pointer ptr, size_type)
     {
         m_provider.get ().deallocate (ptr);
     }
 
+    /**
+     * Get the largest number of objects that could be requested.
+     *
+     * @return  the largest number of objects that allocate () accepts.
+     */
     size_type
     max_size () const
     {
         return (std::numeric_limits<size_type>::max) () / sizeof (T);
     }
 
+    /**
+     * Construct an object in allocated memory.
+     *
+     * @param   ptr
+     *          where to construct the object.
+     * @param   args
+     *          the constructor arguments.
+     */
     template<class U, class... Args>
     void
     construct (U* ptr, Args&&... args)
@@ -306,6 +459,12 @@ public:
         ::new (static_cast<void*> (ptr)) U (std::forward<Args> (args)...);
     }
 
+    /**
+     * Destroy an object without deallocating its memory.
+     *
+     * @param   ptr
+     *          the object to destroy.
+     */
     template<class U>
     void
     destroy (U* ptr)
@@ -313,12 +472,25 @@ public:
         ptr->~U ();
     }
 
+    /**
+     * Get the memory context.
+     *
+     * @return  the memory context this allocator allocates from.
+     */
     context_type&
     getContext () const
     {
         return m_provider.get ();
     }
 
+    /**
+     * Check if memory allocated by one allocator can be deallocated by the
+     * other.
+     *
+     * @param   other
+     *          the allocator to compare with.
+     * @return  true if both allocators use the same memory context.
+     */
     template<class U>
     bool
     operator== (const Allocator<U, ContextProvider>& other) const
@@ -326,6 +498,13 @@ public:
         return m_provider == other.m_provider;
     }
 
+    /**
+     * Check if two allocators use different memory contexts.
+     *
+     * @param   other
+     *          the allocator to compare with.
+     * @return  true if the allocators use different memory contexts.
+     */
     template<class U>
     bool
     operator!= (const Allocator<U, ContextProvider>& other) const

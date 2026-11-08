@@ -162,6 +162,7 @@ template<class Arena, class TreeType = PtrRBTree>
 class CachedArena
 {
 public:
+    /** The type of the tree used to cache the released segments. */
     typedef TreeType   PtrTreeType;
 public:
     /**

@@ -1,12 +1,19 @@
 CMAKE_MINIMUM_REQUIRED (VERSION 3.12)
 
-# The version number is kept in version.txt.  Editing it re-runs CMake.
-file (STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/version.txt" COOKMEM_VERSION LIMIT_COUNT 1)
-string (STRIP "${COOKMEM_VERSION}" COOKMEM_VERSION)
-set_property (DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/version.txt")
+# The version number is defined in include/cookmem/version.h.  Editing that
+# file re-runs CMake.
+set (COOKMEM_VERSION_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/include/cookmem/version.h")
+file (READ "${COOKMEM_VERSION_HEADER}" COOKMEM_VERSION_HEADER_TEXT)
+foreach (part MAJOR MINOR PATCH)
+	if (NOT COOKMEM_VERSION_HEADER_TEXT MATCHES "#define COOKMEM_VERSION_${part} +([0-9]+)")
+		message (FATAL_ERROR "COOKMEM_VERSION_${part} is not defined in ${COOKMEM_VERSION_HEADER}")
+	endif ()
+	set (COOKMEM_VERSION_${part} "${CMAKE_MATCH_1}")
+endforeach ()
+set_property (DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${COOKMEM_VERSION_HEADER}")
 
 project (CookMem
-	VERSION ${COOKMEM_VERSION}
+	VERSION ${COOKMEM_VERSION_MAJOR}.${COOKMEM_VERSION_MINOR}.${COOKMEM_VERSION_PATCH}
 	LANGUAGES CXX
 )
 
@@ -161,6 +168,16 @@ add_executable(test_mmaparena
 
 add_test(NAME test_mmaparena
 	COMMAND test_mmaparena)
+
+# .. test_version
+add_executable(test_version
+	tests/test_version.cpp)
+# Check that the version CMake read from version.h matches the header.
+target_compile_definitions(test_version PRIVATE
+	COOKMEM_CMAKE_PROJECT_VERSION="${PROJECT_VERSION}")
+
+add_test(NAME test_version
+	COMMAND test_version)
 
 # -- performance tests -------------------------------------------------------
 # Until I figure out how to replace malloc / free on Windows, these tests

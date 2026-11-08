@@ -304,7 +304,7 @@ private:
         print () const
         {
             printf ("-- chunk[ %p ]: size: %zu, used = %s, exact size: %zu\n",
-                    this,
+                    static_cast<const void*> (this),
                     getChunkSize (),
                     (isUsed () ? "true " : "false"),
                     getUserSize ());
@@ -415,7 +415,7 @@ private:
         void
         print () const
         {
-            printf ("== segment %p, size: %zu, header: %zu, footer: %zu\n", this, m_size, offsetof(MemSegment, m_pad), sizeof(MemChunk));
+            printf ("== segment %p, size: %zu, header: %zu, footer: %zu\n", static_cast<const void*> (this), m_size, offsetof(MemSegment, m_pad), sizeof(MemChunk));
             const MemChunk* chunk = getFirstChunk ();
             const MemChunk* lastChunk = getPastLastChunk ();
             for (;;)
@@ -428,7 +428,7 @@ private:
                 else
                 {
                     printf ("-- chunk[ %p ]: size: %zu\n",
-                            chunk,
+                            static_cast<const void*> (chunk),
                             chunk->getChunkSize ());
                     break;
                 }
@@ -667,7 +667,7 @@ public:
     /**
      * Allocate memory from the memory pool.
      *
-     * @param   size
+     * @param   userSize
      *          memory request size.
      * @return  the memory region that is at least the request size.
      *          nullptr if the request cannot be satisfied.
@@ -1255,10 +1255,14 @@ public:
         m_paddingByte = (char)paddingByte;
     }
 
+    /**
+     * Print the memory segments and chunks of the pool to stdout.  This is
+     * for debugging.
+     */
     void
     print () const
     {
-        printf ("**** context: %p ****\n", this);
+        printf ("**** context: %p ****\n", static_cast<const void*> (this));
 
         MemSegment* seg = m_segList;
         while (seg)

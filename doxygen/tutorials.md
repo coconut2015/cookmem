@@ -11,7 +11,7 @@ CookMem divides the job of a memory context into three parts.
    is to gather memory statistics.
 
 Separating the memory arena from the memory pool makes it easy to build a
-custom memory context for your needs. See [References](references.md) for
+custom memory context for your needs. See \ref references "References" for
 the available arenas and loggers. CookMem also provides ready-to-use
 memory contexts, including cookmem::SimpleMemContext and
 cookmem::CachedMemContext. This flexibility was a primary motivation for

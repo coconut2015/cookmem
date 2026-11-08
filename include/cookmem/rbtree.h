@@ -23,12 +23,33 @@
 namespace cookmem
 {
 
+/**
+ * The node of RedBlackTree, which is stored in the memory being tracked.
+ *
+ * The memory pool places this node at the start of a free chunk, so its
+ * layout must match the chunk header: the second word (m_size) is both the
+ * value of the node and the size field of the chunk.  The memory must be at
+ * least sizeof(PtrRBNode) (7 words) large.
+ *
+ * Nodes with the same value are kept in a doubly linked list (DLL) attached
+ * to the one node that is in the tree.
+ */
 class PtrRBNode
 {
 public:
+    /** The type of this node. */
     typedef PtrRBNode       SelfType;
+    /** The type of the value (the size of the memory). */
     typedef std::size_t     ValueType;
 
+    /**
+     * Initialize the node as a red leaf.
+     *
+     * @param   value
+     *          the value of the node.
+     * @param   parentNode
+     *          the parent node, or nullptr for the root.
+     */
     void
     init (ValueType value, SelfType* parentNode)
     {
@@ -41,72 +62,84 @@ public:
         m_inList = false;
     }
 
+    /** Get the value of the node. */
     ValueType
     getValue () const
     {
         return m_size;
     }
 
+    /** Get the left and right child pointers as an array. */
     SelfType**
     getChildren ()
     {
         return m_children;
     }
 
+    /** Get the left and right child pointers as an array. */
     SelfType* const *
     getChildren () const
     {
         return m_children;
     }
 
+    /** Get the left child, or the previous node for a list node. */
     SelfType*
     getLeft ()
     {
         return m_children[0];
     }
 
+    /** Get the left child, or the previous node for a list node. */
     const SelfType*
     getLeft () const
     {
         return m_children[0];
     }
 
+    /** Set the left child. */
     void
     setLeft (SelfType* left)
     {
         m_children[0] = left;
     }
 
+    /** Get the right child. */
     SelfType*
     getRight ()
     {
         return m_children[1];
     }
 
+    /** Get the right child. */
     const SelfType*
     getRight () const
     {
         return m_children[1];
     }
 
+    /** Set the right child. */
     void
     setRight (SelfType* right)
     {
         m_children[1] = right;
     }
 
+    /** Get the parent node, or nullptr for the root. */
     SelfType*
     getParent ()
     {
         return m_parent;
     }
 
+    /** Get the parent node, or nullptr for the root. */
     const SelfType*
     getParent () const
     {
         return m_parent;
     }
 
+    /** Set the parent node. */
     void
     setParent (SelfType* parentNode)
     {
@@ -133,6 +166,7 @@ public:
         m_next = other;
     }
 
+    /** Check if this tree node has a DLL of nodes with the same value. */
     bool
     hasList () const
     {
@@ -149,12 +183,14 @@ public:
         return m_inList;
     }
 
+    /** Get the next node in the DLL of nodes with the same value. */
     SelfType*
     getNext ()
     {
         return m_next;
     }
 
+    /** Get the next node in the DLL of nodes with the same value. */
     const SelfType*
     getNext () const
     {
@@ -226,12 +262,14 @@ public:
         return replacementNode;
     }
 
+    /** Check if the node is red. */
     bool
     isRed () const
     {
         return m_red;
     }
 
+    /** Set the node to be red or black. */
     void
     setRed (bool red)
     {
@@ -265,7 +303,9 @@ template<class Node>
 class RedBlackTree
 {
 public:
+    /** The type of the tree nodes. */
     typedef Node                            NodeType;
+    /** The type of the node values. */
     typedef typename NodeType::ValueType    ValueType;
 
 public:
@@ -322,6 +362,11 @@ public:
 
         balanceInsert (newNode);
     }
+    /**
+     * Get the root node.  This is mostly for testing.
+     *
+     * @return  the root node, or nullptr if the tree is empty.
+     */
     NodeType* getRoot()
     {
         return this->m_root;

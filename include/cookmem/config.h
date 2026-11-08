@@ -19,6 +19,8 @@
 #include <cstddef>
 #include <cstdint>
 
+#include "version.h"
+
 namespace cookmem
 {
 

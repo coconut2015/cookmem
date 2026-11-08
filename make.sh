@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright (c) 2018 Heng Yuan
+# Copyright (c) 2018-2026 Heng Yuan
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
