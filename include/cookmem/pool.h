@@ -1012,6 +1012,13 @@ public:
                          !m_dv->isUsed () &&
                          m_dv->getChunkSize () == m_dvSize));
 
+        // A tree bin is marked in the tree map if and only if its tree is
+        // not empty.
+        for (BinIndexType binIndex = 0; binIndex < NTREEBINS; ++binIndex)
+        {
+            COOKMEM_ASSERT (isTreeMapMarked (binIndex) == !treeAt (binIndex).isEmpty ());
+        }
+
         MemSegment* seg = m_segList;
         while (seg)
         {
@@ -1346,7 +1353,13 @@ private:
             {
                 chunk = reinterpret_cast<MemChunk*>(tree.remove(actualSize));
                 if (chunk != nullptr)
+                {
+                    if (tree.isEmpty ())
+                    {
+                        clearTreeMap (binIndex);
+                    }
                     break;
+                }
             }
         }
 
