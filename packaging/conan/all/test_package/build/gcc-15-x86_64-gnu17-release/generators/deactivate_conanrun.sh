@@ -1,1 +1,0 @@
-. "/mnt/d/workspace/cookmem/packaging/conan/all/test_package/build/gcc-15-x86_64-gnu17-release/generators/deactivate_conanrunenv-release-x86_64.sh"

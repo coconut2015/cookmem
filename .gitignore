@@ -17,3 +17,5 @@ CMakeFiles
 /win-*
 Makefile
 backup
+/packaging/conan/all/test_package/build
+/packaging/conan/all/test_package/CMakeUserPresets.json
