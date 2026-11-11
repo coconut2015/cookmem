@@ -1,13 +1,13 @@
 var searchData=
 [
   ['performance_0',['Performance',['../index.html#autotoc_md2',1,'']]],
-  ['performance_20tests_1',['Performance Tests',['../build.html#autotoc_md21',1,'']]],
+  ['performance_20tests_1',['Performance Tests',['../build.html#autotoc_md24',1,'']]],
   ['pointer_2',['pointer',['../classcookmem_1_1Allocator.html#a63ea11986b34d79d892e6667e63066d6',1,'cookmem::Allocator::pointer'],['../classcookmem_1_1MemContext.html#a4831e190cd7ed0c9d380983262e08c34',1,'cookmem::MemContext::pointer'],['../classcookmem_1_1SimpleMemContext.html#a27bff01af2f1861ea706087892f1087c',1,'cookmem::SimpleMemContext::pointer'],['../classcookmem_1_1CachedMemContext.html#a13c0e307cf87c47e0eb810a46b02fffb',1,'cookmem::CachedMemContext::pointer'],['../classcookmem_1_1MemPool.html#af9efe4d87381763062297389fc5adb7d',1,'cookmem::MemPool::pointer']]],
   ['pointer_20information_3',['Querying Pointer Information',['../tutorials.html#querying',1,'']]],
   ['pointer_20ownership_4',['Pointer Ownership',['../behavior.html#autotoc_md11',1,'']]],
-  ['pool_5',['pool',['../references.html#autotoc_md25',1,'Memory Pool'],['../classcookmem_1_1MemContext.html#a0067e2f72e25097e61f305b0fbf2a462',1,'cookmem::MemContext::Pool']]],
+  ['pool_5',['pool',['../references.html#autotoc_md28',1,'Memory Pool'],['../classcookmem_1_1MemContext.html#a0067e2f72e25097e61f305b0fbf2a462',1,'cookmem::MemContext::Pool']]],
   ['pools_6',['Copying Data Between Memory Pools',['../tutorials.html#copying',1,'']]],
-  ['prerequisites_7',['Prerequisites',['../build.html#autotoc_md17',1,'']]],
+  ['prerequisites_7',['Prerequisites',['../build.html#autotoc_md20',1,'']]],
   ['print_8',['print',['../classcookmem_1_1MemPool.html#a674ce26fbd8a472054c8b3b282640e04',1,'cookmem::MemPool']]],
   ['printgraph_9',['printGraph',['../classcookmem_1_1PtrAVLTree.html#a24696de9988fbfd8a6619c4b4465c4c8',1,'cookmem::PtrAVLTree']]],
   ['printstats_10',['printStats',['../structcookmem_1_1MemStatistics.html#afb199f0ec1bf2219f581759289d163ef',1,'cookmem::MemStatistics']]],

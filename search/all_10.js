@@ -18,7 +18,7 @@ var searchData=
   ['start_15',['Quick Start',['../index.html#autotoc_md0',1,'']]],
   ['statistics_16',['Memory Statistics',['../tutorials.html#statistics',1,'']]],
   ['statslogger_17',['StatsLogger',['../classcookmem_1_1StatsLogger.html',1,'cookmem']]],
-  ['stl_20allocator_18',['stl allocator',['../tutorials.html#callerSTLAlloc',1,'Caller-owned STL Allocator'],['../references.html#autotoc_md27',1,'STL Allocator']]],
+  ['stl_20allocator_18',['stl allocator',['../tutorials.html#callerSTLAlloc',1,'Caller-owned STL Allocator'],['../references.html#autotoc_md30',1,'STL Allocator']]],
   ['stl_20allocators_19',['Thread-local and Scoped Context STL Allocators',['../tutorials.html#tlsSTLAlloc',1,'']]],
   ['synchronization_20cost_20',['Avoiding Synchronization Cost',['../index.html#autotoc_md4',1,'']]]
 ];

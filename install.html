@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CookMem<span id="projectnumber">&#160;1.1.0</span>
+   <div id="projectname">CookMem<span id="projectnumber">&#160;1.2.0</span>
    </div>
    <div id="projectbrief">A C++ memory context / allocator</div>
   </td>
@@ -93,7 +93,36 @@ $(document).ready(function(){initNavTree('install.html',''); initResizable(); })
   <div class="headertitle"><div class="title">Installation</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>CookMem is a collection of C++ header files, so there are no libraries to install. Put <code><a class="el" href="cookmem_8h_source.html">cookmem.h</a></code> and the <code>cookmem/</code> directory in a suitable include directory, then include <code><a class="el" href="cookmem_8h_source.html">cookmem.h</a></code> in your code.</p>
+<div class="textblock"><p>CookMem is a collection of C++ header files, so there are no libraries to build or link. Include <code><a class="el" href="cookmem_8h_source.html">cookmem.h</a></code> in your code.</p>
+<h2><a class="anchor" id="autotoc_md17"></a>
+Using CMake</h2>
+<p>CookMem provides the CMake target <code>cookmem::cookmem</code>. Linking it adds the CookMem include directory and requires C++11:</p>
+<div class="fragment"><div class="line">target_link_libraries (myapp PRIVATE cookmem::cookmem)</div>
+</div><!-- fragment --><p>Use one of the following to make the target available. They require CMake 3.14 or later.</p>
+<p><b>FetchContent</b> downloads CookMem when your project is configured:</p>
+<div class="fragment"><div class="line">include (FetchContent)</div>
+<div class="line">FetchContent_Declare (cookmem</div>
+<div class="line">    GIT_REPOSITORY https://github.com/coconut2015/cookmem.git</div>
+<div class="line">    GIT_TAG        v1.2.0)</div>
+<div class="line">FetchContent_MakeAvailable (cookmem)</div>
+</div><!-- fragment --><p><b>add_subdirectory</b> uses a copy of CookMem inside your project, such as a Git submodule:</p>
+<div class="fragment"><div class="line">add_subdirectory (third_party/cookmem)</div>
+</div><!-- fragment --><p><b>find_package</b> uses an installed copy of CookMem. To install it:</p>
+<div class="fragment"><div class="line">cmake -S cookmem -B cookmem-build -DCOOKMEM_BUILD_TESTS=OFF</div>
+<div class="line">cmake --install cookmem-build --prefix /path/to/prefix</div>
+</div><!-- fragment --><p>Then, in your project:</p>
+<div class="fragment"><div class="line">find_package (cookmem 1.2 REQUIRED)</div>
+</div><!-- fragment --><p>If CookMem is not installed in a standard location, pass <code>-DCMAKE_PREFIX_PATH=/path/to/prefix</code> when you configure your project. The version check accepts any release with the same major version.</p>
+<p>With FetchContent and add_subdirectory, only the <code>cookmem::cookmem</code> target is created. CookMem's tests, examples and performance tests are built only when CookMem is the top-level project. The following options change that:</p>
+<ul>
+<li><code>COOKMEM_BUILD_TESTS</code> - build the tests, examples and performance tests. The default is <code>ON</code> only when CookMem is the top-level project.</li>
+<li><code>COOKMEM_INSTALL</code> - generate the install rules. The default is <code>ON</code> only when CookMem is the top-level project.</li>
+</ul>
+<h2><a class="anchor" id="autotoc_md18"></a>
+Without CMake</h2>
+<p>Copy <code><a class="el" href="cookmem_8h_source.html">cookmem.h</a></code> and the <code>cookmem/</code> directory from <code>include/</code> into a suitable include directory.</p>
+<h2><a class="anchor" id="autotoc_md19"></a>
+Version</h2>
 <p>The version of CookMem is available through the macros in <code><a class="el" href="version_8h.html">cookmem/version.h</a></code>, which every CookMem header includes:</p>
 <ul>
 <li><code>COOKMEM_VERSION_MAJOR</code>, <code>COOKMEM_VERSION_MINOR</code> and <code>COOKMEM_VERSION_PATCH</code></li>
