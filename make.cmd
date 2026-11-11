@@ -30,11 +30,15 @@ goto END
 
 :END_1
 
-if not exist "%BUILD%\" (
-	md %BUILD%
+rem Use different directories from make.sh, so that builds from WSL and
+rem Windows can share the same checkout.
+set BUILD_DIR=win-%BUILD%
+
+if not exist "%BUILD_DIR%\" (
+	md %BUILD_DIR%
 )
 
-cd %BUILD%
+cd %BUILD_DIR%
 
 cmake %PROFILER% %BUILD_DOC% ..
 

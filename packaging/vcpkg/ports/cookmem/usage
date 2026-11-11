@@ -1,0 +1,4 @@
+cookmem provides CMake targets:
+
+  find_package(cookmem CONFIG REQUIRED)
+  target_link_libraries(main PRIVATE cookmem::cookmem)
