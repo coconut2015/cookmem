@@ -7,7 +7,7 @@ CookMem in your own project, see \ref install "Installation".
 
 ### Prerequisites
 
-* [CMake](https://cmake.org/) 3.12 or later.
+* [CMake](https://cmake.org/) 3.14 or later.
 * A C++11 compiler, such as GCC, Clang or Visual Studio.
 * For code coverage (`cov` builds on Linux): `gcov`, `lcov` and `genhtml`.
 * For documentation: [Doxygen](https://www.doxygen.nl/) and

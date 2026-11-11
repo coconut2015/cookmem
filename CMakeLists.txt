@@ -1,4 +1,4 @@
-CMAKE_MINIMUM_REQUIRED (VERSION 3.12)
+CMAKE_MINIMUM_REQUIRED (VERSION 3.14)
 
 # The version number is defined in include/cookmem/version.h.  Editing that
 # file re-runs CMake.
@@ -17,12 +17,74 @@ project (CookMem
 	LANGUAGES CXX
 )
 
-set( CMAKE_CXX_STANDARD 11 )
-enable_testing()
-
 # Must use GNUInstallDirs to install libraries into correct
 # locations on all platforms.
 include(GNUInstallDirs)
+
+# CookMem is the top-level project when it is built by itself, rather than
+# added to another project with add_subdirectory () or FetchContent.
+if (CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+	set (COOKMEM_IS_TOP_LEVEL ON)
+else ()
+	set (COOKMEM_IS_TOP_LEVEL OFF)
+endif ()
+
+option (COOKMEM_BUILD_TESTS
+	"Build the CookMem tests, examples and performance tests."
+	${COOKMEM_IS_TOP_LEVEL})
+option (COOKMEM_INSTALL
+	"Generate the install rules for the CookMem headers and package files."
+	${COOKMEM_IS_TOP_LEVEL})
+
+# -- cookmem::cookmem --------------------------------------------------------
+# CookMem is header-only.  Linking cookmem::cookmem adds the include
+# directory and requires C++11.
+add_library (cookmem INTERFACE)
+add_library (cookmem::cookmem ALIAS cookmem)
+target_include_directories (cookmem INTERFACE
+	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+	$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+target_compile_features (cookmem INTERFACE cxx_std_11)
+
+# -- install -----------------------------------------------------------------
+# Installs the headers and a package config, so that other projects can use
+# find_package (cookmem).
+if (COOKMEM_INSTALL)
+	include (CMakePackageConfigHelpers)
+
+	set (COOKMEM_CMAKE_INSTALL_DIR "${CMAKE_INSTALL_DATADIR}/cookmem/cmake")
+
+	install (TARGETS cookmem EXPORT cookmemTargets)
+	install (DIRECTORY include/ DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
+	install (EXPORT cookmemTargets
+		NAMESPACE cookmem::
+		DESTINATION "${COOKMEM_CMAKE_INSTALL_DIR}")
+
+	configure_package_config_file (
+		"${CMAKE_CURRENT_SOURCE_DIR}/cmake/cookmemConfig.cmake.in"
+		"${CMAKE_CURRENT_BINARY_DIR}/cookmemConfig.cmake"
+		INSTALL_DESTINATION "${COOKMEM_CMAKE_INSTALL_DIR}")
+	# Releases with the same major version are compatible.  The headers do
+	# not depend on the architecture of the project that installed them.
+	write_basic_package_version_file (
+		"${CMAKE_CURRENT_BINARY_DIR}/cookmemConfigVersion.cmake"
+		VERSION ${PROJECT_VERSION}
+		COMPATIBILITY SameMajorVersion
+		ARCH_INDEPENDENT)
+	install (FILES
+		"${CMAKE_CURRENT_BINARY_DIR}/cookmemConfig.cmake"
+		"${CMAKE_CURRENT_BINARY_DIR}/cookmemConfigVersion.cmake"
+		DESTINATION "${COOKMEM_CMAKE_INSTALL_DIR}")
+endif ()
+
+# Everything below builds the CookMem tests, examples, performance tests and
+# documentation, which projects that use CookMem do not need.
+if (NOT COOKMEM_BUILD_TESTS)
+	return ()
+endif ()
+
+set( CMAKE_CXX_STANDARD 11 )
+enable_testing()
 
 add_custom_target(ctest COMMAND ${CMAKE_CTEST_COMMAND})
 
@@ -80,9 +142,6 @@ include_directories(include/)
 # Debug builds define COOKMEM_DEBUG so that the internal assertions
 # (COOKMEM_ASSERT) are checked.  Release builds are free of assertions.
 add_compile_definitions ($<$<CONFIG:Debug>:COOKMEM_DEBUG=1>)
-
-#add_library(cookmem STATIC
-#)
 
 # -- tests -------------------------------------------------------------------
 
