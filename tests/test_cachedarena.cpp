@@ -188,7 +188,8 @@ testReleaseAll ()
 
 /**
  * Destroying a CachedMemContext returns all of its segments to the
- * underlying arena, which the context owns.
+ * underlying arena, which the context owns.  Regression test for
+ * https://github.com/coconut2015/cookmem/issues/14.
  */
 static int
 testCachedMemContext ()
@@ -230,6 +231,79 @@ testCachedMemContext ()
     return 0;
 }
 
+/**
+ * With an arena shared by two contexts, releaseAll () keeps the segments in
+ * the cache for the other context, and releaseAllToSystem () empties the
+ * cache.
+ */
+static int
+testSharedArena ()
+{
+    typedef cookmem::CachedArena<CountingArena> ArenaType;
+    typedef cookmem::MemContext<ArenaType, cookmem::NoActionMemLogger> ContextType;
+
+    CountingArena arena;
+    ArenaType cachedArena (arena);
+    cookmem::NoActionMemLogger logger;
+    ContextType memCtx1 (cachedArena, logger);
+    ContextType memCtx2 (cachedArena, logger);
+
+    ASSERT_NE (nullptr, memCtx1.allocate (1 << 20));
+    const int numSegments = arena.getNumSegments ();
+    ASSERT_NE (0, numSegments);
+
+    // The segments go to the cache, and memCtx2 reuses them.
+    memCtx1.releaseAll ();
+    ASSERT_EQ (numSegments, arena.getNumSegments ());
+    void* ptr = memCtx2.allocate (1 << 20);
+    ASSERT_NE (nullptr, ptr);
+    ASSERT_EQ (numSegments, arena.getNumSegments ());
+
+    // memCtx1 empties the cache, without affecting the segments of memCtx2.
+    ASSERT_NE (nullptr, memCtx1.allocate (1 << 20));
+    memCtx1.releaseAllToSystem ();
+    ASSERT_EQ (numSegments, arena.getNumSegments ());
+    ASSERT_EQ (true, memCtx2.contains (ptr));
+
+    memCtx2.releaseAllToSystem ();
+    ASSERT_EQ (0, arena.getNumSegments ());
+    ASSERT_EQ (false, memCtx2.contains (ptr));
+
+    return 0;
+}
+
+/**
+ * MallocArena::releaseAll () does nothing, and releaseAllToSystem () of a
+ * context that uses MallocArena works like releaseAll ().
+ */
+static int
+testMallocArena ()
+{
+    cookmem::MallocArena arena;
+    std::size_t size = 4096;
+    char* seg = static_cast<char*> (arena.getSegment (size));
+    ASSERT_NE (nullptr, seg);
+    arena.releaseAll ();
+    // The segment is still usable.
+    seg[0] = 1;
+    seg[size - 1] = 2;
+    ASSERT_EQ (1, seg[0]);
+    ASSERT_EQ (false, arena.freeSegment (seg, size));
+
+    cookmem::SimpleMemContext<cookmem::MallocArena> memCtx;
+    void* ptr = memCtx.allocate (1000);
+    ASSERT_NE (nullptr, ptr);
+    memCtx.releaseAllToSystem ();
+    ASSERT_EQ (false, memCtx.contains (ptr));
+    ASSERT_EQ (0u, memCtx.getFootprint ());
+
+    ptr = memCtx.allocate (1000);
+    ASSERT_NE (nullptr, ptr);
+    ASSERT_EQ (true, memCtx.contains (ptr));
+
+    return 0;
+}
+
 int
 main (int argc, const char* argv[])
 {
@@ -239,6 +313,8 @@ main (int argc, const char* argv[])
         ASSERT_EQ (0, testReleaseAll<cookmem::PtrRBTree> ());
         ASSERT_EQ (0, testReleaseAll<cookmem::PtrAVLTree> ());
         ASSERT_EQ (0, testCachedMemContext ());
+        ASSERT_EQ (0, testSharedArena ());
+        ASSERT_EQ (0, testMallocArena ());
     }
     catch (const unittest::UnitTestException& ex)
     {
