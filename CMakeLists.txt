@@ -305,6 +305,8 @@ add_test(NAME example_Allocator
 
 add_executable(example_AllocatorThreadLocal
 	examples/example_AllocatorThreadLocal.cpp)
+find_package(Threads REQUIRED)
+target_link_libraries(example_AllocatorThreadLocal Threads::Threads)
 add_test(NAME example_AllocatorThreadLocal
 	COMMAND example_AllocatorThreadLocal)
 

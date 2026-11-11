@@ -161,4 +161,14 @@ containers must be destroyed before their context ends and remain on the
 thread where their allocator was created. Neither approach requires passing
 allocator instances to containers.
 
+To release a thread's memory before the thread exits, destroy its containers
+and call `releaseAll ()` or `releaseAllToSystem ()` on the thread-local
+context, which `getThreadContext ()` returns.  `releaseAll ()` keeps the
+segments in the cached arena, ready for later allocations on the thread.
+`releaseAllToSystem ()` also empties the cache, so the memory goes back to
+the system.  The worker thread in the example uses `releaseAllToSystem ()`,
+which matters when a thread could end without running thread-local
+destructors.  Either way, every pointer allocated from the context becomes
+invalid, including those of containers that still use it.
+
 \include example_AllocatorThreadLocal.cpp
