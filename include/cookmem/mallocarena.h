@@ -78,6 +78,15 @@ public:
         return false;
     }
 
+    /**
+     * Release all segments held by this arena.  This arena does not keep
+     * any segments, so this function does nothing.
+     */
+    void
+    releaseAll ()
+    {
+    }
+
 private:
     std::size_t m_minSize;
 };

@@ -47,6 +47,12 @@ test1 ()
         ASSERT_EQ (false, memCtx.contains (ptrs[i]));
     }
 
+    // MmapArena keeps no segments, so this is the same as releaseAll ().
+    ptrs[0] = memCtx.allocate (100);
+    ASSERT_EQ (true, memCtx.contains (ptrs[0]));
+    memCtx.releaseAllToSystem ();
+    ASSERT_EQ (false, memCtx.contains (ptrs[0]));
+
     ASSERT_EQ (nullptr, memCtx.allocate (0xffffffffff000000));
 
     return 0;

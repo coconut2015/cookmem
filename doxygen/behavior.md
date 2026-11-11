@@ -59,6 +59,16 @@ arena, which reduces the footprint.  As a result:
 `releaseAll ()` releases all memory segments of a context at once.  Every
 pointer allocated from the context becomes invalid.
 
+The segments go to the arena of the context.  cookmem::CachedArena keeps them
+for reuse, so the memory is not returned to the system yet.  This makes
+`releaseAll ()` a cheap way to reset a context that is used again.
+`releaseAllToSystem ()` also calls `releaseAll ()` on the arena, which
+returns the cached segments to the underlying arena, for example before a
+thread exits or when the program no longer needs the memory.  It empties the
+cache even when other contexts share the arena.  Destroying a
+cookmem::CachedArena also returns its cached segments.  Other arenas keep no
+segments, so their `releaseAll ()` does nothing.
+
 Destroying a memory context releases all of its memory segments at once,
 without deallocating each allocation.  Destructors of objects still in that
 memory are not called, so destroy any objects that own other resources (such
@@ -73,3 +83,9 @@ Containers that use cookmem::TLSContextProvider must stay on the thread where
 their allocator was created.  They must also be destroyed before their
 context ends: when the thread exits, or when the cookmem::TLSContextScope
 ends.
+
+When a thread exits normally, the thread-local context is destroyed and its
+memory is returned to the system.  If a thread could end without running
+thread-local destructors, release the memory before that point:
+
+    MyContextProvider::getThreadContext ().releaseAllToSystem ();

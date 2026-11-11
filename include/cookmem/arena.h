@@ -55,6 +55,14 @@ public:
      */
     virtual bool
     freeSegment (void* ptr, std::size_t size) = 0;
+
+    /**
+     * Release all segments held by this arena.  Segments that a memory pool
+     * is still using are not affected.  An arena that keeps no segments
+     * does nothing.
+     */
+    virtual void
+    releaseAll () = 0;
 };
 
 /**
@@ -138,6 +146,15 @@ public:
         return false;
     }
 
+    /**
+     * Release all segments held by this arena.  The buffer belongs to the
+     * caller, so this function does nothing.
+     */
+    void
+    releaseAll ()
+    {
+    }
+
 private:
     void*       m_page;
     std::size_t m_size;
@@ -178,6 +195,17 @@ public:
     }
 
     /**
+     * Destructor.  The cached segments are returned to the underlying arena.
+     */
+    ~CachedArena ()
+    {
+        releaseAll ();
+    }
+
+    CachedArena (const CachedArena&) = delete;
+    CachedArena& operator= (const CachedArena&) = delete;
+
+    /**
      * Allocate an arena segment.
      *
      * It first checks if there is a cached segment that could satisfy the request.
@@ -216,6 +244,25 @@ public:
     {
         m_tree.add (ptr, size);
         return false;
+    }
+
+    /**
+     * Return all the cached segments to the underlying arena.  Segments
+     * that a memory pool is still using are not affected.
+     */
+    void
+    releaseAll ()
+    {
+        for (;;)
+        {
+            std::size_t size = 0;
+            void* seg = m_tree.remove (size);
+            if (seg == nullptr)
+            {
+                break;
+            }
+            m_arena.freeSegment (seg, size);
+        }
     }
 
 private:
