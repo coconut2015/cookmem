@@ -15,6 +15,7 @@
  */
 #include <iostream>
 #include <list>
+#include <thread>
 
 #include <cookmem.h>
 
@@ -84,12 +85,36 @@ runWithSeparateArena ()
     printValues (values);
 }
 
+void
+runWorkerThread ()
+{
+    {
+        std::list<int, MyAllocator> values;
+
+        values.push_back (10);
+        values.push_back (20);
+        values.push_back (30);
+
+        printValues (values);
+    }   // Destroy the containers before releasing their memory.
+
+    // Return this thread's memory to the system now, instead of waiting for
+    // the thread-local context to be destroyed when the thread exits.  Do
+    // this when the thread could end without running thread-local
+    // destructors.  releaseAll () would instead keep the segments in the
+    // cached arena, ready for later allocations on this thread.
+    MyContextProvider::getThreadContext ().releaseAllToSystem ();
+}
+
 int
 main ()
 {
     runWithThreadLocalContext ();
     runWithSharedArena ();
     runWithSeparateArena ();
+
+    std::thread worker (runWorkerThread);
+    worker.join ();
 
     return 0;
 }
