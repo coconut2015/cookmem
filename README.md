@@ -59,8 +59,11 @@ Requirements
 * A C++11 compiler.  CookMem is tested with GCC 13 on Linux and with
   Visual Studio 2022 on Windows.
 * A 64-bit platform.
-* [CMake](https://cmake.org/) 3.12 or later, only to build the tests,
-  examples and documentation.  See [Build Instructions](https://coconut2015.github.io/cookmem/build.html).
+* [CMake](https://cmake.org/) 3.14 or later, to use the `cookmem::cookmem`
+  target or to build the tests, examples and documentation.  CMake is not
+  needed to use the headers directly.  See
+  [Installation](https://coconut2015.github.io/cookmem/install.html) and
+  [Build Instructions](https://coconut2015.github.io/cookmem/build.html).
 
 Performance
 -----------
