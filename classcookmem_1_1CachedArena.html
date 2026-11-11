@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CookMem<span id="projectnumber">&#160;1.0.0</span>
+   <div id="projectname">CookMem<span id="projectnumber">&#160;1.1.0</span>
    </div>
    <div id="projectbrief">A C++ memory context / allocator</div>
   </td>
@@ -109,10 +109,20 @@ Public Types</h2></td></tr>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a7bd04dab4ccf676b1fde813ca273c11d" id="r_a7bd04dab4ccf676b1fde813ca273c11d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1CachedArena.html#a7bd04dab4ccf676b1fde813ca273c11d">CachedArena</a> (<a class="el" href="classcookmem_1_1MemContextProvider.html">Arena</a> &amp;arena)</td></tr>
 <tr class="separator:a7bd04dab4ccf676b1fde813ca273c11d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8a8f335f7a778c10244a90720561335" id="r_ad8a8f335f7a778c10244a90720561335"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1CachedArena.html#ad8a8f335f7a778c10244a90720561335">~CachedArena</a> ()</td></tr>
+<tr class="separator:ad8a8f335f7a778c10244a90720561335"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3f88b148857c50083612088607fd090" id="r_af3f88b148857c50083612088607fd090"><td class="memItemLeft" align="right" valign="top"><a id="af3f88b148857c50083612088607fd090" name="af3f88b148857c50083612088607fd090"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>CachedArena</b> (<a class="el" href="classcookmem_1_1MemContextProvider.html">const</a> <a class="el" href="classcookmem_1_1CachedArena.html">CachedArena</a> &amp;)=<a class="el" href="classcookmem_1_1MemContextProvider.html">delete</a></td></tr>
+<tr class="separator:af3f88b148857c50083612088607fd090"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2be9e9273e0edaf338ad3f11c6869644" id="r_a2be9e9273e0edaf338ad3f11c6869644"><td class="memItemLeft" align="right" valign="top"><a id="a2be9e9273e0edaf338ad3f11c6869644" name="a2be9e9273e0edaf338ad3f11c6869644"></a>
+<a class="el" href="classcookmem_1_1CachedArena.html">CachedArena</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classcookmem_1_1MemContextProvider.html">const</a> <a class="el" href="classcookmem_1_1CachedArena.html">CachedArena</a> &amp;)=<a class="el" href="classcookmem_1_1MemContextProvider.html">delete</a></td></tr>
+<tr class="separator:a2be9e9273e0edaf338ad3f11c6869644"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a02b70c0e2474bf86420a45c2d8fe1999" id="r_a02b70c0e2474bf86420a45c2d8fe1999"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">void</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1CachedArena.html#a02b70c0e2474bf86420a45c2d8fe1999">getSegment</a> (std::size_t &amp;size)</td></tr>
 <tr class="separator:a02b70c0e2474bf86420a45c2d8fe1999"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a91c9457c07bd8c4ccf2c2eddf0934d5c" id="r_a91c9457c07bd8c4ccf2c2eddf0934d5c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1CachedArena.html#a91c9457c07bd8c4ccf2c2eddf0934d5c">freeSegment</a> (<a class="el" href="classcookmem_1_1MemContextProvider.html">void</a> *<a class="el" href="classcookmem_1_1MemContextProvider.html">ptr</a>, std::size_t size)</td></tr>
 <tr class="separator:a91c9457c07bd8c4ccf2c2eddf0934d5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd195673caa98122e6aa22567480da88" id="r_acd195673caa98122e6aa22567480da88"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1CachedArena.html#acd195673caa98122e6aa22567480da88">releaseAll</a> ()</td></tr>
+<tr class="separator:acd195673caa98122e6aa22567480da88"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><div class="compoundTemplParams">template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">Arena</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">TreeType</a> = PtrRBTree&gt;<br />
@@ -176,6 +186,34 @@ template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="ad8a8f335f7a778c10244a90720561335" name="ad8a8f335f7a778c10244a90720561335"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8a8f335f7a778c10244a90720561335">&#9670;&#160;</a></span>~CachedArena()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">Arena</a> , <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">TreeType</a>  = PtrRBTree&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1CachedArena.html">cookmem::CachedArena</a>&lt; <a class="el" href="classcookmem_1_1MemContextProvider.html">Arena</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">TreeType</a> &gt;::~<a class="el" href="classcookmem_1_1CachedArena.html">CachedArena</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Destructor. The cached segments are returned to the underlying arena. </p>
 
 </div>
 </div>
@@ -262,6 +300,34 @@ template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the allocated pointer. nullptr is allocation failed. </dd></dl>
+
+</div>
+</div>
+<a id="acd195673caa98122e6aa22567480da88" name="acd195673caa98122e6aa22567480da88"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acd195673caa98122e6aa22567480da88">&#9670;&#160;</a></span>releaseAll()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">Arena</a> , <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">TreeType</a>  = PtrRBTree&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1MemContextProvider.html">void</a> <a class="el" href="classcookmem_1_1CachedArena.html">cookmem::CachedArena</a>&lt; <a class="el" href="classcookmem_1_1MemContextProvider.html">Arena</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">TreeType</a> &gt;::releaseAll </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Return all the cached segments to the underlying arena. Segments that a memory pool is still using are not affected. </p>
 
 </div>
 </div>

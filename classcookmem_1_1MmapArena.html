@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CookMem<span id="projectnumber">&#160;1.0.0</span>
+   <div id="projectname">CookMem<span id="projectnumber">&#160;1.1.0</span>
    </div>
    <div id="projectbrief">A C++ memory context / allocator</div>
   </td>
@@ -107,6 +107,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a0ad432dcf36fa40dceac8930439590cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4fbfc0fae5958f09548d8a3413196c6a" id="r_a4fbfc0fae5958f09548d8a3413196c6a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MmapArena.html#a4fbfc0fae5958f09548d8a3413196c6a">freeSegment</a> (<a class="el" href="classcookmem_1_1MemContextProvider.html">void</a> *<a class="el" href="classcookmem_1_1MemContextProvider.html">ptr</a>, std::size_t size)</td></tr>
 <tr class="separator:a4fbfc0fae5958f09548d8a3413196c6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06e085780d6faaa35152e5977924760b" id="r_a06e085780d6faaa35152e5977924760b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MmapArena.html#a06e085780d6faaa35152e5977924760b">releaseAll</a> ()</td></tr>
+<tr class="separator:a06e085780d6faaa35152e5977924760b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>An mmap/munmap based memory arena.</p>
@@ -240,6 +242,32 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the allocated pointer. nullptr is allocation failed. </dd></dl>
+
+</div>
+</div>
+<a id="a06e085780d6faaa35152e5977924760b" name="a06e085780d6faaa35152e5977924760b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a06e085780d6faaa35152e5977924760b">&#9670;&#160;</a></span>releaseAll()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1MemContextProvider.html">void</a> cookmem::MmapArena::releaseAll </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Release all segments held by this arena. This arena does not keep any segments, so this function does nothing. </p>
 
 </div>
 </div>

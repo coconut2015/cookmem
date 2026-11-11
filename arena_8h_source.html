@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CookMem<span id="projectnumber">&#160;1.0.0</span>
+   <div id="projectname">CookMem<span id="projectnumber">&#160;1.1.0</span>
    </div>
    <div id="projectbrief">A C++ memory context / allocator</div>
   </td>
@@ -134,125 +134,166 @@ $(document).ready(function(){initNavTree('arena_8h_source.html',''); initResizab
 <div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
 <div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    <span class="keyword">virtual</span> <span class="keywordtype">bool</span></div>
 <div class="line"><a id="l00057" name="l00057"></a><span class="lineno"><a class="line" href="classcookmem_1_1MemArena.html#ab6c3bcdbe1c13eb9df32177f00625f28">   57</a></span>    <a class="code hl_function" href="classcookmem_1_1MemArena.html#ab6c3bcdbe1c13eb9df32177f00625f28">freeSegment</a> (<span class="keywordtype">void</span>* <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">ptr</a>, std::size_t size) = 0;</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>};</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span></div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno"><a class="line" href="classcookmem_1_1MemArena.html#aea9aee45f17a98ee33bb219bfc7d385e">   65</a></span>    <a class="code hl_function" href="classcookmem_1_1MemArena.html#aea9aee45f17a98ee33bb219bfc7d385e">releaseAll</a> () = 0;</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>};</div>
 </div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
-<div class="foldopen" id="foldopen00068" data-start="{" data-end="};">
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno"><a class="line" href="classcookmem_1_1FixedArena.html">   68</a></span><span class="keyword">class </span><a class="code hl_class" href="classcookmem_1_1FixedArena.html">FixedArena</a></div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>{</div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="keyword">public</span>:</div>
-<div class="foldopen" id="foldopen00083" data-start="{" data-end="}">
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno"><a class="line" href="classcookmem_1_1FixedArena.html#a878d9e502bd53fb2ad46380765f52c81">   83</a></span>    <a class="code hl_function" href="classcookmem_1_1FixedArena.html#a878d9e502bd53fb2ad46380765f52c81">FixedArena</a> (<span class="keywordtype">void</span>* <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">ptr</a>, std::size_t size)</div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>    : m_used (<a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">false</a>)</div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>    {</div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>        std::size_t <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">remain</a> = (std::size_t)<a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">ptr</a> &amp; 0xfUL;</div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>        <span class="keywordflow">if</span> (<a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">remain</a>)</div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>        {</div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>            std::size_t <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">inc</a> = (0x10 - <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">remain</a>);</div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>            m_page = (<span class="keywordtype">void</span>*)((<span class="keywordtype">char</span>*)<a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">ptr</a> + <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">inc</a>);</div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>            size -= <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">inc</a>;</div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>        }</div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>        <span class="keywordflow">else</span></div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>        {</div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>            m_page = <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">ptr</a>;</div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>        }</div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>        size &amp;= 0xfffffffffffffff0UL;</div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>        m_size = size;</div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>    }</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
+<div class="foldopen" id="foldopen00076" data-start="{" data-end="};">
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno"><a class="line" href="classcookmem_1_1FixedArena.html">   76</a></span><span class="keyword">class </span><a class="code hl_class" href="classcookmem_1_1FixedArena.html">FixedArena</a></div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>{</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span><span class="keyword">public</span>:</div>
+<div class="foldopen" id="foldopen00091" data-start="{" data-end="}">
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno"><a class="line" href="classcookmem_1_1FixedArena.html#a878d9e502bd53fb2ad46380765f52c81">   91</a></span>    <a class="code hl_function" href="classcookmem_1_1FixedArena.html#a878d9e502bd53fb2ad46380765f52c81">FixedArena</a> (<span class="keywordtype">void</span>* <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">ptr</a>, std::size_t size)</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>    : m_used (<a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">false</a>)</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>    {</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>        std::size_t <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">remain</a> = (std::size_t)<a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">ptr</a> &amp; 0xfUL;</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>        <span class="keywordflow">if</span> (<a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">remain</a>)</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>        {</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>            std::size_t <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">inc</a> = (0x10 - <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">remain</a>);</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>            m_page = (<span class="keywordtype">void</span>*)((<span class="keywordtype">char</span>*)<a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">ptr</a> + <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">inc</a>);</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>            size -= <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">inc</a>;</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>        }</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>        <span class="keywordflow">else</span></div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>        {</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>            m_page = <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">ptr</a>;</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>        }</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>        size &amp;= 0xfffffffffffffff0UL;</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>        m_size = size;</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>    }</div>
 </div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span> </div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>    <span class="keywordtype">void</span>*</div>
-<div class="foldopen" id="foldopen00110" data-start="{" data-end="}">
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno"><a class="line" href="classcookmem_1_1FixedArena.html#ac7f0c164daed205b28dbaf445e37be53">  110</a></span>    <a class="code hl_function" href="classcookmem_1_1FixedArena.html#ac7f0c164daed205b28dbaf445e37be53">getSegment</a> (std::size_t&amp; size)</div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>    {</div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>        <span class="keywordflow">if</span> (m_used || size &gt; m_size)</div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>        {</div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>            <span class="keywordflow">return</span> <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">NULL</a>;</div>
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>        }</div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>        m_used = <span class="keyword">true</span>;</div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>        size = m_size;</div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>        <span class="keywordflow">return</span> m_page;</div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>    }</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span> </div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>    <span class="keywordtype">void</span>*</div>
+<div class="foldopen" id="foldopen00118" data-start="{" data-end="}">
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno"><a class="line" href="classcookmem_1_1FixedArena.html#ac7f0c164daed205b28dbaf445e37be53">  118</a></span>    <a class="code hl_function" href="classcookmem_1_1FixedArena.html#ac7f0c164daed205b28dbaf445e37be53">getSegment</a> (std::size_t&amp; size)</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>    {</div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>        <span class="keywordflow">if</span> (m_used || size &gt; m_size)</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>        {</div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>            <span class="keywordflow">return</span> <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">NULL</a>;</div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>        }</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>        m_used = <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>        size = m_size;</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>        <span class="keywordflow">return</span> m_page;</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>    }</div>
 </div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span> </div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>    <span class="keywordtype">bool</span></div>
-<div class="foldopen" id="foldopen00131" data-start="{" data-end="}">
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno"><a class="line" href="classcookmem_1_1FixedArena.html#ae62bd3a59110add2dfcf7f553d72ab24">  131</a></span>    <a class="code hl_function" href="classcookmem_1_1FixedArena.html#ae62bd3a59110add2dfcf7f553d72ab24">freeSegment</a> (<span class="keywordtype">void</span>* <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">ptr</a>, std::size_t size)</div>
-<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>    {</div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>        <span class="keywordflow">if</span> (!m_used || <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">ptr</a> != m_page || size != m_size)</div>
-<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>        {</div>
-<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>            <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>        }</div>
-<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>        m_used = <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>    }</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span> </div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>    <span class="keywordtype">bool</span></div>
+<div class="foldopen" id="foldopen00139" data-start="{" data-end="}">
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno"><a class="line" href="classcookmem_1_1FixedArena.html#ae62bd3a59110add2dfcf7f553d72ab24">  139</a></span>    <a class="code hl_function" href="classcookmem_1_1FixedArena.html#ae62bd3a59110add2dfcf7f553d72ab24">freeSegment</a> (<span class="keywordtype">void</span>* <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">ptr</a>, std::size_t size)</div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>    {</div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>        <span class="keywordflow">if</span> (!m_used || <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">ptr</a> != m_page || size != m_size)</div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>        {</div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>            <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>        }</div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>        m_used = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>    }</div>
 </div>
-<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span> </div>
-<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>    <span class="keywordtype">void</span>*       m_page;</div>
-<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>    std::size_t m_size;</div>
-<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>    <span class="keywordtype">bool</span>        m_used;</div>
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>};</div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span> </div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>    <span class="keywordtype">void</span></div>
+<div class="foldopen" id="foldopen00154" data-start="{" data-end="}">
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno"><a class="line" href="classcookmem_1_1FixedArena.html#a49a6ce0603faadb7c65776103c13e8b6">  154</a></span>    <a class="code hl_function" href="classcookmem_1_1FixedArena.html#a49a6ce0603faadb7c65776103c13e8b6">releaseAll</a> ()</div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>    {</div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>    }</div>
 </div>
-<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span> </div>
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span><span class="keyword">template</span>&lt;<span class="keyword">class</span> Arena, <span class="keyword">class</span> TreeType = PtrRBTree&gt;</div>
-<div class="foldopen" id="foldopen00162" data-start="{" data-end="};">
-<div class="line"><a id="l00162" name="l00162"></a><span class="lineno"><a class="line" href="classcookmem_1_1CachedArena.html">  162</a></span><span class="keyword">class </span><a class="code hl_class" href="classcookmem_1_1CachedArena.html">CachedArena</a></div>
-<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>{</div>
-<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00166" name="l00166"></a><span class="lineno"><a class="line" href="classcookmem_1_1CachedArena.html#a37b4a31c88042c7d9e530d5394753ab5">  166</a></span>    <span class="keyword">typedef</span> <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">TreeType</a>   <a class="code hl_typedef" href="classcookmem_1_1CachedArena.html#a37b4a31c88042c7d9e530d5394753ab5">PtrTreeType</a>;</div>
-<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span><span class="keyword">public</span>:</div>
-<div class="foldopen" id="foldopen00174" data-start="{" data-end="}">
-<div class="line"><a id="l00174" name="l00174"></a><span class="lineno"><a class="line" href="classcookmem_1_1CachedArena.html#a7bd04dab4ccf676b1fde813ca273c11d">  174</a></span>    <a class="code hl_function" href="classcookmem_1_1CachedArena.html#a7bd04dab4ccf676b1fde813ca273c11d">CachedArena</a> (<a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">Arena</a>&amp; arena)</div>
-<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>    : m_arena (arena),</div>
-<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>      m_tree ()</div>
-<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>    {</div>
-<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>    }</div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span> </div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>    <span class="keywordtype">void</span>*       m_page;</div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>    std::size_t m_size;</div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>    <span class="keywordtype">bool</span>        m_used;</div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>};</div>
 </div>
-<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span> </div>
-<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>    <span class="keywordtype">void</span>*</div>
-<div class="foldopen" id="foldopen00192" data-start="{" data-end="}">
-<div class="line"><a id="l00192" name="l00192"></a><span class="lineno"><a class="line" href="classcookmem_1_1CachedArena.html#a02b70c0e2474bf86420a45c2d8fe1999">  192</a></span>    <a class="code hl_function" href="classcookmem_1_1CachedArena.html#a02b70c0e2474bf86420a45c2d8fe1999">getSegment</a> (std::size_t&amp; size)</div>
-<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>    {</div>
-<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>        <span class="keywordtype">void</span>* <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">seg</a> = m_tree.remove(size);</div>
-<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>        <span class="keywordflow">if</span> (<a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">seg</a>)</div>
-<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>        {</div>
-<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>            <span class="keywordflow">return</span> <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">seg</a>;</div>
-<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>        }</div>
-<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>        <span class="keywordflow">return</span> m_arena.getSegment(size);</div>
-<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>    }</div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span> </div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span><span class="keyword">template</span>&lt;<span class="keyword">class</span> Arena, <span class="keyword">class</span> TreeType = PtrRBTree&gt;</div>
+<div class="foldopen" id="foldopen00179" data-start="{" data-end="};">
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno"><a class="line" href="classcookmem_1_1CachedArena.html">  179</a></span><span class="keyword">class </span><a class="code hl_class" href="classcookmem_1_1CachedArena.html">CachedArena</a></div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>{</div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno"><a class="line" href="classcookmem_1_1CachedArena.html#a37b4a31c88042c7d9e530d5394753ab5">  183</a></span>    <span class="keyword">typedef</span> <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">TreeType</a>   <a class="code hl_typedef" href="classcookmem_1_1CachedArena.html#a37b4a31c88042c7d9e530d5394753ab5">PtrTreeType</a>;</div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span><span class="keyword">public</span>:</div>
+<div class="foldopen" id="foldopen00191" data-start="{" data-end="}">
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno"><a class="line" href="classcookmem_1_1CachedArena.html#a7bd04dab4ccf676b1fde813ca273c11d">  191</a></span>    <a class="code hl_function" href="classcookmem_1_1CachedArena.html#a7bd04dab4ccf676b1fde813ca273c11d">CachedArena</a> (<a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">Arena</a>&amp; arena)</div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>    : m_arena (arena),</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>      m_tree ()</div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>    {</div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>    }</div>
 </div>
-<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span> </div>
-<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>    <span class="keywordtype">bool</span></div>
-<div class="foldopen" id="foldopen00215" data-start="{" data-end="}">
-<div class="line"><a id="l00215" name="l00215"></a><span class="lineno"><a class="line" href="classcookmem_1_1CachedArena.html#a91c9457c07bd8c4ccf2c2eddf0934d5c">  215</a></span>    <a class="code hl_function" href="classcookmem_1_1CachedArena.html#a91c9457c07bd8c4ccf2c2eddf0934d5c">freeSegment</a> (<span class="keywordtype">void</span>* <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">ptr</a>, std::size_t size)</div>
-<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>    {</div>
-<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>        m_tree.add (<a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">ptr</a>, size);</div>
-<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>    }</div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span> </div>
+<div class="foldopen" id="foldopen00200" data-start="{" data-end="}">
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno"><a class="line" href="classcookmem_1_1CachedArena.html#ad8a8f335f7a778c10244a90720561335">  200</a></span>    <a class="code hl_function" href="classcookmem_1_1CachedArena.html#ad8a8f335f7a778c10244a90720561335">~CachedArena</a> ()</div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>    {</div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>        <a class="code hl_function" href="classcookmem_1_1CachedArena.html#acd195673caa98122e6aa22567480da88">releaseAll</a> ();</div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>    }</div>
 </div>
-<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span> </div>
-<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>    <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">Arena</a>&amp;      m_arena;</div>
-<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>    <a class="code hl_typedef" href="classcookmem_1_1CachedArena.html#a37b4a31c88042c7d9e530d5394753ab5">PtrTreeType</a> m_tree;</div>
-<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>};</div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span> </div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>    <a class="code hl_class" href="classcookmem_1_1CachedArena.html">CachedArena</a> (<span class="keyword">const</span> <a class="code hl_class" href="classcookmem_1_1CachedArena.html">CachedArena</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>    <a class="code hl_class" href="classcookmem_1_1CachedArena.html">CachedArena</a>&amp; <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">operator= </a>(<span class="keyword">const</span> <a class="code hl_class" href="classcookmem_1_1CachedArena.html">CachedArena</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span> </div>
+<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>    <span class="keywordtype">void</span>*</div>
+<div class="foldopen" id="foldopen00220" data-start="{" data-end="}">
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno"><a class="line" href="classcookmem_1_1CachedArena.html#a02b70c0e2474bf86420a45c2d8fe1999">  220</a></span>    <a class="code hl_function" href="classcookmem_1_1CachedArena.html#a02b70c0e2474bf86420a45c2d8fe1999">getSegment</a> (std::size_t&amp; size)</div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>    {</div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>        <span class="keywordtype">void</span>* <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">seg</a> = m_tree.remove(size);</div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>        <span class="keywordflow">if</span> (<a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">seg</a>)</div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>        {</div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>            <span class="keywordflow">return</span> <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">seg</a>;</div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>        }</div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>        <span class="keywordflow">return</span> m_arena.getSegment(size);</div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>    }</div>
 </div>
-<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span> </div>
-<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span> </div>
-<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>}   <span class="comment">// namespace cookmem</span></div>
-<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span> </div>
-<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span><span class="preprocessor">#endif  </span><span class="comment">// COOK_MEM_ARENA_H</span></div>
-<div class="ttc" id="aclasscookmem_1_1CachedArena_html"><div class="ttname"><a href="classcookmem_1_1CachedArena.html">cookmem::CachedArena</a></div><div class="ttdef"><b>Definition</b> arena.h:163</div></div>
-<div class="ttc" id="aclasscookmem_1_1CachedArena_html_a02b70c0e2474bf86420a45c2d8fe1999"><div class="ttname"><a href="classcookmem_1_1CachedArena.html#a02b70c0e2474bf86420a45c2d8fe1999">cookmem::CachedArena::getSegment</a></div><div class="ttdeci">void * getSegment(std::size_t &amp;size)</div><div class="ttdef"><b>Definition</b> arena.h:192</div></div>
-<div class="ttc" id="aclasscookmem_1_1CachedArena_html_a37b4a31c88042c7d9e530d5394753ab5"><div class="ttname"><a href="classcookmem_1_1CachedArena.html#a37b4a31c88042c7d9e530d5394753ab5">cookmem::CachedArena::PtrTreeType</a></div><div class="ttdeci">TreeType PtrTreeType</div><div class="ttdef"><b>Definition</b> arena.h:166</div></div>
-<div class="ttc" id="aclasscookmem_1_1CachedArena_html_a7bd04dab4ccf676b1fde813ca273c11d"><div class="ttname"><a href="classcookmem_1_1CachedArena.html#a7bd04dab4ccf676b1fde813ca273c11d">cookmem::CachedArena::CachedArena</a></div><div class="ttdeci">CachedArena(Arena &amp;arena)</div><div class="ttdef"><b>Definition</b> arena.h:174</div></div>
-<div class="ttc" id="aclasscookmem_1_1CachedArena_html_a91c9457c07bd8c4ccf2c2eddf0934d5c"><div class="ttname"><a href="classcookmem_1_1CachedArena.html#a91c9457c07bd8c4ccf2c2eddf0934d5c">cookmem::CachedArena::freeSegment</a></div><div class="ttdeci">bool freeSegment(void *ptr, std::size_t size)</div><div class="ttdef"><b>Definition</b> arena.h:215</div></div>
-<div class="ttc" id="aclasscookmem_1_1FixedArena_html"><div class="ttname"><a href="classcookmem_1_1FixedArena.html">cookmem::FixedArena</a></div><div class="ttdef"><b>Definition</b> arena.h:69</div></div>
-<div class="ttc" id="aclasscookmem_1_1FixedArena_html_a878d9e502bd53fb2ad46380765f52c81"><div class="ttname"><a href="classcookmem_1_1FixedArena.html#a878d9e502bd53fb2ad46380765f52c81">cookmem::FixedArena::FixedArena</a></div><div class="ttdeci">FixedArena(void *ptr, std::size_t size)</div><div class="ttdef"><b>Definition</b> arena.h:83</div></div>
-<div class="ttc" id="aclasscookmem_1_1FixedArena_html_ac7f0c164daed205b28dbaf445e37be53"><div class="ttname"><a href="classcookmem_1_1FixedArena.html#ac7f0c164daed205b28dbaf445e37be53">cookmem::FixedArena::getSegment</a></div><div class="ttdeci">void * getSegment(std::size_t &amp;size)</div><div class="ttdef"><b>Definition</b> arena.h:110</div></div>
-<div class="ttc" id="aclasscookmem_1_1FixedArena_html_ae62bd3a59110add2dfcf7f553d72ab24"><div class="ttname"><a href="classcookmem_1_1FixedArena.html#ae62bd3a59110add2dfcf7f553d72ab24">cookmem::FixedArena::freeSegment</a></div><div class="ttdeci">bool freeSegment(void *ptr, std::size_t size)</div><div class="ttdef"><b>Definition</b> arena.h:131</div></div>
+<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span> </div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>    <span class="keywordtype">bool</span></div>
+<div class="foldopen" id="foldopen00243" data-start="{" data-end="}">
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno"><a class="line" href="classcookmem_1_1CachedArena.html#a91c9457c07bd8c4ccf2c2eddf0934d5c">  243</a></span>    <a class="code hl_function" href="classcookmem_1_1CachedArena.html#a91c9457c07bd8c4ccf2c2eddf0934d5c">freeSegment</a> (<span class="keywordtype">void</span>* <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">ptr</a>, std::size_t size)</div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>    {</div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>        m_tree.add (<a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">ptr</a>, size);</div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>    }</div>
+</div>
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span> </div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>    <span class="keywordtype">void</span></div>
+<div class="foldopen" id="foldopen00254" data-start="{" data-end="}">
+<div class="line"><a id="l00254" name="l00254"></a><span class="lineno"><a class="line" href="classcookmem_1_1CachedArena.html#acd195673caa98122e6aa22567480da88">  254</a></span>    <a class="code hl_function" href="classcookmem_1_1CachedArena.html#acd195673caa98122e6aa22567480da88">releaseAll</a> ()</div>
+<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>    {</div>
+<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>        <span class="keywordflow">for</span> (;;)</div>
+<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>        {</div>
+<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>            std::size_t size = 0;</div>
+<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>            <span class="keywordtype">void</span>* <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">seg</a> = m_tree.remove (size);</div>
+<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>            <span class="keywordflow">if</span> (<a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">seg</a> == <span class="keyword">nullptr</span>)</div>
+<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span>            {</div>
+<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>                <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>            }</div>
+<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span>            m_arena.freeSegment (<a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">seg</a>, size);</div>
+<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span>        }</div>
+<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>    }</div>
+</div>
+<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span> </div>
+<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>    <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">Arena</a>&amp;      m_arena;</div>
+<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>    <a class="code hl_typedef" href="classcookmem_1_1CachedArena.html#a37b4a31c88042c7d9e530d5394753ab5">PtrTreeType</a> m_tree;</div>
+<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>};</div>
+</div>
+<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span> </div>
+<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span> </div>
+<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>}   <span class="comment">// namespace cookmem</span></div>
+<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span> </div>
+<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span><span class="preprocessor">#endif  </span><span class="comment">// COOK_MEM_ARENA_H</span></div>
+<div class="ttc" id="aclasscookmem_1_1CachedArena_html"><div class="ttname"><a href="classcookmem_1_1CachedArena.html">cookmem::CachedArena</a></div><div class="ttdef"><b>Definition</b> arena.h:180</div></div>
+<div class="ttc" id="aclasscookmem_1_1CachedArena_html_a02b70c0e2474bf86420a45c2d8fe1999"><div class="ttname"><a href="classcookmem_1_1CachedArena.html#a02b70c0e2474bf86420a45c2d8fe1999">cookmem::CachedArena::getSegment</a></div><div class="ttdeci">void * getSegment(std::size_t &amp;size)</div><div class="ttdef"><b>Definition</b> arena.h:220</div></div>
+<div class="ttc" id="aclasscookmem_1_1CachedArena_html_a37b4a31c88042c7d9e530d5394753ab5"><div class="ttname"><a href="classcookmem_1_1CachedArena.html#a37b4a31c88042c7d9e530d5394753ab5">cookmem::CachedArena::PtrTreeType</a></div><div class="ttdeci">TreeType PtrTreeType</div><div class="ttdef"><b>Definition</b> arena.h:183</div></div>
+<div class="ttc" id="aclasscookmem_1_1CachedArena_html_a7bd04dab4ccf676b1fde813ca273c11d"><div class="ttname"><a href="classcookmem_1_1CachedArena.html#a7bd04dab4ccf676b1fde813ca273c11d">cookmem::CachedArena::CachedArena</a></div><div class="ttdeci">CachedArena(Arena &amp;arena)</div><div class="ttdef"><b>Definition</b> arena.h:191</div></div>
+<div class="ttc" id="aclasscookmem_1_1CachedArena_html_a91c9457c07bd8c4ccf2c2eddf0934d5c"><div class="ttname"><a href="classcookmem_1_1CachedArena.html#a91c9457c07bd8c4ccf2c2eddf0934d5c">cookmem::CachedArena::freeSegment</a></div><div class="ttdeci">bool freeSegment(void *ptr, std::size_t size)</div><div class="ttdef"><b>Definition</b> arena.h:243</div></div>
+<div class="ttc" id="aclasscookmem_1_1CachedArena_html_acd195673caa98122e6aa22567480da88"><div class="ttname"><a href="classcookmem_1_1CachedArena.html#acd195673caa98122e6aa22567480da88">cookmem::CachedArena::releaseAll</a></div><div class="ttdeci">void releaseAll()</div><div class="ttdef"><b>Definition</b> arena.h:254</div></div>
+<div class="ttc" id="aclasscookmem_1_1CachedArena_html_ad8a8f335f7a778c10244a90720561335"><div class="ttname"><a href="classcookmem_1_1CachedArena.html#ad8a8f335f7a778c10244a90720561335">cookmem::CachedArena::~CachedArena</a></div><div class="ttdeci">~CachedArena()</div><div class="ttdef"><b>Definition</b> arena.h:200</div></div>
+<div class="ttc" id="aclasscookmem_1_1FixedArena_html"><div class="ttname"><a href="classcookmem_1_1FixedArena.html">cookmem::FixedArena</a></div><div class="ttdef"><b>Definition</b> arena.h:77</div></div>
+<div class="ttc" id="aclasscookmem_1_1FixedArena_html_a49a6ce0603faadb7c65776103c13e8b6"><div class="ttname"><a href="classcookmem_1_1FixedArena.html#a49a6ce0603faadb7c65776103c13e8b6">cookmem::FixedArena::releaseAll</a></div><div class="ttdeci">void releaseAll()</div><div class="ttdef"><b>Definition</b> arena.h:154</div></div>
+<div class="ttc" id="aclasscookmem_1_1FixedArena_html_a878d9e502bd53fb2ad46380765f52c81"><div class="ttname"><a href="classcookmem_1_1FixedArena.html#a878d9e502bd53fb2ad46380765f52c81">cookmem::FixedArena::FixedArena</a></div><div class="ttdeci">FixedArena(void *ptr, std::size_t size)</div><div class="ttdef"><b>Definition</b> arena.h:91</div></div>
+<div class="ttc" id="aclasscookmem_1_1FixedArena_html_ac7f0c164daed205b28dbaf445e37be53"><div class="ttname"><a href="classcookmem_1_1FixedArena.html#ac7f0c164daed205b28dbaf445e37be53">cookmem::FixedArena::getSegment</a></div><div class="ttdeci">void * getSegment(std::size_t &amp;size)</div><div class="ttdef"><b>Definition</b> arena.h:118</div></div>
+<div class="ttc" id="aclasscookmem_1_1FixedArena_html_ae62bd3a59110add2dfcf7f553d72ab24"><div class="ttname"><a href="classcookmem_1_1FixedArena.html#ae62bd3a59110add2dfcf7f553d72ab24">cookmem::FixedArena::freeSegment</a></div><div class="ttdeci">bool freeSegment(void *ptr, std::size_t size)</div><div class="ttdef"><b>Definition</b> arena.h:139</div></div>
 <div class="ttc" id="aclasscookmem_1_1MemArena_html"><div class="ttname"><a href="classcookmem_1_1MemArena.html">cookmem::MemArena</a></div><div class="ttdef"><b>Definition</b> arena.h:32</div></div>
 <div class="ttc" id="aclasscookmem_1_1MemArena_html_ab6c3bcdbe1c13eb9df32177f00625f28"><div class="ttname"><a href="classcookmem_1_1MemArena.html#ab6c3bcdbe1c13eb9df32177f00625f28">cookmem::MemArena::freeSegment</a></div><div class="ttdeci">virtual bool freeSegment(void *ptr, std::size_t size)=0</div></div>
+<div class="ttc" id="aclasscookmem_1_1MemArena_html_aea9aee45f17a98ee33bb219bfc7d385e"><div class="ttname"><a href="classcookmem_1_1MemArena.html#aea9aee45f17a98ee33bb219bfc7d385e">cookmem::MemArena::releaseAll</a></div><div class="ttdeci">virtual void releaseAll()=0</div></div>
 <div class="ttc" id="aclasscookmem_1_1MemArena_html_aff8a58baef47469cb74422df8324f8a6"><div class="ttname"><a href="classcookmem_1_1MemArena.html#aff8a58baef47469cb74422df8324f8a6">cookmem::MemArena::getSegment</a></div><div class="ttdeci">virtual void * getSegment(std::size_t &amp;size)=0</div></div>
 <div class="ttc" id="aclasscookmem_1_1MemContextProvider_html"><div class="ttname"><a href="classcookmem_1_1MemContextProvider.html">cookmem::MemContextProvider</a></div><div class="ttdef"><b>Definition</b> allocator.h:39</div></div>
 <div class="ttc" id="anamespacecookmem_html"><div class="ttname"><a href="namespacecookmem.html">cookmem</a></div><div class="ttdef"><b>Definition</b> allocator.h:29</div></div>

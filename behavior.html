@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CookMem<span id="projectnumber">&#160;1.0.0</span>
+   <div id="projectname">CookMem<span id="projectnumber">&#160;1.1.0</span>
    </div>
    <div id="projectbrief">A C++ memory context / allocator</div>
   </td>
@@ -119,12 +119,14 @@ Releasing Memory</h2>
 <li><a class="el" href="classcookmem_1_1StatsLogger.html">cookmem::StatsLogger</a> counts the trimming passes (<code>getNumTrimEmptySegments ()</code>).</li>
 </ul>
 <p><code>releaseAll ()</code> releases all memory segments of a context at once. Every pointer allocated from the context becomes invalid.</p>
+<p>The segments go to the arena of the context. <a class="el" href="classcookmem_1_1CachedArena.html">cookmem::CachedArena</a> keeps them for reuse, so the memory is not returned to the system yet. This makes <code>releaseAll ()</code> a cheap way to reset a context that is used again. <code>releaseAllToSystem ()</code> also calls <code>releaseAll ()</code> on the arena, which returns the cached segments to the underlying arena, for example before a thread exits or when the program no longer needs the memory. It empties the cache even when other contexts share the arena. Destroying a <a class="el" href="classcookmem_1_1CachedArena.html">cookmem::CachedArena</a> also returns its cached segments. Other arenas keep no segments, so their <code>releaseAll ()</code> does nothing.</p>
 <p>Destroying a memory context releases all of its memory segments at once, without deallocating each allocation. Destructors of objects still in that memory are not called, so destroy any objects that own other resources (such as files or memory from other allocators) before the context ends.</p>
 <p><a class="el" href="classcookmem_1_1FixedArena.html">cookmem::FixedArena</a> has a fixed capacity. When it is used up, allocations fail and return <code>nullptr</code>.</p>
 <h2><a class="anchor" id="autotoc_md13"></a>
 Thread-Local Allocators</h2>
-<p>Containers that use <a class="el" href="classcookmem_1_1TLSContextProvider.html">cookmem::TLSContextProvider</a> must stay on the thread where their allocator was created. They must also be destroyed before their context ends: when the thread exits, or when the <a class="el" href="classcookmem_1_1TLSContextScope.html">cookmem::TLSContextScope</a> ends. </p>
-</div></div><!-- contents -->
+<p>Containers that use <a class="el" href="classcookmem_1_1TLSContextProvider.html">cookmem::TLSContextProvider</a> must stay on the thread where their allocator was created. They must also be destroyed before their context ends: when the thread exits, or when the <a class="el" href="classcookmem_1_1TLSContextScope.html">cookmem::TLSContextScope</a> ends.</p>
+<p>When a thread exits normally, the thread-local context is destroyed and its memory is returned to the system. If a thread could end without running thread-local destructors, release the memory before that point: </p><pre class="fragment">MyContextProvider::getThreadContext ().releaseAllToSystem ();
+</pre> </div></div><!-- contents -->
 </div><!-- PageDoc -->
 </div><!-- doc-content -->
 <!-- start footer part -->

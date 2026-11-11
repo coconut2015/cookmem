@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CookMem<span id="projectnumber">&#160;1.0.0</span>
+   <div id="projectname">CookMem<span id="projectnumber">&#160;1.1.0</span>
    </div>
    <div id="projectbrief">A C++ memory context / allocator</div>
   </td>
@@ -166,7 +166,7 @@ FixedArena</h1>
 <div class="line"> </div>
 <div class="line">    <span class="keywordflow">return</span> 0;</div>
 <div class="line">}</div>
-<div class="ttc" id="aclasscookmem_1_1FixedArena_html"><div class="ttname"><a href="classcookmem_1_1FixedArena.html">cookmem::FixedArena</a></div><div class="ttdef"><b>Definition</b> arena.h:69</div></div>
+<div class="ttc" id="aclasscookmem_1_1FixedArena_html"><div class="ttname"><a href="classcookmem_1_1FixedArena.html">cookmem::FixedArena</a></div><div class="ttdef"><b>Definition</b> arena.h:77</div></div>
 <div class="ttc" id="aclasscookmem_1_1MemContextProvider_html"><div class="ttname"><a href="classcookmem_1_1MemContextProvider.html">cookmem::MemContextProvider</a></div><div class="ttdef"><b>Definition</b> allocator.h:39</div></div>
 <div class="ttc" id="aclasscookmem_1_1NoActionMemLogger_html"><div class="ttname"><a href="classcookmem_1_1NoActionMemLogger.html">cookmem::NoActionMemLogger</a></div><div class="ttdef"><b>Definition</b> logger.h:151</div></div>
 </div><!-- fragment --><h1><a class="anchor" id="MmapArena"></a>
@@ -213,6 +213,7 @@ MmapArena</h1>
 CachedArena</h1>
 <p><a class="el" href="classcookmem_1_1CachedArena.html">cookmem::CachedArena</a> caches released memory segments in a <a href="https://en.wikipedia.org/wiki/Red%E2%80%93black_tree">red-black tree</a> and reuses them for later requests. This is useful when it is expensive to request and release memory segments.</p>
 <p>Note that the memory pool does not release a segment to the arena as soon as the segment becomes free. It keeps free segments for later allocations, and releases them periodically, after a number of deallocations.</p>
+<p>The arena keeps cached segments until it is destroyed or its <code>releaseAll ()</code> is called, which returns them to the underlying arena. A context's <code>releaseAllToSystem ()</code> releases its segments and then calls the arena's <code>releaseAll ()</code>.</p>
 <div class="fragment"><div class="line"><span class="comment">/*</span></div>
 <div class="line"><span class="comment"> * Copyright (c) 2018-2021 Heng Yuan</span></div>
 <div class="line"><span class="comment"> *</span></div>
@@ -274,7 +275,7 @@ CachedArena</h1>
 <div class="line">    }</div>
 <div class="line">    <span class="keywordflow">return</span> 0;</div>
 <div class="line">}</div>
-<div class="ttc" id="aclasscookmem_1_1MmapArena_html"><div class="ttname"><a href="classcookmem_1_1MmapArena.html">cookmem::MmapArena</a></div><div class="ttdef"><b>Definition</b> mmaparena.h:106</div></div>
+<div class="ttc" id="aclasscookmem_1_1MmapArena_html"><div class="ttname"><a href="classcookmem_1_1MmapArena.html">cookmem::MmapArena</a></div><div class="ttdef"><b>Definition</b> mmaparena.h:115</div></div>
 </div><!-- fragment --><h1><a class="anchor" id="copying"></a>
 Copying Data Between Memory Pools</h1>
 <p>cookmem can determine whether a memory pointer is in the address space of a memory pool. The check iterates through all memory segments owned by the pool.</p>

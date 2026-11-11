@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CookMem<span id="projectnumber">&#160;1.0.0</span>
+   <div id="projectname">CookMem<span id="projectnumber">&#160;1.1.0</span>
    </div>
    <div id="projectbrief">A C++ memory context / allocator</div>
   </td>
@@ -151,6 +151,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a1db94dd9bf74e4e3281da3e47e846373"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7ee7fa640486f0a8bddd8a76f4043caf" id="r_a7ee7fa640486f0a8bddd8a76f4043caf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemContext.html#a7ee7fa640486f0a8bddd8a76f4043caf">releaseAll</a> ()</td></tr>
 <tr class="separator:a7ee7fa640486f0a8bddd8a76f4043caf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1931f42371aede291707a423158e69e0" id="r_a1931f42371aede291707a423158e69e0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemContext.html#a1931f42371aede291707a423158e69e0">releaseAllToSystem</a> ()</td></tr>
+<tr class="separator:a1931f42371aede291707a423158e69e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab260be11297c8ef76f228369ec6935ab" id="r_ab260be11297c8ef76f228369ec6935ab"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContext.html#a755605b35d1e22ad5e61f10a08b26e84">size_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemContext.html#ab260be11297c8ef76f228369ec6935ab">getFootprintLimit</a> () <a class="el" href="classcookmem_1_1MemContextProvider.html">const</a></td></tr>
 <tr class="separator:ab260be11297c8ef76f228369ec6935ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a665586811361b929428e1899e4f33f8b" id="r_a665586811361b929428e1899e4f33f8b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemContext.html#a665586811361b929428e1899e4f33f8b">setFootprintLimit</a> (<a class="el" href="classcookmem_1_1MemContext.html#a755605b35d1e22ad5e61f10a08b26e84">size_type</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">footprintLimit</a>)</td></tr>
@@ -999,6 +1001,35 @@ template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</
 </table>
 </div><div class="memdoc">
 <p>Release all the memory segments held by this <a class="el" href="classcookmem_1_1MemPool.html">MemPool</a>. </p>
+
+</div>
+</div>
+<a id="a1931f42371aede291707a423158e69e0" name="a1931f42371aede291707a423158e69e0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1931f42371aede291707a423158e69e0">&#9670;&#160;</a></span>releaseAllToSystem()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">Arena</a> , <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">Logger</a> , <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">TreeType</a>  = PtrRBTree, <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a>  = void&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1MemContextProvider.html">void</a> <a class="el" href="classcookmem_1_1MemContext.html">cookmem::MemContext</a>&lt; <a class="el" href="classcookmem_1_1MemContextProvider.html">Arena</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">Logger</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">TreeType</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> &gt;::releaseAllToSystem </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Release all the memory segments held by this <a class="el" href="classcookmem_1_1MemPool.html">MemPool</a>, then the segments cached by the arena, so that the memory is returned to the system. Every pointer allocated from this context becomes invalid.</p>
+<p>Unlike releaseAll (), this also empties the cache of a <a class="el" href="classcookmem_1_1CachedArena.html">CachedArena</a>, including the segments that other contexts sharing the arena could have reused. </p>
 
 </div>
 </div>

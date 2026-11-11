@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CookMem<span id="projectnumber">&#160;1.0.0</span>
+   <div id="projectname">CookMem<span id="projectnumber">&#160;1.1.0</span>
    </div>
    <div id="projectbrief">A C++ memory context / allocator</div>
   </td>
@@ -105,6 +105,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aff8a58baef47469cb74422df8324f8a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab6c3bcdbe1c13eb9df32177f00625f28" id="r_ab6c3bcdbe1c13eb9df32177f00625f28"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">virtual</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemArena.html#ab6c3bcdbe1c13eb9df32177f00625f28">freeSegment</a> (<a class="el" href="classcookmem_1_1MemContextProvider.html">void</a> *<a class="el" href="classcookmem_1_1MemContextProvider.html">ptr</a>, std::size_t size)=0</td></tr>
 <tr class="separator:ab6c3bcdbe1c13eb9df32177f00625f28"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea9aee45f17a98ee33bb219bfc7d385e" id="r_aea9aee45f17a98ee33bb219bfc7d385e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">virtual</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemArena.html#aea9aee45f17a98ee33bb219bfc7d385e">releaseAll</a> ()=0</td></tr>
+<tr class="separator:aea9aee45f17a98ee33bb219bfc7d385e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>An arena is used to retrieve a page of memory.</p>
@@ -186,6 +188,32 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the allocated pointer. nullptr is allocation failed. </dd></dl>
+
+</div>
+</div>
+<a id="aea9aee45f17a98ee33bb219bfc7d385e" name="aea9aee45f17a98ee33bb219bfc7d385e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea9aee45f17a98ee33bb219bfc7d385e">&#9670;&#160;</a></span>releaseAll()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1MemContextProvider.html">virtual</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">void</a> cookmem::MemArena::releaseAll </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Release all segments held by this arena. Segments that a memory pool is still using are not affected. An arena that keeps no segments does nothing. </p>
 
 </div>
 </div>

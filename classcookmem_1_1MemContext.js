@@ -27,6 +27,7 @@ var classcookmem_1_1MemContext =
     [ "isStoringExactSize", "classcookmem_1_1MemContext.html#afa66cd66a401426a8233ac2c6dd9c94d", null ],
     [ "reallocate", "classcookmem_1_1MemContext.html#a586818a5e1d4ff1c562216beb976a655", null ],
     [ "releaseAll", "classcookmem_1_1MemContext.html#a7ee7fa640486f0a8bddd8a76f4043caf", null ],
+    [ "releaseAllToSystem", "classcookmem_1_1MemContext.html#a1931f42371aede291707a423158e69e0", null ],
     [ "setFootprintLimit", "classcookmem_1_1MemContext.html#a665586811361b929428e1899e4f33f8b", null ],
     [ "setPaddingByte", "classcookmem_1_1MemContext.html#ad5a23c07b12dab6162054dbbcccf9723", null ],
     [ "setStoringExactSize", "classcookmem_1_1MemContext.html#a1fbd6a1736b7e4f5529ecdcc77767813", null ],
