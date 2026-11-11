@@ -702,6 +702,7 @@ Thread-local and Scoped Context STL Allocators</h1>
 <p><a class="el" href="classcookmem_1_1TLSContextProvider.html">cookmem::TLSContextProvider</a> provides one context per thread for each context type and tag type. Use a unique tag to keep allocator groups separate. By default, this context lasts for the lifetime of the thread. To limit it to a lexical scope instead, declare a <a class="el" href="classcookmem_1_1TLSContextScope.html">cookmem::TLSContextScope</a> before the containers. Default-constructed allocators created inside that scope use its context, which is destroyed when the scope exits.</p>
 <p>Use <code>TLSContextProvider&lt;Context, Tag&gt;::getActiveContext()</code> to query the context currently used for allocations. When no matching scope is active, it returns the persistent thread-local context. <code>TLSContextProvider&lt;Context, Tag&gt;::getThreadContext()</code> returns the persistent thread-local context whether or not a scope is active. The provider instance's <code>get()</code> still returns the context to which that instance was bound.</p>
 <p>The function-scope example uses TLSContextScope to release the context as soon as its containers are destroyed. It demonstrates both options: passing <code>true</code> makes its pool share the thread-local context's arena; with CachedMemContext, freed segments can be reused by either context. Passing <code>false</code> gives the scope its own arena. The thread-local example omits the scope, so the provider uses its per-thread context and releases it when the thread exits. In all cases, containers must be destroyed before their context ends and remain on the thread where their allocator was created. Neither approach requires passing allocator instances to containers.</p>
+<p>To release a thread's memory before the thread exits, destroy its containers and call <code>releaseAll ()</code> or <code>releaseAllToSystem ()</code> on the thread-local context, which <code>getThreadContext ()</code> returns. <code>releaseAll ()</code> keeps the segments in the cached arena, ready for later allocations on the thread. <code>releaseAllToSystem ()</code> also empties the cache, so the memory goes back to the system. The worker thread in the example uses <code>releaseAllToSystem ()</code>, which matters when a thread could end without running thread-local destructors. Either way, every pointer allocated from the context becomes invalid, including those of containers that still use it.</p>
 <div class="fragment"><div class="line"><span class="comment">/*</span></div>
 <div class="line"><span class="comment"> * Copyright (c) 2025-2026 Heng Yuan</span></div>
 <div class="line"><span class="comment"> *</span></div>
@@ -719,6 +720,7 @@ Thread-local and Scoped Context STL Allocators</h1>
 <div class="line"><span class="comment"> */</span></div>
 <div class="line"><span class="preprocessor">#include &lt;iostream&gt;</span></div>
 <div class="line"><span class="preprocessor">#include &lt;list&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;thread&gt;</span></div>
 <div class="line"> </div>
 <div class="line"><span class="preprocessor">#include &lt;cookmem.h&gt;</span></div>
 <div class="line"> </div>
@@ -788,12 +790,36 @@ Thread-local and Scoped Context STL Allocators</h1>
 <div class="line">    printValues (values);</div>
 <div class="line">}</div>
 <div class="line"> </div>
+<div class="line"><span class="keywordtype">void</span></div>
+<div class="line">runWorkerThread ()</div>
+<div class="line">{</div>
+<div class="line">    {</div>
+<div class="line">        std::list&lt;int, MyAllocator&gt; values;</div>
+<div class="line"> </div>
+<div class="line">        values.push_back (10);</div>
+<div class="line">        values.push_back (20);</div>
+<div class="line">        values.push_back (30);</div>
+<div class="line"> </div>
+<div class="line">        printValues (values);</div>
+<div class="line">    }   <span class="comment">// Destroy the containers before releasing their memory.</span></div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Return this thread&#39;s memory to the system now, instead of waiting for</span></div>
+<div class="line">    <span class="comment">// the thread-local context to be destroyed when the thread exits.  Do</span></div>
+<div class="line">    <span class="comment">// this when the thread could end without running thread-local</span></div>
+<div class="line">    <span class="comment">// destructors.  releaseAll () would instead keep the segments in the</span></div>
+<div class="line">    <span class="comment">// cached arena, ready for later allocations on this thread.</span></div>
+<div class="line">    MyContextProvider::getThreadContext ().releaseAllToSystem ();</div>
+<div class="line">}</div>
+<div class="line"> </div>
 <div class="line"><span class="keywordtype">int</span></div>
 <div class="line">main ()</div>
 <div class="line">{</div>
 <div class="line">    runWithThreadLocalContext ();</div>
 <div class="line">    runWithSharedArena ();</div>
 <div class="line">    runWithSeparateArena ();</div>
+<div class="line"> </div>
+<div class="line">    std::thread worker (runWorkerThread);</div>
+<div class="line">    worker.join ();</div>
 <div class="line"> </div>
 <div class="line">    <span class="keywordflow">return</span> 0;</div>
 <div class="line">}</div>
