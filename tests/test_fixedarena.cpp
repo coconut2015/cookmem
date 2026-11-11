@@ -103,6 +103,48 @@ test3 ()
     return 0;
 }
 
+/**
+ * FixedArena::releaseAll () does nothing, and releaseAll () and
+ * releaseAllToSystem () of the context return the buffer to the arena.
+ */
+static int
+test4 ()
+{
+    char buffer[64000];
+    cookmem::FixedArena arena (buffer, sizeof(buffer));
+
+    // The segment in use is not affected.
+    std::size_t size = 3000;
+    void* ptr = arena.getSegment (size);
+    ASSERT_NE (nullptr, ptr);
+    arena.releaseAll ();
+    ASSERT_EQ (nullptr, arena.getSegment (size));
+    ASSERT_EQ (false, arena.freeSegment (ptr, size));
+
+    cookmem::NoActionMemLogger logger;
+    cookmem::MemContext<cookmem::FixedArena, cookmem::NoActionMemLogger> memCtx (arena, logger);
+
+    ptr = memCtx.allocate (30000);
+    ASSERT_NE (nullptr, ptr);
+    memCtx.releaseAll ();
+    ASSERT_EQ (false, memCtx.contains (ptr));
+    ASSERT_EQ (0u, memCtx.getFootprint ());
+
+    // The whole buffer is available again.
+    ptr = memCtx.allocate (30000);
+    ASSERT_NE (nullptr, ptr);
+    ASSERT_NE (nullptr, memCtx.allocate (30000));
+    memCtx.releaseAllToSystem ();
+    ASSERT_EQ (false, memCtx.contains (ptr));
+    ASSERT_EQ (0u, memCtx.getFootprint ());
+
+    ptr = memCtx.allocate (30000);
+    ASSERT_NE (nullptr, ptr);
+    ASSERT_EQ (true, memCtx.contains (ptr));
+
+    return 0;
+}
+
 int
 main (int argc, const char* argv[])
 {
@@ -111,6 +153,7 @@ main (int argc, const char* argv[])
         ASSERT_EQ (0, test1 ());
         ASSERT_EQ (0, test2 ());
         ASSERT_EQ (0, test3 ());
+        ASSERT_EQ (0, test4 ());
     }
     catch (const unittest::UnitTestException& ex)
     {

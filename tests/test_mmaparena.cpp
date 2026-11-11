@@ -47,6 +47,12 @@ test1 ()
         ASSERT_EQ (false, memCtx.contains (ptrs[i]));
     }
 
+    // MmapArena keeps no segments, so this is the same as releaseAll ().
+    ptrs[0] = memCtx.allocate (100);
+    ASSERT_EQ (true, memCtx.contains (ptrs[0]));
+    memCtx.releaseAllToSystem ();
+    ASSERT_EQ (false, memCtx.contains (ptrs[0]));
+
     ASSERT_EQ (nullptr, memCtx.allocate (0xffffffffff000000));
 
     return 0;
@@ -116,6 +122,27 @@ test4 ()
 }
 
 
+/**
+ * MmapArena::releaseAll () does nothing: segments in use stay mapped.
+ */
+static int
+test5 ()
+{
+    cookmem::MmapArena arena;
+
+    std::size_t size = 4096;
+    char* ptr = static_cast<char*> (arena.getSegment (size));
+    ASSERT_NE (nullptr, ptr);
+    arena.releaseAll ();
+    // The segment is still mapped and writable.
+    ptr[0] = 1;
+    ptr[size - 1] = 2;
+    ASSERT_EQ (1, ptr[0]);
+    ASSERT_EQ (false, arena.freeSegment (ptr, size));
+
+    return 0;
+}
+
 int
 main (int argc, const char* argv[])
 {
@@ -125,6 +152,7 @@ main (int argc, const char* argv[])
         ASSERT_EQ (0, test2 ());
         ASSERT_EQ (0, test3 ());
         ASSERT_EQ (0, test4 ());
+        ASSERT_EQ (0, test5 ());
     }
     catch (const unittest::UnitTestException& ex)
     {

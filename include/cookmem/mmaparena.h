@@ -89,6 +89,15 @@ public:
         return VirtualFree (ptr, 0, MEM_RELEASE) == 0;
     }
 
+    /**
+     * Release all segments held by this arena.  This arena does not keep
+     * any segments, so this function does nothing.
+     */
+    void
+    releaseAll ()
+    {
+    }
+
 private:
     std::size_t m_minSize;
     DWORD       m_prot;
@@ -159,6 +168,15 @@ public:
     freeSegment (void* ptr, std::size_t size)
     {
         return munmap (ptr, size) != 0;
+    }
+
+    /**
+     * Release all segments held by this arena.  This arena does not keep
+     * any segments, so this function does nothing.
+     */
+    void
+    releaseAll ()
+    {
     }
 
 private:

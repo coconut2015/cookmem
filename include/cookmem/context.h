@@ -189,6 +189,22 @@ public:
     releaseAll () { m_pool.releaseAll (); }
 
     /**
+     * Release all the memory segments held by this MemPool, then the
+     * segments cached by the arena, so that the memory is returned to the
+     * system.  Every pointer allocated from this context becomes invalid.
+     *
+     * Unlike releaseAll (), this also empties the cache of a CachedArena,
+     * including the segments that other contexts sharing the arena could
+     * have reused.
+     */
+    inline void
+    releaseAllToSystem ()
+    {
+        m_pool.releaseAll ();
+        m_arena.releaseAll ();
+    }
+
+    /**
      * Get the memory footprint limit.
      *
      * @return  the memory footprint limit

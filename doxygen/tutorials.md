@@ -47,6 +47,11 @@ Note that the memory pool does not release a segment to the arena as soon as
 the segment becomes free.  It keeps free segments for later allocations, and
 releases them periodically, after a number of deallocations.
 
+The arena keeps cached segments until it is destroyed or its `releaseAll ()`
+is called, which returns them to the underlying arena.  A context's
+`releaseAllToSystem ()` releases its segments and then calls the arena's
+`releaseAll ()`.
+
 \include example_CachedArena.cpp
 
 \section copying Copying Data Between Memory Pools
