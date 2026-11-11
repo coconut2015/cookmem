@@ -49,7 +49,10 @@ make.cmd [type]
 ```
 
 `type` can be `debug` (the default), `release` or `profiler`.  It builds with
-CMake's default generator, normally Visual Studio, and runs the tests.
+CMake's default generator, normally Visual Studio, and runs the tests.  The
+build directory is named after the type with a `win-` prefix, such as
+`win-debug`, so that it does not clash with the directories of `make.sh` when
+the same checkout is built from both Windows and WSL.
 
 Code coverage, documentation and the performance tests are only available on
 Linux.

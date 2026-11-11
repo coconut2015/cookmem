@@ -14,5 +14,6 @@ CMakeFiles
 /docs
 /out
 /build
+/win-*
 Makefile
 backup
