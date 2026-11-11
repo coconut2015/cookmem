@@ -120,7 +120,7 @@ Linux</h2>
 <h2><a class="anchor" id="autotoc_md22"></a>
 Windows</h2>
 <div class="fragment"><div class="line">make.cmd [type]</div>
-</div><!-- fragment --><p><code>type</code> can be <code>debug</code> (the default), <code>release</code> or <code>profiler</code>. It builds with CMake's default generator, normally Visual Studio, and runs the tests.</p>
+</div><!-- fragment --><p><code>type</code> can be <code>debug</code> (the default), <code>release</code> or <code>profiler</code>. It builds with CMake's default generator, normally Visual Studio, and runs the tests. The build directory is named after the type with a <code>win-</code> prefix, such as <code>win-debug</code>, so that it does not clash with the directories of <code>make.sh</code> when the same checkout is built from both Windows and WSL.</p>
 <p>Code coverage, documentation and the performance tests are only available on Linux.</p>
 <h2><a class="anchor" id="autotoc_md23"></a>
 Using CMake Directly</h2>
