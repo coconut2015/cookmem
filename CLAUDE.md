@@ -39,9 +39,7 @@ Other Linux builds, each in a separate build directory:
 - 32-bit: `-DCMAKE_CXX_FLAGS=-m32`, with GCC or Clang.  It needs the 32-bit
   runtime and the `/usr/include/asm` link from `g++-multilib`.
 
-arm64 is tested only by CI, on native arm64 runners.  Do not install
-`g++-aarch64-linux-gnu` for local testing: on Ubuntu it conflicts with
-`gcc-multilib`, which the 32-bit builds need.
+arm64 is tested only by CI, on native arm64 runners.
 
 Before calling a change done, run the tests in Debug and Release with GCC
 and Clang on Linux x64 and i386, and with MSVC on x64 and Win32.  CI also
