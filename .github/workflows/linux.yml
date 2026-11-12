@@ -1,0 +1,53 @@
+name: Linux
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: linux-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    name: ${{ matrix.compiler.name }} ${{ matrix.arch }} ${{ matrix.config }}
+    runs-on: ${{ matrix.arch == 'arm64' && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [x64, arm64]
+        compiler:
+          - { name: GCC, cxx: g++ }
+          - { name: Clang, cxx: clang++ }
+        config: [Debug, Release]
+        # GCC on x64 is tested by CircleCI, with code coverage.
+        exclude:
+          - arch: x64
+            compiler: { name: GCC, cxx: g++ }
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install tools
+        run: |
+          if ! command -v ${{ matrix.compiler.cxx }} > /dev/null || ! command -v cmake > /dev/null; then
+            sudo apt-get update
+            sudo apt-get install -y cmake ${{ matrix.compiler.cxx == 'clang++' && 'clang' || 'g++' }}
+          fi
+          ${{ matrix.compiler.cxx }} --version
+          cmake --version
+
+      - name: Configure
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=${{ matrix.config }} -DCMAKE_CXX_COMPILER=${{ matrix.compiler.cxx }}
+
+      - name: Build
+        run: cmake --build build --parallel
+
+      - name: Test
+        run: ctest --test-dir build --output-on-failure

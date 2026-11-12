@@ -16,25 +16,28 @@ concurrency:
 
 jobs:
   build-and-test:
-    name: GCC i386 ${{ matrix.config }}
+    name: ${{ matrix.compiler.name }} i386 ${{ matrix.config }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
+        compiler:
+          - { name: GCC, cxx: g++ }
+          - { name: Clang, cxx: clang++ }
         config: [Debug, Release]
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      # g++-multilib provides the 32-bit C++ runtime for -m32.  64-bit Linux
-      # builds are tested by CircleCI.
+      # g++-multilib provides the 32-bit C++ runtime for -m32, which Clang
+      # uses too.  64-bit Linux builds are tested by CircleCI and linux.yml.
       - name: Install 32-bit compiler support
         run: |
           sudo apt-get update
-          sudo apt-get install -y g++-multilib
+          sudo apt-get install -y g++-multilib ${{ matrix.compiler.cxx == 'clang++' && 'clang' || '' }}
 
       - name: Configure
-        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=${{ matrix.config }} -DCMAKE_CXX_FLAGS=-m32
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=${{ matrix.config }} -DCMAKE_CXX_COMPILER=${{ matrix.compiler.cxx }} -DCMAKE_CXX_FLAGS=-m32
 
       - name: Build
         run: cmake --build build --parallel

@@ -20,6 +20,16 @@
 
 #include "exception.h"
 
+/// @cond INTERNAL
+// Marks a private field that is intentionally never used, so that compilers
+// do not warn about it.
+#if defined(__GNUC__)
+#define COOKMEM_UNUSED_FIELD __attribute__ ((unused))
+#else
+#define COOKMEM_UNUSED_FIELD
+#endif
+/// @endcond
+
 namespace cookmem
 {
 
@@ -277,8 +287,11 @@ public:
     }
 
 private:
-    /** reserved to make the header the same as MemChunk in cookmem.h */
-    std::size_t     m_reserved;
+    /**
+     * Reserved, so that the layout matches the header of a memory chunk:
+     * this is the size of the previous chunk, which the tree does not use.
+     */
+    std::size_t     m_reserved COOKMEM_UNUSED_FIELD;
     /** size of the pointer */
     std::size_t     m_size;
     /** children */
