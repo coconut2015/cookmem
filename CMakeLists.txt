@@ -311,6 +311,12 @@ if (UNIX AND NOT COVERAGE)
 		performances/perf_cookmem_12.cpp)
 	add_test(NAME perf_cookmem_12
 		COMMAND perf_cookmem_12)
+
+	# The performance tests compile dlmalloc.c, which is third-party code,
+	# so its warnings are turned off.
+	foreach (perf_test RANGE 1 12)
+		target_compile_options (perf_cookmem_${perf_test} PRIVATE -w)
+	endforeach ()
 endif (UNIX AND NOT COVERAGE)
 
 # -- examples -------------------------------------------------------

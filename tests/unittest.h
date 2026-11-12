@@ -16,8 +16,9 @@
 #ifndef __UNIT_TEST_H__
 #define __UNIT_TEST_H__
 
-#include <iostream>
+#include <cstddef>
 #include <exception>
+#include <iostream>
 
 /**
  * This is a simple unit testing framework.
@@ -26,7 +27,7 @@ namespace unittest
 {
 
 inline void
-printValue (nullptr_t)
+printValue (std::nullptr_t)
 {
     std::cout << "nullptr";
 }
@@ -71,15 +72,11 @@ public:
     :   UnitTestException (file, line)
     {
     }
-
-private:
-    const char* m_file;
-    int         m_line;
 };
 
 template<class T>
 inline void
-assertEquals (nullptr_t, const T* actual, const char* file, int line)
+assertEquals (std::nullptr_t, const T* actual, const char* file, int line)
 {
     if (nullptr != actual)
     {
@@ -108,7 +105,7 @@ assertEquals (const E& expected, const A& actual, const char* file, int line)
 
 template<class T>
 inline void
-assertNotEquals (nullptr_t, const T& actual, const char* file, int line)
+assertNotEquals (std::nullptr_t, const T& actual, const char* file, int line)
 {
     if (nullptr == actual)
     {

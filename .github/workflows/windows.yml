@@ -16,11 +16,12 @@ concurrency:
 
 jobs:
   build-and-test:
-    name: MSVC ${{ matrix.arch }} ${{ matrix.config }}
+    name: ${{ matrix.toolset }} ${{ matrix.arch }} ${{ matrix.config }}
     runs-on: windows-latest
     strategy:
       fail-fast: false
       matrix:
+        toolset: [MSVC, ClangCL]
         arch: [x64, Win32]
         config: [Debug, Release]
     steps:
@@ -28,9 +29,10 @@ jobs:
         uses: actions/checkout@v4
 
       # Uses CMake directly rather than make.cmd, so that a failing build or
-      # test fails the job.
+      # test fails the job.  ClangCL is the clang-cl toolset that comes with
+      # Visual Studio.
       - name: Configure
-        run: cmake -S . -B build -A ${{ matrix.arch }}
+        run: cmake -S . -B build -A ${{ matrix.arch }} ${{ matrix.toolset == 'ClangCL' && '-T ClangCL' || '' }}
 
       - name: Build
         run: cmake --build build --config ${{ matrix.config }} --parallel

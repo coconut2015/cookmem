@@ -33,15 +33,17 @@ Linux / WSL (`make.sh` builds in `debug/`, `release/`, `cov/`, ...):
 ./make.sh docs       # Doxygen into docs/
 ```
 
-32-bit Linux: `cmake -S . -B <dir> -DCMAKE_CXX_FLAGS=-m32` (needs
-g++-multilib).
+Other Linux builds, each in a separate build directory:
 
-Windows: `make.cmd` builds in `win-<config>` folders.  From WSL, use a batch
-file that calls `VsDevCmd.bat` and run it with `cmd.exe /c`; a plain
-`cmd.exe` has no cmake on its PATH.  Test both `-A x64` and `-A Win32`.
+- Clang: `-DCMAKE_CXX_COMPILER=clang++`.
+- 32-bit: `-DCMAKE_CXX_FLAGS=-m32`, with GCC or Clang.  It needs the 32-bit
+  runtime and the `/usr/include/asm` link from `g++-multilib`.
 
-Before calling a change done, run the tests on Linux x64 and i386 and on
-MSVC x64 and Win32, in Debug and Release.  Debug builds define
+arm64 is tested only by CI, on native arm64 runners.
+
+Before calling a change done, run the tests in Debug and Release with GCC
+and Clang on Linux x64 and i386, and with MSVC on x64 and Win32.  CI also
+runs arm64 builds and clang-cl on Windows.  Debug builds define
 `COOKMEM_DEBUG`, which turns on `COOKMEM_ASSERT` and the checks in
 `validate ()`.  Keep coverage at its current level (about 99.6%) and Doxygen
 free of warnings.

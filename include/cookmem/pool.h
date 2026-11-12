@@ -1172,6 +1172,8 @@ public:
 
             COOKMEM_ASSERT (remainSize == SEGMENT_OVERHEAD &&
                             chunk == firstChunk);
+            // Only used by the assertions, which release builds omit.
+            (void) remainSize;
 
             seg = seg->getNext ();
         }
