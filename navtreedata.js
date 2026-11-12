@@ -35,6 +35,7 @@ var NAVTREE =
       [ "Diagnosing and Debugging", "index.html#autotoc_md7", null ],
       [ "Links", "index.html#autotoc_md8", null ]
     ] ],
+    [ "Installation", "install.html", null ],
     [ "Tutorials", "tutorials.html", [
       [ "FixedArena", "tutorials.html#FixedArena", null ],
       [ "MmapArena", "tutorials.html#MmapArena", null ],
@@ -49,7 +50,7 @@ var NAVTREE =
     ] ],
     [ "Detailed Behavior", "behavior.html", null ],
     [ "Limitations", "limitations.html", null ],
-    [ "Installation", "install.html", null ],
+    [ "Implementation Details", "implementation.html", null ],
     [ "Build Instructions", "build.html", null ],
     [ "References", "references.html", null ],
     [ "License", "license.html", null ],
@@ -87,8 +88,8 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "allocator_8h_source.html",
-"classcookmem_1_1MemLogger.html#ae7a2543185a5000b3742779d2d2b0362",
-"cookmem_8h_source.html"
+"classcookmem_1_1MemLogger.html#ac51822ba2461d900457e698a9545459a",
+"classcookmem_1_1TLSContextScope.html#ad8b580b4a8f07dcda09f269fa6337c7b"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

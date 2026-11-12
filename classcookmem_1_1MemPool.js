@@ -8,6 +8,7 @@ var classcookmem_1_1MemPool =
     [ "MemPool", "classcookmem_1_1MemPool.html#a98479b71083532ba825c132780c70e51", null ],
     [ "~MemPool", "classcookmem_1_1MemPool.html#a19b3ce416b2ec240c606e07118e21442", null ],
     [ "allocate", "classcookmem_1_1MemPool.html#af6af6ba215f60234e4efc1e5cba10075", null ],
+    [ "allocateAligned", "classcookmem_1_1MemPool.html#af4c531440183881b29e817dfab6bddaf", null ],
     [ "callocate", "classcookmem_1_1MemPool.html#a4cdd4d40e3d8ffe8b61b8599e7318c5b", null ],
     [ "contains", "classcookmem_1_1MemPool.html#a0fdcfc548d9769f63893d802194b8a7b", null ],
     [ "deallocate", "classcookmem_1_1MemPool.html#aaccf54a257600e92899622796ac04c37", null ],

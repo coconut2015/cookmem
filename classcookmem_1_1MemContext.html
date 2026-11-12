@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CookMem<span id="projectnumber">&#160;1.2.0</span>
+   <div id="projectname">CookMem<span id="projectnumber">&#160;1.3.0</span>
    </div>
    <div id="projectbrief">A C++ memory context / allocator</div>
   </td>
@@ -137,6 +137,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:abe4e9f425e10164ca0d5271f4df360be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afb7b98ac1304907fadf9194533080917" id="r_afb7b98ac1304907fadf9194533080917"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemContext.html#afb7b98ac1304907fadf9194533080917">allocate</a> (<a class="el" href="classcookmem_1_1MemContext.html#a755605b35d1e22ad5e61f10a08b26e84">size_type</a> size)</td></tr>
 <tr class="separator:afb7b98ac1304907fadf9194533080917"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27c85a34c96b7ec171ac5203ce6e5986" id="r_a27c85a34c96b7ec171ac5203ce6e5986"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemContext.html#a27c85a34c96b7ec171ac5203ce6e5986">allocateAligned</a> (<a class="el" href="classcookmem_1_1MemContext.html#a755605b35d1e22ad5e61f10a08b26e84">size_type</a> size, <a class="el" href="classcookmem_1_1MemContext.html#a755605b35d1e22ad5e61f10a08b26e84">size_type</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">alignment</a>)</td></tr>
+<tr class="separator:a27c85a34c96b7ec171ac5203ce6e5986"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a586818a5e1d4ff1c562216beb976a655" id="r_a586818a5e1d4ff1c562216beb976a655"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemContext.html#a586818a5e1d4ff1c562216beb976a655">reallocate</a> (<a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> *<a class="el" href="classcookmem_1_1MemContextProvider.html">ptr</a>, <a class="el" href="classcookmem_1_1MemContext.html#a755605b35d1e22ad5e61f10a08b26e84">size_type</a> size)</td></tr>
 <tr class="separator:a586818a5e1d4ff1c562216beb976a655"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7ec4fa5c035ba4d143f5abe8ab41a543" id="r_a7ec4fa5c035ba4d143f5abe8ab41a543"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemContext.html#a7ec4fa5c035ba4d143f5abe8ab41a543">callocate</a> (<a class="el" href="classcookmem_1_1MemContext.html#a755605b35d1e22ad5e61f10a08b26e84">size_type</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">num</a>, <a class="el" href="classcookmem_1_1MemContext.html#a755605b35d1e22ad5e61f10a08b26e84">size_type</a> size)</td></tr>
@@ -434,6 +436,57 @@ template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</
 
 </div>
 </div>
+<a id="a27c85a34c96b7ec171ac5203ce6e5986" name="a27c85a34c96b7ec171ac5203ce6e5986"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a27c85a34c96b7ec171ac5203ce6e5986">&#9670;&#160;</a></span>allocateAligned()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">Arena</a> , <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">Logger</a> , <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">TreeType</a>  = PtrRBTree, <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a>  = void&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> * <a class="el" href="classcookmem_1_1MemContext.html">cookmem::MemContext</a>&lt; <a class="el" href="classcookmem_1_1MemContextProvider.html">Arena</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">Logger</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">TreeType</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> &gt;::allocateAligned </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcookmem_1_1MemContext.html#a755605b35d1e22ad5e61f10a08b26e84">size_type</a>&#160;</td>
+          <td class="paramname"><em>size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classcookmem_1_1MemContext.html#a755605b35d1e22ad5e61f10a08b26e84">size_type</a>&#160;</td>
+          <td class="paramname"><em>alignment</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Allocate memory with an alignment larger than ALLOCATION_ALIGNMENT.</p>
+<p>The memory is freed with deallocate () like any other allocation. reallocate () does not keep the alignment if it moves the memory.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">size</td><td>memory request size. </td></tr>
+    <tr><td class="paramname">alignment</td><td>the alignment of the returned pointer. It must be a power of<ol type="1">
+<li>An alignment up to ALLOCATION_ALIGNMENT is the same as allocate (). </li>
+</ol>
+</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the memory region that is at least the request size and is aligned to the alignment. nullptr if the alignment is not a power of 2, or if the request cannot be satisfied. </dd></dl>
+
+</div>
+</div>
 <a id="a7ec4fa5c035ba4d143f5abe8ab41a543" name="a7ec4fa5c035ba4d143f5abe8ab41a543"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7ec4fa5c035ba4d143f5abe8ab41a543">&#9670;&#160;</a></span>callocate()</h2>
 
@@ -477,7 +530,7 @@ template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>memory allocated. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>memory allocated. nullptr if num * size overflows, or if the request cannot be satisfied. </dd></dl>
 
 </div>
 </div>

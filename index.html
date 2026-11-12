@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CookMem<span id="projectnumber">&#160;1.2.0</span>
+   <div id="projectname">CookMem<span id="projectnumber">&#160;1.3.0</span>
    </div>
    <div id="projectbrief">A C++ memory context / allocator</div>
   </td>
@@ -115,6 +115,10 @@ Quick Start</h1>
 <div class="line">    <span class="keywordtype">void</span>* ptr = memCtx.allocate (100);</div>
 <div class="line">    memCtx.deallocate (ptr);</div>
 <div class="line"> </div>
+<div class="line">    <span class="comment">// Memory with a larger alignment, for example for SIMD data.</span></div>
+<div class="line">    <span class="keywordtype">void</span>* simd = memCtx.allocateAligned (256, 64);</div>
+<div class="line">    memCtx.deallocate (simd);</div>
+<div class="line"> </div>
 <div class="line">    <span class="comment">// Standard containers can allocate from the same context.</span></div>
 <div class="line">    <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">cookmem::Allocator&lt;int&gt;</a> allocator (memCtx);</div>
 <div class="line">    std::vector&lt;int, cookmem::Allocator&lt;int&gt;&gt; numbers (allocator);</div>
@@ -127,8 +131,7 @@ Quick Start</h1>
 <h1><a class="anchor" id="autotoc_md1"></a>
 Requirements</h1>
 <ul>
-<li>A C++11 compiler. CookMem is tested with GCC 13 on Linux and with Visual Studio 2022 on Windows.</li>
-<li>A 64-bit platform.</li>
+<li>A C++11 compiler. CookMem is tested with GCC 13 on Linux and with Visual Studio 2022 on Windows, on both 32-bit and 64-bit platforms.</li>
 <li><a href="https://cmake.org/">CMake</a> 3.14 or later, to use the <code>cookmem::cookmem</code> target or to build the tests, examples and documentation. CMake is not needed to use the headers directly. See <a href="https://coconut2015.github.io/cookmem/install.html">Installation</a> and <a href="https://coconut2015.github.io/cookmem/build.html">Build Instructions</a>.</li>
 </ul>
 <h1><a class="anchor" id="autotoc_md2"></a>
@@ -191,6 +194,7 @@ Links</h2>
 <li><a href="https://coconut2015.github.io/cookmem/tutorials.html">Tutorials</a></li>
 <li><a href="https://coconut2015.github.io/cookmem/behavior.html">Detailed Behavior</a></li>
 <li><a href="https://coconut2015.github.io/cookmem/limitations.html">Limitations</a></li>
+<li><a href="https://coconut2015.github.io/cookmem/implementation.html">Implementation Details</a></li>
 <li><a href="https://coconut2015.github.io/cookmem/install.html">Installation</a></li>
 <li><a href="https://coconut2015.github.io/cookmem/build.html">Build Instructions</a></li>
 <li><a href="https://coconut2015.github.io/cookmem/references.html">References</a></li>

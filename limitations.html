@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CookMem<span id="projectnumber">&#160;1.2.0</span>
+   <div id="projectname">CookMem<span id="projectnumber">&#160;1.3.0</span>
    </div>
    <div id="projectbrief">A C++ memory context / allocator</div>
   </td>
@@ -93,14 +93,16 @@ $(document).ready(function(){initNavTree('limitations.html',''); initResizable()
   <div class="headertitle"><div class="title">Limitations</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h2><a class="anchor" id="autotoc_md14"></a>
+<div class="textblock"><h2><a class="anchor" id="autotoc_md17"></a>
 No Thread Safety</h2>
 <p>A memory context is not thread-safe. Use each context from one thread at a time, for example one context per thread. Locking support is not provided and is unlikely to be implemented, since this project is intended for use within a thread. Consider <a href="https://github.com/ned14/nedmalloc">nedmalloc</a> instead if you need a thread-safe allocator.</p>
-<h2><a class="anchor" id="autotoc_md15"></a>
-Limited Alignment</h2>
-<p>Every pointer returned by a memory context is aligned to <a class="el" href="namespacecookmem.html#af8f267bdfdc8572528da1d3c8fb4ef23">cookmem::ALLOCATION_ALIGNMENT</a>, which is twice the size of <code>std::size_t</code>: 16 bytes on 64-bit platforms and 8 bytes on 32-bit platforms.</p>
-<p>Types that require a larger alignment, such as types declared with <code>alignas(32)</code>, are not supported. <a class="el" href="classcookmem_1_1Allocator.html">cookmem::Allocator</a> rejects them at compile time. Raw allocations from a memory context are not checked, so do not use them for such types.</p>
-<h2><a class="anchor" id="autotoc_md16"></a>
+<h2><a class="anchor" id="autotoc_md18"></a>
+Alignment</h2>
+<p>Every pointer returned by <code>allocate ()</code> of a memory context is aligned to <a class="el" href="namespacecookmem.html#af8f267bdfdc8572528da1d3c8fb4ef23">cookmem::ALLOCATION_ALIGNMENT</a>, which is twice the size of <code>std::size_t</code>: 16 bytes on 64-bit platforms and 8 bytes on 32-bit platforms.</p>
+<p>For a larger alignment, use <code>allocateAligned (size, alignment)</code>. The alignment must be a power of 2. The memory is freed with <code>deallocate ()</code>. <code>reallocate ()</code> keeps the memory in place when it shrinks, but if it has to move the memory, the new memory has only the normal alignment.</p>
+<p>To find an aligned address, the pool takes a chunk that is larger than the request by the alignment, then returns the unused memory before and after the result to the pool. A large alignment therefore needs that much free space, and may fail under a footprint limit that a normal allocation of the same size would fit in.</p>
+<p><a class="el" href="classcookmem_1_1Allocator.html">cookmem::Allocator</a> uses <code>allocateAligned ()</code> automatically for types that require a larger alignment, such as types declared with <code>alignas(64)</code>.</p>
+<h2><a class="anchor" id="autotoc_md19"></a>
 Best-Effort Error Detection</h2>
 <p>The checks for memory errors are designed to be cheap, so they cannot catch everything.</p>
 <ul>

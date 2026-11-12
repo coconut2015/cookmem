@@ -10,6 +10,7 @@ var classcookmem_1_1MemContext =
     [ "MemContext", "classcookmem_1_1MemContext.html#af6f56f169ab75f1e7c494df7c6dfc9f6", null ],
     [ "MemContext", "classcookmem_1_1MemContext.html#abe4e9f425e10164ca0d5271f4df360be", null ],
     [ "allocate", "classcookmem_1_1MemContext.html#afb7b98ac1304907fadf9194533080917", null ],
+    [ "allocateAligned", "classcookmem_1_1MemContext.html#a27c85a34c96b7ec171ac5203ce6e5986", null ],
     [ "callocate", "classcookmem_1_1MemContext.html#a7ec4fa5c035ba4d143f5abe8ab41a543", null ],
     [ "contains", "classcookmem_1_1MemContext.html#a1f22eb4d92f78a10392b8538246fa1f5", null ],
     [ "deallocate", "classcookmem_1_1MemContext.html#a56b82d97972ea6d1c8b3cae4a532a6ff", null ],

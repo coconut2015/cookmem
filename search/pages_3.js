@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['installation_0',['Installation',['../install.html',1,'']]],
-  ['instructions_1',['Build Instructions',['../build.html',1,'']]]
+  ['implementation_20details_0',['Implementation Details',['../implementation.html',1,'']]],
+  ['installation_1',['Installation',['../install.html',1,'']]],
+  ['instructions_2',['Build Instructions',['../build.html',1,'']]]
 ];

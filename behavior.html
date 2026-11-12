@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CookMem<span id="projectnumber">&#160;1.2.0</span>
+   <div id="projectname">CookMem<span id="projectnumber">&#160;1.3.0</span>
    </div>
    <div id="projectbrief">A C++ memory context / allocator</div>
   </td>
@@ -94,11 +94,11 @@ $(document).ready(function(){initNavTree('behavior.html',''); initResizable(); }
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p>This page describes how CookMem behaves in situations that are easy to overlook. See <a class="el" href="limitations.html">Limitations</a> for what CookMem does not support.</p>
-<h2><a class="anchor" id="autotoc_md9"></a>
+<h2><a class="anchor" id="autotoc_md12"></a>
 Allocation Failures</h2>
-<p><code>allocate</code> and <code>reallocate</code> of a memory context return <code>nullptr</code> when a request cannot be satisfied, for example when it is too large, when the arena cannot provide a segment, or when the footprint limit is reached. When <code>reallocate</code> fails, the original pointer remains valid.</p>
+<p><code>allocate</code>, <code>allocateAligned</code> and <code>reallocate</code> of a memory context return <code>nullptr</code> when a request cannot be satisfied, for example when it is too large, when the arena cannot provide a segment, or when the footprint limit is reached. <code>allocateAligned</code> also returns <code>nullptr</code> when the alignment is not a power of 2. When <code>reallocate</code> fails, the original pointer remains valid.</p>
 <p><a class="el" href="classcookmem_1_1Allocator.html">cookmem::Allocator</a> throws <code>std::bad_alloc</code> instead, as the standard library expects.</p>
-<h2><a class="anchor" id="autotoc_md10"></a>
+<h2><a class="anchor" id="autotoc_md13"></a>
 Errors and Exceptions</h2>
 <ul>
 <li><code>deallocate</code> throws <a class="el" href="classcookmem_1_1Exception.html">cookmem::Exception</a> when it detects a double free (<a class="el" href="namespacecookmem.html#a28eece75e72b18dfe29be8366247ec32ad21efb1b7f9eb60e548d43b860cf2067" title="freeing an already free pointer">cookmem::MEM_ERROR_DOUBLE_FREE</a>) or overwritten padding bytes (<a class="el" href="namespacecookmem.html#a28eece75e72b18dfe29be8366247ec32a48be12240ae74a48197ea215bd298b96" title="padding bytes after an allocation were overwritten">cookmem::MEM_ERROR_PADDING</a>). These checks are done in release builds too.</li>
@@ -106,10 +106,10 @@ Errors and Exceptions</h2>
 <li>Assertions (<a class="el" href="namespacecookmem.html#a28eece75e72b18dfe29be8366247ec32ad250c6d9580887ebec4f01010080c76d" title="assertion failure (COOKMEM_DEBUG builds only)">cookmem::MEM_ERROR_ASSERT</a>) are checked only when <code>COOKMEM_DEBUG</code> is defined to a non-zero value. CookMem's own Debug builds of its tests and examples define it; your code needs to define it to enable the checks.</li>
 <li>Once an exception is thrown, the memory context is in a bad state. Do not use it again.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md11"></a>
+<h2><a class="anchor" id="autotoc_md14"></a>
 Pointer Ownership</h2>
 <p>A pointer must be deallocated by the memory context that allocated it. Use <code>contains ()</code> to check whether a pointer is in the memory segments of a context, for example before copying data out of a context that is about to be destroyed.</p>
-<h2><a class="anchor" id="autotoc_md12"></a>
+<h2><a class="anchor" id="autotoc_md15"></a>
 Releasing Memory</h2>
 <p>When memory is deallocated, the memory pool does not release memory segments to the arena right away, even when a segment becomes entirely free. Free segments are kept for later allocations. After every <a class="el" href="namespacecookmem.html#a53874591e7f085b60e3dd910711d93b1">cookmem::DEFAULT_TRIM_EMPTY_SEGMENTS_INTERVAL</a> (4095) deallocations, the pool runs a trimming pass that releases the segments that are entirely free to the arena, which reduces the footprint. As a result:</p>
 <ul>
@@ -122,7 +122,7 @@ Releasing Memory</h2>
 <p>The segments go to the arena of the context. <a class="el" href="classcookmem_1_1CachedArena.html">cookmem::CachedArena</a> keeps them for reuse, so the memory is not returned to the system yet. This makes <code>releaseAll ()</code> a cheap way to reset a context that is used again. <code>releaseAllToSystem ()</code> also calls <code>releaseAll ()</code> on the arena, which returns the cached segments to the underlying arena, for example before a thread exits or when the program no longer needs the memory. It empties the cache even when other contexts share the arena. Destroying a <a class="el" href="classcookmem_1_1CachedArena.html">cookmem::CachedArena</a> also returns its cached segments. Other arenas keep no segments, so their <code>releaseAll ()</code> does nothing.</p>
 <p>Destroying a memory context releases all of its memory segments at once, without deallocating each allocation. Destructors of objects still in that memory are not called, so destroy any objects that own other resources (such as files or memory from other allocators) before the context ends.</p>
 <p><a class="el" href="classcookmem_1_1FixedArena.html">cookmem::FixedArena</a> has a fixed capacity. When it is used up, allocations fail and return <code>nullptr</code>.</p>
-<h2><a class="anchor" id="autotoc_md13"></a>
+<h2><a class="anchor" id="autotoc_md16"></a>
 Thread-Local Allocators</h2>
 <p>Containers that use <a class="el" href="classcookmem_1_1TLSContextProvider.html">cookmem::TLSContextProvider</a> must stay on the thread where their allocator was created. They must also be destroyed before their context ends: when the thread exits, or when the <a class="el" href="classcookmem_1_1TLSContextScope.html">cookmem::TLSContextScope</a> ends.</p>
 <p>When a thread exits normally, the thread-local context is destroyed and its memory is returned to the system. If a thread could end without running thread-local destructors, release the memory before that point: </p><pre class="fragment">MyContextProvider::getThreadContext ().releaseAllToSystem ();
