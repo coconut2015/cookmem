@@ -39,9 +39,9 @@ be destroyed.
 
 ### Releasing Memory
 
-When memory is deallocated, the memory pool does not release memory segments
-to the arena right away, even when a segment becomes entirely free.  Free
-segments are kept for later allocations.  After every
+When memory is deallocated, the memory pool usually does not release memory
+segments to the arena right away, even when a segment becomes entirely free.
+Free segments are kept for later allocations.  After every
 cookmem::DEFAULT_TRIM_EMPTY_SEGMENTS_INTERVAL (4095) deallocations, the pool
 runs a trimming pass that releases the segments that are entirely free to the
 arena, which reduces the footprint.  As a result:
@@ -57,6 +57,15 @@ arena, which reduces the footprint.  As a result:
   more often.
 * cookmem::StatsLogger counts the trimming passes
   (`getNumTrimEmptySegments ()`).
+
+The exception is a large allocation.  When an allocation of at least
+cookmem::DEFAULT_IMMEDIATE_RELEASE_THRESHOLD (256 KB) is freed and its
+segment becomes entirely free, which is usual since a large allocation gets
+a segment of its own, the segment is released right away.
+`setImmediateReleaseThreshold ()` changes the size, and 0 turns this off.
+With cookmem::CachedArena, the released segment is cached for reuse, so a
+large buffer that is freed and allocated again does not go back to the
+system each time.
 
 `releaseAll ()` releases all memory segments of a context at once.  Every
 pointer allocated from the context becomes invalid.

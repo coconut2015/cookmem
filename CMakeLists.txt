@@ -197,6 +197,12 @@ add_executable(test_cookmem_03
 add_test(NAME test_cookmem_03
 	COMMAND test_cookmem_03)
 
+add_executable(test_cookmem_04
+	tests/test_cookmem_04.cpp)
+
+add_test(NAME test_cookmem_04
+	COMMAND test_cookmem_04)
+
 add_executable(test_cookmem_error_01
 	tests/test_cookmem_error_01.cpp)
 

@@ -40,6 +40,11 @@ const std::size_t ALLOCATION_ALIGNMENT = sizeof (std::size_t) * 2;
  */
 const std::size_t DEFAULT_TRIM_EMPTY_SEGMENTS_INTERVAL = 4095;
 /**
+ * The default allocation size at which a freed allocation releases its own
+ * segment right away (see MemContext::setImmediateReleaseThreshold ()).
+ */
+const std::size_t DEFAULT_IMMEDIATE_RELEASE_THRESHOLD = 256 * 1024;
+/**
  * Default minimum memory segment size.
  *
  * It should be noted that this value needs to be a multiple of 16.

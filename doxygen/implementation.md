@@ -169,8 +169,10 @@ For a large request:
 
 1. **Tree bins.**  The best fit: starting with the bin for the size, the
    smallest chunk that is large enough is taken from the first bin that has
-   one, and split.  dlmalloc also compares that chunk with the dv and takes
-   the better fit; CookMem does not.
+   one, and split.  As in dlmalloc, if the dv is also large enough, the tree
+   chunk is only taken if it is smaller than the dv.  The search stops at the
+   first bin whose chunks are all at least the size of the dv, and the tree
+   search leaves a chunk in place if it is not smaller.
 2. **Designated victim**, if it is large enough.
 3. **New segment** from the arena.
 
@@ -223,9 +225,13 @@ allocated.
   If the unused tail is at least a minimum chunk, it is split off, merged
   with the next chunk if that one is free, and returned to a bin.  The exact
   size and the padding bytes are written again for the new size.
-* **Growing** beyond the chunk always allocates new memory, copies the data
-  and frees the old memory.  dlmalloc first tries to extend the chunk in
-  place into a free next chunk or the top chunk; CookMem does not.
+* **Growing** beyond the chunk happens in place if the next chunk is free
+  and the two chunks together are large enough, as in dlmalloc.  The next
+  chunk is taken out of its bin or is the dv, and the unused tail, if it is
+  at least a minimum chunk, goes back to a bin.  The chunk after the next one
+  is in use, so the tail does not need merging.
+* Otherwise, growing allocates new memory, copies the data and frees the old
+  memory.
 * A new size too large to represent fails, and the old memory is unchanged.
 
 `callocate (num, size)` fails if `num * size` overflows, as `calloc` does in
@@ -238,6 +244,14 @@ dlmalloc.
   the same idea as dlmalloc's `release_unused_segments`, which runs on a
   countdown of 4095 frees (`MAX_RELEASE_CHECK_RATE`).  The interval can be changed with
   `setTrimEmptySegmentsInterval ()`.
+* When an allocation of at least
+  cookmem::DEFAULT_IMMEDIATE_RELEASE_THRESHOLD (256 KB) is freed and its
+  segment becomes entirely free, the segment is released right away instead
+  of at the next trimming pass.  A large allocation usually gets a segment of
+  its own, so this is similar to how dlmalloc unmaps requests above its mmap
+  threshold.  The threshold can be changed, or set to 0 to disable this, with
+  `setImmediateReleaseThreshold ()`.  The segment is found from its first
+  chunk, and is unlinked from the segment list by walking the list.
 * `releaseAll ()` returns every segment of the context to its arena at once,
   and `releaseAllToSystem ()` also tells the arena to release segments it has
   cached (see \ref behavior "Detailed Behavior").
@@ -333,13 +347,13 @@ memory is freed.  dlmalloc has no equivalent.
   (`malloc_trim`, `M_TRIM_THRESHOLD`).  CookMem only uses separate segments
   from the arena, and has no top chunk.
 * **Direct mmap for large requests.**  dlmalloc maps requests above
-  `M_MMAP_THRESHOLD` (256 KB by default) individually and unmaps them on
-  free.  CookMem puts a large request in a new segment of its own, and the
-  segment is released by the next trimming pass rather than immediately.
+  `M_MMAP_THRESHOLD` (256 KB by default) individually, with their own chunk
+  format.  CookMem puts a large request in an ordinary segment of its own,
+  and releases the segment when the allocation is freed (see above).
 * **Merging contiguous segments**, which dlmalloc does when new memory is
   adjacent to an existing segment.
-* **Extending a chunk in place** on reallocation, and `realloc_in_place`.
-* **Comparing the best tree fit with the dv** for large requests.
+* **`realloc_in_place`**, which grows or shrinks only if the memory does not
+  move.  `reallocate ()` does grow in place when it can.
 * **Thread safety.**  dlmalloc can lock each mspace (`USE_LOCKS`).  CookMem
   contexts are not thread-safe (see \ref limitations "Limitations").
 * **`FOOTERS` mode**, where each chunk records which mspace it belongs to,
@@ -350,4 +364,5 @@ memory is freed.  dlmalloc has no equivalent.
 * **`mallinfo`, `malloc_stats` and `malloc_inspect_all`.**  Use
   cookmem::StatsLogger, `getFootprint ()` and `getMaxFootprint ()` instead.
 * **`mallopt` tuning.**  The settings that apply have CookMem equivalents:
-  the minimum segment size of the arena and the trimming interval.
+  the minimum segment size of the arena, the trimming interval and the
+  immediate release threshold.

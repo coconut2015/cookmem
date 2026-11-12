@@ -174,11 +174,14 @@ public:
      * @param [in,out]  size
      *          search key.  If the node is found, the actual size of the
      *          pointer is returned.
+     * @param   limit
+     *          the node must be smaller than this value.  Otherwise nothing
+     *          is removed.
      * @return  the node matching the search key that is at least the size
      *          of the provided.  This node is also removed from the tree.
      */
     void*
-    remove (std::size_t& size)
+    remove (std::size_t& size, std::size_t limit = ~static_cast<std::size_t> (0))
     {
         Node* stack[sizeof(Node*) * 8 + 1];
         Node* root = m_root;
@@ -203,7 +206,7 @@ public:
             ++depth;
         }
 
-        if (candidate == nullptr)
+        if (candidate == nullptr || candidate->size >= limit)
         {
             return nullptr;
         }
