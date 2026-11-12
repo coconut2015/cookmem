@@ -41,6 +41,7 @@ var namespacecookmem =
       [ "MEM_ERROR_PADDING", "namespacecookmem.html#a28eece75e72b18dfe29be8366247ec32a48be12240ae74a48197ea215bd298b96", null ]
     ] ],
     [ "ALLOCATION_ALIGNMENT", "namespacecookmem.html#af8f267bdfdc8572528da1d3c8fb4ef23", null ],
+    [ "DEFAULT_IMMEDIATE_RELEASE_THRESHOLD", "namespacecookmem.html#a1565b8b4cb9a52f871ce814946c244c8", null ],
     [ "DEFAULT_MIN_SEGMENT_SIZE", "namespacecookmem.html#af2366620901d1a61342ac5f0960c6404", null ],
     [ "DEFAULT_PADDING_BYTE", "namespacecookmem.html#a0f5e7e68db4582bce046ee43533e9374", null ],
     [ "DEFAULT_PADDING_SIZE", "namespacecookmem.html#a7a0b0f6fe49cc19e0652f53c17c2bcb6", null ],

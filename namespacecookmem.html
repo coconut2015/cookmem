@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CookMem<span id="projectnumber">&#160;1.3.0</span>
+   <div id="projectname">CookMem<span id="projectnumber">&#160;1.4.0</span>
    </div>
    <div id="projectbrief">A C++ memory context / allocator</div>
   </td>
@@ -182,6 +182,8 @@ Variables</h2></td></tr>
 <tr class="separator:af8f267bdfdc8572528da1d3c8fb4ef23"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a53874591e7f085b60e3dd910711d93b1" id="r_a53874591e7f085b60e3dd910711d93b1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">const</a> std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecookmem.html#a53874591e7f085b60e3dd910711d93b1">DEFAULT_TRIM_EMPTY_SEGMENTS_INTERVAL</a> = 4095</td></tr>
 <tr class="separator:a53874591e7f085b60e3dd910711d93b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1565b8b4cb9a52f871ce814946c244c8" id="r_a1565b8b4cb9a52f871ce814946c244c8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">const</a> std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecookmem.html#a1565b8b4cb9a52f871ce814946c244c8">DEFAULT_IMMEDIATE_RELEASE_THRESHOLD</a> = 256 * 1024</td></tr>
+<tr class="separator:a1565b8b4cb9a52f871ce814946c244c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af2366620901d1a61342ac5f0960c6404" id="r_af2366620901d1a61342ac5f0960c6404"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">const</a> std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecookmem.html#af2366620901d1a61342ac5f0960c6404">DEFAULT_MIN_SEGMENT_SIZE</a> = 65536</td></tr>
 <tr class="separator:af2366620901d1a61342ac5f0960c6404"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7a0b0f6fe49cc19e0652f53c17c2bcb6" id="r_a7a0b0f6fe49cc19e0652f53c17c2bcb6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">const</a> std::uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecookmem.html#a7a0b0f6fe49cc19e0652f53c17c2bcb6">DEFAULT_PADDING_SIZE</a> = 0</td></tr>
@@ -279,6 +281,21 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>The alignment of every pointer returned by allocate () of a memory context: twice the size of std::size_t, which is 16 bytes on 64-bit platforms and 8 bytes on 32-bit platforms. Use allocateAligned () for a larger alignment. </p>
+
+</div>
+</div>
+<a id="a1565b8b4cb9a52f871ce814946c244c8" name="a1565b8b4cb9a52f871ce814946c244c8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1565b8b4cb9a52f871ce814946c244c8">&#9670;&#160;</a></span>DEFAULT_IMMEDIATE_RELEASE_THRESHOLD</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1MemContextProvider.html">const</a> std::size_t cookmem::DEFAULT_IMMEDIATE_RELEASE_THRESHOLD = 256 * 1024</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The default allocation size at which a freed allocation releases its own segment right away (see <a class="el" href="classcookmem_1_1MemContext.html#a03a51f8594a7272e43414c2fec0ac812">MemContext::setImmediateReleaseThreshold</a> ()). </p>
 
 </div>
 </div>

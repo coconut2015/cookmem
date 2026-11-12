@@ -88,8 +88,8 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "allocator_8h_source.html",
-"classcookmem_1_1MemLogger.html#ac51822ba2461d900457e698a9545459a",
-"classcookmem_1_1TLSContextScope.html#ad8b580b4a8f07dcda09f269fa6337c7b"
+"classcookmem_1_1MemLogger.html#a8754b6eb34a4f99ea6df9c72ebd6a179",
+"classcookmem_1_1TLSContextProvider.html#aee37ad73e8faffa846471f7f9b5bda93"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

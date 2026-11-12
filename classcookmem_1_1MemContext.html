@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CookMem<span id="projectnumber">&#160;1.3.0</span>
+   <div id="projectname">CookMem<span id="projectnumber">&#160;1.4.0</span>
    </div>
    <div id="projectbrief">A C++ memory context / allocator</div>
   </td>
@@ -167,6 +167,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ad6a131734c7b8a9bc0133c78a4d67fca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a177629e9704f57d81ae1f8a931a1ad73" id="r_a177629e9704f57d81ae1f8a931a1ad73"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContext.html#a755605b35d1e22ad5e61f10a08b26e84">size_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemContext.html#a177629e9704f57d81ae1f8a931a1ad73">getTrimEmptySegmentsInterval</a> () <a class="el" href="classcookmem_1_1MemContextProvider.html">const</a></td></tr>
 <tr class="separator:a177629e9704f57d81ae1f8a931a1ad73"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03a51f8594a7272e43414c2fec0ac812" id="r_a03a51f8594a7272e43414c2fec0ac812"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemContext.html#a03a51f8594a7272e43414c2fec0ac812">setImmediateReleaseThreshold</a> (<a class="el" href="classcookmem_1_1MemContext.html#a755605b35d1e22ad5e61f10a08b26e84">size_type</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">threshold</a>)</td></tr>
+<tr class="separator:a03a51f8594a7272e43414c2fec0ac812"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b0b7c919526963b6c6412ee80244f39" id="r_a7b0b7c919526963b6c6412ee80244f39"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContext.html#a755605b35d1e22ad5e61f10a08b26e84">size_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemContext.html#a7b0b7c919526963b6c6412ee80244f39">getImmediateReleaseThreshold</a> () <a class="el" href="classcookmem_1_1MemContextProvider.html">const</a></td></tr>
+<tr class="separator:a7b0b7c919526963b6c6412ee80244f39"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa66cd66a401426a8233ac2c6dd9c94d" id="r_afa66cd66a401426a8233ac2c6dd9c94d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemContext.html#afa66cd66a401426a8233ac2c6dd9c94d">isStoringExactSize</a> () <a class="el" href="classcookmem_1_1MemContextProvider.html">const</a></td></tr>
 <tr class="separator:afa66cd66a401426a8233ac2c6dd9c94d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1fbd6a1736b7e4f5529ecdcc77767813" id="r_a1fbd6a1736b7e4f5529ecdcc77767813"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemContext.html#a1fbd6a1736b7e4f5529ecdcc77767813">setStoringExactSize</a> (<a class="el" href="classcookmem_1_1MemContextProvider.html">bool</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">b</a>)</td></tr>
@@ -714,6 +718,35 @@ template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</
 
 </div>
 </div>
+<a id="a7b0b7c919526963b6c6412ee80244f39" name="a7b0b7c919526963b6c6412ee80244f39"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b0b7c919526963b6c6412ee80244f39">&#9670;&#160;</a></span>getImmediateReleaseThreshold()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">Arena</a> , <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">Logger</a> , <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">TreeType</a>  = PtrRBTree, <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a>  = void&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1MemContext.html#a755605b35d1e22ad5e61f10a08b26e84">size_type</a> <a class="el" href="classcookmem_1_1MemContext.html">cookmem::MemContext</a>&lt; <a class="el" href="classcookmem_1_1MemContextProvider.html">Arena</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">Logger</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">TreeType</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> &gt;::getImmediateReleaseThreshold </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Get the size at which freed allocations release their memory right away.</p>
+<dl class="section return"><dt>Returns</dt><dd>the allocation size in bytes. 0 means disabled. </dd></dl>
+
+</div>
+</div>
 <a id="abb543b0c8868e53d5eb381ad4170018b" name="abb543b0c8868e53d5eb381ad4170018b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abb543b0c8868e53d5eb381ad4170018b">&#9670;&#160;</a></span>getLogger()</h2>
 
@@ -1115,6 +1148,42 @@ template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">footprintLimit</td><td>the maximum total size of the memory segments in bytes. 0 means no limit. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a03a51f8594a7272e43414c2fec0ac812" name="a03a51f8594a7272e43414c2fec0ac812"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a03a51f8594a7272e43414c2fec0ac812">&#9670;&#160;</a></span>setImmediateReleaseThreshold()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">Arena</a> , <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">Logger</a> , <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">TreeType</a>  = PtrRBTree, <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a>  = void&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1MemContextProvider.html">void</a> <a class="el" href="classcookmem_1_1MemContext.html">cookmem::MemContext</a>&lt; <a class="el" href="classcookmem_1_1MemContextProvider.html">Arena</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">Logger</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">TreeType</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> &gt;::setImmediateReleaseThreshold </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcookmem_1_1MemContext.html#a755605b35d1e22ad5e61f10a08b26e84">size_type</a>&#160;</td>
+          <td class="paramname"><em>threshold</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Set the size at which freed allocations release their memory right away.</p>
+<p>A large allocation usually gets a segment of its own. When an allocation at least this large is freed and its segment becomes entirely free, the segment is released to the arena immediately, instead of at the next empty-segment trimming pass.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">threshold</td><td>the allocation size in bytes. The default is DEFAULT_IMMEDIATE_RELEASE_THRESHOLD. 0 disables the immediate release. </td></tr>
   </table>
   </dd>
 </dl>

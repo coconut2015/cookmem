@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CookMem<span id="projectnumber">&#160;1.3.0</span>
+   <div id="projectname">CookMem<span id="projectnumber">&#160;1.4.0</span>
    </div>
    <div id="projectbrief">A C++ memory context / allocator</div>
   </td>
@@ -142,6 +142,7 @@ $(document).ready(function(){initNavTree('functions_func.html',''); initResizabl
 <li>getFile()&#160;:&#160;<a class="el" href="classcookmem_1_1Exception.html#a98bbebd1af0fe5abd6bc442564f18ff9">cookmem::Exception</a></li>
 <li>getFootprint()&#160;:&#160;<a class="el" href="classcookmem_1_1MemContext.html#a9f08636c45cdc60279af67760e80e8c1">cookmem::MemContext&lt; Arena, Logger, TreeType, T &gt;</a>, <a class="el" href="classcookmem_1_1MemPool.html#abc097b770d0f8a2f6b258e12bb67e6f6">cookmem::MemPool&lt; Arena, Logger, TreeType, T &gt;</a></li>
 <li>getFootprintLimit()&#160;:&#160;<a class="el" href="classcookmem_1_1MemContext.html#ab260be11297c8ef76f228369ec6935ab">cookmem::MemContext&lt; Arena, Logger, TreeType, T &gt;</a>, <a class="el" href="classcookmem_1_1MemPool.html#a076acbaee2327f5e33d816e5c23fb3b8">cookmem::MemPool&lt; Arena, Logger, TreeType, T &gt;</a></li>
+<li>getImmediateReleaseThreshold()&#160;:&#160;<a class="el" href="classcookmem_1_1MemContext.html#a7b0b7c919526963b6c6412ee80244f39">cookmem::MemContext&lt; Arena, Logger, TreeType, T &gt;</a>, <a class="el" href="classcookmem_1_1MemPool.html#acd5050270f3647958c31b6279b44597f">cookmem::MemPool&lt; Arena, Logger, TreeType, T &gt;</a></li>
 <li>getLeft()&#160;:&#160;<a class="el" href="classcookmem_1_1PtrRBNode.html#a79e7fa68298eaa299c93f34171b55064">cookmem::PtrRBNode</a></li>
 <li>getLine()&#160;:&#160;<a class="el" href="classcookmem_1_1Exception.html#abec594023f07b62490af45e78c62691d">cookmem::Exception</a></li>
 <li>getLogger()&#160;:&#160;<a class="el" href="classcookmem_1_1MemContext.html#abb543b0c8868e53d5eb381ad4170018b">cookmem::MemContext&lt; Arena, Logger, TreeType, T &gt;</a></li>
@@ -236,13 +237,14 @@ $(document).ready(function(){initNavTree('functions_func.html',''); initResizabl
 <li>reallocate()&#160;:&#160;<a class="el" href="classcookmem_1_1MemContext.html#a586818a5e1d4ff1c562216beb976a655">cookmem::MemContext&lt; Arena, Logger, TreeType, T &gt;</a>, <a class="el" href="classcookmem_1_1MemPool.html#a5eec8adbb528ae7e8907f35540879d46">cookmem::MemPool&lt; Arena, Logger, TreeType, T &gt;</a></li>
 <li>releaseAll()&#160;:&#160;<a class="el" href="classcookmem_1_1CachedArena.html#acd195673caa98122e6aa22567480da88">cookmem::CachedArena&lt; Arena, TreeType &gt;</a>, <a class="el" href="classcookmem_1_1FixedArena.html#a49a6ce0603faadb7c65776103c13e8b6">cookmem::FixedArena</a>, <a class="el" href="classcookmem_1_1MallocArena.html#a3e3bb346036117f91124e927c2ab9747">cookmem::MallocArena</a>, <a class="el" href="classcookmem_1_1MemArena.html#aea9aee45f17a98ee33bb219bfc7d385e">cookmem::MemArena</a>, <a class="el" href="classcookmem_1_1MemContext.html#a7ee7fa640486f0a8bddd8a76f4043caf">cookmem::MemContext&lt; Arena, Logger, TreeType, T &gt;</a>, <a class="el" href="classcookmem_1_1MemPool.html#ac126e2364498d1ac892ef545b02ee5f4">cookmem::MemPool&lt; Arena, Logger, TreeType, T &gt;</a>, <a class="el" href="classcookmem_1_1MmapArena.html#a06e085780d6faaa35152e5977924760b">cookmem::MmapArena</a></li>
 <li>releaseAllToSystem()&#160;:&#160;<a class="el" href="classcookmem_1_1MemContext.html#a1931f42371aede291707a423158e69e0">cookmem::MemContext&lt; Arena, Logger, TreeType, T &gt;</a></li>
-<li>remove()&#160;:&#160;<a class="el" href="classcookmem_1_1CircularList.html#a294a5f91969056c1034e61b676385674">cookmem::CircularList&lt; Node &gt;</a>, <a class="el" href="classcookmem_1_1PtrAVLTree.html#a03dece4089837d9baaaa8a183d041b44">cookmem::PtrAVLTree</a>, <a class="el" href="classcookmem_1_1RedBlackTree.html#a47dcc1884aa840a2d2b3e6866fe56eca">cookmem::RedBlackTree&lt; Node &gt;</a></li>
+<li>remove()&#160;:&#160;<a class="el" href="classcookmem_1_1CircularList.html#a294a5f91969056c1034e61b676385674">cookmem::CircularList&lt; Node &gt;</a>, <a class="el" href="classcookmem_1_1PtrAVLTree.html#aff36d0c81a1df2fd55088f7b733b89cc">cookmem::PtrAVLTree</a>, <a class="el" href="classcookmem_1_1RedBlackTree.html#acfbd6800eaa47e6be679e00a982dc8ea">cookmem::RedBlackTree&lt; Node &gt;</a></li>
 <li>removeFromList()&#160;:&#160;<a class="el" href="classcookmem_1_1PtrRBNode.html#aa8d8a1c5572c405c271940f5c7ee9e0b">cookmem::PtrRBNode</a></li>
 </ul>
 
 
 <h3><a id="index_s" name="index_s"></a>- s -</h3><ul>
 <li>setFootprintLimit()&#160;:&#160;<a class="el" href="classcookmem_1_1MemContext.html#a665586811361b929428e1899e4f33f8b">cookmem::MemContext&lt; Arena, Logger, TreeType, T &gt;</a>, <a class="el" href="classcookmem_1_1MemPool.html#aff7415be899841ea19b711c8f8234468">cookmem::MemPool&lt; Arena, Logger, TreeType, T &gt;</a></li>
+<li>setImmediateReleaseThreshold()&#160;:&#160;<a class="el" href="classcookmem_1_1MemContext.html#a03a51f8594a7272e43414c2fec0ac812">cookmem::MemContext&lt; Arena, Logger, TreeType, T &gt;</a>, <a class="el" href="classcookmem_1_1MemPool.html#ac10a1a517af875f0fd27e6f63f42d433">cookmem::MemPool&lt; Arena, Logger, TreeType, T &gt;</a></li>
 <li>setLeft()&#160;:&#160;<a class="el" href="classcookmem_1_1PtrRBNode.html#afb7f65722fc2902e4b44891dd87dfafb">cookmem::PtrRBNode</a></li>
 <li>setPaddingByte()&#160;:&#160;<a class="el" href="classcookmem_1_1MemContext.html#ad5a23c07b12dab6162054dbbcccf9723">cookmem::MemContext&lt; Arena, Logger, TreeType, T &gt;</a>, <a class="el" href="classcookmem_1_1MemPool.html#ad087d5db6eae0727de9e069fe7623c8b">cookmem::MemPool&lt; Arena, Logger, TreeType, T &gt;</a></li>
 <li>setParent()&#160;:&#160;<a class="el" href="classcookmem_1_1PtrRBNode.html#a39ad61463c3610e0165e61e758dc071f">cookmem::PtrRBNode</a></li>

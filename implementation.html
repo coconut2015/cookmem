@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CookMem<span id="projectnumber">&#160;1.3.0</span>
+   <div id="projectname">CookMem<span id="projectnumber">&#160;1.4.0</span>
    </div>
    <div id="projectbrief">A C++ memory context / allocator</div>
   </td>
@@ -173,7 +173,7 @@ Allocation</h2>
 </ol>
 <p>For a large request:</p>
 <ol type="1">
-<li><b>Tree bins.</b> The best fit: starting with the bin for the size, the smallest chunk that is large enough is taken from the first bin that has one, and split. dlmalloc also compares that chunk with the dv and takes the better fit; CookMem does not.</li>
+<li><b>Tree bins.</b> The best fit: starting with the bin for the size, the smallest chunk that is large enough is taken from the first bin that has one, and split. As in dlmalloc, if the dv is also large enough, the tree chunk is only taken if it is smaller than the dv. The search stops at the first bin whose chunks are all at least the size of the dv, and the tree search leaves a chunk in place if it is not smaller.</li>
 <li><b>Designated victim</b>, if it is large enough.</li>
 <li><b>New segment</b> from the arena.</li>
 </ol>
@@ -197,7 +197,8 @@ Deallocation and Coalescing</h2>
 Reallocation</h2>
 <ul>
 <li><b>Shrinking</b>, or growing within the same chunk, happens in place. The new size, including the padding, is compared with the actual chunk size. If the unused tail is at least a minimum chunk, it is split off, merged with the next chunk if that one is free, and returned to a bin. The exact size and the padding bytes are written again for the new size.</li>
-<li><b>Growing</b> beyond the chunk always allocates new memory, copies the data and frees the old memory. dlmalloc first tries to extend the chunk in place into a free next chunk or the top chunk; CookMem does not.</li>
+<li><b>Growing</b> beyond the chunk happens in place if the next chunk is free and the two chunks together are large enough, as in dlmalloc. The next chunk is taken out of its bin or is the dv, and the unused tail, if it is at least a minimum chunk, goes back to a bin. The chunk after the next one is in use, so the tail does not need merging.</li>
+<li>Otherwise, growing allocates new memory, copies the data and frees the old memory.</li>
 <li>A new size too large to represent fails, and the old memory is unchanged.</li>
 </ul>
 <p><code>callocate (num, size)</code> fails if <code>num * size</code> overflows, as <code>calloc</code> does in dlmalloc.</p>
@@ -205,6 +206,7 @@ Reallocation</h2>
 Returning Memory to the Arena</h2>
 <ul>
 <li>Every <a class="el" href="namespacecookmem.html#a53874591e7f085b60e3dd910711d93b1">cookmem::DEFAULT_TRIM_EMPTY_SEGMENTS_INTERVAL</a> (4095) deallocations, the pool releases every segment that has become entirely free. This is the same idea as dlmalloc's <code>release_unused_segments</code>, which runs on a countdown of 4095 frees (<code>MAX_RELEASE_CHECK_RATE</code>). The interval can be changed with <code>setTrimEmptySegmentsInterval ()</code>.</li>
+<li>When an allocation of at least <a class="el" href="namespacecookmem.html#a1565b8b4cb9a52f871ce814946c244c8">cookmem::DEFAULT_IMMEDIATE_RELEASE_THRESHOLD</a> (256 KB) is freed and its segment becomes entirely free, the segment is released right away instead of at the next trimming pass. A large allocation usually gets a segment of its own, so this is similar to how dlmalloc unmaps requests above its mmap threshold. The threshold can be changed, or set to 0 to disable this, with <code>setImmediateReleaseThreshold ()</code>. The segment is found from its first chunk, and is unlinked from the segment list by walking the list.</li>
 <li><code>releaseAll ()</code> returns every segment of the context to its arena at once, and <code>releaseAllToSystem ()</code> also tells the arena to release segments it has cached (see <a class="el" href="behavior.html">Detailed Behavior</a>).</li>
 <li><a class="el" href="classcookmem_1_1CachedArena.html">cookmem::CachedArena</a> keeps freed segments in a size tree and hands out the smallest one that is large enough, whole. It never splits or merges segments.</li>
 </ul>
@@ -250,16 +252,15 @@ Debugging Aids</h2>
 dlmalloc Features That Are Not Implemented</h2>
 <ul>
 <li><b>The top chunk and <code>sbrk</code>.</b> dlmalloc grows a contiguous "top" chunk with <code>MORECORE</code> (usually <code>sbrk</code>) and trims it when it gets too large (<code>malloc_trim</code>, <code>M_TRIM_THRESHOLD</code>). CookMem only uses separate segments from the arena, and has no top chunk.</li>
-<li><b>Direct mmap for large requests.</b> dlmalloc maps requests above <code>M_MMAP_THRESHOLD</code> (256 KB by default) individually and unmaps them on free. CookMem puts a large request in a new segment of its own, and the segment is released by the next trimming pass rather than immediately.</li>
+<li><b>Direct mmap for large requests.</b> dlmalloc maps requests above <code>M_MMAP_THRESHOLD</code> (256 KB by default) individually, with their own chunk format. CookMem puts a large request in an ordinary segment of its own, and releases the segment when the allocation is freed (see above).</li>
 <li><b>Merging contiguous segments</b>, which dlmalloc does when new memory is adjacent to an existing segment.</li>
-<li><b>Extending a chunk in place</b> on reallocation, and <code>realloc_in_place</code>.</li>
-<li><b>Comparing the best tree fit with the dv</b> for large requests.</li>
+<li>**<code>realloc_in_place</code>**, which grows or shrinks only if the memory does not move. <code>reallocate ()</code> does grow in place when it can.</li>
 <li><b>Thread safety.</b> dlmalloc can lock each mspace (<code>USE_LOCKS</code>). CookMem contexts are not thread-safe (see <a class="el" href="limitations.html">Limitations</a>).</li>
 <li>**<code>FOOTERS</code> mode**, where each chunk records which mspace it belongs to, so that freeing into the wrong mspace is detected.</li>
 <li>**<code>independent_calloc</code>, <code>independent_comalloc</code> and <code>bulk_free</code>.**</li>
 <li>**<code>valloc</code> and <code>pvalloc</code>.** <code>allocateAligned ()</code> covers <code>memalign</code> and <code>posix_memalign</code>.</li>
 <li>**<code>mallinfo</code>, <code>malloc_stats</code> and <code>malloc_inspect_all</code>.** Use <a class="el" href="classcookmem_1_1StatsLogger.html">cookmem::StatsLogger</a>, <code>getFootprint ()</code> and <code>getMaxFootprint ()</code> instead.</li>
-<li>**<code>mallopt</code> tuning.** The settings that apply have CookMem equivalents: the minimum segment size of the arena and the trimming interval. </li>
+<li>**<code>mallopt</code> tuning.** The settings that apply have CookMem equivalents: the minimum segment size of the arena, the trimming interval and the immediate release threshold. </li>
 </ul>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->

@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CookMem<span id="projectnumber">&#160;1.3.0</span>
+   <div id="projectname">CookMem<span id="projectnumber">&#160;1.4.0</span>
    </div>
    <div id="projectbrief">A C++ memory context / allocator</div>
   </td>
@@ -103,7 +103,7 @@ Using CMake</h2>
 <div class="fragment"><div class="line">include (FetchContent)</div>
 <div class="line">FetchContent_Declare (cookmem</div>
 <div class="line">    GIT_REPOSITORY https://github.com/coconut2015/cookmem.git</div>
-<div class="line">    GIT_TAG        v1.3.0)</div>
+<div class="line">    GIT_TAG        v1.4.0)</div>
 <div class="line">FetchContent_MakeAvailable (cookmem)</div>
 </div><!-- fragment --><p><b>add_subdirectory</b> uses a copy of CookMem inside your project, such as a Git submodule:</p>
 <div class="fragment"><div class="line">add_subdirectory (third_party/cookmem)</div>
@@ -111,7 +111,7 @@ Using CMake</h2>
 <div class="fragment"><div class="line">cmake -S cookmem -B cookmem-build -DCOOKMEM_BUILD_TESTS=OFF</div>
 <div class="line">cmake --install cookmem-build --prefix /path/to/prefix</div>
 </div><!-- fragment --><p>Then, in your project:</p>
-<div class="fragment"><div class="line">find_package (cookmem 1.3 REQUIRED)</div>
+<div class="fragment"><div class="line">find_package (cookmem 1.4 REQUIRED)</div>
 </div><!-- fragment --><p>If CookMem is not installed in a standard location, pass <code>-DCMAKE_PREFIX_PATH=/path/to/prefix</code> when you configure your project. The version check accepts any release with the same major version.</p>
 <p>With FetchContent and add_subdirectory, only the <code>cookmem::cookmem</code> target is created. CookMem's tests, examples and performance tests are built only when CookMem is the top-level project. The following options change that:</p>
 <ul>

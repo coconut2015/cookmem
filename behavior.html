@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">CookMem<span id="projectnumber">&#160;1.3.0</span>
+   <div id="projectname">CookMem<span id="projectnumber">&#160;1.4.0</span>
    </div>
    <div id="projectbrief">A C++ memory context / allocator</div>
   </td>
@@ -111,13 +111,14 @@ Pointer Ownership</h2>
 <p>A pointer must be deallocated by the memory context that allocated it. Use <code>contains ()</code> to check whether a pointer is in the memory segments of a context, for example before copying data out of a context that is about to be destroyed.</p>
 <h2><a class="anchor" id="autotoc_md15"></a>
 Releasing Memory</h2>
-<p>When memory is deallocated, the memory pool does not release memory segments to the arena right away, even when a segment becomes entirely free. Free segments are kept for later allocations. After every <a class="el" href="namespacecookmem.html#a53874591e7f085b60e3dd910711d93b1">cookmem::DEFAULT_TRIM_EMPTY_SEGMENTS_INTERVAL</a> (4095) deallocations, the pool runs a trimming pass that releases the segments that are entirely free to the arena, which reduces the footprint. As a result:</p>
+<p>When memory is deallocated, the memory pool usually does not release memory segments to the arena right away, even when a segment becomes entirely free. Free segments are kept for later allocations. After every <a class="el" href="namespacecookmem.html#a53874591e7f085b60e3dd910711d93b1">cookmem::DEFAULT_TRIM_EMPTY_SEGMENTS_INTERVAL</a> (4095) deallocations, the pool runs a trimming pass that releases the segments that are entirely free to the arena, which reduces the footprint. As a result:</p>
 <ul>
 <li>The footprint can stay higher than the memory in use until the next trimming pass.</li>
 <li>With <a class="el" href="classcookmem_1_1CachedArena.html">cookmem::CachedArena</a>, the released segments are cached by the arena and reused for later requests, including requests from other memory contexts that share the arena.</li>
 <li><code>setTrimEmptySegmentsInterval ()</code> changes the number of deallocations between trimming passes. The default suits most programs. A smaller interval keeps the footprint smaller, but releases and obtains segments more often.</li>
 <li><a class="el" href="classcookmem_1_1StatsLogger.html">cookmem::StatsLogger</a> counts the trimming passes (<code>getNumTrimEmptySegments ()</code>).</li>
 </ul>
+<p>The exception is a large allocation. When an allocation of at least <a class="el" href="namespacecookmem.html#a1565b8b4cb9a52f871ce814946c244c8">cookmem::DEFAULT_IMMEDIATE_RELEASE_THRESHOLD</a> (256 KB) is freed and its segment becomes entirely free, which is usual since a large allocation gets a segment of its own, the segment is released right away. <code>setImmediateReleaseThreshold ()</code> changes the size, and 0 turns this off. With <a class="el" href="classcookmem_1_1CachedArena.html">cookmem::CachedArena</a>, the released segment is cached for reuse, so a large buffer that is freed and allocated again does not go back to the system each time.</p>
 <p><code>releaseAll ()</code> releases all memory segments of a context at once. Every pointer allocated from the context becomes invalid.</p>
 <p>The segments go to the arena of the context. <a class="el" href="classcookmem_1_1CachedArena.html">cookmem::CachedArena</a> keeps them for reuse, so the memory is not returned to the system yet. This makes <code>releaseAll ()</code> a cheap way to reset a context that is used again. <code>releaseAllToSystem ()</code> also calls <code>releaseAll ()</code> on the arena, which returns the cached segments to the underlying arena, for example before a thread exits or when the program no longer needs the memory. It empties the cache even when other contexts share the arena. Destroying a <a class="el" href="classcookmem_1_1CachedArena.html">cookmem::CachedArena</a> also returns its cached segments. Other arenas keep no segments, so their <code>releaseAll ()</code> does nothing.</p>
 <p>Destroying a memory context releases all of its memory segments at once, without deallocating each allocation. Destructors of objects still in that memory are not called, so destroy any objects that own other resources (such as files or memory from other allocators) before the context ends.</p>
