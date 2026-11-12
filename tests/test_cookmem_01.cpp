@@ -208,11 +208,16 @@ test6 ()
     ASSERT_NE (nullptr, third);
     ASSERT_NE (nullptr, last);
 
+    // A request that needs two adjacent small chunks merged into one.  The
+    // chunk header is two size_t.
+    const std::size_t overhead = 2 * sizeof (std::size_t);
+    const std::size_t mergedSize = 2 * memCtx.getSize (first) + overhead;
+
     memCtx.deallocate (first);
     memCtx.deallocate (second);
     memCtx.validate ();
 
-    void* merged = memCtx.allocate (40);
+    void* merged = memCtx.allocate (mergedSize);
     ASSERT_EQ (first, merged);
 
     memCtx.deallocate (third);
@@ -233,7 +238,7 @@ test6 ()
     memCtx.deallocate (second);
     memCtx.validate ();
 
-    merged = memCtx.allocate (40);
+    merged = memCtx.allocate (mergedSize);
     ASSERT_EQ (second, merged);
 
     memCtx.deallocate (first);

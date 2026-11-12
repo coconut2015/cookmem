@@ -42,6 +42,10 @@ int main ()
     void* ptr = memCtx.allocate (100);
     memCtx.deallocate (ptr);
 
+    // Memory with a larger alignment, for example for SIMD data.
+    void* simd = memCtx.allocateAligned (256, 64);
+    memCtx.deallocate (simd);
+
     // Standard containers can allocate from the same context.
     cookmem::Allocator<int> allocator (memCtx);
     std::vector<int, cookmem::Allocator<int>> numbers (allocator);
@@ -57,8 +61,7 @@ Requirements
 ------------
 
 * A C++11 compiler.  CookMem is tested with GCC 13 on Linux and with
-  Visual Studio 2022 on Windows.
-* A 64-bit platform.
+  Visual Studio 2022 on Windows, on both 32-bit and 64-bit platforms.
 * [CMake](https://cmake.org/) 3.14 or later, to use the `cookmem::cookmem`
   target or to build the tests, examples and documentation.  CMake is not
   needed to use the headers directly.  See
@@ -160,6 +163,7 @@ Links
   * [Tutorials](https://coconut2015.github.io/cookmem/tutorials.html)
   * [Detailed Behavior](https://coconut2015.github.io/cookmem/behavior.html)
   * [Limitations](https://coconut2015.github.io/cookmem/limitations.html)
+  * [Implementation Details](https://coconut2015.github.io/cookmem/implementation.html)
   * [Installation](https://coconut2015.github.io/cookmem/install.html)
   * [Build Instructions](https://coconut2015.github.io/cookmem/build.html)
   * [References](https://coconut2015.github.io/cookmem/references.html)

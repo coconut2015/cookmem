@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#include <cstdint>
 #include <iostream>
 
 #include <cookmem.h>
@@ -89,7 +90,8 @@ test2 ()
 static int
 test3 ()
 {
-    char buffer[64000];
+    // Aligned, so that FixedArena uses the whole buffer.
+    alignas (cookmem::ALLOCATION_ALIGNMENT) char buffer[64000];
     cookmem::FixedArena arena (buffer, sizeof(buffer));
 
     std::size_t size = 3000;
@@ -145,6 +147,36 @@ test4 ()
     return 0;
 }
 
+/**
+ * A buffer that is not aligned is advanced to the next ALLOCATION_ALIGNMENT
+ * boundary, and its size is rounded down to a multiple of it.
+ */
+static int
+test5 ()
+{
+    const std::size_t align = cookmem::ALLOCATION_ALIGNMENT;
+    alignas (cookmem::ALLOCATION_ALIGNMENT) char buffer[1000];
+
+    for (std::size_t skip = 1; skip < align; ++skip)
+    {
+        cookmem::FixedArena arena (buffer + skip, 500);
+
+        std::size_t size = 100;
+        char* ptr = static_cast<char*> (arena.getSegment (size));
+        ASSERT_EQ (buffer + align, ptr);
+        ASSERT_EQ (0u, reinterpret_cast<std::uintptr_t> (ptr) % align);
+        ASSERT_EQ (0u, size % align);
+        ASSERT_EQ ((500 - (align - skip)) & ~(align - 1), size);
+    }
+
+    // A buffer smaller than the bytes skipped to align it has no usable space.
+    cookmem::FixedArena tiny (buffer + 1, align - 2);
+    std::size_t size = 1;
+    ASSERT_EQ (nullptr, tiny.getSegment (size));
+
+    return 0;
+}
+
 int
 main (int argc, const char* argv[])
 {
@@ -154,6 +186,7 @@ main (int argc, const char* argv[])
         ASSERT_EQ (0, test2 ());
         ASSERT_EQ (0, test3 ());
         ASSERT_EQ (0, test4 ());
+        ASSERT_EQ (0, test5 ());
     }
     catch (const unittest::UnitTestException& ex)
     {

@@ -184,20 +184,19 @@ private:
     /**
      * Basic memory chunk header.
      *
-     * For unused memory chunks, the size information is the chunk size.
-     * For memory chunks being used, the size information is the request size
-     * (without being aligned) and with sign bit being set.
-     *
-     * The prevFootSize is treated the same manner.
+     * m_size is the chunk size, with BIT_USED set if the chunk is in use and
+     * BIT_NOTEXACTSIZE set if the exact user size is stored in the last byte
+     * of the chunk.  m_prevFootSize is the size of the previous chunk, with
+     * BIT_USED set if that chunk is in use.
      */
     class MemChunk
     {
     public:
         /**
-         * We are using 16-byte alignment.  So the lower 4 bits of pointers
-         * and sizes are available to use.
+         * Chunk sizes are multiples of ALLOCATION_ALIGNMENT, which is at
+         * least 8 bytes.  So the lower bits of sizes are available for flags.
          */
-        static const size_type  BIT_MASK = ((size_t)-1) ^ 0x0f;
+        static const size_type  BIT_MASK = ~static_cast<size_type> (ALLOCATION_ALIGNMENT - 1);
         static const size_type  BIT_USED = 1;
         static const size_type  BIT_NOTEXACTSIZE = 2;
 
@@ -229,6 +228,17 @@ private:
         setFence ()
         {
             m_size = BIT_USED;
+        }
+
+        /**
+         * Clear the used bit, so that a later double free of this chunk is
+         * detected even if the chunk is merged into the free chunk before
+         * it, which leaves this header inside the merged chunk.
+         */
+        inline void
+        clearUsed ()
+        {
+            m_size &= ~BIT_USED;
         }
 
         inline bool
@@ -263,7 +273,9 @@ private:
         setUsedSize (bool storingExactSize, size_type userSize)
         {
             size_type chunkSize = getChunkSize ();
-            m_size |= BIT_USED;
+            // Reset the flags, since the chunk may have been in use with a
+            // different size (see reallocate ()).
+            m_size = chunkSize | BIT_USED;
             if (storingExactSize)
             {
                 userSize += CHUNK_OVERHEAD;
@@ -452,6 +464,11 @@ private:
      * The mask used to calculate the alignment.
      */
     static const size_type  ALIGN_MASK = ALIGNMENT - 1;
+    // MemChunk stores BIT_USED and BIT_NOTEXACTSIZE in the low bits of chunk
+    // sizes, so the alignment must leave at least two low bits free.
+    static_assert (ALIGNMENT >= 4, "ALLOCATION_ALIGNMENT must be at least 4.");
+    static_assert (ALIGN_MASK == ~MemChunk::BIT_MASK,
+                   "ALLOCATION_ALIGNMENT must match MemChunk::BIT_MASK.");
     /**
      * The number of fixed small segment bins.
      *
@@ -697,121 +714,102 @@ public:
     T*
     allocate (size_type userSize)
     {
-        size_type  chunkSize;
-
-        size_type allocSize = getMinAllocSize (userSize);
-
-        if (allocSize < MIN_LARGE_REQUEST)
+        MemAllocType_et allocType;
+        MemChunk* chunk = allocateChunk (getMinAllocSize (userSize), allocType);
+        if (chunk == nullptr)
         {
-            BinIndexType binIndex;
-            BinIndexType smallBits;
-            chunkSize = (allocSize < MIN_REQUEST) ? MIN_CHUNK_SIZE : calcChunkSize (allocSize);
-            binIndex = getSmallBinIndex (chunkSize);
-            smallBits = m_smallMap >> binIndex;
-
-            /*
-             * Check if two smallest chunk lists that can satisfy the request.
-             * Note that since the chunk is quite tight, it is not necessary
-             * to split the chunk since there will not be enough rooms.
-             */
-            if ((smallBits & 0x3U) != 0)
-            {
-                MemChunk* chunk;
-                binIndex += ~smallBits & 1; /* Uses next bin if idx empty */
-
-                chunk = removeSmallChunkList (binIndex);
-                COOKMEM_ASSERT(chunk != nullptr && chunk->getChunkSize () == getSmallBinSize (binIndex));
-
-                setUsed (chunk, userSize);
-
-                return getUserPointer (chunk, userSize, MEM_ALLOC_SMALL);
-            }
-            else
-            {
-                if (chunkSize > m_dvSize &&
-                    smallBits != 0)
-                {
-                    /* Use chunk in next nonempty smallbin */
-                    MemChunk* chunk;
-                    BinIndexType i;
-                    BinIndexType leftbits = (smallBits << binIndex) & left_bits(idx2bit(binIndex));
-                    BinIndexType leastbit = least_bit(leftbits);
-                    cookmem_bit2treeIndex(leastbit, i);
-
-                    chunk = removeSmallChunkList (i);
-                    COOKMEM_ASSERT(chunk != nullptr && chunk->getChunkSize () == getSmallBinSize (i));
-
-                    chunk = splitChunk (chunk, chunkSize);
-
-                    setUsed (chunk, userSize);
-
-                    return getUserPointer (chunk, userSize, MEM_ALLOC_SMALL);
-                }
-            }
-        }
-        else if (allocSize >= MAX_REQUEST)
-        {
-            // The request size is too big.
             m_logger.logAllocation (nullptr, userSize, MEM_ALLOC_BIG);
             return nullptr;
         }
-        else
+        setUsed (chunk, userSize);
+        return getUserPointer (chunk, userSize, allocType);
+    }
+
+    /**
+     * Allocate memory with an alignment larger than ALLOCATION_ALIGNMENT.
+     *
+     * The memory is freed with deallocate () like any other allocation.
+     * reallocate () does not keep the alignment if it moves the memory.
+     *
+     * @param   userSize
+     *          memory request size.
+     * @param   alignment
+     *          the alignment of the returned pointer.  It must be a power of
+     *          2.  An alignment up to ALLOCATION_ALIGNMENT is the same as
+     *          allocate ().
+     * @return  the memory region that is at least the request size and is
+     *          aligned to the alignment.  nullptr if the alignment is not a
+     *          power of 2, or if the request cannot be satisfied.
+     */
+    T*
+    allocateAligned (size_type userSize, size_type alignment)
+    {
+        if (alignment == 0 || (alignment & (alignment - 1)) != 0)
         {
-            chunkSize = calcChunkSize (allocSize);
+            m_logger.logAllocation (nullptr, userSize, MEM_ALLOC_BIG);
+            return nullptr;
+        }
+        if (alignment <= ALIGNMENT)
+        {
+            return allocate (userSize);
         }
 
-        MemChunk* chunk;
-
-        if (allocSize < MIN_LARGE_REQUEST &&
-            m_dvSize >= chunkSize)
+        size_type allocSize = getMinAllocSize (userSize);
+        if (allocSize >= MAX_REQUEST || alignment >= MAX_REQUEST - allocSize)
         {
-            chunk = takeDesignatedVictim (chunkSize);
-            setUsed (chunk, userSize);
-            return getUserPointer (chunk, userSize, MEM_ALLOC_DV);
+            m_logger.logAllocation (nullptr, userSize, MEM_ALLOC_BIG);
+            return nullptr;
         }
+        size_type chunkSize = (allocSize < MIN_REQUEST) ? MIN_CHUNK_SIZE : calcChunkSize (allocSize);
 
-        MemAllocType_et allocType = MEM_ALLOC_NONE;
-
-        /*
-         * Check if we have enough space in existing chunks.
-         */
-        if (m_treeMap != 0)
-        {
-            chunk = treeMalloc (chunkSize);
-            if (chunk != nullptr)
-            {
-                allocType = MEM_ALLOC_TREE;
-            }
-        }
-        else
-        {
-            chunk = nullptr;
-        }
-
-        if (chunk == nullptr &&
-            m_dvSize >= chunkSize)
-        {
-            chunk = takeDesignatedVictim (chunkSize);
-            allocType = MEM_ALLOC_DV;
-        }
-
-        /*
-         * At this point, we have to allocate memory from arena.
-         */
+        // Allocate enough room to find an aligned position inside the chunk
+        // that leaves a free chunk of at least MIN_CHUNK_SIZE in front of it.
+        MemAllocType_et allocType;
+        MemChunk* chunk = allocateChunk (chunkSize + alignment + MIN_CHUNK_SIZE - CHUNK_OVERHEAD, allocType);
         if (chunk == nullptr)
         {
-            chunk = arenaAlloc (chunkSize);
+            m_logger.logAllocation (nullptr, userSize, MEM_ALLOC_BIG);
+            return nullptr;
+        }
 
-            if (chunk == nullptr)
+        std::uintptr_t mem = reinterpret_cast<std::uintptr_t> (chunk2Mem (chunk));
+        if ((mem & (alignment - 1)) != 0)
+        {
+            // Free the memory in front of the aligned position.  The chunk
+            // before it is in use, since free chunks are always coalesced,
+            // so the leading chunk does not need to be coalesced.
+            std::uintptr_t alignedMem = (mem + alignment - 1) & ~static_cast<std::uintptr_t> (alignment - 1);
+            size_type leadSize = static_cast<size_type> (alignedMem - mem);
+            if (leadSize < MIN_CHUNK_SIZE)
             {
-                m_logger.logAllocation (nullptr, userSize, MEM_ALLOC_BIG);
-                return nullptr;
+                leadSize += alignment;
             }
-            allocType = MEM_ALLOC_ARENA;
+            MemChunk* alignedChunk = chunk->getNextChunk (leadSize);
+            size_type alignedSize = chunk->getChunkSize () - leadSize;
+
+            chunk->setFreeChunkSize (leadSize);
+            addChunk (chunk);
+            alignedChunk->setFreeChunkSize (alignedSize);
+            chunk = alignedChunk;
+        }
+
+        // Free the memory after the requested size.
+        size_type remainSize = chunk->getChunkSize () - chunkSize;
+        if (remainSize >= MIN_CHUNK_SIZE)
+        {
+            MemChunk* remainChunk = chunk->getNextChunk (chunkSize);
+            MemChunk* nextChunk = remainChunk->getNextChunk (remainSize);
+            if (!nextChunk->isUsed ())
+            {
+                removeChunk (nextChunk);
+                remainSize += nextChunk->getChunkSize ();
+            }
+            chunk->setFreeChunkSize (chunkSize);
+            remainChunk->setFreeChunkSize (remainSize);
+            addChunk (remainChunk);
         }
 
         setUsed (chunk, userSize);
-
         return getUserPointer (chunk, userSize, allocType);
     }
 
@@ -835,26 +833,32 @@ public:
         }
 
         MemChunk* chunk = mem2Chunk (ptr);
-        size_type oldAllocSize = chunk->getUserSize ();
-        size_type oldChunkSize = calcChunkSize(oldAllocSize);
+        size_type oldUserSize = chunk->getUserSize ();
 
-        size_type newAllocSize = newUserSize;
-        size_type newChunkSize = (newAllocSize < MIN_REQUEST) ? MIN_CHUNK_SIZE : calcChunkSize(newAllocSize);
+        // The new chunk must also hold the padding, and a request too large
+        // to represent must not wrap around to a small chunk size.
+        size_type newAllocSize = getMinAllocSize (newUserSize);
+        if (newAllocSize >= MAX_REQUEST)
+        {
+            m_logger.logAllocation (nullptr, newUserSize, MEM_ALLOC_BIG);
+            return nullptr;
+        }
+        size_type newChunkSize = (newAllocSize < MIN_REQUEST) ? MIN_CHUNK_SIZE : calcChunkSize (newAllocSize);
 
-        if (oldChunkSize < newChunkSize)
+        if (chunk->getChunkSize () < newChunkSize)
         {
             // For now we use a simple algorithm that allocate new memory.
             T* newPtr = allocate (newUserSize);
             if (newPtr)
             {
-                memcpy(newPtr, ptr, oldAllocSize);
+                memcpy (newPtr, ptr, oldUserSize);
                 deallocate (ptr);
             }
             return newPtr;
         }
         else
         {
-            m_logger.logReallocation(ptr, oldAllocSize, newUserSize);
+            m_logger.logReallocation (ptr, oldUserSize, newUserSize);
 
             size_type remainSize = chunk->getChunkSize () - newChunkSize;
             if (remainSize >= MIN_CHUNK_SIZE)
@@ -889,11 +893,17 @@ public:
      *          number of elements
      * @param   size
      *          element size
-     * @return  memory allocated.
+     * @return  memory allocated.  nullptr if num * size overflows, or if the
+     *          request cannot be satisfied.
      */
     T*
     callocate (size_type num, size_type size)
     {
+        if (num != 0 && size > (MAX_REQUEST / num))
+        {
+            m_logger.logAllocation (nullptr, MAX_REQUEST, MEM_ALLOC_BIG);
+            return nullptr;
+        }
         size_type totalSize = size * num;
         T* ptr = allocate (totalSize);
         if (ptr)
@@ -944,6 +954,7 @@ public:
                 }
             }
             m_logger.logDeallocation (ptr, chunk->getUserSize ());
+            chunk->clearUsed ();
 
             bool        prevChunkUsed = chunk->isPrevChunkUsed ();
             MemChunk*   nextChunk = chunk->getNextChunk (chunkSize);
@@ -1068,6 +1079,8 @@ public:
                 if (!chunk->isPrevChunkUsed ())
                 {
                     COOKMEM_ASSERT (isValidChunk (prevChunk));
+                    // Free chunks are always coalesced.
+                    COOKMEM_ASSERT (chunk->isUsed ());
                 }
 
                 chunk = prevChunk;
@@ -1398,6 +1411,122 @@ private:
         }
         return nullptr;
     }
+
+    /**
+     * Find or allocate a free chunk that can hold the allocation size.  The
+     * chunk is not marked as used.
+     *
+     * @param   allocSize
+     *          the allocation size, including the padding.
+     * @param   allocType
+     *          set to where the chunk came from.
+     * @return  the chunk, or nullptr if the request cannot be satisfied.
+     */
+    inline     MemChunk*
+    allocateChunk (size_type allocSize, MemAllocType_et& allocType)
+    {
+        size_type  chunkSize;
+
+        if (allocSize < MIN_LARGE_REQUEST)
+        {
+            BinIndexType binIndex;
+            BinIndexType smallBits;
+            chunkSize = (allocSize < MIN_REQUEST) ? MIN_CHUNK_SIZE : calcChunkSize (allocSize);
+            binIndex = getSmallBinIndex (chunkSize);
+            smallBits = m_smallMap >> binIndex;
+
+            /*
+             * Check if two smallest chunk lists that can satisfy the request.
+             * Note that since the chunk is quite tight, it is not necessary
+             * to split the chunk since there will not be enough rooms.
+             */
+            if ((smallBits & 0x3U) != 0)
+            {
+                MemChunk* chunk;
+                binIndex += ~smallBits & 1; /* Uses next bin if idx empty */
+
+                chunk = removeSmallChunkList (binIndex);
+                COOKMEM_ASSERT(chunk != nullptr && chunk->getChunkSize () == getSmallBinSize (binIndex));
+
+                allocType = MEM_ALLOC_SMALL;
+                return chunk;
+            }
+            else
+            {
+                if (chunkSize > m_dvSize &&
+                    smallBits != 0)
+                {
+                    /* Use chunk in next nonempty smallbin */
+                    MemChunk* chunk;
+                    BinIndexType i;
+                    BinIndexType leftbits = (smallBits << binIndex) & left_bits(idx2bit(binIndex));
+                    BinIndexType leastbit = least_bit(leftbits);
+                    cookmem_bit2treeIndex(leastbit, i);
+
+                    chunk = removeSmallChunkList (i);
+                    COOKMEM_ASSERT(chunk != nullptr && chunk->getChunkSize () == getSmallBinSize (i));
+
+                    allocType = MEM_ALLOC_SMALL;
+                    return splitChunk (chunk, chunkSize);
+                }
+            }
+        }
+        else if (allocSize >= MAX_REQUEST)
+        {
+            // The request size is too big.
+            return nullptr;
+        }
+        else
+        {
+            chunkSize = calcChunkSize (allocSize);
+        }
+
+        MemChunk* chunk;
+
+        if (allocSize < MIN_LARGE_REQUEST &&
+            m_dvSize >= chunkSize)
+        {
+            allocType = MEM_ALLOC_DV;
+            return takeDesignatedVictim (chunkSize);
+        }
+
+        allocType = MEM_ALLOC_NONE;
+
+        /*
+         * Check if we have enough space in existing chunks.
+         */
+        if (m_treeMap != 0)
+        {
+            chunk = treeMalloc (chunkSize);
+            if (chunk != nullptr)
+            {
+                allocType = MEM_ALLOC_TREE;
+            }
+        }
+        else
+        {
+            chunk = nullptr;
+        }
+
+        if (chunk == nullptr &&
+            m_dvSize >= chunkSize)
+        {
+            chunk = takeDesignatedVictim (chunkSize);
+            allocType = MEM_ALLOC_DV;
+        }
+
+        /*
+         * At this point, we have to allocate memory from arena.
+         */
+        if (chunk == nullptr)
+        {
+            chunk = arenaAlloc (chunkSize);
+            allocType = MEM_ALLOC_ARENA;
+        }
+
+        return chunk;
+    }
+
 
     /**
      * Split a memory chunk into two parts.  The first part is returned

@@ -224,6 +224,13 @@ add_executable(test_mmaparena
 add_test(NAME test_mmaparena
 	COMMAND test_mmaparena)
 
+# .. test_cookmem_aligned
+add_executable(test_cookmem_aligned
+	tests/test_cookmem_aligned.cpp)
+
+add_test(NAME test_cookmem_aligned
+	COMMAND test_cookmem_aligned)
+
 # .. test_version
 add_executable(test_version
 	tests/test_version.cpp)
@@ -233,22 +240,6 @@ target_compile_definitions(test_version PRIVATE
 
 add_test(NAME test_version
 	COMMAND test_version)
-
-# .. test_allocator_alignment
-# Allocator must reject types that require a larger alignment than CookMem
-# provides.  The source must fail to compile, so it is not part of the normal
-# build.  The test builds it and passes only if the compiler reports the
-# static_assert message.
-add_executable(test_allocator_alignment EXCLUDE_FROM_ALL
-	tests/compile_fail_allocator_alignment.cpp)
-set_target_properties(test_allocator_alignment PROPERTIES
-	EXCLUDE_FROM_DEFAULT_BUILD TRUE)
-
-add_test(NAME test_allocator_alignment
-	COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR}
-	        --target test_allocator_alignment --config $<CONFIG>)
-set_tests_properties(test_allocator_alignment PROPERTIES
-	PASS_REGULAR_EXPRESSION "does not support types that require an alignment larger than")
 
 # -- performance tests -------------------------------------------------------
 # Until I figure out how to replace malloc / free on Windows, these tests
