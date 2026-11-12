@@ -293,8 +293,9 @@ private:
  *
  * Allocator copies and rebound allocators retain the same provider.
  *
- * T must not require an alignment larger than ALLOCATION_ALIGNMENT.  Using
- * such a type causes a compile error when memory is allocated.
+ * Types that require an alignment larger than ALLOCATION_ALIGNMENT are
+ * allocated with the allocateAligned () function of the context.  Other types
+ * only need the context to provide allocate ().
  */
 template<class T,
          class ContextProvider = MemContextProvider<CachedMemContext<> > >
@@ -406,12 +407,6 @@ public:
     pointer
     allocate (size_type size, const void* = nullptr)
     {
-        // Checked here rather than in the class body, so that the allocator
-        // can still be named for an incomplete type T.
-        static_assert (alignof (T) <= ALLOCATION_ALIGNMENT,
-                       "cookmem::Allocator does not support types that require "
-                       "an alignment larger than cookmem::ALLOCATION_ALIGNMENT.");
-
         if (size > (std::numeric_limits<size_type>::max) () / sizeof (T))
         {
             throw std::bad_alloc ();
@@ -421,7 +416,10 @@ public:
             return nullptr;
         }
 
-        void* ptr = m_provider.get ().allocate (size * sizeof (T));
+        // Decided here rather than in the class body, so that the allocator
+        // can still be named for an incomplete type T.
+        typedef std::integral_constant<bool, (alignof (T) > ALLOCATION_ALIGNMENT)> OverAligned;
+        void* ptr = allocateBytes (size * sizeof (T), OverAligned ());
         if (ptr == nullptr)
         {
             throw std::bad_alloc ();
@@ -524,6 +522,24 @@ public:
 private:
     template<class, class>
     friend class Allocator;
+
+    /**
+     * Allocate memory for a type that ALLOCATION_ALIGNMENT is enough for.
+     */
+    void*
+    allocateBytes (size_type bytes, std::false_type)
+    {
+        return m_provider.get ().allocate (bytes);
+    }
+
+    /**
+     * Allocate memory for an over-aligned type.
+     */
+    void*
+    allocateBytes (size_type bytes, std::true_type)
+    {
+        return m_provider.get ().allocateAligned (bytes, alignof (T));
+    }
 
     ContextProvider m_provider;
 };

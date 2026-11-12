@@ -107,6 +107,25 @@ public:
     allocate (size_type size) { return m_pool.allocate (size); }
 
     /**
+     * Allocate memory with an alignment larger than ALLOCATION_ALIGNMENT.
+     *
+     * The memory is freed with deallocate () like any other allocation.
+     * reallocate () does not keep the alignment if it moves the memory.
+     *
+     * @param   size
+     *          memory request size.
+     * @param   alignment
+     *          the alignment of the returned pointer.  It must be a power of
+     *          2.  An alignment up to ALLOCATION_ALIGNMENT is the same as
+     *          allocate ().
+     * @return  the memory region that is at least the request size and is
+     *          aligned to the alignment.  nullptr if the alignment is not a
+     *          power of 2, or if the request cannot be satisfied.
+     */
+    inline T*
+    allocateAligned (size_type size, size_type alignment) { return m_pool.allocateAligned (size, alignment); }
+
+    /**
      * This function reallocate a memory.
      *
      * @param   ptr

@@ -9,16 +9,25 @@ and is unlikely to be implemented, since this project is intended for use
 within a thread.  Consider [nedmalloc](https://github.com/ned14/nedmalloc)
 instead if you need a thread-safe allocator.
 
-### Limited Alignment
+### Alignment
 
-Every pointer returned by a memory context is aligned to
+Every pointer returned by `allocate ()` of a memory context is aligned to
 cookmem::ALLOCATION_ALIGNMENT, which is twice the size of `std::size_t`:
 16 bytes on 64-bit platforms and 8 bytes on 32-bit platforms.
 
-Types that require a larger alignment, such as types declared with
-`alignas(32)`, are not supported.  cookmem::Allocator rejects them at compile
-time.  Raw allocations from a memory context are not checked, so do not use
-them for such types.
+For a larger alignment, use `allocateAligned (size, alignment)`.  The
+alignment must be a power of 2.  The memory is freed with `deallocate ()`.
+`reallocate ()` keeps the memory in place when it shrinks, but if it has to
+move the memory, the new memory has only the normal alignment.
+
+To find an aligned address, the pool takes a chunk that is larger than the
+request by the alignment, then returns the unused memory before and after
+the result to the pool.  A large alignment therefore needs that much free
+space, and may fail under a footprint limit that a normal allocation of the
+same size would fit in.
+
+cookmem::Allocator uses `allocateAligned ()` automatically for types that
+require a larger alignment, such as types declared with `alignas(64)`.
 
 ### Best-Effort Error Detection
 

@@ -28,10 +28,10 @@ namespace cookmem
 {
 
 /**
- * The alignment of every pointer returned by a memory context: twice the
- * size of std::size_t, which is 16 bytes on 64-bit platforms and 8 bytes on
- * 32-bit platforms.  Types that require a larger alignment, such as types
- * declared with alignas(32), are not supported.
+ * The alignment of every pointer returned by allocate () of a memory
+ * context: twice the size of std::size_t, which is 16 bytes on 64-bit
+ * platforms and 8 bytes on 32-bit platforms.  Use allocateAligned () for a
+ * larger alignment.
  */
 const std::size_t ALLOCATION_ALIGNMENT = sizeof (std::size_t) * 2;
 

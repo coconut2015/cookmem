@@ -7,10 +7,12 @@ support.
 
 ### Allocation Failures
 
-`allocate` and `reallocate` of a memory context return `nullptr` when a
-request cannot be satisfied, for example when it is too large, when the arena
-cannot provide a segment, or when the footprint limit is reached.  When
-`reallocate` fails, the original pointer remains valid.
+`allocate`, `allocateAligned` and `reallocate` of a memory context return
+`nullptr` when a request cannot be satisfied, for example when it is too
+large, when the arena cannot provide a segment, or when the footprint limit
+is reached.  `allocateAligned` also returns `nullptr` when the alignment is
+not a power of 2.  When `reallocate` fails, the original pointer remains
+valid.
 
 cookmem::Allocator throws `std::bad_alloc` instead, as the standard library
 expects.
