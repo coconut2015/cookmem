@@ -71,12 +71,11 @@ Requirements
 Performance
 -----------
 
-CookMem is faster than dlmalloc in most of the tests below, up to about 13
-times faster for large blocks that come straight from the arena
-(perf_cookmem_10), and about the same in the others.  dlmalloc is faster for
-small blocks of the same size that are allocated and freed repeatedly
-(perf_cookmem_5), and for a sliding window of blocks of mixed sizes
-(perf_cookmem_11).  Neither dlmalloc nor CookMem uses locks.  CookMem was
+CookMem is faster than dlmalloc in most of the tests below: about 13 times
+faster for large blocks that come straight from the arena (perf_cookmem_10),
+about 5 times faster for interleaved `realloc` growth, where blocks grow in
+place (perf_cookmem_9), and about the same in the others.  dlmalloc is faster
+for a sliding window of blocks of mixed sizes (perf_cookmem_11).  Neither dlmalloc nor CookMem uses locks.  CookMem was
 tested with both of its large chunk bins: the red-black tree (RB-tree), which
 is the default, and the AVL tree.
 
@@ -91,18 +90,18 @@ in seconds.
 
 | Test | What it covers | dlmalloc | CookMem (RB-tree) | CookMem (AVL-tree) |
 |------|----------------|---------:|------------------:|-------------------:|
-| perf_cookmem_1 | Copy a 200-character string into a vector 1M times (small bins, plus large vector growth) | 0.137765 | 0.112946 | 0.131251 |
-| perf_cookmem_2 | Same as perf_cookmem_1, then clear and fill again (reuse of freed chunks) | 0.253331 | 0.168729 | 0.178487 |
-| perf_cookmem_3 | 10k strings of growing length 1 to 10000 (mostly tree bins) | 0.024164 | 0.022851 | 0.022613 |
-| perf_cookmem_4 | Same as perf_cookmem_3, then clear and build again (reuse of freed tree chunks) | 0.036800 | 0.026149 | 0.026622 |
-| perf_cookmem_5 | Small same-size churn (`std::list<int>`, small bins) | 0.069674 | 0.079835 | 0.084755 |
-| perf_cookmem_6 | Mixed sizes (`std::map<int, std::string>`, values 0-999 chars, erase and re-insert) | 0.149489 | 0.164420 | 0.161334 |
-| perf_cookmem_7 | 50k free chunks of the same 1KB size, then merging with free neighbors | 0.045692 | 0.022891 | 0.022319 |
-| perf_cookmem_8 | Fragmentation and best-fit search (sizes 256 B-8 KB, refill the holes) | 0.081027 | 0.071846 | 0.077851 |
-| perf_cookmem_9 | Interleaved `realloc` growth up to 32KB | 0.598881 | 0.567728 | 0.585602 |
-| perf_cookmem_10 | Large blocks (128KB-4MB) going straight to the arena | 0.029663 | 0.002250 | 0.002693 |
-| perf_cookmem_11 | Sliding window (FIFO) of 1024 live blocks, 16-2047 bytes | 0.087624 | 0.109254 | 0.122220 |
-| perf_cookmem_12 | 10k vectors grown in interleaved order | 0.023026 | 0.022922 | 0.022312 |
+| perf_cookmem_1 | Copy a 200-character string into a vector 1M times (small bins, plus large vector growth) | 0.179852 | 0.147207 | 0.138198 |
+| perf_cookmem_2 | Same as perf_cookmem_1, then clear and fill again (reuse of freed chunks) | 0.328629 | 0.190954 | 0.177236 |
+| perf_cookmem_3 | 10k strings of growing length 1 to 10000 (mostly tree bins) | 0.028434 | 0.026320 | 0.026967 |
+| perf_cookmem_4 | Same as perf_cookmem_3, then clear and build again (reuse of freed tree chunks) | 0.045815 | 0.032542 | 0.031780 |
+| perf_cookmem_5 | Small same-size churn (`std::list<int>`, small bins) | 0.108232 | 0.086955 | 0.095069 |
+| perf_cookmem_6 | Mixed sizes (`std::map<int, std::string>`, values 0-999 chars, erase and re-insert) | 0.162361 | 0.174398 | 0.159243 |
+| perf_cookmem_7 | 50k free chunks of the same 1KB size, then merging with free neighbors | 0.058387 | 0.028435 | 0.030270 |
+| perf_cookmem_8 | Fragmentation and best-fit search (sizes 256 B-8 KB, refill the holes) | 0.105328 | 0.093511 | 0.097044 |
+| perf_cookmem_9 | Interleaved `realloc` growth up to 32KB | 0.503400 | 0.088520 | 0.092882 |
+| perf_cookmem_10 | Large blocks (128KB-4MB) going straight to the arena | 0.039517 | 0.003039 | 0.002812 |
+| perf_cookmem_11 | Sliding window (FIFO) of 1024 live blocks, 16-2047 bytes | 0.094661 | 0.117984 | 0.122740 |
+| perf_cookmem_12 | 10k vectors grown in interleaved order | 0.028886 | 0.026630 | 0.028787 |
 
 Use Cases
 =========
