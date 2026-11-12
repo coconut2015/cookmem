@@ -28,7 +28,7 @@
 /** The major version number. */
 #define COOKMEM_VERSION_MAJOR 1
 /** The minor version number.  Must be less than 100. */
-#define COOKMEM_VERSION_MINOR 2
+#define COOKMEM_VERSION_MINOR 3
 /** The patch version number.  Must be less than 100. */
 #define COOKMEM_VERSION_PATCH 0
 
