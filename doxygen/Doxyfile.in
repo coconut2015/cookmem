@@ -766,10 +766,11 @@ WARN_LOGFILE           =
 # Note: If this tag is empty the current directory is searched.
 
 INPUT                  = ../README.md \
+						 ../doxygen/install.md \
 						 ../doxygen/tutorials.md \
 						 ../doxygen/behavior.md \
 						 ../doxygen/limitations.md \
-						 ../doxygen/install.md \
+						 ../doxygen/implementation.md \
 						 ../doxygen/build.md \
 						 ../doxygen/references.md \
 						 ../doxygen/license.md \

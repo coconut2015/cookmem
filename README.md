@@ -42,6 +42,10 @@ int main ()
     void* ptr = memCtx.allocate (100);
     memCtx.deallocate (ptr);
 
+    // Memory with a larger alignment, for example for SIMD data.
+    void* simd = memCtx.allocateAligned (256, 64);
+    memCtx.deallocate (simd);
+
     // Standard containers can allocate from the same context.
     cookmem::Allocator<int> allocator (memCtx);
     std::vector<int, cookmem::Allocator<int>> numbers (allocator);
@@ -159,6 +163,7 @@ Links
   * [Tutorials](https://coconut2015.github.io/cookmem/tutorials.html)
   * [Detailed Behavior](https://coconut2015.github.io/cookmem/behavior.html)
   * [Limitations](https://coconut2015.github.io/cookmem/limitations.html)
+  * [Implementation Details](https://coconut2015.github.io/cookmem/implementation.html)
   * [Installation](https://coconut2015.github.io/cookmem/install.html)
   * [Build Instructions](https://coconut2015.github.io/cookmem/build.html)
   * [References](https://coconut2015.github.io/cookmem/references.html)
