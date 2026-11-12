@@ -855,6 +855,10 @@ public:
     /**
      * This function reallocate a memory.
      *
+     * The memory is resized in place when possible (see resizeInPlace ()).
+     * Otherwise new memory is allocated, the data is copied, and the old
+     * memory is freed.
+     *
      * @param   ptr
      *          the current memory pointer.
      * @param   newUserSize
@@ -868,19 +872,55 @@ public:
     {
         if (ptr == nullptr)
         {
-            return allocate(newUserSize);
+            return allocate (newUserSize);
+        }
+
+        if (resizeInPlace (ptr, newUserSize))
+        {
+            return ptr;
+        }
+
+        // allocate () fails for a request too large to represent.
+        size_type oldUserSize = mem2Chunk (ptr)->getUserSize ();
+        T* newPtr = allocate (newUserSize);
+        if (newPtr)
+        {
+            memcpy (newPtr, ptr, oldUserSize);
+            deallocate (ptr);
+        }
+        return newPtr;
+    }
+
+    /**
+     * Resize memory without moving it, like realloc_in_place in dlmalloc.
+     *
+     * Shrinking always succeeds, and the unused tail is freed.  Growing
+     * succeeds if the memory after the allocation is free and large enough.
+     *
+     * @param   ptr
+     *          the current memory pointer.
+     * @param   newUserSize
+     *          the new size
+     * @return  true if the memory now has the new size at the same address.
+     *          false if it could not be resized in place, or if ptr is
+     *          nullptr; the memory is then unchanged.
+     */
+    bool
+    resizeInPlace (T* ptr, size_type newUserSize)
+    {
+        if (ptr == nullptr)
+        {
+            return false;
         }
 
         MemChunk* chunk = mem2Chunk (ptr);
-        size_type oldUserSize = chunk->getUserSize ();
 
         // The new chunk must also hold the padding, and a request too large
         // to represent must not wrap around to a small chunk size.
         size_type newAllocSize = getMinAllocSize (newUserSize);
         if (newAllocSize >= MAX_REQUEST)
         {
-            m_logger.logAllocation (nullptr, newUserSize, MEM_ALLOC_BIG);
-            return nullptr;
+            return false;
         }
         size_type newChunkSize = (newAllocSize < MIN_REQUEST) ? MIN_CHUNK_SIZE : calcChunkSize (newAllocSize);
 
@@ -889,69 +929,61 @@ public:
         {
             // Grow in place if the next chunk is free and large enough.
             MemChunk* nextChunk = chunk->getNextChunk (chunkSize);
-            if (!nextChunk->isUsed () &&
-                chunkSize + nextChunk->getChunkSize () >= newChunkSize)
+            if (nextChunk->isUsed () ||
+                chunkSize + nextChunk->getChunkSize () < newChunkSize)
             {
-                m_logger.logReallocation (ptr, oldUserSize, newUserSize);
-
-                size_type mergedSize = chunkSize + nextChunk->getChunkSize ();
-                removeChunk (nextChunk);
-
-                // The chunk after nextChunk is in use, since free chunks are
-                // always coalesced, so the remainder does not need merging.
-                size_type remainSize = mergedSize - newChunkSize;
-                if (remainSize >= MIN_CHUNK_SIZE)
-                {
-                    chunk->setFreeChunkSize (newChunkSize);
-                    MemChunk* remainChunk = chunk->getNextChunk (newChunkSize);
-                    remainChunk->setFreeChunkSize (remainSize);
-                    addChunk (remainChunk);
-                }
-                else
-                {
-                    chunk->setFreeChunkSize (mergedSize);
-                }
-                setUsed (chunk, newUserSize);
-                return ptr;
+                return false;
             }
 
-            // Otherwise allocate new memory and copy.
-            T* newPtr = allocate (newUserSize);
-            if (newPtr)
-            {
-                memcpy (newPtr, ptr, oldUserSize);
-                deallocate (ptr);
-            }
-            return newPtr;
-        }
-        else
-        {
-            m_logger.logReallocation (ptr, oldUserSize, newUserSize);
+            m_logger.logReallocation (ptr, chunk->getUserSize (), newUserSize);
 
-            size_type remainSize = chunkSize - newChunkSize;
+            size_type mergedSize = chunkSize + nextChunk->getChunkSize ();
+            removeChunk (nextChunk);
+
+            // The chunk after nextChunk is in use, since free chunks are
+            // always coalesced, so the remainder does not need merging.
+            size_type remainSize = mergedSize - newChunkSize;
             if (remainSize >= MIN_CHUNK_SIZE)
             {
-                MemChunk* remainChunk = (MemChunk*)((char*)chunk + newChunkSize);
-                MemChunk* nextChunk = remainChunk->getNextChunk (remainSize);
-
-                if (!nextChunk->isUsed ())
-                {
-                    removeChunk (nextChunk);
-                    remainSize += nextChunk->getChunkSize ();
-                }
-
                 chunk->setFreeChunkSize (newChunkSize);
-                setUsed (chunk, newUserSize);
+                MemChunk* remainChunk = chunk->getNextChunk (newChunkSize);
                 remainChunk->setFreeChunkSize (remainSize);
                 addChunk (remainChunk);
             }
             else
             {
-                setUsed (chunk, newUserSize);
+                chunk->setFreeChunkSize (mergedSize);
+            }
+            setUsed (chunk, newUserSize);
+            return true;
+        }
+
+        m_logger.logReallocation (ptr, chunk->getUserSize (), newUserSize);
+
+        // Shrink, freeing the unused tail if it is large enough, merged with
+        // the next chunk if that one is free.
+        size_type remainSize = chunkSize - newChunkSize;
+        if (remainSize >= MIN_CHUNK_SIZE)
+        {
+            MemChunk* remainChunk = chunk->getNextChunk (newChunkSize);
+            MemChunk* nextChunk = remainChunk->getNextChunk (remainSize);
+
+            if (!nextChunk->isUsed ())
+            {
+                removeChunk (nextChunk);
+                remainSize += nextChunk->getChunkSize ();
             }
 
-            return ptr;
+            chunk->setFreeChunkSize (newChunkSize);
+            setUsed (chunk, newUserSize);
+            remainChunk->setFreeChunkSize (remainSize);
+            addChunk (remainChunk);
         }
+        else
+        {
+            setUsed (chunk, newUserSize);
+        }
+        return true;
     }
 
     /**

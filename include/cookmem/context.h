@@ -140,6 +140,23 @@ public:
     reallocate (T* ptr, size_type size) { return m_pool.reallocate (ptr, size); }
 
     /**
+     * Resize memory without moving it, like realloc_in_place in dlmalloc.
+     *
+     * Shrinking always succeeds, and the unused tail is freed.  Growing
+     * succeeds if the memory after the allocation is free and large enough.
+     *
+     * @param   ptr
+     *          the current memory pointer.
+     * @param   size
+     *          the new size
+     * @return  true if the memory now has the new size at the same address.
+     *          false if it could not be resized in place, or if ptr is
+     *          nullptr; the memory is then unchanged.
+     */
+    inline bool
+    resizeInPlace (T* ptr, size_type size) { return m_pool.resizeInPlace (ptr, size); }
+
+    /**
      * Allocate n items of certain size.  The memory allocated is zeroed.
      *
      * @param   num

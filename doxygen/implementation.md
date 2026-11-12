@@ -234,6 +234,12 @@ allocated.
   memory.
 * A new size too large to represent fails, and the old memory is unchanged.
 
+`resizeInPlace (ptr, size)` does only the in-place part, like dlmalloc's
+`realloc_in_place`: it returns `true` if the memory now has the new size at
+the same address, and `false`, with the memory unchanged, if it would have to
+move.  `reallocate ()` calls it first, and allocates and copies only if it
+fails.
+
 `callocate (num, size)` fails if `num * size` overflows, as `calloc` does in
 dlmalloc.
 
@@ -352,8 +358,6 @@ memory is freed.  dlmalloc has no equivalent.
   and releases the segment when the allocation is freed (see above).
 * **Merging contiguous segments**, which dlmalloc does when new memory is
   adjacent to an existing segment.
-* **`realloc_in_place`**, which grows or shrinks only if the memory does not
-  move.  `reallocate ()` does grow in place when it can.
 * **Thread safety.**  dlmalloc can lock each mspace (`USE_LOCKS`).  CookMem
   contexts are not thread-safe (see \ref limitations "Limitations").
 * **`FOOTERS` mode**, where each chunk records which mspace it belongs to,

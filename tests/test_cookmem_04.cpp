@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// Tests for growing in place on reallocate, preferring the designated victim
+// Tests for resizing in place, preferring the designated victim
 // when it fits better than the tree bins, and releasing large segments as
 // soon as they are freed.
 #include <cstdint>
@@ -117,6 +117,71 @@ testGrowInPlace (std::uint8_t paddingSize)
     newCtx.validate ();
     newCtx.deallocate (f);
     newCtx.validate ();
+    return 0;
+}
+
+/**
+ * resizeInPlace () resizes without moving, and leaves the memory unchanged
+ * when it cannot.
+ */
+template<class TreeType>
+static int
+testResizeInPlace (std::uint8_t paddingSize)
+{
+    cookmem::SimpleMemContext<cookmem::MmapArena, cookmem::NoActionMemLogger, TreeType> memCtx (paddingSize);
+    memCtx.setStoringExactSize (true);
+
+    void* a = memCtx.allocate (1000);
+    void* b = memCtx.allocate (1000);
+    void* c = memCtx.allocate (100);
+    ASSERT_NE (nullptr, c);
+    std::memset (a, 0x5a, 1000);
+
+    // Growing fails while the next chunk is in use.
+    ASSERT_EQ (false, memCtx.resizeInPlace (a, 1500));
+    ASSERT_EQ (1000u, memCtx.getSize (a));
+    ASSERT_EQ (true, isFilled (a, 1000, 0x5a));
+    memCtx.validate ();
+
+    // Shrinking always succeeds, and frees the tail.
+    ASSERT_EQ (true, memCtx.resizeInPlace (a, 100));
+    ASSERT_EQ (100u, memCtx.getSize (a));
+    ASSERT_EQ (true, isFilled (a, 100, 0x5a));
+    memCtx.validate ();
+
+    // Growing back into the freed tail succeeds.
+    ASSERT_EQ (true, memCtx.resizeInPlace (a, 1000));
+    ASSERT_EQ (1000u, memCtx.getSize (a));
+    ASSERT_EQ (true, isFilled (a, 100, 0x5a));
+    std::memset (a, 0x5a, 1000);
+    memCtx.validate ();
+
+    // Growing into a free next chunk succeeds, up to the size of both.
+    memCtx.deallocate (b);
+    std::size_t limit = reinterpret_cast<char*> (c) - reinterpret_cast<char*> (a) -
+                        2 * sizeof (std::size_t) - paddingSize - (paddingSize ? 1 : 0);
+    ASSERT_EQ (false, memCtx.resizeInPlace (a, limit + 1));
+    ASSERT_EQ (1000u, memCtx.getSize (a));
+    ASSERT_EQ (true, memCtx.resizeInPlace (a, limit));
+    ASSERT_EQ (limit, memCtx.getSize (a));
+    ASSERT_EQ (true, isFilled (a, 1000, 0x5a));
+    memCtx.validate ();
+
+    // Shrinking to 0 keeps the memory.
+    ASSERT_EQ (true, memCtx.resizeInPlace (c, 0));
+    ASSERT_EQ (true, memCtx.contains (c, true));
+    ASSERT_EQ (0u, memCtx.getSize (c));
+
+    // nullptr, and sizes too large to represent, fail.
+    ASSERT_EQ (false, memCtx.resizeInPlace (nullptr, 100));
+    ASSERT_EQ (false, memCtx.resizeInPlace (a, ~static_cast<std::size_t> (0)));
+    ASSERT_EQ (false, memCtx.resizeInPlace (a, ~static_cast<std::size_t> (0) - 8));
+    ASSERT_EQ (limit, memCtx.getSize (a));
+
+    // deallocate () checks the padding.
+    memCtx.deallocate (a);
+    memCtx.deallocate (c);
+    memCtx.validate ();
     return 0;
 }
 
@@ -365,6 +430,9 @@ main (int argc, const char* argv[])
         ASSERT_EQ (0, testGrowInPlace<cookmem::PtrRBTree> (0));
         ASSERT_EQ (0, testGrowInPlace<cookmem::PtrRBTree> (cookmem::MAX_PADDING_SIZE));
         ASSERT_EQ (0, testGrowInPlace<cookmem::PtrAVLTree> (1));
+        ASSERT_EQ (0, testResizeInPlace<cookmem::PtrRBTree> (0));
+        ASSERT_EQ (0, testResizeInPlace<cookmem::PtrRBTree> (cookmem::MAX_PADDING_SIZE));
+        ASSERT_EQ (0, testResizeInPlace<cookmem::PtrAVLTree> (1));
         ASSERT_EQ (0, testRandomReallocate ());
         ASSERT_EQ (0, testPreferBetterFit<cookmem::PtrRBTree> ());
         ASSERT_EQ (0, testPreferBetterFit<cookmem::PtrAVLTree> ());
