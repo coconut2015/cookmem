@@ -15,7 +15,7 @@
  */
 // Tests for resizing in place, preferring the designated victim
 // when it fits better than the tree bins, and releasing large segments as
-// soon as they are freed.
+// soon as they are freed, and the tree bin index of large sizes.
 #include <cstdint>
 #include <cstring>
 #include <iostream>
@@ -422,6 +422,45 @@ testImmediateRelease ()
     return 0;
 }
 
+/**
+ * Check the tree bin index of large chunk sizes.  Sizes at or just above a
+ * multiple of 1 TB used to be put in a small tree bin with GCC and Clang
+ * on x86_64.
+ */
+static int
+testTreeBinIndex ()
+{
+    typedef cookmem::MemPool<cookmem::MmapArena, cookmem::NoActionMemLogger> Pool;
+    const std::size_t MB = 1024 * 1024;
+
+    // Each bin starts at a power of two, or 1.5 times a power of two.
+    std::size_t binSize = 256;
+    for (unsigned int i = 0; i < 31; i += 2)
+    {
+        ASSERT_EQ (i, Pool::getTreeBinIndex (binSize));
+        ASSERT_EQ (i, Pool::getTreeBinIndex (binSize + binSize / 2 - 1));
+        ASSERT_EQ (i + 1, Pool::getTreeBinIndex (binSize + binSize / 2));
+        ASSERT_EQ (i + 1, Pool::getTreeBinIndex (binSize * 2 - 1));
+        binSize *= 2;
+    }
+    ASSERT_EQ (31u, Pool::getTreeBinIndex (16 * MB));
+    ASSERT_EQ (31u, Pool::getTreeBinIndex (~static_cast<std::size_t> (0)));
+
+    if (sizeof (std::size_t) > 4)
+    {
+        // Shift in two steps to avoid a warning about the shift width on
+        // 32-bit platforms.
+        const std::size_t TB = (static_cast<std::size_t> (1) << 20) << 20;
+        ASSERT_EQ (31u, Pool::getTreeBinIndex (TB - MB));
+        ASSERT_EQ (31u, Pool::getTreeBinIndex (TB));
+        ASSERT_EQ (31u, Pool::getTreeBinIndex (TB + 4096));
+        ASSERT_EQ (31u, Pool::getTreeBinIndex (TB + MB));
+        ASSERT_EQ (31u, Pool::getTreeBinIndex (TB + 16 * MB - 1));
+        ASSERT_EQ (31u, Pool::getTreeBinIndex (2 * TB + MB));
+    }
+    return 0;
+}
+
 int
 main (int argc, const char* argv[])
 {
@@ -437,6 +476,7 @@ main (int argc, const char* argv[])
         ASSERT_EQ (0, testPreferBetterFit<cookmem::PtrRBTree> ());
         ASSERT_EQ (0, testPreferBetterFit<cookmem::PtrAVLTree> ());
         ASSERT_EQ (0, testImmediateRelease ());
+        ASSERT_EQ (0, testTreeBinIndex ());
     }
     catch (const unittest::UnitTestException& ex)
     {

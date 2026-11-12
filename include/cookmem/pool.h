@@ -53,13 +53,13 @@ T left_bits(T x)
 #if defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
 #define cookmem_getLargeBinIndex(S, I)\
 {\
-  unsigned int X = S >> TREEBIN_SHIFT;\
+  std::size_t X = S >> TREEBIN_SHIFT;\
   if (X == 0)\
     I = 0;\
   else if (X > 0xFFFF)\
     I = NTREEBINS-1;\
   else {\
-    unsigned int K = (unsigned) sizeof(X)*__CHAR_BIT__ - 1 - (unsigned) __builtin_clz(X); \
+    unsigned int K = (unsigned) sizeof(unsigned int)*__CHAR_BIT__ - 1 - (unsigned) __builtin_clz((unsigned int) X); \
     I =  (BinIndexType)((K << 1) + ((S >> (K + (TREEBIN_SHIFT-1)) & 1)));\
   }\
 }
@@ -1359,6 +1359,23 @@ public:
     setPaddingByte (std::uint8_t paddingByte)
     {
         m_paddingByte = (char)paddingByte;
+    }
+
+    /**
+     * Get the tree bin that holds free chunks of a given size.  Chunks of
+     * 12 MB and more all go in the last bin.
+     *
+     * @param   chunkSize
+     *          the chunk size, which must be at least the smallest large
+     *          chunk size (256 bytes).
+     * @return  the tree bin index.
+     */
+    static unsigned int
+    getTreeBinIndex (size_type chunkSize)
+    {
+        BinIndexType binIndex;
+        cookmem_getLargeBinIndex (chunkSize, binIndex);
+        return binIndex;
     }
 
     /**
