@@ -18,14 +18,16 @@
 #include <cookmem.h>
 #include "unittest.h"
 
-#define NUM_ENTRIES 9
+// Allocation sizes go from 30 bytes up by factors of 10: up to 3 GB on 64-bit
+// platforms, and up to 300 MB on 32-bit platforms, which cannot address 3 GB.
+#define NUM_ENTRIES (sizeof (void*) == 8 ? 9 : 8)
 
 static int
 test1 ()
 {
     cookmem::SimpleMemContext<cookmem::MmapArena> memCtx;
 
-    void* ptrs[NUM_ENTRIES];
+    void* ptrs[9];
 
     std::size_t size = 3;
     for (int i = 0; i < NUM_ENTRIES; ++i)
@@ -53,7 +55,8 @@ test1 ()
     memCtx.releaseAllToSystem ();
     ASSERT_EQ (false, memCtx.contains (ptrs[0]));
 
-    ASSERT_EQ (nullptr, memCtx.allocate (0xffffffffff000000));
+    // A request near the top of the address space fails.
+    ASSERT_EQ (nullptr, memCtx.allocate (~static_cast<std::size_t> (0) - 0xffffff));
 
     return 0;
 }

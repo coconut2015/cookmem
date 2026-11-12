@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 #include <cookmem/allocator.h>
+#include <cookmem/mallocarena.h>
 
 #include <cstdint>
 #include <list>
@@ -288,18 +289,45 @@ isAligned (const void* ptr)
  * Every allocation is aligned to ALLOCATION_ALIGNMENT, so types that require
  * that alignment work with Allocator.
  */
+/**
+ * Raw allocations of many sizes, small and large, are aligned to
+ * ALLOCATION_ALIGNMENT.
+ */
+template<class Context>
 static int
-testAlignment ()
+checkRawAlignment (Context& context)
 {
-    cookmem::CachedMemContext<> context;
-
-    // Raw allocations of many sizes.
     for (std::size_t size = 1; size < 3000; size += 7)
     {
         void* ptr = context.allocate (size);
         ASSERT_NE (nullptr, ptr);
         ASSERT_EQ (true, isAligned (ptr));
     }
+    for (std::size_t size = 100000; size < 2000000; size += 300000)
+    {
+        void* ptr = context.allocate (size);
+        ASSERT_NE (nullptr, ptr);
+        ASSERT_EQ (true, isAligned (ptr));
+    }
+    return 0;
+}
+
+static int
+testAlignment ()
+{
+    cookmem::CachedMemContext<> context;
+    ASSERT_EQ (0, checkRawAlignment (context));
+
+    // malloc only guarantees 8-byte alignment on some 32-bit platforms.
+    cookmem::SimpleMemContext<cookmem::MallocArena> mallocContext;
+    ASSERT_EQ (0, checkRawAlignment (mallocContext));
+
+    // FixedArena aligns the start of a misaligned buffer.
+    static char buffer[8 * 1024 * 1024 + 16];
+    cookmem::FixedArena fixedArena (buffer + 1, sizeof (buffer) - 1);
+    cookmem::NoActionMemLogger logger;
+    cookmem::MemContext<cookmem::FixedArena, cookmem::NoActionMemLogger> fixedContext (fixedArena, logger);
+    ASSERT_EQ (0, checkRawAlignment (fixedContext));
 
     // Containers of a type that requires the largest supported alignment.
     typedef cookmem::Allocator<MaxAligned> MaxAlignedAllocator;

@@ -23,7 +23,7 @@ testError1 ()
 {
     cookmem::SimpleMemContext<cookmem::MallocArena> memCtx;
 
-    ASSERT_EQ (nullptr, memCtx.allocate (0xffffffffffffffffUL));
+    ASSERT_EQ (nullptr, memCtx.allocate (~static_cast<std::size_t> (0)));
 
     return 0;
 }

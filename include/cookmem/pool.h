@@ -194,10 +194,10 @@ private:
     {
     public:
         /**
-         * We are using 16-byte alignment.  So the lower 4 bits of pointers
-         * and sizes are available to use.
+         * Chunk sizes are multiples of ALLOCATION_ALIGNMENT, which is at
+         * least 8 bytes.  So the lower bits of sizes are available for flags.
          */
-        static const size_type  BIT_MASK = ((size_t)-1) ^ 0x0f;
+        static const size_type  BIT_MASK = ~static_cast<size_type> (ALLOCATION_ALIGNMENT - 1);
         static const size_type  BIT_USED = 1;
         static const size_type  BIT_NOTEXACTSIZE = 2;
 
@@ -452,6 +452,11 @@ private:
      * The mask used to calculate the alignment.
      */
     static const size_type  ALIGN_MASK = ALIGNMENT - 1;
+    // MemChunk stores BIT_USED and BIT_NOTEXACTSIZE in the low bits of chunk
+    // sizes, so the alignment must leave at least two low bits free.
+    static_assert (ALIGNMENT >= 4, "ALLOCATION_ALIGNMENT must be at least 4.");
+    static_assert (ALIGN_MASK == ~MemChunk::BIT_MASK,
+                   "ALLOCATION_ALIGNMENT must match MemChunk::BIT_MASK.");
     /**
      * The number of fixed small segment bins.
      *

@@ -16,11 +16,12 @@ concurrency:
 
 jobs:
   build-and-test:
-    name: MSVC x64 ${{ matrix.config }}
+    name: MSVC ${{ matrix.arch }} ${{ matrix.config }}
     runs-on: windows-latest
     strategy:
       fail-fast: false
       matrix:
+        arch: [x64, Win32]
         config: [Debug, Release]
     steps:
       - name: Check out repository
@@ -29,7 +30,7 @@ jobs:
       # Uses CMake directly rather than make.cmd, so that a failing build or
       # test fails the job.
       - name: Configure
-        run: cmake -S . -B build -A x64
+        run: cmake -S . -B build -A ${{ matrix.arch }}
 
       - name: Build
         run: cmake --build build --config ${{ matrix.config }} --parallel

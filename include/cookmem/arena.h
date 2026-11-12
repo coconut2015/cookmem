@@ -17,7 +17,9 @@
 #define COOK_MEM_ARENA_H
 
 #include <cstddef>
+#include <cstdint>
 
+#include "config.h"
 #include "rbtree.h"
 
 namespace cookmem
@@ -81,28 +83,30 @@ public:
      *
      * @param   ptr
      *          the memory buffer for memory allocation.
-     *          If it is not 16-byte aligned, the start address is advanced
-     *          to the next 16-byte boundary.
+     *          If it is not aligned to ALLOCATION_ALIGNMENT, the start
+     *          address is advanced to the next aligned address.
      * @param   size
      *          The size of the memory buffer. The usable size is reduced by
      *          any bytes skipped to align the start address, then rounded
-     *          down to a multiple of 16.
+     *          down to a multiple of ALLOCATION_ALIGNMENT.
      */
     FixedArena (void* ptr, std::size_t size)
     : m_used (false)
     {
-        std::size_t remain = (std::size_t)ptr & 0xfUL;
+        const std::size_t mask = ALLOCATION_ALIGNMENT - 1;
+        std::size_t remain = reinterpret_cast<std::uintptr_t> (ptr) & mask;
         if (remain)
         {
-            std::size_t inc = (0x10 - remain);
-            m_page = (void*)((char*)ptr + inc);
-            size -= inc;
+            std::size_t inc = ALLOCATION_ALIGNMENT - remain;
+            m_page = static_cast<char*> (ptr) + inc;
+            // A buffer smaller than the bytes skipped has no usable space.
+            size = (size > inc) ? size - inc : 0;
         }
         else
         {
             m_page = ptr;
         }
-        size &= 0xfffffffffffffff0UL;
+        size &= ~mask;
         m_size = size;
     }
 

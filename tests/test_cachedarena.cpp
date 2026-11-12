@@ -18,7 +18,9 @@
 #include <cookmem.h>
 #include "unittest.h"
 
-#define NUM_ENTRIES 9
+// Allocation sizes go from 30 bytes up by factors of 10: up to 3 GB on 64-bit
+// platforms, and up to 300 MB on 32-bit platforms, which cannot address 3 GB.
+#define NUM_ENTRIES (sizeof (void*) == 8 ? 9 : 8)
 
 /**
  * An arena that counts the segments it has handed out and not yet freed.
@@ -88,7 +90,7 @@ test1 ()
     {
         cookmem::MemContext<cookmem::CachedArena<cookmem::MallocArena>, cookmem::NoActionMemLogger> memCtx (cachedArena, logger);
 
-        void* ptrs[NUM_ENTRIES];
+        void* ptrs[9];
 
         std::size_t size = 3;
         for (int i = 0; i < NUM_ENTRIES; ++i)
@@ -114,7 +116,7 @@ test1 ()
     {
         cookmem::MemContext<cookmem::CachedArena<cookmem::MallocArena>, cookmem::NoActionMemLogger> memCtx(cachedArena, logger);
 
-        void* ptrs[NUM_ENTRIES];
+        void* ptrs[9];
 
         std::size_t size = 3;
         for (int i = 0; i < NUM_ENTRIES; ++i)
@@ -153,8 +155,8 @@ testReleaseAll ()
     {
         cookmem::CachedArena<CountingArena, TreeType> cachedArena (arena);
 
-        void* ptrs[NUM_ENTRIES];
-        std::size_t sizes[NUM_ENTRIES];
+        void* ptrs[9];
+        std::size_t sizes[9];
         for (int i = 0; i < NUM_ENTRIES; ++i)
         {
             // Two segments of each size, to fill the lists of equal sizes.

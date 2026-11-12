@@ -18,6 +18,21 @@
 #include <cookmem.h>
 #include "unittest.h"
 
+/**
+ * The usable size of an allocation when the exact size is not stored: the
+ * request plus the chunk header, rounded up to ALLOCATION_ALIGNMENT, minus the
+ * header.
+ * The header is two size_t, so it is 16 bytes on 64-bit platforms and 8
+ * bytes on 32-bit platforms.
+ */
+static std::size_t
+roundedSize (std::size_t size)
+{
+    const std::size_t overhead = 2 * sizeof (std::size_t);
+    const std::size_t mask = cookmem::ALLOCATION_ALIGNMENT - 1;
+    return ((size + overhead + mask) & ~mask) - overhead;
+}
+
 static int
 test1 ()
 {
@@ -32,24 +47,24 @@ test1 ()
 
     ptr = memCtx.allocate (30);
     ASSERT_NE (nullptr, ptr);
-    ASSERT_EQ (32UL, memCtx.getSize (ptr));
+    ASSERT_EQ (roundedSize (30), memCtx.getSize (ptr));
     memCtx.deallocate (ptr);
     ASSERT_EQ (0UL, memCtx.getSize (ptr));
 
     ptr = memCtx.allocate (300);
     ASSERT_NE (nullptr, ptr);
-    ASSERT_EQ (304UL, memCtx.getSize (ptr));
+    ASSERT_EQ (roundedSize (300), memCtx.getSize (ptr));
     ptr = memCtx.allocate (3000);
     ASSERT_NE (nullptr, ptr);
-    ASSERT_EQ (3008UL, memCtx.getSize (ptr));
+    ASSERT_EQ (roundedSize (3000), memCtx.getSize (ptr));
     ptr = memCtx.allocate (30000);
     ASSERT_NE (nullptr, ptr);
-    ASSERT_EQ (30000UL, memCtx.getSize (ptr));
+    ASSERT_EQ (roundedSize (30000), memCtx.getSize (ptr));
     ptr = memCtx.allocate (30000);
-    ASSERT_EQ (30000UL, memCtx.getSize (ptr));
+    ASSERT_EQ (roundedSize (30000), memCtx.getSize (ptr));
     ASSERT_NE (nullptr, ptr);
     ptr = memCtx.allocate (30000);
-    ASSERT_EQ (30000UL, memCtx.getSize (ptr));
+    ASSERT_EQ (roundedSize (30000), memCtx.getSize (ptr));
     ASSERT_NE (nullptr, ptr);
 
     return 0;
@@ -150,7 +165,11 @@ test4 ()
     void* ptr = memCtx.allocate (8);
     ASSERT_NE (nullptr, ptr);
 
-    void* resized = memCtx.reallocate (ptr, 9);
+    // Growing up to the usable size of the chunk stays in place.  The usable
+    // size depends on the platform: 16 bytes on 64-bit, 8 bytes on 32-bit.
+    const std::size_t usable = memCtx.getSize (ptr);
+    ASSERT_EQ (true, usable >= 8);
+    void* resized = memCtx.reallocate (ptr, usable);
     ASSERT_EQ (ptr, resized);
     ASSERT_EQ (true, memCtx.contains (resized, true));
 
