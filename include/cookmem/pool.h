@@ -550,6 +550,11 @@ private:
      * The number of deallocations since the last empty-segment trimming pass.
      */
     size_type       m_numFrees;
+    /**
+     * Freed allocations at least this large release their segment right away
+     * if it becomes entirely free.  0 disables this.
+     */
+    size_type       m_immediateReleaseThreshold;
     BinIndexType    m_smallMap;
     BinIndexType    m_treeMap;
     /**
@@ -611,6 +616,7 @@ public:
       m_segList (nullptr),
       m_trimEmptySegmentsInterval (DEFAULT_TRIM_EMPTY_SEGMENTS_INTERVAL),
       m_numFrees (0),
+      m_immediateReleaseThreshold (DEFAULT_IMMEDIATE_RELEASE_THRESHOLD),
       m_smallMap (0),
       m_treeMap (0),
       m_dv (nullptr),
@@ -701,6 +707,39 @@ public:
     getTrimEmptySegmentsInterval () const
     {
         return m_trimEmptySegmentsInterval;
+    }
+
+    /**
+     * Set the size at which freed allocations release their memory right
+     * away.
+     *
+     * A large allocation usually gets a segment of its own.  When an
+     * allocation at least this large is freed and its segment becomes
+     * entirely free, the segment is released to the arena immediately,
+     * instead of at the next empty-segment trimming pass.  This is similar
+     * to the mmap threshold of dlmalloc.
+     *
+     * @param   threshold
+     *          the allocation size in bytes.  The default is
+     *          DEFAULT_IMMEDIATE_RELEASE_THRESHOLD.  0 disables the
+     *          immediate release.
+     */
+    void
+    setImmediateReleaseThreshold (size_type threshold)
+    {
+        m_immediateReleaseThreshold = threshold;
+    }
+
+    /**
+     * Get the size at which freed allocations release their memory right
+     * away.
+     *
+     * @return  the allocation size in bytes.  0 means disabled.
+     */
+    size_type
+    getImmediateReleaseThreshold () const
+    {
+        return m_immediateReleaseThreshold;
     }
 
     /**
@@ -845,9 +884,38 @@ public:
         }
         size_type newChunkSize = (newAllocSize < MIN_REQUEST) ? MIN_CHUNK_SIZE : calcChunkSize (newAllocSize);
 
-        if (chunk->getChunkSize () < newChunkSize)
+        size_type chunkSize = chunk->getChunkSize ();
+        if (chunkSize < newChunkSize)
         {
-            // For now we use a simple algorithm that allocate new memory.
+            // Grow in place if the next chunk is free and large enough.
+            MemChunk* nextChunk = chunk->getNextChunk (chunkSize);
+            if (!nextChunk->isUsed () &&
+                chunkSize + nextChunk->getChunkSize () >= newChunkSize)
+            {
+                m_logger.logReallocation (ptr, oldUserSize, newUserSize);
+
+                size_type mergedSize = chunkSize + nextChunk->getChunkSize ();
+                removeChunk (nextChunk);
+
+                // The chunk after nextChunk is in use, since free chunks are
+                // always coalesced, so the remainder does not need merging.
+                size_type remainSize = mergedSize - newChunkSize;
+                if (remainSize >= MIN_CHUNK_SIZE)
+                {
+                    chunk->setFreeChunkSize (newChunkSize);
+                    MemChunk* remainChunk = chunk->getNextChunk (newChunkSize);
+                    remainChunk->setFreeChunkSize (remainSize);
+                    addChunk (remainChunk);
+                }
+                else
+                {
+                    chunk->setFreeChunkSize (mergedSize);
+                }
+                setUsed (chunk, newUserSize);
+                return ptr;
+            }
+
+            // Otherwise allocate new memory and copy.
             T* newPtr = allocate (newUserSize);
             if (newPtr)
             {
@@ -860,7 +928,7 @@ public:
         {
             m_logger.logReallocation (ptr, oldUserSize, newUserSize);
 
-            size_type remainSize = chunk->getChunkSize () - newChunkSize;
+            size_type remainSize = chunkSize - newChunkSize;
             if (remainSize >= MIN_CHUNK_SIZE)
             {
                 MemChunk* remainChunk = (MemChunk*)((char*)chunk + newChunkSize);
@@ -960,14 +1028,20 @@ public:
             MemChunk*   nextChunk = chunk->getNextChunk (chunkSize);
             bool        nextChunkUsed = nextChunk->isUsed ();
 
+            MemChunk*   freeChunk;
+
             // Fast path: when only the previous chunk is free, it may be able
             // to absorb this chunk without being moved to a different place.
             // This is common when memory is freed in allocation order.
-            if (prevChunkUsed ||
-                !nextChunkUsed ||
-                !growFreeChunkInPlace (chunk->getPrevChunk (), chunkSize))
+            if (!prevChunkUsed &&
+                nextChunkUsed &&
+                growFreeChunkInPlace (chunk->getPrevChunk (), chunkSize))
             {
-                MemChunk*   freeChunk = chunk;
+                freeChunk = chunk->getPrevChunk ();
+            }
+            else
+            {
+                freeChunk = chunk;
                 size_type   freeChunkSize = chunkSize;
 
                 if (!prevChunkUsed)
@@ -986,6 +1060,15 @@ public:
 
                 freeChunk->setFreeChunkSize (freeChunkSize);
                 addChunk (freeChunk);
+            }
+
+            // A large allocation that had a segment of its own is returned
+            // to the arena right away, rather than at the next trimming pass.
+            if (m_immediateReleaseThreshold != 0 &&
+                chunkSize >= m_immediateReleaseThreshold &&
+                isWholeSegment (freeChunk))
+            {
+                releaseSegment (freeChunk);
             }
 
             ++m_numFrees;
@@ -1311,6 +1394,58 @@ private:
         m_numFrees = 0;
     }
 
+    /**
+     * Check if a free chunk spans its entire segment.
+     *
+     * @param   chunk
+     *          a free chunk.
+     * @return  true if the chunk is the only chunk of its segment.
+     */
+    static inline bool
+    isWholeSegment (MemChunk* chunk)
+    {
+        // Only the first chunk of a segment has a previous size of 0, and
+        // only the fence at the end of a segment has a size of 0.
+        return chunk->getPrevChunkSize () == 0 &&
+               chunk->getNextChunk (chunk->getChunkSize ())->getChunkSize () == 0;
+    }
+
+    /**
+     * Release the segment of a free chunk that spans the entire segment.
+     *
+     * @param   chunk
+     *          the free chunk, which is in a bin or is the designated victim.
+     */
+    void
+    releaseSegment (MemChunk* chunk)
+    {
+        MemSegment* seg = reinterpret_cast<MemSegment*> (reinterpret_cast<char*> (chunk) - SEGMENT_HEADER);
+        COOKMEM_ASSERT (seg->getFirstChunk () == chunk &&
+                        chunk->getChunkSize () == seg->getMaxChunkSize ());
+
+        MemSegment* prevSeg = nullptr;
+        for (MemSegment* s = m_segList; s != seg; s = s->getNext ())
+        {
+            COOKMEM_ASSERT (s != nullptr);
+            prevSeg = s;
+        }
+        if (prevSeg == nullptr)
+        {
+            m_segList = seg->getNext ();
+        }
+        else
+        {
+            prevSeg->setNext (seg->getNext ());
+        }
+
+        removeChunk (chunk);
+
+        size_type segSize = seg->getSize ();
+        m_footprint -= segSize;
+        m_logger.logFreeSegment (seg, segSize);
+        m_arena.freeSegment (seg, segSize);
+    }
+
     static inline BinIndexType
     idx2bit (BinIndexType binIndex)
     {
@@ -1379,8 +1514,33 @@ private:
         return m_largeTrees[i];
     }
 
+    /**
+     * Get the smallest chunk size that a tree bin holds.
+     *
+     * @param   binIndex
+     *          the tree bin index.
+     * @return  the smallest chunk size of the bin.
+     */
+    static inline size_type
+    getTreeBinMinSize (BinIndexType binIndex)
+    {
+        return (static_cast<size_type> (1) << ((binIndex >> 1) + TREEBIN_SHIFT)) |
+               (static_cast<size_type> (binIndex & 1) << ((binIndex >> 1) + TREEBIN_SHIFT - 1));
+    }
+
+    /**
+     * Take the best fitting chunk from the tree bins and split it.
+     *
+     * @param   size
+     *          the chunk size needed.
+     * @param   limit
+     *          the chunk taken must be smaller than this size.  This is used
+     *          to prefer the designated victim when it fits better.
+     * @return  the chunk, or nullptr if no chunk of at least size and smaller
+     *          than limit is free.
+     */
     inline MemChunk*
-    treeMalloc (size_type size)
+    treeMalloc (size_type size, size_type limit)
     {
         MemChunk* chunk = nullptr;
         size_type  actualSize = size;
@@ -1388,12 +1548,14 @@ private:
         BinIndexType binIndex;
         cookmem_getLargeBinIndex (size, binIndex);
 
-        for (; binIndex < NTREEBINS; ++binIndex)
+        // Bins hold increasing sizes, so stop at a bin whose chunks are all
+        // at least the limit.
+        for (; binIndex < NTREEBINS && getTreeBinMinSize (binIndex) < limit; ++binIndex)
         {
             PtrTreeType& tree = treeAt (binIndex);
             if (!tree.isEmpty ())
             {
-                chunk = reinterpret_cast<MemChunk*>(tree.remove(actualSize));
+                chunk = reinterpret_cast<MemChunk*>(tree.remove(actualSize, limit));
                 if (chunk != nullptr)
                 {
                     if (tree.isEmpty ())
@@ -1497,7 +1659,9 @@ private:
          */
         if (m_treeMap != 0)
         {
-            chunk = treeMalloc (chunkSize);
+            // As in dlmalloc, a tree chunk is only used if it fits better
+            // than the designated victim.
+            chunk = treeMalloc (chunkSize, (m_dvSize >= chunkSize) ? m_dvSize : ~static_cast<size_type> (0));
             if (chunk != nullptr)
             {
                 allocType = MEM_ALLOC_TREE;

@@ -22,7 +22,7 @@ Use one of the following to make the target available.  They require CMake
 include (FetchContent)
 FetchContent_Declare (cookmem
     GIT_REPOSITORY https://github.com/coconut2015/cookmem.git
-    GIT_TAG        v1.3.0)
+    GIT_TAG        v1.4.0)
 FetchContent_MakeAvailable (cookmem)
 ```
 
@@ -43,7 +43,7 @@ cmake --install cookmem-build --prefix /path/to/prefix
 Then, in your project:
 
 ```cmake
-find_package (cookmem 1.3 REQUIRED)
+find_package (cookmem 1.4 REQUIRED)
 ```
 
 If CookMem is not installed in a standard location, pass

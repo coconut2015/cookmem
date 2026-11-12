@@ -379,11 +379,14 @@ public:
      * @param [in,out]  size
      *                  search key.  If the node is found, the actual size of the
      *                  pointer is returned.
+     * @param   limit
+     *          the node must be smaller than this value.  Otherwise nothing
+     *          is removed.
      * @return  the node matching the search key that is at least the size
      *          of the provided.  This node is also removed from the tree.
      */
     NodeType*
-    remove (ValueType& size)
+    remove (ValueType& size, ValueType limit = ~static_cast<ValueType> (0))
     {
         NodeType*   lastBigNode = nullptr;
         NodeType*   node = m_root;
@@ -415,6 +418,11 @@ public:
             {
                 node = lastBigNode;
             }
+        }
+
+        if (node->getValue () >= limit)
+        {
+            return nullptr;
         }
 
         if (node->hasList ())

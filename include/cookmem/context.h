@@ -288,6 +288,38 @@ public:
     }
 
     /**
+     * Set the size at which freed allocations release their memory right
+     * away.
+     *
+     * A large allocation usually gets a segment of its own.  When an
+     * allocation at least this large is freed and its segment becomes
+     * entirely free, the segment is released to the arena immediately,
+     * instead of at the next empty-segment trimming pass.
+     *
+     * @param   threshold
+     *          the allocation size in bytes.  The default is
+     *          DEFAULT_IMMEDIATE_RELEASE_THRESHOLD.  0 disables the
+     *          immediate release.
+     */
+    void
+    setImmediateReleaseThreshold (size_type threshold)
+    {
+        m_pool.setImmediateReleaseThreshold (threshold);
+    }
+
+    /**
+     * Get the size at which freed allocations release their memory right
+     * away.
+     *
+     * @return  the allocation size in bytes.  0 means disabled.
+     */
+    size_type
+    getImmediateReleaseThreshold () const
+    {
+        return m_pool.getImmediateReleaseThreshold ();
+    }
+
+    /**
      * Check whether or not we are storing the exact user size in the memory.
      *
      * @return  whether or not we are storing the exact user size in the memory.
