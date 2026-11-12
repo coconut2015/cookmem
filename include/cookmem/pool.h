@@ -35,22 +35,24 @@ namespace cookmem
 {
 
 /// @cond INTERNAL
-// Bit helpers used by the bin maps (from dlmalloc).
+// Bit helpers used by the bin maps (from dlmalloc).  T is unsigned, and
+// ~x + 1 is -x without the overflow of negating INT_MIN as an int.
 template<class T>
 T least_bit(T x)
 {
-    return ((x) & -(static_cast<int>(x)));
+    return x & (~x + 1);
 }
 
 template<class T>
 T left_bits(T x)
 {
-    return ((x << 1) | -static_cast<int>(x << 1));
+    return (x << 1) | (~(x << 1) + 1);
 }
 /// @endcond
 
-/* assign tree index for size S to variable I. Use x86 asm if possible  */
-#if defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
+/* Assign the tree bin index for size S to I.  Use the compiler builtins or
+   intrinsics for the bit scan if possible. */
+#if defined(__GNUC__)
 #define cookmem_getLargeBinIndex(S, I)\
 {\
   std::size_t X = S >> TREEBIN_SHIFT;\
@@ -113,7 +115,7 @@ T left_bits(T x)
 }
 #endif /* GNUC */
 
-#if defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
+#if defined(__GNUC__)
 #define cookmem_bit2treeIndex(X, I)\
 {\
   unsigned int J;\
@@ -1599,23 +1601,29 @@ private:
         BinIndexType binIndex;
         cookmem_getLargeBinIndex (size, binIndex);
 
-        // Bins hold increasing sizes, so stop at a bin whose chunks are all
-        // at least the limit.
-        for (; binIndex < NTREEBINS && getTreeBinMinSize (binIndex) < limit; ++binIndex)
+        // Visit only the non-empty bins, starting from the bin of the size,
+        // using the tree map.  Bins hold increasing sizes, so stop at a bin
+        // whose chunks are all at least the limit.
+        BinIndexType bits = m_treeMap & ~(idx2bit (binIndex) - 1);
+        while (bits != 0)
         {
-            PtrTreeType& tree = treeAt (binIndex);
-            if (!tree.isEmpty ())
+            cookmem_bit2treeIndex (least_bit (bits), binIndex);
+            if (getTreeBinMinSize (binIndex) >= limit)
             {
-                chunk = reinterpret_cast<MemChunk*>(tree.remove(actualSize, limit));
-                if (chunk != nullptr)
-                {
-                    if (tree.isEmpty ())
-                    {
-                        clearTreeMap (binIndex);
-                    }
-                    break;
-                }
+                break;
             }
+            PtrTreeType& tree = treeAt (binIndex);
+            COOKMEM_ASSERT (!tree.isEmpty ());
+            chunk = reinterpret_cast<MemChunk*>(tree.remove(actualSize, limit));
+            if (chunk != nullptr)
+            {
+                if (tree.isEmpty ())
+                {
+                    clearTreeMap (binIndex);
+                }
+                break;
+            }
+            bits &= bits - 1;
         }
 
         if (chunk != nullptr)

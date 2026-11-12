@@ -115,8 +115,10 @@ Free chunks are kept in bins, as in dlmalloc:
   holds sizes from `2^(k+8)` up to `1.5 * 2^(k+8)`, and bin `2k+1` holds sizes
   from `1.5 * 2^(k+8)` up to `2^(k+9)`.  The last bin also holds everything
   larger, so it starts at 12 MB.  The bin index is computed from the two most
-  significant bits of the size, using a bit-scan instruction where one is
-  available, exactly as in dlmalloc.  A 32-bit map (`m_treeMap`) records
+  significant bits of the size, as in dlmalloc.  It uses the compiler's
+  bit-scan builtin with GCC and Clang (on every architecture, where dlmalloc
+  uses it only on x86) and the bit-scan intrinsic with MSVC, and portable
+  shifts otherwise.  A 32-bit map (`m_treeMap`) records
   which bins are not empty.
 
 Within a tree bin, dlmalloc uses a bitwise trie.  CookMem uses a balanced
@@ -169,7 +171,7 @@ For a large request:
 
 1. **Tree bins.**  The best fit: starting with the bin for the size, the
    smallest chunk that is large enough is taken from the first bin that has
-   one, and split.  As in dlmalloc, if the dv is also large enough, the tree
+   one, and split.  The search skips the empty bins using the tree map.  As in dlmalloc, if the dv is also large enough, the tree
    chunk is only taken if it is smaller than the dv.  The search stops at the
    first bin whose chunks are all at least the size of the dv, and the tree
    search leaves a chunk in place if it is not smaller.
