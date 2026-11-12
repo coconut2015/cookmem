@@ -127,7 +127,8 @@ public:
      *          number of elements
      * @param   size
      *          element size
-     * @return  memory allocated.
+     * @return  memory allocated.  nullptr if num * size overflows, or if the
+     *          request cannot be satisfied.
      */
     inline T*
     callocate (size_type num, size_type size) { return m_pool.callocate (num, size); }

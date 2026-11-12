@@ -58,6 +58,62 @@ testError2 ()
     return 1;
 }
 
+/**
+ * A double free is detected after the chunk was merged into the free chunk
+ * before it, and after the free chunk after it was merged into it.
+ */
+template<class TreeType>
+static int
+testDoubleFreeAfterMerge (std::size_t size)
+{
+    cookmem::SimpleMemContext<cookmem::MmapArena, cookmem::NoActionMemLogger, TreeType> memCtx;
+
+    void* first = memCtx.allocate (size);
+    void* second = memCtx.allocate (size);
+    void* third = memCtx.allocate (size);
+    void* fourth = memCtx.allocate (size);
+    ASSERT_NE (nullptr, fourth);
+
+    // second is merged into first.
+    memCtx.deallocate (first);
+    memCtx.deallocate (second);
+    try
+    {
+        memCtx.deallocate (second);
+        return 1;
+    }
+    catch (cookmem::Exception& ex)
+    {
+        ASSERT_EQ (cookmem::MEM_ERROR_DOUBLE_FREE, ex.getError ());
+    }
+
+    // third is merged into the free chunk before it.  Then fourth is merged
+    // with the free chunks on both sides.
+    memCtx.deallocate (third);
+    memCtx.deallocate (fourth);
+    try
+    {
+        memCtx.deallocate (third);
+        return 1;
+    }
+    catch (cookmem::Exception& ex)
+    {
+        ASSERT_EQ (cookmem::MEM_ERROR_DOUBLE_FREE, ex.getError ());
+    }
+    try
+    {
+        memCtx.deallocate (fourth);
+        return 1;
+    }
+    catch (cookmem::Exception& ex)
+    {
+        ASSERT_EQ (cookmem::MEM_ERROR_DOUBLE_FREE, ex.getError ());
+    }
+
+    memCtx.validate ();
+    return 0;
+}
+
 static int
 checkBound (int size)
 {
@@ -117,6 +173,10 @@ main (int argc, const char* argv[])
     {
         ASSERT_EQ (0, testError1 ());
         ASSERT_EQ (0, testError2 ());
+        // Small chunks, and large chunks merged in a tree or in the dv.
+        ASSERT_EQ (0, testDoubleFreeAfterMerge<cookmem::PtrRBTree> (100));
+        ASSERT_EQ (0, testDoubleFreeAfterMerge<cookmem::PtrRBTree> (1000));
+        ASSERT_EQ (0, testDoubleFreeAfterMerge<cookmem::PtrAVLTree> (1000));
         ASSERT_EQ (0, testError3 ());
         ASSERT_EQ (0, testInvalidPaddingSize ());
     }

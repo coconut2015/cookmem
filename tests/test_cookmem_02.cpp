@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#include <cstdint>
+#include <cstring>
 #include <iostream>
 
 #include <cookmem.h>
@@ -179,6 +181,87 @@ test4 ()
     return 0;
 }
 
+/**
+ * Resizing in place keeps the padding inside the chunk and the exact size
+ * correct, for every combination of old and new sizes.
+ */
+static int
+checkReallocateSizes (std::uint8_t paddingSize)
+{
+    cookmem::SimpleMemContext<cookmem::MmapArena> memCtx (paddingSize);
+    memCtx.setStoringExactSize (true);
+
+    for (std::size_t oldSize = 1; oldSize < 300; oldSize += 7)
+    {
+        for (std::size_t newSize = 1; newSize < 300; newSize += 5)
+        {
+            unsigned char* ptr = static_cast<unsigned char*> (memCtx.allocate (oldSize));
+            // The neighbor detects writes past the chunk of ptr.
+            unsigned char* neighbor = static_cast<unsigned char*> (memCtx.allocate (16));
+            ASSERT_NE (nullptr, ptr);
+            ASSERT_NE (nullptr, neighbor);
+            memset (ptr, 0x11, oldSize);
+            memset (neighbor, 0x22, 16);
+
+            ptr = static_cast<unsigned char*> (memCtx.reallocate (ptr, newSize));
+            ASSERT_NE (nullptr, ptr);
+            ASSERT_EQ (newSize, memCtx.getSize (ptr));
+            for (std::size_t i = 0; i < oldSize && i < newSize; ++i)
+            {
+                ASSERT_EQ (0x11, ptr[i]);
+            }
+            memset (ptr, 0x33, newSize);
+            memCtx.validate ();
+
+            // deallocate () throws if a padding byte was changed.
+            memCtx.deallocate (neighbor);
+            memCtx.deallocate (ptr);
+            memCtx.validate ();
+        }
+    }
+    return 0;
+}
+
+static int
+test5 ()
+{
+    ASSERT_EQ (0, checkReallocateSizes (0));
+    ASSERT_EQ (0, checkReallocateSizes (1));
+    ASSERT_EQ (0, checkReallocateSizes (cookmem::MAX_PADDING_SIZE));
+    return 0;
+}
+
+/**
+ * Requests too large to represent fail without changing the memory.
+ */
+static int
+test6 ()
+{
+    cookmem::SimpleMemContext<cookmem::MmapArena> memCtx;
+    const std::size_t maxSize = ~static_cast<std::size_t> (0);
+
+    char* ptr = static_cast<char*> (memCtx.allocate (100));
+    ASSERT_NE (nullptr, ptr);
+    memset (ptr, 0x44, 100);
+    ASSERT_EQ (nullptr, memCtx.reallocate (ptr, maxSize));
+    ASSERT_EQ (nullptr, memCtx.reallocate (ptr, maxSize - 8));
+    ASSERT_EQ (true, memCtx.contains (ptr, true));
+    ASSERT_EQ (0x44, ptr[99]);
+    memCtx.deallocate (ptr);
+
+    // num * size overflows.
+    ASSERT_EQ (nullptr, memCtx.callocate (maxSize / 16 + 2, 16));
+    ASSERT_EQ (nullptr, memCtx.callocate (16, maxSize / 16 + 2));
+    ASSERT_EQ (nullptr, memCtx.callocate (maxSize, maxSize));
+    // Zero elements is not an overflow.
+    void* zero = memCtx.callocate (0, maxSize);
+    ASSERT_NE (nullptr, zero);
+    memCtx.deallocate (zero);
+
+    memCtx.validate ();
+    return 0;
+}
+
 int
 main (int argc, const char* argv[])
 {
@@ -188,6 +271,8 @@ main (int argc, const char* argv[])
         ASSERT_EQ (0, test2 ());
         ASSERT_EQ (0, test3 ());
         ASSERT_EQ (0, test4 ());
+        ASSERT_EQ (0, test5 ());
+        ASSERT_EQ (0, test6 ());
     }
     catch (const unittest::UnitTestException& ex)
     {

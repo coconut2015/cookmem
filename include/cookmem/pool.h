@@ -184,11 +184,10 @@ private:
     /**
      * Basic memory chunk header.
      *
-     * For unused memory chunks, the size information is the chunk size.
-     * For memory chunks being used, the size information is the request size
-     * (without being aligned) and with sign bit being set.
-     *
-     * The prevFootSize is treated the same manner.
+     * m_size is the chunk size, with BIT_USED set if the chunk is in use and
+     * BIT_NOTEXACTSIZE set if the exact user size is stored in the last byte
+     * of the chunk.  m_prevFootSize is the size of the previous chunk, with
+     * BIT_USED set if that chunk is in use.
      */
     class MemChunk
     {
@@ -231,6 +230,17 @@ private:
             m_size = BIT_USED;
         }
 
+        /**
+         * Clear the used bit, so that a later double free of this chunk is
+         * detected even if the chunk is merged into the free chunk before
+         * it, which leaves this header inside the merged chunk.
+         */
+        inline void
+        clearUsed ()
+        {
+            m_size &= ~BIT_USED;
+        }
+
         inline bool
         isUsed () const
         {
@@ -263,7 +273,9 @@ private:
         setUsedSize (bool storingExactSize, size_type userSize)
         {
             size_type chunkSize = getChunkSize ();
-            m_size |= BIT_USED;
+            // Reset the flags, since the chunk may have been in use with a
+            // different size (see reallocate ()).
+            m_size = chunkSize | BIT_USED;
             if (storingExactSize)
             {
                 userSize += CHUNK_OVERHEAD;
@@ -840,26 +852,32 @@ public:
         }
 
         MemChunk* chunk = mem2Chunk (ptr);
-        size_type oldAllocSize = chunk->getUserSize ();
-        size_type oldChunkSize = calcChunkSize(oldAllocSize);
+        size_type oldUserSize = chunk->getUserSize ();
 
-        size_type newAllocSize = newUserSize;
-        size_type newChunkSize = (newAllocSize < MIN_REQUEST) ? MIN_CHUNK_SIZE : calcChunkSize(newAllocSize);
+        // The new chunk must also hold the padding, and a request too large
+        // to represent must not wrap around to a small chunk size.
+        size_type newAllocSize = getMinAllocSize (newUserSize);
+        if (newAllocSize >= MAX_REQUEST)
+        {
+            m_logger.logAllocation (nullptr, newUserSize, MEM_ALLOC_BIG);
+            return nullptr;
+        }
+        size_type newChunkSize = (newAllocSize < MIN_REQUEST) ? MIN_CHUNK_SIZE : calcChunkSize (newAllocSize);
 
-        if (oldChunkSize < newChunkSize)
+        if (chunk->getChunkSize () < newChunkSize)
         {
             // For now we use a simple algorithm that allocate new memory.
             T* newPtr = allocate (newUserSize);
             if (newPtr)
             {
-                memcpy(newPtr, ptr, oldAllocSize);
+                memcpy (newPtr, ptr, oldUserSize);
                 deallocate (ptr);
             }
             return newPtr;
         }
         else
         {
-            m_logger.logReallocation(ptr, oldAllocSize, newUserSize);
+            m_logger.logReallocation (ptr, oldUserSize, newUserSize);
 
             size_type remainSize = chunk->getChunkSize () - newChunkSize;
             if (remainSize >= MIN_CHUNK_SIZE)
@@ -894,11 +912,17 @@ public:
      *          number of elements
      * @param   size
      *          element size
-     * @return  memory allocated.
+     * @return  memory allocated.  nullptr if num * size overflows, or if the
+     *          request cannot be satisfied.
      */
     T*
     callocate (size_type num, size_type size)
     {
+        if (num != 0 && size > (MAX_REQUEST / num))
+        {
+            m_logger.logAllocation (nullptr, MAX_REQUEST, MEM_ALLOC_BIG);
+            return nullptr;
+        }
         size_type totalSize = size * num;
         T* ptr = allocate (totalSize);
         if (ptr)
@@ -949,6 +973,7 @@ public:
                 }
             }
             m_logger.logDeallocation (ptr, chunk->getUserSize ());
+            chunk->clearUsed ();
 
             bool        prevChunkUsed = chunk->isPrevChunkUsed ();
             MemChunk*   nextChunk = chunk->getNextChunk (chunkSize);
