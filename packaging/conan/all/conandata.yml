@@ -1,4 +1,4 @@
 sources:
-  "1.5.0":
-    url: "https://github.com/coconut2015/cookmem/archive/refs/tags/v1.5.0.tar.gz"
-    sha256: "dfc9252550b63b411f4672edec38f7ac8512994e4de040adaa49060a71d975c1"
+  "1.5.1":
+    url: "https://github.com/coconut2015/cookmem/archive/refs/tags/v1.5.1.tar.gz"
+    sha256: "4a2f8d4a29bb49d4c4cff0ae21e67df2859f8b03b0c8c8f16dcf70b131262c34"

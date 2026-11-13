@@ -26,7 +26,7 @@ Conan
 `recipes/cookmem`.  To test it:
 
 ```bash
-conan create packaging/conan/all --version 1.5.0
+conan create packaging/conan/all --version 1.5.1
 ```
 
 This builds and runs `test_package`, which links `cookmem::cookmem`.
