@@ -1,6 +1,19 @@
 Tutorials {#tutorials}
 =========
 
+This page shows the parts of CookMem with short examples.  For slides and
+example programs organized by use case, see
+[CookMem Tutorials](https://github.com/coconut2015/cookmem-tutorials):
+
+1. Getting Started
+2. Complex Pointer Graphs
+3. Single-Threaded Performance
+4. Debugging Without Valgrind
+5. Limiting Memory Use
+6. Replacing malloc and new
+
+Each tutorial has its slides as PowerPoint and as PDF.
+
 CookMem divides the job of a memory context into three parts.
 
 1. The memory arena provides the API for allocating and deallocating large
