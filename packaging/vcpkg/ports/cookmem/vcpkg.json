@@ -1,6 +1,6 @@
 {
   "name": "cookmem",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "description": "A header-only C++11 memory context and allocator based on dlmalloc.",
   "homepage": "https://github.com/coconut2015/cookmem",
   "license": "Apache-2.0",

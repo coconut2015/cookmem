@@ -5,7 +5,7 @@ vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO coconut2015/cookmem
     REF "v${VERSION}"
-    SHA512 92ed2da3b23f693e20a0d267192638f8b09b3c3fb787d68a8a052714782959053caaa4e390051ee87bef5cc58eb80889b28d3431db9462a330d4d89cdbd4feab
+    SHA512 b4a5dd2d333ecebbd8c1fa622933d82d1feb0a1d91aa8e4ecfaad63a9ad68ab27e72c3c6001d7c2bb0809eb33c58e3b17a796fcc6f6fcf772d92bbefa1d5621b
     HEAD_REF master
 )
 
