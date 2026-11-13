@@ -1,7 +1,11 @@
 <map id="cookmem::SimpleMemContext&lt; Arena, Logger, TreeType, T &gt;" name="cookmem::SimpleMemContext&lt; Arena, Logger, TreeType, T &gt;">
-<area shape="rect" id="Node000001" title=" " alt="" coords="289,37,513,77"/>
-<area shape="rect" id="Node000002" href="$structcookmem_1_1SimpleMemContainer.html" title=" " alt="" coords="5,5,241,45"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="255,38,289,42,289,47,255,43"/>
-<area shape="rect" id="Node000003" href="$classcookmem_1_1MemContext.html" title=" " alt="" coords="12,69,235,109"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="248,72,289,68,290,73,249,78"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="656,86,880,131"/>
+<area shape="rect" id="Node000002" href="$structcookmem_1_1SimpleMemContainer.html" title=" " alt="" coords="333,25,607,70"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="597,71,659,86,653,85,596,76"/>
+<area shape="rect" id="Node000003" href="$classcookmem_1_1MmapArena.html" title=" " alt="" coords="34,5,207,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="222,25,335,35,330,37,223,30"/>
+<area shape="rect" id="Node000004" href="$classcookmem_1_1NoActionMemLogger.html" title=" " alt="" coords="5,61,236,89"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="250,66,308,62,335,62,329,63,309,67,251,71"/>
+<area shape="rect" id="Node000005" href="$classcookmem_1_1MemContext.html" title=" " alt="" coords="338,94,602,155"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="617,114,658,114,653,115,617,119"/>
 </map>

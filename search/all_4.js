@@ -1,7 +1,7 @@
 var searchData=
 [
   ['data_20between_20memory_20pools_0',['Copying Data Between Memory Pools',['../tutorials.html#copying',1,'']]],
-  ['deallocate_1',['deallocate',['../classcookmem_1_1MemContext.html#a56b82d97972ea6d1c8b3cae4a532a6ff',1,'cookmem::MemContext::deallocate()'],['../classcookmem_1_1MemPool.html#aaccf54a257600e92899622796ac04c37',1,'cookmem::MemPool::deallocate()'],['../classcookmem_1_1Allocator.html#a28e71c9997a19f662c09ad49a768c128',1,'cookmem::Allocator::deallocate()']]],
+  ['deallocate_1',['deallocate',['../classcookmem_1_1Allocator.html#a28e71c9997a19f662c09ad49a768c128',1,'cookmem::Allocator::deallocate()'],['../classcookmem_1_1MemContext.html#a56b82d97972ea6d1c8b3cae4a532a6ff',1,'cookmem::MemContext::deallocate()'],['../classcookmem_1_1MemPool.html#aaccf54a257600e92899622796ac04c37',1,'cookmem::MemPool::deallocate()']]],
   ['deallocation_20and_20coalescing_2',['Deallocation and Coalescing',['../implementation.html#autotoc_md28',1,'']]],
   ['debugging_20aids_3',['Debugging Aids',['../implementation.html#autotoc_md34',1,'']]],
   ['debugging_20where_20valgrind_20is_20impractical_4',['Debugging Where Valgrind Is Impractical',['../index.html#autotoc_md6',1,'']]],
@@ -14,8 +14,8 @@ var searchData=
   ['destroy_11',['destroy',['../classcookmem_1_1Allocator.html#a650a7b1462ff1de306a1f86766160180',1,'cookmem::Allocator::destroy()'],['../classcookmem_1_1MemContext.html#aa12af137c598b44d2c92a4a6f18bb375',1,'cookmem::MemContext::destroy()']]],
   ['detailed_20behavior_12',['Detailed Behavior',['../behavior.html',1,'']]],
   ['details_13',['Implementation Details',['../implementation.html',1,'']]],
-  ['detection_14',['detection',['../limitations.html#autotoc_md20',1,'Best-Effort Error Detection'],['../tutorials.html#boundcheck',1,'Memory Corruption Detection']]],
-  ['difference_5ftype_15',['difference_type',['../classcookmem_1_1MemPool.html#ad91f60758aeb71bdb6457756c27ed9c0',1,'cookmem::MemPool::difference_type'],['../classcookmem_1_1CachedMemContext.html#aa8ed63cc3efa3dda1385daddf49e01e7',1,'cookmem::CachedMemContext::difference_type'],['../classcookmem_1_1SimpleMemContext.html#a5c986ff13a9c375c9ce9dad1a0b8825f',1,'cookmem::SimpleMemContext::difference_type'],['../classcookmem_1_1MemContext.html#ab686cd72d67fd70be4de46e666de1d9d',1,'cookmem::MemContext::difference_type'],['../classcookmem_1_1Allocator.html#ac23a0e4e15833f76bf355a47dbf1c562',1,'cookmem::Allocator::difference_type']]],
+  ['detection_14',['Detection',['../limitations.html#autotoc_md20',1,'Best-Effort Error Detection'],['../tutorials.html#boundcheck',1,'Memory Corruption Detection']]],
+  ['difference_5ftype_15',['difference_type',['../classcookmem_1_1Allocator.html#ac23a0e4e15833f76bf355a47dbf1c562',1,'cookmem::Allocator::difference_type'],['../classcookmem_1_1MemContext.html#ab686cd72d67fd70be4de46e666de1d9d',1,'cookmem::MemContext::difference_type'],['../classcookmem_1_1SimpleMemContext.html#a5c986ff13a9c375c9ce9dad1a0b8825f',1,'cookmem::SimpleMemContext::difference_type'],['../classcookmem_1_1CachedMemContext.html#aa8ed63cc3efa3dda1385daddf49e01e7',1,'cookmem::CachedMemContext::difference_type'],['../classcookmem_1_1MemPool.html#ad91f60758aeb71bdb6457756c27ed9c0',1,'cookmem::MemPool::difference_type']]],
   ['directly_16',['Using CMake Directly',['../build.html#autotoc_md39',1,'']]],
   ['dlmalloc_20features_20that_20are_20not_20implemented_17',['dlmalloc Features That Are Not Implemented',['../implementation.html#autotoc_md35',1,'']]],
   ['do_5fallocate_18',['do_allocate',['../classcookmem_1_1MemResource.html#a28e043e0f89636b89d644b1ce193cbc7',1,'cookmem::MemResource']]],
