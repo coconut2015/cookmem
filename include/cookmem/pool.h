@@ -763,7 +763,7 @@ public:
             return nullptr;
         }
         setUsed (chunk, userSize);
-        return getUserPointer (chunk, userSize, allocType);
+        return getUserPointer (chunk, allocType);
     }
 
     /**
@@ -851,7 +851,7 @@ public:
         }
 
         setUsed (chunk, userSize);
-        return getUserPointer (chunk, userSize, allocType);
+        return getUserPointer (chunk, allocType);
     }
 
     /**
@@ -937,8 +937,8 @@ public:
                 return false;
             }
 
-            m_logger.logReallocation (ptr, chunk->getUserSize (), newUserSize);
-
+            // The size before, as logged; read it before setUsed () changes it.
+            size_type oldUserSize = chunk->getUserSize ();
             size_type mergedSize = chunkSize + nextChunk->getChunkSize ();
             removeChunk (nextChunk);
 
@@ -957,13 +957,13 @@ public:
                 chunk->setFreeChunkSize (mergedSize);
             }
             setUsed (chunk, newUserSize);
+            m_logger.logReallocation (ptr, oldUserSize, chunk->getUserSize ());
             return true;
         }
 
-        m_logger.logReallocation (ptr, chunk->getUserSize (), newUserSize);
-
         // Shrink, freeing the unused tail if it is large enough, merged with
         // the next chunk if that one is free.
+        size_type oldUserSize = chunk->getUserSize ();
         size_type remainSize = chunkSize - newChunkSize;
         if (remainSize >= MIN_CHUNK_SIZE)
         {
@@ -985,6 +985,7 @@ public:
         {
             setUsed (chunk, newUserSize);
         }
+        m_logger.logReallocation (ptr, oldUserSize, chunk->getUserSize ());
         return true;
     }
 
@@ -2183,10 +2184,12 @@ private:
     }
 
     inline T*
-    getUserPointer (MemChunk* chunk, size_type userSize, MemAllocType_et allocType)
+    getUserPointer (MemChunk* chunk, MemAllocType_et allocType)
     {
         T* userPtr = chunk2Mem (chunk);
-        m_logger.logAllocation (userPtr, userSize, allocType);
+        // Log the size the chunk reports, which deallocate () logs too.
+        // Without the exact size, it is the requested size rounded up.
+        m_logger.logAllocation (userPtr, chunk->getUserSize (), allocType);
         return userPtr;
     }
 };

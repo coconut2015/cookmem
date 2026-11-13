@@ -13,11 +13,80 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include <cookmem/logger.h>
+#include <vector>
+
+#include <cookmem.h>
+
+typedef cookmem::SimpleMemContext<cookmem::MmapArena, cookmem::StatsLogger> StatsContext;
+
+/**
+ * Check that the bytes StatsLogger counts as allocated match the sizes the
+ * context reports, which needs the pool to log the same size for an
+ * allocation, a reallocation and a deallocation.  Without the exact size,
+ * the size is rounded up to the alignment.
+ */
+static bool
+statsMatch (StatsContext& memCtx, const std::vector<void*>& ptrs)
+{
+    std::size_t total = 0;
+    for (void* ptr : ptrs)
+    {
+        total += memCtx.getSize (ptr);
+    }
+    const cookmem::MemStatistics& stats = memCtx.getLogger ().getStats ();
+    return stats.getCurrentAllocated () == total &&
+           stats.getTotalAllocated () - stats.getTotalDeallocated () == total;
+}
+
+static int
+testContextSizes (bool storingExactSize)
+{
+    StatsContext memCtx;
+    memCtx.setStoringExactSize (storingExactSize);
+
+    std::vector<void*> ptrs;
+    ptrs.push_back (memCtx.allocate (100));
+    ptrs.push_back (memCtx.allocate (3));
+    ptrs.push_back (memCtx.allocateAligned (1000, 64));
+    if (!statsMatch (memCtx, ptrs))
+    {
+        return 1;
+    }
+
+    // Grow and shrink in place.  The last allocation is followed by free
+    // memory, so it can grow.
+    void* last = memCtx.allocate (100);
+    ptrs.push_back (last);
+    if (!memCtx.resizeInPlace (last, 300) || !statsMatch (memCtx, ptrs))
+    {
+        return 2;
+    }
+    if (!memCtx.resizeInPlace (last, 50) || !statsMatch (memCtx, ptrs))
+    {
+        return 3;
+    }
+    ptrs.back () = memCtx.reallocate (last, 100000);
+    if (!statsMatch (memCtx, ptrs))
+    {
+        return 4;
+    }
+
+    for (void* ptr : ptrs)
+    {
+        memCtx.deallocate (ptr);
+    }
+    ptrs.clear ();
+    return statsMatch (memCtx, ptrs) ? 0 : 5;
+}
 
 int
 main ()
 {
+    if (testContextSizes (false) != 0 || testContextSizes (true) != 0)
+    {
+        return 4;
+    }
+
     cookmem::StatsLogger logger;
     int allocation;
     int segment;
