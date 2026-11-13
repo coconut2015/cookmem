@@ -77,6 +77,21 @@ See the following example.
 
 \include example_getSize.cpp
 
+\section leaks Finding Memory Leaks
+
+`forEachAllocation ()` calls a visitor function, such as a lambda, for every
+allocation that has not been freed, with its pointer and size, and returns
+the number of allocations.  Calling it before a context is destroyed shows
+the memory that was never freed.  With padding, or with
+`setStoringExactSize (true)`, the sizes are the sizes that were requested.
+
+The visitor function must not allocate, free or resize memory of the context
+that is being walked, since that changes the allocations while they are
+visited.  It can use other contexts or the global heap, for example to
+print or to collect the results.
+
+\include example_leaks.cpp
+
 \section footprint Restricting Memory Usage
 
 A memory context can limit the total size of the memory segments it obtains,

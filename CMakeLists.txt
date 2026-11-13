@@ -237,6 +237,13 @@ add_executable(test_cookmem_aligned
 add_test(NAME test_cookmem_aligned
 	COMMAND test_cookmem_aligned)
 
+# .. test_cookmem_walk
+add_executable(test_cookmem_walk
+	tests/test_cookmem_walk.cpp)
+
+add_test(NAME test_cookmem_walk
+	COMMAND test_cookmem_walk)
+
 # .. test_version
 add_executable(test_version
 	tests/test_version.cpp)
@@ -344,6 +351,11 @@ add_executable(example_getSize
 	examples/example_getSize.cpp)
 add_test(NAME example_getSize
 	COMMAND example_getSize)
+
+add_executable(example_leaks
+	examples/example_leaks.cpp)
+add_test(NAME example_leaks
+	COMMAND example_leaks)
 
 add_executable(example_footprintLimit
 	examples/example_footprintLimit.cpp)

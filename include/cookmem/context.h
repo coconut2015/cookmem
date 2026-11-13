@@ -220,6 +220,25 @@ public:
     getSize (T* ptr) { return m_pool.getUserSize (ptr); }
 
     /**
+     * Call a visitor function for every allocation that has not been freed,
+     * like inspect_all in dlmalloc.  This can be used to find memory leaks.
+     *
+     * The allocations are visited segment by segment, in address order
+     * within each segment.  The visitor function must not allocate, free or
+     * resize memory of this context.
+     *
+     * @param   visitor
+     *          the visitor function: a function, lambda or function object
+     *          called as visitor (ptr, size) for each allocation, where ptr
+     *          is the pointer returned to the user and size is the
+     *          allocation size, as returned by getSize ().
+     * @return  the number of allocations visited.
+     */
+    template<class Visitor>
+    inline size_type
+    forEachAllocation (Visitor visitor) const { return m_pool.forEachAllocation (visitor); }
+
+    /**
      * Release all the memory segments held by this MemPool.
      */
     inline void

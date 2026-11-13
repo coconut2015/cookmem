@@ -1244,6 +1244,43 @@ public:
     }
 
     /**
+     * Call a visitor function for every allocation that has not been freed,
+     * like inspect_all in dlmalloc.  This can be used to find memory leaks.
+     *
+     * The allocations are visited segment by segment, in address order
+     * within each segment.  The visitor function must not allocate, free or
+     * resize memory of this pool.
+     *
+     * @param   visitor
+     *          the visitor function: a function, lambda or function object
+     *          called as visitor (ptr, size) for each allocation, where ptr
+     *          is the pointer returned to the user and size is the
+     *          allocation size, as returned by getUserSize ().
+     * @return  the number of allocations visited.
+     */
+    template<class Visitor>
+    size_type
+    forEachAllocation (Visitor visitor) const
+    {
+        size_type count = 0;
+        for (const MemSegment* seg = m_segList; seg != nullptr; seg = seg->getNext ())
+        {
+            const MemChunk* lastChunk = seg->getPastLastChunk ();
+            for (const MemChunk* chunk = seg->getFirstChunk ();
+                 chunk < lastChunk;
+                 chunk = chunk->getNextChunk ())
+            {
+                if (chunk->isUsed ())
+                {
+                    visitor (chunk2Mem (const_cast<MemChunk*> (chunk)), chunk->getUserSize ());
+                    ++count;
+                }
+            }
+        }
+        return count;
+    }
+
+    /**
      * Release all the memory segments held by this MemPool.
      */
     void

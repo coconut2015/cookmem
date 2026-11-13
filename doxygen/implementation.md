@@ -245,6 +245,16 @@ fails.
 `callocate (num, size)` fails if `num * size` overflows, as `calloc` does in
 dlmalloc.
 
+### Walking the Allocations
+
+`forEachAllocation (visitor)` walks the chunks of every segment in address
+order, using the chunk sizes, and calls `visitor (ptr, size)` for each chunk
+in use, with the pointer returned to the user and the size from
+`getSize ()`.  It returns the number of allocations.  It is like dlmalloc's
+`malloc_inspect_all`, except that it skips the free chunks.  The visitor
+function must not allocate, free or resize memory of the context being
+walked, since that changes the chunks while they are walked.
+
 ### Returning Memory to the Arena
 
 * Every cookmem::DEFAULT_TRIM_EMPTY_SEGMENTS_INTERVAL (4095) deallocations,
@@ -367,8 +377,8 @@ memory is freed.  dlmalloc has no equivalent.
 * **`independent_calloc`, `independent_comalloc` and `bulk_free`.**
 * **`valloc` and `pvalloc`.**  `allocateAligned ()` covers `memalign` and
   `posix_memalign`.
-* **`mallinfo`, `malloc_stats` and `malloc_inspect_all`.**  Use
-  cookmem::StatsLogger, `getFootprint ()` and `getMaxFootprint ()` instead.
+* **`mallinfo` and `malloc_stats`.**  Use cookmem::StatsLogger,
+  `getFootprint ()` and `getMaxFootprint ()` instead.
 * **`mallopt` tuning.**  The settings that apply have CookMem equivalents:
   the minimum segment size of the arena, the trimming interval and the
   immediate release threshold.
