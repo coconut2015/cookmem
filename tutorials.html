@@ -93,7 +93,17 @@ $(document).ready(function(){initNavTree('tutorials.html',''); initResizable(); 
   <div class="headertitle"><div class="title">Tutorials</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>CookMem divides the job of a memory context into three parts.</p>
+<div class="textblock"><p>This page shows the parts of CookMem with short examples. For slides and example programs organized by use case, see <a href="https://github.com/coconut2015/cookmem-tutorials">CookMem Tutorials</a>:</p>
+<ol type="1">
+<li>Getting Started</li>
+<li>Complex Pointer Graphs</li>
+<li>Single-Threaded Performance</li>
+<li>Debugging Without Valgrind</li>
+<li>Limiting Memory Use</li>
+<li>Replacing malloc and new</li>
+</ol>
+<p>Each tutorial has its slides as PowerPoint and as PDF.</p>
+<p>CookMem divides the job of a memory context into three parts.</p>
 <ol type="1">
 <li>The memory arena provides the API for allocating and deallocating large memory segments.</li>
 <li>The memory pool manages memory chunks within memory segments. This component is typically managed and hidden by the memory context.</li>
