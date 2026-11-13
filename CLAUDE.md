@@ -70,8 +70,9 @@ change, regenerate the README table and `performances/perfdata.js` with
   sign-in window.  If the login is missing, the push can use gh's login
   instead:
   `git.exe -c credential.helper= -c 'credential.helper=!"C:/Program Files/GitHub CLI/gh.exe" auth git-credential' push ...`.
-  gh's token has no `workflow` scope, so GitHub rejects this for a branch
-  that changes `.github/workflows/`; ask the user to sign in or run
+  Changes to `.github/workflows/` need a token with the `workflow` scope.
+  gh's token has it; if GitHub rejects such a push, check the scopes with
+  `gh.exe auth status` and ask the user to run
   `gh auth refresh -h github.com -s workflow`.
 - Write PR and issue bodies to a file under `D:\workspace\tmp`
   (`/mnt/d/workspace/tmp`) and pass `--body-file`, since quoting through WSL
