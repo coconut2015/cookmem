@@ -147,6 +147,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a7ec4fa5c035ba4d143f5abe8ab41a543"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a56b82d97972ea6d1c8b3cae4a532a6ff" id="r_a56b82d97972ea6d1c8b3cae4a532a6ff"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemContext.html#a56b82d97972ea6d1c8b3cae4a532a6ff">deallocate</a> (<a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> *<a class="el" href="classcookmem_1_1MemContextProvider.html">ptr</a>, <a class="el" href="classcookmem_1_1MemContext.html#a755605b35d1e22ad5e61f10a08b26e84">size_type</a> size=0)</td></tr>
 <tr class="separator:a56b82d97972ea6d1c8b3cae4a532a6ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c0abc0f3e53775840c340b6310c9b49" id="r_a8c0abc0f3e53775840c340b6310c9b49"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">U</a> , class... Args&gt; </td></tr>
+<tr class="memitem:a8c0abc0f3e53775840c340b6310c9b49"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">U</a> *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemContext.html#a8c0abc0f3e53775840c340b6310c9b49">create</a> (<a class="el" href="classcookmem_1_1MemContextProvider.html">Args</a> &amp;&amp;... <a class="el" href="classcookmem_1_1MemContextProvider.html">args</a>)</td></tr>
+<tr class="separator:a8c0abc0f3e53775840c340b6310c9b49"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa12af137c598b44d2c92a4a6f18bb375" id="r_aa12af137c598b44d2c92a4a6f18bb375"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">U</a> &gt; </td></tr>
+<tr class="memitem:aa12af137c598b44d2c92a4a6f18bb375"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemContext.html#aa12af137c598b44d2c92a4a6f18bb375">destroy</a> (<a class="el" href="classcookmem_1_1MemContextProvider.html">U</a> *<a class="el" href="classcookmem_1_1MemContextProvider.html">ptr</a>)</td></tr>
+<tr class="separator:aa12af137c598b44d2c92a4a6f18bb375"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4daba21af7408782d8cd0badf6abab73" id="r_a4daba21af7408782d8cd0badf6abab73"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemContext.html#a4daba21af7408782d8cd0badf6abab73">validate</a> ()</td></tr>
 <tr class="separator:a4daba21af7408782d8cd0badf6abab73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1f22eb4d92f78a10392b8538246fa1f5" id="r_a1f22eb4d92f78a10392b8538246fa1f5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemContext.html#a1f22eb4d92f78a10392b8538246fa1f5">contains</a> (<a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> *<a class="el" href="classcookmem_1_1MemContextProvider.html">ptr</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">bool</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">checkUsed</a>=<a class="el" href="classcookmem_1_1MemContextProvider.html">false</a>)</td></tr>
@@ -596,6 +602,52 @@ template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</
 
 </div>
 </div>
+<a id="a8c0abc0f3e53775840c340b6310c9b49" name="a8c0abc0f3e53775840c340b6310c9b49"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c0abc0f3e53775840c340b6310c9b49">&#9670;&#160;</a></span>create()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">Arena</a> , <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">Logger</a> , <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">TreeType</a>  = PtrRBTree, <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a>  = void&gt; </div>
+<div class="memtemplate">
+template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">U</a> , class... Args&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1MemContextProvider.html">U</a> * <a class="el" href="classcookmem_1_1MemContext.html">cookmem::MemContext</a>&lt; <a class="el" href="classcookmem_1_1MemContextProvider.html">Arena</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">Logger</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">TreeType</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> &gt;::create </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcookmem_1_1MemContextProvider.html">Args</a> &amp;&amp;...&#160;</td>
+          <td class="paramname"><em>args</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Allocate memory for an object of type U and construct it, like new.</p>
+<p>The memory is aligned to alignof (U), including alignments larger than ALLOCATION_ALIGNMENT. Free the object with destroy (), or free all objects at once with releaseAll () or by destroying the context; those do not call destructors.</p>
+<p>If the constructor throws, the memory is deallocated and the exception is passed on.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">args</td><td>the arguments passed to the constructor of U. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the new object. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::bad_alloc</td><td>if the memory cannot be allocated. Unlike allocate (), this function does not return nullptr. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a56b82d97972ea6d1c8b3cae4a532a6ff" name="a56b82d97972ea6d1c8b3cae4a532a6ff"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a56b82d97972ea6d1c8b3cae4a532a6ff">&#9670;&#160;</a></span>deallocate()</h2>
 
@@ -636,6 +688,44 @@ template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</
   <table class="params">
     <tr><td class="paramname">ptr</td><td>a piece of memory to be freed. </td></tr>
     <tr><td class="paramname">size</td><td>mostly ignored. It is only used by the memory logger. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aa12af137c598b44d2c92a4a6f18bb375" name="aa12af137c598b44d2c92a4a6f18bb375"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa12af137c598b44d2c92a4a6f18bb375">&#9670;&#160;</a></span>destroy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">Arena</a> , <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">Logger</a> , <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">TreeType</a>  = PtrRBTree, <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a>  = void&gt; </div>
+<div class="memtemplate">
+template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">U</a> &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1MemContextProvider.html">void</a> <a class="el" href="classcookmem_1_1MemContext.html">cookmem::MemContext</a>&lt; <a class="el" href="classcookmem_1_1MemContextProvider.html">Arena</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">Logger</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">TreeType</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> &gt;::destroy </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcookmem_1_1MemContextProvider.html">U</a> *&#160;</td>
+          <td class="paramname"><em>ptr</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Destroy an object created by create (), like delete: call its destructor, then deallocate its memory.</p>
+<p>A pointer to a polymorphic base class works, as with delete, when the destructor is virtual.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ptr</td><td>the object to destroy. Nothing is done if it is nullptr. </td></tr>
   </table>
   </dd>
 </dl>

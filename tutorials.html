@@ -276,6 +276,67 @@ CachedArena</h1>
 <div class="line">    <span class="keywordflow">return</span> 0;</div>
 <div class="line">}</div>
 <div class="ttc" id="aclasscookmem_1_1MmapArena_html"><div class="ttname"><a href="classcookmem_1_1MmapArena.html">cookmem::MmapArena</a></div><div class="ttdef"><b>Definition</b> mmaparena.h:115</div></div>
+</div><!-- fragment --><h1><a class="anchor" id="create"></a>
+Creating Objects</h1>
+<p><code>create&lt;T&gt; (args...)</code> allocates memory for an object from a memory context and constructs it, like <code>new</code>. The memory is aligned to <code>alignof (T)</code>. Unlike <code>allocate ()</code>, it throws <code>std::bad_alloc</code> when the memory cannot be allocated. <code>destroy (ptr)</code> calls the destructor and frees the memory, like <code>delete</code>, and works through a base class pointer when the destructor is virtual.</p>
+<p>Objects that own nothing but memory from the context do not need to be destroyed one by one: <code>releaseAll ()</code>, or destroying the context, frees them all at once without calling their destructors.</p>
+<div class="fragment"><div class="line"><span class="comment">/*</span></div>
+<div class="line"><span class="comment"> * Copyright (c) 2026 Heng Yuan</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span></div>
+<div class="line"><span class="comment"> * you may not use this file except in compliance with the License.</span></div>
+<div class="line"><span class="comment"> * You may obtain a copy of the License at</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> *     http://www.apache.org/licenses/LICENSE-2.0</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> * Unless required by applicable law or agreed to in writing, software</span></div>
+<div class="line"><span class="comment"> * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span></div>
+<div class="line"><span class="comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></div>
+<div class="line"><span class="comment"> * See the License for the specific language governing permissions and</span></div>
+<div class="line"><span class="comment"> * limitations under the License.</span></div>
+<div class="line"><span class="comment"> */</span></div>
+<div class="line"><span class="preprocessor">#include &lt;iostream&gt;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="preprocessor">#include &lt;cookmem.h&gt;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">struct </span>Node</div>
+<div class="line">{</div>
+<div class="line">    Node (<span class="keywordtype">int</span> v, Node* n) : value (v), next (n) {}</div>
+<div class="line"> </div>
+<div class="line">    <span class="keywordtype">int</span>     value;</div>
+<div class="line">    Node*   next;</div>
+<div class="line">};</div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">int</span></div>
+<div class="line">main (<span class="keywordtype">int</span> argc, <span class="keyword">const</span> <span class="keywordtype">char</span>* argv[])</div>
+<div class="line">{</div>
+<div class="line">    <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">cookmem::SimpleMemContext&lt;&gt;</a> memCtx;</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// create () allocates and constructs, like new.  It throws</span></div>
+<div class="line">    <span class="comment">// std::bad_alloc when memory cannot be allocated.</span></div>
+<div class="line">    Node* list = <span class="keyword">nullptr</span>;</div>
+<div class="line">    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; 5; ++i)</div>
+<div class="line">    {</div>
+<div class="line">        list = memCtx.create&lt;Node&gt; (i, list);</div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Expect output 4 3 2 1 0</span></div>
+<div class="line">    <span class="keywordflow">for</span> (Node* node = list; node != <span class="keyword">nullptr</span>; node = node-&gt;next)</div>
+<div class="line">    {</div>
+<div class="line">        std::cout &lt;&lt; node-&gt;value &lt;&lt; <span class="stringliteral">&quot; &quot;</span>;</div>
+<div class="line">    }</div>
+<div class="line">    std::cout &lt;&lt; std::endl;</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// destroy () calls the destructor and frees the memory, like delete.</span></div>
+<div class="line">    Node* head = list;</div>
+<div class="line">    list = list-&gt;next;</div>
+<div class="line">    memCtx.destroy (head);</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// The rest of the list does not need to be destroyed one by one.</span></div>
+<div class="line">    <span class="comment">// Destroying memCtx, or calling releaseAll (), frees all of it at once,</span></div>
+<div class="line">    <span class="comment">// without calling destructors.</span></div>
+<div class="line">    <span class="keywordflow">return</span> 0;</div>
+<div class="line">}</div>
 </div><!-- fragment --><h1><a class="anchor" id="copying"></a>
 Copying Data Between Memory Pools</h1>
 <p>cookmem can determine whether a memory pointer is in the address space of a memory pool. The check iterates through all memory segments owned by the pool.</p>

@@ -97,7 +97,7 @@ $(document).ready(function(){initNavTree('behavior.html',''); initResizable(); }
 <h2><a class="anchor" id="autotoc_md13"></a>
 Allocation Failures</h2>
 <p><code>allocate</code>, <code>allocateAligned</code> and <code>reallocate</code> of a memory context return <code>nullptr</code> when a request cannot be satisfied, for example when it is too large, when the arena cannot provide a segment, or when the footprint limit is reached. <code>allocateAligned</code> also returns <code>nullptr</code> when the alignment is not a power of 2. When <code>reallocate</code> fails, the original pointer remains valid.</p>
-<p><a class="el" href="classcookmem_1_1Allocator.html">cookmem::Allocator</a> throws <code>std::bad_alloc</code> instead, as the standard library expects.</p>
+<p><a class="el" href="classcookmem_1_1Allocator.html">cookmem::Allocator</a> throws <code>std::bad_alloc</code> instead, as the standard library expects, and so does <code>create ()</code> of a memory context.</p>
 <h2><a class="anchor" id="autotoc_md14"></a>
 Errors and Exceptions</h2>
 <ul>

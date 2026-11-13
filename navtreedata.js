@@ -41,6 +41,7 @@ var NAVTREE =
       [ "FixedArena", "tutorials.html#FixedArena", null ],
       [ "MmapArena", "tutorials.html#MmapArena", null ],
       [ "CachedArena", "tutorials.html#CachedArena", null ],
+      [ "Creating Objects", "tutorials.html#create", null ],
       [ "Copying Data Between Memory Pools", "tutorials.html#copying", null ],
       [ "Querying Pointer Information", "tutorials.html#querying", null ],
       [ "Finding Memory Leaks", "tutorials.html#leaks", null ],
@@ -91,8 +92,8 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "allocator_8h_source.html",
-"classcookmem_1_1MemContextProvider.html#af9faa103ac97de2856ec37f8b0156c7f",
-"classcookmem_1_1StatsLogger.html#ab8864f7d2d5784b0114338e1ae22e470"
+"classcookmem_1_1MemContextProvider.html#ade5bc76b6d1b5a0ca5f8d78654072efe",
+"classcookmem_1_1StatsLogger.html#a5ed25fa4957aa87fc47a02f06e7fd5cc"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
