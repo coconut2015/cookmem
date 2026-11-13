@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 #include <iostream>
+#include <string>
 
 #include <cookmem.h>
 #include "unittest.h"
@@ -166,6 +167,116 @@ testInvalidPaddingSize ()
     return 1;
 }
 
+/**
+ * A logger that records the errors it is given, and returns instead of
+ * throwing.
+ */
+struct RecordingLogger
+{
+    int                     numErrors = 0;
+    void*                   ptr = nullptr;
+    cookmem::MemError_et    error = cookmem::MEM_ERROR_GENERAL;
+    std::string             message;
+
+    void logGetSegment (void*, std::size_t) { }
+    void logFreeSegment (void*, std::size_t) { }
+    void logTrimEmptySegments () { }
+    void logAllocation (void*, std::size_t, cookmem::MemAllocType_et) { }
+    void logReallocation (void*, std::size_t, std::size_t) { }
+    void logDeallocation (void*, std::size_t) { }
+
+    void
+    logError (void* userPtr, cookmem::MemError_et err, const char* msg,
+              const char* = __FILE__, int = __LINE__)
+    {
+        ++numErrors;
+        ptr = userPtr;
+        error = err;
+        message = msg;
+    }
+};
+
+typedef cookmem::MemContext<cookmem::MmapArena, RecordingLogger> RecordingContext;
+
+/**
+ * The pool reports errors to logError () of its logger, with a message.  It
+ * is not safe to go on after an error, so the pool still throws when
+ * logError () returns.
+ */
+static int
+testLogError ()
+{
+    // Double free.
+    {
+        cookmem::MmapArena arena;
+        RecordingLogger logger;
+        RecordingContext memCtx (arena, logger);
+        void* ptr = memCtx.allocate (100);
+        memCtx.deallocate (ptr);
+        bool thrown = false;
+        try
+        {
+            memCtx.deallocate (ptr);
+        }
+        catch (const cookmem::Exception& ex)
+        {
+            thrown = true;
+            ASSERT_EQ (cookmem::MEM_ERROR_DOUBLE_FREE, ex.getError ());
+            ASSERT_EQ (logger.message, std::string (ex.getMessage ()));
+        }
+        ASSERT_EQ (true, thrown);
+        ASSERT_EQ (1, logger.numErrors);
+        ASSERT_EQ (ptr, logger.ptr);
+        ASSERT_EQ (cookmem::MEM_ERROR_DOUBLE_FREE, logger.error);
+        ASSERT_EQ (std::string ("potentially freeing an unused pointer"), logger.message);
+    }
+
+    // Overwritten padding.
+    {
+        cookmem::MmapArena arena;
+        RecordingLogger logger;
+        RecordingContext memCtx (arena, logger, cookmem::MAX_PADDING_SIZE);
+        char* ptr = static_cast<char*> (memCtx.allocate (10));
+        ptr[10] = 0;
+        bool thrown = false;
+        try
+        {
+            memCtx.deallocate (ptr);
+        }
+        catch (const cookmem::Exception& ex)
+        {
+            thrown = true;
+            ASSERT_EQ (cookmem::MEM_ERROR_PADDING, ex.getError ());
+        }
+        ASSERT_EQ (true, thrown);
+        ASSERT_EQ (1, logger.numErrors);
+        ASSERT_EQ (static_cast<void*> (ptr), logger.ptr);
+        ASSERT_EQ (cookmem::MEM_ERROR_PADDING, logger.error);
+        ASSERT_EQ (std::string ("padding byte got modified."), logger.message);
+    }
+
+    // Invalid padding size.
+    {
+        cookmem::MmapArena arena;
+        RecordingLogger logger;
+        bool thrown = false;
+        try
+        {
+            RecordingContext memCtx (arena, logger, 9);
+        }
+        catch (const cookmem::Exception& ex)
+        {
+            thrown = true;
+            ASSERT_EQ (cookmem::MEM_ERROR_GENERAL, ex.getError ());
+        }
+        ASSERT_EQ (true, thrown);
+        ASSERT_EQ (1, logger.numErrors);
+        ASSERT_EQ (nullptr, logger.ptr);
+        ASSERT_EQ (std::string ("padding size cannot exceed 8 bytes."), logger.message);
+    }
+    return 0;
+}
+
 int
 main (int argc, const char* argv[])
 {
@@ -179,6 +290,7 @@ main (int argc, const char* argv[])
         ASSERT_EQ (0, testDoubleFreeAfterMerge<cookmem::PtrAVLTree> (1000));
         ASSERT_EQ (0, testError3 ());
         ASSERT_EQ (0, testInvalidPaddingSize ());
+        ASSERT_EQ (0, testLogError ());
     }
     catch (const unittest::UnitTestException& ex)
     {

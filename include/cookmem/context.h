@@ -414,6 +414,14 @@ public:
     getArena () { return m_arena;  }
 
     /**
+     * Get the underlying memory arena.
+     *
+     * @return  The underlying memory arena.
+     */
+    inline const Arena&
+    getArena () const { return m_arena;  }
+
+    /**
      * Get the underlying logger.
      *
      * @return  The underlying logger.
@@ -422,12 +430,29 @@ public:
     getLogger () { return m_logger;  }
 
     /**
+     * Get the underlying logger, for example to read the statistics of a
+     * cookmem::StatsLogger through a const context.
+     *
+     * @return  The underlying logger.
+     */
+    inline const Logger&
+    getLogger () const { return m_logger;  }
+
+    /**
      * Get the underlying memory pool.
      *
      * @return  The underlying memory pool.
      */
     inline Pool&
     getPool () { return m_pool; }
+
+    /**
+     * Get the underlying memory pool.
+     *
+     * @return  The underlying memory pool.
+     */
+    inline const Pool&
+    getPool () const { return m_pool; }
 
 private:
     Arena&      m_arena;

@@ -164,7 +164,6 @@ public:
                 return;
             }
         }
-        throw Exception (MEM_ERROR_GENERAL, "Invalid PtrAVLTree.", __FILE__, __LINE__);
     }
 
     /**
@@ -603,7 +602,7 @@ private:
     }
 
     void
-    removeNode (Node* root, Node** stack, int depth)
+    removeNode (Node* root, Node** stack, std::int16_t depth)
     {
         Node* left = root->left;
         Node* right = root->right;
@@ -693,7 +692,7 @@ private:
         setParent (newRoot, stack[depth - 1]);
 
         stack[depth] = newRoot;
-        newRoot = balance (stack, depth + 1);
+        newRoot = balance (stack, static_cast<std::int16_t> (depth + 1));
 
         if (newRoot != nullptr)
         {

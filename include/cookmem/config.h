@@ -61,7 +61,7 @@ const std::uint8_t MAX_PADDING_SIZE = 8;
 /**
  * Default padding byte for strict bounds checking.
  */
-const char DEFAULT_PADDING_BYTE = (char)0xcd;
+const char DEFAULT_PADDING_BYTE = '\xcd';
 
 }   // namespace cookmem
 

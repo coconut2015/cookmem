@@ -633,7 +633,7 @@ public:
     {
         if (m_padding > MAX_PADDING_SIZE)
         {
-            throw Exception (MEM_ERROR_GENERAL, "padding size cannot exceed 8 bytes.", __FILE__, __LINE__);
+            reportError (nullptr, MEM_ERROR_GENERAL, "padding size cannot exceed 8 bytes.", __FILE__, __LINE__);
         }
     }
 
@@ -1032,7 +1032,7 @@ public:
             MemChunk* chunk = mem2Chunk (ptr);
             if (!chunk->isUsed())
             {
-                throw Exception (MEM_ERROR_DOUBLE_FREE, "potentially freeing an unused pointer", __FILE__, __LINE__);
+                reportError (ptr, MEM_ERROR_DOUBLE_FREE, "potentially freeing an unused pointer", __FILE__, __LINE__);
             }
             COOKMEM_ASSERT (chunk->isValidSize ());
             size_type chunkSize = chunk->getChunkSize ();
@@ -1052,7 +1052,7 @@ public:
                 {
                     if (paddingPtr[i] != m_paddingByte)
                     {
-                        throw Exception (MEM_ERROR_PADDING, "padding byte got modified.", __FILE__, __LINE__);
+                        reportError (ptr, MEM_ERROR_PADDING, "padding byte got modified.", __FILE__, __LINE__);
                     }
                 }
             }
@@ -2189,6 +2189,38 @@ private:
             }
         }
     }
+
+    /**
+     * Report an error to the logger, which normally throws Exception.  It
+     * is not safe to go on after an error, so if the logger returns, throw
+     * the Exception here.
+     *
+     * @param   ptr
+     *          the user pointer involved, or nullptr.
+     * @param   error
+     *          the error.
+     * @param   message
+     *          a description of the error.
+     * @param   file
+     *          the source file where the error was detected.
+     * @param   line
+     *          the line where the error was detected.
+     */
+#if defined(_MSC_VER)
+#pragma warning(push)
+// The loggers of CookMem always throw, so MSVC finds the throw below
+// unreachable (C4702).  It is needed for loggers that return.
+#pragma warning(disable: 4702)
+#endif
+    void
+    reportError (void* ptr, MemError_et error, const char* message, const char* file, int line)
+    {
+        m_logger.logError (ptr, error, message, file, line);
+        throw Exception (error, message, file, line);
+    }
+#if defined(_MSC_VER)
+#pragma warning(pop)
+#endif
 
     inline T*
     getUserPointer (MemChunk* chunk, MemAllocType_et allocType)

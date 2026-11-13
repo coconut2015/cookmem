@@ -131,19 +131,27 @@ public:
     logDeallocation (void* userPtr, std::size_t userSize) = 0;
 
     /**
-     * Log the memory corruption.
+     * Log an error that the memory pool detected: a double free
+     * (MEM_ERROR_DOUBLE_FREE), overwritten padding bytes (MEM_ERROR_PADDING),
+     * or an invalid padding size when the pool is created
+     * (MEM_ERROR_GENERAL).  The loggers of CookMem throw Exception with the
+     * same error, message, file and line.  A logger may record the error
+     * first, or throw its own exception.  It is not safe to go on after an
+     * error, so if this function returns, the pool throws Exception itself.
      *
      * @param   userPtr
-     *          the user pointer that had the memory corruption.
+     *          the user pointer that had the error, or nullptr.
      * @param   error
      *          the type of the error encountered.
+     * @param   message
+     *          a description of the error.
      * @param   file
      *          the source file where the error was detected.
      * @param   line
      *          the line number where the error was detected.
      */
     virtual void
-    logError (void* userPtr, MemError_et error, const char* file = __FILE__, int line = __LINE__) = 0;
+    logError (void* userPtr, MemError_et error, const char* message, const char* file = __FILE__, int line = __LINE__) = 0;
 };
 
 /**
@@ -184,6 +192,8 @@ public:
      *
      * @param   error
      *          the type of the error encountered.
+     * @param   message
+     *          a description of the error.
      * @param   file
      *          the source file where the error was detected.
      * @param   line
@@ -194,10 +204,11 @@ public:
     inline void
     logError (void*,
               MemError_et error,
+              const char* message,
               const char* file = __FILE__,
               int line = __LINE__)
     {
-        throw Exception (error, "memory corruption detected.", file, line);
+        throw Exception (error, message, file, line);
     }
 };
 
@@ -467,10 +478,11 @@ public:
     void
     logError (void*,
               MemError_et error,
+              const char* message,
               const char* file = __FILE__,
               int line = __LINE__)
     {
-        throw Exception (error, "memory corruption detected.", file, line);
+        throw Exception (error, message, file, line);
     }
 
     /**
