@@ -135,6 +135,11 @@ structure is allocated from a memory context and released all at once, with
   meshes, document layout trees, and game scenes that are loaded and
   unloaded as a unit.
 
+Releasing everything at once frees the memory without calling destructors,
+so C++ RAII does not happen: it suits objects that own nothing but memory
+from the same context, and objects that hold files, locks or memory from the
+global heap must be destroyed first.
+
 Unlike simple arena (bump) allocators, a memory context can also free
 individual objects and reuse their memory, so long-lived structures that
 change over time do not keep growing.  See
