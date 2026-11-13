@@ -59,6 +59,9 @@ int main ()
 ```
 
 See the [tutorials](https://coconut2015.github.io/cookmem/tutorials.html) for more.
+[CookMem Tutorials](https://github.com/coconut2015/cookmem-tutorials) has
+slides and example programs for each kind of program CookMem helps, from
+complex pointer graphs to limiting memory use.
 
 Requirements
 ------------
@@ -239,3 +242,4 @@ Links
   * [References](https://coconut2015.github.io/cookmem/references.html)
   * [Performance Chart](https://coconut2015.github.io/cookmem/performance.html)
 * Source: https://github.com/coconut2015/cookmem
+* Tutorials with slides and examples: https://github.com/coconut2015/cookmem-tutorials
