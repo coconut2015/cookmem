@@ -573,7 +573,7 @@ $(document).ready(function(){initNavTree('pool_8h_source.html',''); initResizabl
 <div class="line"><a id="l00633" name="l00633"></a><span class="lineno">  633</span>    {</div>
 <div class="line"><a id="l00634" name="l00634"></a><span class="lineno">  634</span>        <span class="keywordflow">if</span> (m_padding &gt; <a class="code hl_variable" href="namespacecookmem.html#adf7ac4a4f06599326987955ec360a2a4">MAX_PADDING_SIZE</a>)</div>
 <div class="line"><a id="l00635" name="l00635"></a><span class="lineno">  635</span>        {</div>
-<div class="line"><a id="l00636" name="l00636"></a><span class="lineno">  636</span>            <span class="keywordflow">throw</span> <a class="code hl_class" href="classcookmem_1_1Exception.html">Exception</a> (<a class="code hl_enumvalue" href="namespacecookmem.html#a28eece75e72b18dfe29be8366247ec32a4f60728f71321a75f2d2c8e7a283e67f">MEM_ERROR_GENERAL</a>, <span class="stringliteral">&quot;padding size cannot exceed 8 bytes.&quot;</span>, <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">__FILE__</a>, <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">__LINE__</a>);</div>
+<div class="line"><a id="l00636" name="l00636"></a><span class="lineno">  636</span>            reportError (<span class="keyword">nullptr</span>, <a class="code hl_enumvalue" href="namespacecookmem.html#a28eece75e72b18dfe29be8366247ec32a4f60728f71321a75f2d2c8e7a283e67f">MEM_ERROR_GENERAL</a>, <span class="stringliteral">&quot;padding size cannot exceed 8 bytes.&quot;</span>, <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">__FILE__</a>, <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">__LINE__</a>);</div>
 <div class="line"><a id="l00637" name="l00637"></a><span class="lineno">  637</span>        }</div>
 <div class="line"><a id="l00638" name="l00638"></a><span class="lineno">  638</span>    }</div>
 </div>
@@ -869,7 +869,7 @@ $(document).ready(function(){initNavTree('pool_8h_source.html',''); initResizabl
 <div class="line"><a id="l01032" name="l01032"></a><span class="lineno"> 1032</span>            MemChunk* <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">chunk</a> = mem2Chunk (<a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">ptr</a>);</div>
 <div class="line"><a id="l01033" name="l01033"></a><span class="lineno"> 1033</span>            <span class="keywordflow">if</span> (!<a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">chunk</a>-&gt;isUsed())</div>
 <div class="line"><a id="l01034" name="l01034"></a><span class="lineno"> 1034</span>            {</div>
-<div class="line"><a id="l01035" name="l01035"></a><span class="lineno"> 1035</span>                <span class="keywordflow">throw</span> <a class="code hl_class" href="classcookmem_1_1Exception.html">Exception</a> (<a class="code hl_enumvalue" href="namespacecookmem.html#a28eece75e72b18dfe29be8366247ec32ad21efb1b7f9eb60e548d43b860cf2067">MEM_ERROR_DOUBLE_FREE</a>, <span class="stringliteral">&quot;potentially freeing an unused pointer&quot;</span>, <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">__FILE__</a>, <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">__LINE__</a>);</div>
+<div class="line"><a id="l01035" name="l01035"></a><span class="lineno"> 1035</span>                reportError (<a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">ptr</a>, <a class="code hl_enumvalue" href="namespacecookmem.html#a28eece75e72b18dfe29be8366247ec32ad21efb1b7f9eb60e548d43b860cf2067">MEM_ERROR_DOUBLE_FREE</a>, <span class="stringliteral">&quot;potentially freeing an unused pointer&quot;</span>, <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">__FILE__</a>, <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">__LINE__</a>);</div>
 <div class="line"><a id="l01036" name="l01036"></a><span class="lineno"> 1036</span>            }</div>
 <div class="line"><a id="l01037" name="l01037"></a><span class="lineno"> 1037</span>            COOKMEM_ASSERT (<a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">chunk</a>-&gt;isValidSize ());</div>
 <div class="line"><a id="l01038" name="l01038"></a><span class="lineno"> 1038</span>            <a class="code hl_typedef" href="classcookmem_1_1MemPool.html#a904544e49e74d27f33a7e4d617aef701">size_type</a> <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">chunkSize</a> = <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">chunk</a>-&gt;getChunkSize ();</div>
@@ -889,7 +889,7 @@ $(document).ready(function(){initNavTree('pool_8h_source.html',''); initResizabl
 <div class="line"><a id="l01052" name="l01052"></a><span class="lineno"> 1052</span>                {</div>
 <div class="line"><a id="l01053" name="l01053"></a><span class="lineno"> 1053</span>                    <span class="keywordflow">if</span> (<a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">paddingPtr</a>[<a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">i</a>] != m_paddingByte)</div>
 <div class="line"><a id="l01054" name="l01054"></a><span class="lineno"> 1054</span>                    {</div>
-<div class="line"><a id="l01055" name="l01055"></a><span class="lineno"> 1055</span>                        <span class="keywordflow">throw</span> <a class="code hl_class" href="classcookmem_1_1Exception.html">Exception</a> (<a class="code hl_enumvalue" href="namespacecookmem.html#a28eece75e72b18dfe29be8366247ec32a48be12240ae74a48197ea215bd298b96">MEM_ERROR_PADDING</a>, <span class="stringliteral">&quot;padding byte got modified.&quot;</span>, <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">__FILE__</a>, <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">__LINE__</a>);</div>
+<div class="line"><a id="l01055" name="l01055"></a><span class="lineno"> 1055</span>                        reportError (<a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">ptr</a>, <a class="code hl_enumvalue" href="namespacecookmem.html#a28eece75e72b18dfe29be8366247ec32a48be12240ae74a48197ea215bd298b96">MEM_ERROR_PADDING</a>, <span class="stringliteral">&quot;padding byte got modified.&quot;</span>, <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">__FILE__</a>, <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">__LINE__</a>);</div>
 <div class="line"><a id="l01056" name="l01056"></a><span class="lineno"> 1056</span>                    }</div>
 <div class="line"><a id="l01057" name="l01057"></a><span class="lineno"> 1057</span>                }</div>
 <div class="line"><a id="l01058" name="l01058"></a><span class="lineno"> 1058</span>            }</div>
@@ -1841,24 +1841,40 @@ $(document).ready(function(){initNavTree('pool_8h_source.html',''); initResizabl
 <div class="line"><a id="l02190" name="l02190"></a><span class="lineno"> 2190</span>        }</div>
 <div class="line"><a id="l02191" name="l02191"></a><span class="lineno"> 2191</span>    }</div>
 <div class="line"><a id="l02192" name="l02192"></a><span class="lineno"> 2192</span> </div>
-<div class="line"><a id="l02193" name="l02193"></a><span class="lineno"> 2193</span>    <span class="keyword">inline</span> T*</div>
-<div class="line"><a id="l02194" name="l02194"></a><span class="lineno"> 2194</span>    getUserPointer (MemChunk* chunk, <a class="code hl_enumeration" href="namespacecookmem.html#af66049bcb6c6c6069141c13b46a40e5a">MemAllocType_et</a> allocType)</div>
-<div class="line"><a id="l02195" name="l02195"></a><span class="lineno"> 2195</span>    {</div>
-<div class="line"><a id="l02196" name="l02196"></a><span class="lineno"> 2196</span>        T* userPtr = chunk2Mem (chunk);</div>
-<div class="line"><a id="l02197" name="l02197"></a><span class="lineno"> 2197</span>        <span class="comment">// Log the size the chunk reports, which deallocate () logs too.</span></div>
-<div class="line"><a id="l02198" name="l02198"></a><span class="lineno"> 2198</span>        <span class="comment">// Without the exact size, it is the requested size rounded up.</span></div>
-<div class="line"><a id="l02199" name="l02199"></a><span class="lineno"> 2199</span>        m_logger.logAllocation (userPtr, chunk-&gt;getUserSize (), allocType);</div>
-<div class="line"><a id="l02200" name="l02200"></a><span class="lineno"> 2200</span>        <span class="keywordflow">return</span> userPtr;</div>
-<div class="line"><a id="l02201" name="l02201"></a><span class="lineno"> 2201</span>    }</div>
-<div class="line"><a id="l02202" name="l02202"></a><span class="lineno"> 2202</span>};</div>
+<div class="line"><a id="l02209" name="l02209"></a><span class="lineno"> 2209</span><span class="preprocessor">#if defined(_MSC_VER)</span></div>
+<div class="line"><a id="l02210" name="l02210"></a><span class="lineno"> 2210</span><span class="preprocessor">#pragma warning(push)</span></div>
+<div class="line"><a id="l02211" name="l02211"></a><span class="lineno"> 2211</span><span class="comment">// The loggers of CookMem always throw, so MSVC finds the throw below</span></div>
+<div class="line"><a id="l02212" name="l02212"></a><span class="lineno"> 2212</span><span class="comment">// unreachable (C4702).  It is needed for loggers that return.</span></div>
+<div class="line"><a id="l02213" name="l02213"></a><span class="lineno"> 2213</span><span class="preprocessor">#pragma warning(disable: 4702)</span></div>
+<div class="line"><a id="l02214" name="l02214"></a><span class="lineno"> 2214</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l02215" name="l02215"></a><span class="lineno"> 2215</span>    <span class="keywordtype">void</span></div>
+<div class="line"><a id="l02216" name="l02216"></a><span class="lineno"> 2216</span>    reportError (<span class="keywordtype">void</span>* ptr, <a class="code hl_enumeration" href="namespacecookmem.html#a28eece75e72b18dfe29be8366247ec32">MemError_et</a> error, <span class="keyword">const</span> <span class="keywordtype">char</span>* message, <span class="keyword">const</span> <span class="keywordtype">char</span>* file, <span class="keywordtype">int</span> line)</div>
+<div class="line"><a id="l02217" name="l02217"></a><span class="lineno"> 2217</span>    {</div>
+<div class="line"><a id="l02218" name="l02218"></a><span class="lineno"> 2218</span>        m_logger.logError (ptr, error, message, file, line);</div>
+<div class="line"><a id="l02219" name="l02219"></a><span class="lineno"> 2219</span>        <span class="keywordflow">throw</span> Exception (error, message, file, line);</div>
+<div class="line"><a id="l02220" name="l02220"></a><span class="lineno"> 2220</span>    }</div>
+<div class="line"><a id="l02221" name="l02221"></a><span class="lineno"> 2221</span><span class="preprocessor">#if defined(_MSC_VER)</span></div>
+<div class="line"><a id="l02222" name="l02222"></a><span class="lineno"> 2222</span><span class="preprocessor">#pragma warning(pop)</span></div>
+<div class="line"><a id="l02223" name="l02223"></a><span class="lineno"> 2223</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l02224" name="l02224"></a><span class="lineno"> 2224</span> </div>
+<div class="line"><a id="l02225" name="l02225"></a><span class="lineno"> 2225</span>    <span class="keyword">inline</span> T*</div>
+<div class="line"><a id="l02226" name="l02226"></a><span class="lineno"> 2226</span>    getUserPointer (MemChunk* chunk, <a class="code hl_enumeration" href="namespacecookmem.html#af66049bcb6c6c6069141c13b46a40e5a">MemAllocType_et</a> allocType)</div>
+<div class="line"><a id="l02227" name="l02227"></a><span class="lineno"> 2227</span>    {</div>
+<div class="line"><a id="l02228" name="l02228"></a><span class="lineno"> 2228</span>        T* userPtr = chunk2Mem (chunk);</div>
+<div class="line"><a id="l02229" name="l02229"></a><span class="lineno"> 2229</span>        <span class="comment">// Log the size the chunk reports, which deallocate () logs too.</span></div>
+<div class="line"><a id="l02230" name="l02230"></a><span class="lineno"> 2230</span>        <span class="comment">// Without the exact size, it is the requested size rounded up.</span></div>
+<div class="line"><a id="l02231" name="l02231"></a><span class="lineno"> 2231</span>        m_logger.logAllocation (userPtr, chunk-&gt;getUserSize (), allocType);</div>
+<div class="line"><a id="l02232" name="l02232"></a><span class="lineno"> 2232</span>        <span class="keywordflow">return</span> userPtr;</div>
+<div class="line"><a id="l02233" name="l02233"></a><span class="lineno"> 2233</span>    }</div>
+<div class="line"><a id="l02234" name="l02234"></a><span class="lineno"> 2234</span>};</div>
 </div>
-<div class="line"><a id="l02203" name="l02203"></a><span class="lineno"> 2203</span> </div>
-<div class="line"><a id="l02204" name="l02204"></a><span class="lineno"> 2204</span><span class="preprocessor">#undef cookmem_getLargeBinIndex</span></div>
-<div class="line"><a id="l02205" name="l02205"></a><span class="lineno"> 2205</span><span class="preprocessor">#undef cookmem_bit2treeIndex</span></div>
-<div class="line"><a id="l02206" name="l02206"></a><span class="lineno"> 2206</span> </div>
-<div class="line"><a id="l02207" name="l02207"></a><span class="lineno"> 2207</span>}   <span class="comment">// namespace cookmem</span></div>
-<div class="line"><a id="l02208" name="l02208"></a><span class="lineno"> 2208</span> </div>
-<div class="line"><a id="l02209" name="l02209"></a><span class="lineno"> 2209</span><span class="preprocessor">#endif  </span><span class="comment">// COOK_MEM_POOL_H</span></div>
+<div class="line"><a id="l02235" name="l02235"></a><span class="lineno"> 2235</span> </div>
+<div class="line"><a id="l02236" name="l02236"></a><span class="lineno"> 2236</span><span class="preprocessor">#undef cookmem_getLargeBinIndex</span></div>
+<div class="line"><a id="l02237" name="l02237"></a><span class="lineno"> 2237</span><span class="preprocessor">#undef cookmem_bit2treeIndex</span></div>
+<div class="line"><a id="l02238" name="l02238"></a><span class="lineno"> 2238</span> </div>
+<div class="line"><a id="l02239" name="l02239"></a><span class="lineno"> 2239</span>}   <span class="comment">// namespace cookmem</span></div>
+<div class="line"><a id="l02240" name="l02240"></a><span class="lineno"> 2240</span> </div>
+<div class="line"><a id="l02241" name="l02241"></a><span class="lineno"> 2241</span><span class="preprocessor">#endif  </span><span class="comment">// COOK_MEM_POOL_H</span></div>
 <div class="ttc" id="aclasscookmem_1_1Exception_html"><div class="ttname"><a href="classcookmem_1_1Exception.html">cookmem::Exception</a></div><div class="ttdef"><b>Definition</b> exception.h:39</div></div>
 <div class="ttc" id="aclasscookmem_1_1MemContextProvider_html"><div class="ttname"><a href="classcookmem_1_1MemContextProvider.html">cookmem::MemContextProvider</a></div><div class="ttdef"><b>Definition</b> allocator.h:39</div></div>
 <div class="ttc" id="aclasscookmem_1_1MemPool_html"><div class="ttname"><a href="classcookmem_1_1MemPool.html">cookmem::MemPool</a></div><div class="ttdef"><b>Definition</b> pool.h:168</div></div>
@@ -1899,6 +1915,7 @@ $(document).ready(function(){initNavTree('pool_8h_source.html',''); initResizabl
 <div class="ttc" id="anamespacecookmem_html"><div class="ttname"><a href="namespacecookmem.html">cookmem</a></div><div class="ttdef"><b>Definition</b> allocator.h:29</div></div>
 <div class="ttc" id="anamespacecookmem_html_a0f5e7e68db4582bce046ee43533e9374"><div class="ttname"><a href="namespacecookmem.html#a0f5e7e68db4582bce046ee43533e9374">cookmem::DEFAULT_PADDING_BYTE</a></div><div class="ttdeci">const char DEFAULT_PADDING_BYTE</div><div class="ttdef"><b>Definition</b> config.h:64</div></div>
 <div class="ttc" id="anamespacecookmem_html_a1565b8b4cb9a52f871ce814946c244c8"><div class="ttname"><a href="namespacecookmem.html#a1565b8b4cb9a52f871ce814946c244c8">cookmem::DEFAULT_IMMEDIATE_RELEASE_THRESHOLD</a></div><div class="ttdeci">const std::size_t DEFAULT_IMMEDIATE_RELEASE_THRESHOLD</div><div class="ttdef"><b>Definition</b> config.h:46</div></div>
+<div class="ttc" id="anamespacecookmem_html_a28eece75e72b18dfe29be8366247ec32"><div class="ttname"><a href="namespacecookmem.html#a28eece75e72b18dfe29be8366247ec32">cookmem::MemError_et</a></div><div class="ttdeci">MemError_et</div><div class="ttdef"><b>Definition</b> exception.h:28</div></div>
 <div class="ttc" id="anamespacecookmem_html_a28eece75e72b18dfe29be8366247ec32a48be12240ae74a48197ea215bd298b96"><div class="ttname"><a href="namespacecookmem.html#a28eece75e72b18dfe29be8366247ec32a48be12240ae74a48197ea215bd298b96">cookmem::MEM_ERROR_PADDING</a></div><div class="ttdeci">@ MEM_ERROR_PADDING</div><div class="ttdoc">padding bytes after an allocation were overwritten</div><div class="ttdef"><b>Definition</b> exception.h:32</div></div>
 <div class="ttc" id="anamespacecookmem_html_a28eece75e72b18dfe29be8366247ec32a4f60728f71321a75f2d2c8e7a283e67f"><div class="ttname"><a href="namespacecookmem.html#a28eece75e72b18dfe29be8366247ec32a4f60728f71321a75f2d2c8e7a283e67f">cookmem::MEM_ERROR_GENERAL</a></div><div class="ttdeci">@ MEM_ERROR_GENERAL</div><div class="ttdoc">general error</div><div class="ttdef"><b>Definition</b> exception.h:29</div></div>
 <div class="ttc" id="anamespacecookmem_html_a28eece75e72b18dfe29be8366247ec32ad21efb1b7f9eb60e548d43b860cf2067"><div class="ttname"><a href="namespacecookmem.html#a28eece75e72b18dfe29be8366247ec32ad21efb1b7f9eb60e548d43b860cf2067">cookmem::MEM_ERROR_DOUBLE_FREE</a></div><div class="ttdeci">@ MEM_ERROR_DOUBLE_FREE</div><div class="ttdoc">freeing an already free pointer</div><div class="ttdef"><b>Definition</b> exception.h:31</div></div>
