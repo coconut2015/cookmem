@@ -30,7 +30,7 @@
 /** The minor version number.  Must be less than 100. */
 #define COOKMEM_VERSION_MINOR 5
 /** The patch version number.  Must be less than 100. */
-#define COOKMEM_VERSION_PATCH 0
+#define COOKMEM_VERSION_PATCH 1
 
 /**
  * The version as a single number, MAJOR * 10000 + MINOR * 100 + PATCH, so

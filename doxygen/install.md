@@ -22,7 +22,7 @@ Use one of the following to make the target available.  They require CMake
 include (FetchContent)
 FetchContent_Declare (cookmem
     GIT_REPOSITORY https://github.com/coconut2015/cookmem.git
-    GIT_TAG        v1.5.0)
+    GIT_TAG        v1.5.1)
 FetchContent_MakeAvailable (cookmem)
 ```
 
