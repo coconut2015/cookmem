@@ -90,9 +90,13 @@ public:
      * Log the memory allocation.
      *
      * @param   userPtr
-     *          the user pointer allocated.
+     *          the user pointer allocated, or nullptr if the allocation
+     *          failed.
      * @param   userSize
-     *          the user requested size.
+     *          the size of the allocation, as getSize () reports it: the
+     *          requested size if the exact size is stored, and otherwise the
+     *          requested size rounded up to the alignment.  If the
+     *          allocation failed, the requested size.
      * @param   allocType
      *          the type of the allocation.
      */
@@ -100,15 +104,16 @@ public:
     logAllocation (void* userPtr, std::size_t userSize, MemAllocType_et allocType) = 0;
 
     /**
-     * Log the memory reallocation.  This is only called when the new
-     * size is smaller than the original size.
+     * Log a reallocation in place, which grows or shrinks an allocation
+     * without moving it.  A reallocation that moves the memory is logged as
+     * an allocation and a deallocation instead.
      *
      * @param   userPtr
-     *          the user pointer allocated.
+     *          the user pointer, which does not change.
      * @param   oldUserSize
-     *          the old user size.
+     *          the size before, as getSize () reported it.
      * @param   newUserSize
-     *          the new user size.
+     *          the size after, as getSize () reports it.
      */
     virtual void
     logReallocation (void* userPtr, std::size_t oldUserSize, std::size_t newUserSize) = 0;
@@ -119,7 +124,8 @@ public:
      * @param   userPtr
      *          the user pointer allocated.
      * @param   userSize
-     *          the user requested size.
+     *          the size of the allocation, as getSize () reports it, which
+     *          is the size its allocation was logged with.
      */
     virtual void
     logDeallocation (void* userPtr, std::size_t userSize) = 0;

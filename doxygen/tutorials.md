@@ -118,6 +118,11 @@ it as the logger of a memory context and read the statistics with
 `getLogger ().getStats ()`.  The default logger, cookmem::NoActionMemLogger,
 does nothing, so the statistics cost nothing unless you ask for them.
 
+Byte counts use the sizes that `getSize ()` reports: the requested sizes
+when the exact size is stored (see \ref querying "Querying Pointer
+Information"), and otherwise the requested sizes rounded up to the
+alignment.
+
 \include example_StatsLogger.cpp
 
 \section boundcheck Memory Corruption Detection
