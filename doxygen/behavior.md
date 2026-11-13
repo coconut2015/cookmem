@@ -22,6 +22,12 @@ expects.
 * `deallocate` throws cookmem::Exception when it detects a double free
   (cookmem::MEM_ERROR_DOUBLE_FREE) or overwritten padding bytes
   (cookmem::MEM_ERROR_PADDING).  These checks are done in release builds too.
+* The pool reports these errors, and an invalid padding size when it is
+  created, to `logError (ptr, error, message, file, line)` of its logger.
+  The loggers of CookMem throw cookmem::Exception there.  A custom logger
+  can record the error first, or throw its own exception; if `logError`
+  returns, the pool throws cookmem::Exception itself, since it is not safe
+  to go on.
 * Destructors are `noexcept` by default, so such an error detected while a
   container is being destroyed ends the program with `std::terminate`.
 * Assertions (cookmem::MEM_ERROR_ASSERT) are checked only when `COOKMEM_DEBUG`

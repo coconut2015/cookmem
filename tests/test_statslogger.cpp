@@ -38,6 +38,18 @@ statsMatch (StatsContext& memCtx, const std::vector<void*>& ptrs)
            stats.getTotalAllocated () - stats.getTotalDeallocated () == total;
 }
 
+/**
+ * The bytes in use, read through a const context: getLogger (), getPool ()
+ * and getArena () have const versions.
+ */
+static std::size_t
+currentAllocated (const StatsContext& memCtx)
+{
+    (void) memCtx.getArena ();
+    (void) memCtx.getPool ().getFootprint ();
+    return memCtx.getLogger ().getStats ().getCurrentAllocated ();
+}
+
 static int
 testContextSizes (bool storingExactSize)
 {
@@ -71,12 +83,20 @@ testContextSizes (bool storingExactSize)
         return 4;
     }
 
+    if (currentAllocated (memCtx) == 0)
+    {
+        return 5;
+    }
     for (void* ptr : ptrs)
     {
         memCtx.deallocate (ptr);
     }
     ptrs.clear ();
-    return statsMatch (memCtx, ptrs) ? 0 : 5;
+    if (currentAllocated (memCtx) != 0)
+    {
+        return 6;
+    }
+    return statsMatch (memCtx, ptrs) ? 0 : 7;
 }
 
 int
@@ -131,7 +151,7 @@ main ()
 
     try
     {
-        logger.logError (&allocation, cookmem::MEM_ERROR_PADDING);
+        logger.logError (&allocation, cookmem::MEM_ERROR_PADDING, "test");
     }
     catch (const cookmem::Exception& error)
     {

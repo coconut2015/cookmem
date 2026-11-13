@@ -237,6 +237,19 @@ add_executable(test_cookmem_aligned
 add_test(NAME test_cookmem_aligned
 	COMMAND test_cookmem_aligned)
 
+# .. test_warnings: the headers must compile without warnings, with every
+# warning enabled and treated as an error.
+add_executable(test_warnings
+	tests/test_warnings.cpp)
+if (MSVC)
+	target_compile_options(test_warnings PRIVATE /W4 /WX)
+else ()
+	target_compile_options(test_warnings PRIVATE -Wall -Wextra -Wpedantic -Wshadow -Werror)
+endif ()
+
+add_test(NAME test_warnings
+	COMMAND test_warnings)
+
 # .. test_cookmem_walk
 add_executable(test_cookmem_walk
 	tests/test_cookmem_walk.cpp)
