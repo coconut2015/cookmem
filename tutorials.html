@@ -506,7 +506,7 @@ Restricting Memory Usage</h1>
 <li><code>setFootprintLimit ()</code> sets the limit in bytes. 0, the default, means no limit.</li>
 <li><code>getFootprint ()</code> returns the current footprint, and <code>getMaxFootprint ()</code> returns the largest footprint so far.</li>
 </ul>
-<p>The footprint includes the overhead of the segments, so slightly less memory than the limit is available for allocations.</p>
+<p>The footprint includes the overhead of the segments, so slightly less memory than the limit is available for allocations. It also includes segments that became empty and have not been released yet; before an allocation fails on the limit, the pool releases them and tries again. <code>reallocate ()</code> that has to move the memory needs the old and the new memory at the same time, so a buffer that grows this way can reach about half of the limit.</p>
 <div class="fragment"><div class="line"><span class="comment">/*</span></div>
 <div class="line"><span class="comment"> * Copyright (c) 2026 Heng Yuan</span></div>
 <div class="line"><span class="comment"> *</span></div>

@@ -113,7 +113,7 @@ Pointer Ownership</h2>
 Releasing Memory</h2>
 <p>When memory is deallocated, the memory pool usually does not release memory segments to the arena right away, even when a segment becomes entirely free. Free segments are kept for later allocations. After every <a class="el" href="namespacecookmem.html#a53874591e7f085b60e3dd910711d93b1">cookmem::DEFAULT_TRIM_EMPTY_SEGMENTS_INTERVAL</a> (4095) deallocations, the pool runs a trimming pass that releases the segments that are entirely free to the arena, which reduces the footprint. As a result:</p>
 <ul>
-<li>The footprint can stay higher than the memory in use until the next trimming pass.</li>
+<li>The footprint can stay higher than the memory in use until the next trimming pass. When a footprint limit is set and a new segment would go over it, the pool releases the empty segments first, so they do not make the allocation fail.</li>
 <li>With <a class="el" href="classcookmem_1_1CachedArena.html">cookmem::CachedArena</a>, the released segments are cached by the arena and reused for later requests, including requests from other memory contexts that share the arena.</li>
 <li><code>setTrimEmptySegmentsInterval ()</code> changes the number of deallocations between trimming passes. The default suits most programs. A smaller interval keeps the footprint smaller, but releases and obtains segments more often.</li>
 <li><a class="el" href="classcookmem_1_1StatsLogger.html">cookmem::StatsLogger</a> counts the trimming passes (<code>getNumTrimEmptySegments ()</code>).</li>
