@@ -47,7 +47,9 @@ runs a trimming pass that releases the segments that are entirely free to the
 arena, which reduces the footprint.  As a result:
 
 * The footprint can stay higher than the memory in use until the next
-  trimming pass.
+  trimming pass.  When a footprint limit is set and a new segment would go
+  over it, the pool releases the empty segments first, so they do not make
+  the allocation fail.
 * With cookmem::CachedArena, the released segments are cached by the arena
   and reused for later requests, including requests from other memory
   contexts that share the arena.

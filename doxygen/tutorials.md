@@ -106,7 +106,11 @@ amount of memory.
   returns the largest footprint so far.
 
 The footprint includes the overhead of the segments, so slightly less memory
-than the limit is available for allocations.
+than the limit is available for allocations.  It also includes segments that
+became empty and have not been released yet; before an allocation fails on
+the limit, the pool releases them and tries again.  `reallocate ()` that has
+to move the memory needs the old and the new memory at the same time, so a
+buffer that grows this way can reach about half of the limit.
 
 \include example_footprintLimit.cpp
 
