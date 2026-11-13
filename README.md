@@ -136,7 +136,8 @@ structure is allocated from a memory context and released all at once, with
   unloaded as a unit.
 
 Releasing everything at once frees the memory without calling destructors,
-so C++ RAII does not happen: it suits objects that own nothing but memory
+so C++ [RAII](https://en.wikipedia.org/wiki/Resource_acquisition_is_initialization)
+does not happen: it suits objects that own nothing but memory
 from the same context, and objects that hold files, locks or memory from the
 global heap must be destroyed first.
 
