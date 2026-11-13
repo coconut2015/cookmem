@@ -17,6 +17,9 @@
 #define COOK_MEM_CONTEXT_H
 
 #include <cstdint>
+#include <new>
+#include <type_traits>
+#include <utility>
 
 #include "config.h"
 #include "mmaparena.h"
@@ -179,6 +182,69 @@ public:
      */
     inline void
     deallocate (T* ptr, size_type size = 0) { m_pool.deallocate (ptr, size); }
+
+    /**
+     * Allocate memory for an object of type U and construct it, like new.
+     *
+     * The memory is aligned to alignof (U), including alignments larger
+     * than ALLOCATION_ALIGNMENT.  Free the object with destroy (), or free
+     * all objects at once with releaseAll () or by destroying the context;
+     * those do not call destructors.
+     *
+     * If the constructor throws, the memory is deallocated and the
+     * exception is passed on.
+     *
+     * @param   args
+     *          the arguments passed to the constructor of U.
+     * @return  the new object.
+     * @throws  std::bad_alloc
+     *          if the memory cannot be allocated.  Unlike allocate (), this
+     *          function does not return nullptr.
+     */
+    template<class U, class... Args>
+    U*
+    create (Args&&... args)
+    {
+        void* mem = m_pool.allocateAligned (sizeof (U), alignof (U));
+        if (mem == nullptr)
+        {
+            throw std::bad_alloc ();
+        }
+        try
+        {
+            return ::new (mem) U (std::forward<Args> (args)...);
+        }
+        catch (...)
+        {
+            m_pool.deallocate (static_cast<T*> (mem));
+            throw;
+        }
+    }
+
+    /**
+     * Destroy an object created by create (), like delete: call its
+     * destructor, then deallocate its memory.
+     *
+     * A pointer to a polymorphic base class works, as with delete, when the
+     * destructor is virtual.
+     *
+     * @param   ptr
+     *          the object to destroy.  Nothing is done if it is nullptr.
+     */
+    template<class U>
+    void
+    destroy (U* ptr)
+    {
+        if (ptr == nullptr)
+        {
+            return;
+        }
+        // Find the start of the allocation before the destructor runs: with
+        // multiple inheritance, a base class pointer can point inside it.
+        void* mem = getObjectStart (ptr, std::is_polymorphic<U> ());
+        ptr->~U ();
+        m_pool.deallocate (static_cast<T*> (mem));
+    }
 
     /**
      * Validate the internal memory structures.
@@ -455,6 +521,22 @@ public:
     getPool () const { return m_pool; }
 
 private:
+    /** The start of a polymorphic object: that of its most derived type. */
+    template<class U>
+    static void*
+    getObjectStart (U* ptr, std::true_type)
+    {
+        return const_cast<void*> (dynamic_cast<const volatile void*> (ptr));
+    }
+
+    /** The start of an object that is not polymorphic. */
+    template<class U>
+    static void*
+    getObjectStart (U* ptr, std::false_type)
+    {
+        return const_cast<void*> (static_cast<const volatile void*> (ptr));
+    }
+
     Arena&      m_arena;
     Logger&     m_logger;
     Pool        m_pool;

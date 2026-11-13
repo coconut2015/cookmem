@@ -15,7 +15,7 @@ not a power of 2.  When `reallocate` fails, the original pointer remains
 valid.
 
 cookmem::Allocator throws `std::bad_alloc` instead, as the standard library
-expects.
+expects, and so does `create ()` of a memory context.
 
 ### Errors and Exceptions
 
