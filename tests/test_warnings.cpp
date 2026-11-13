@@ -16,7 +16,7 @@
 // Compiled with every warning enabled and warnings treated as errors (see
 // CMakeLists.txt), so that the CookMem headers stay free of warnings in the
 // programs that include them.  It instantiates both trees, the contexts,
-// the loggers, padding and the STL allocator.
+// the loggers, padding, the STL allocator, and create () and destroy ().
 #include <vector>
 
 #include <cookmem.h>
@@ -61,12 +61,37 @@ test1 ()
     return 0;
 }
 
+struct WarnBase
+{
+    virtual ~WarnBase () {}
+    int m_base = 0;
+};
+
+struct WarnDerived : public WarnBase
+{
+    explicit WarnDerived (int value) : m_value (value) {}
+    int m_value;
+};
+
+static int
+test2 ()
+{
+    cookmem::SimpleMemContext<> memCtx;
+    WarnBase* obj = memCtx.create<WarnDerived> (5);
+    const int* num = memCtx.create<int> (7);
+    ASSERT_EQ (7, *num);
+    memCtx.destroy (num);
+    memCtx.destroy (obj);
+    return 0;
+}
+
 int
 main ()
 {
     try
     {
         ASSERT_EQ (0, test1 ());
+        ASSERT_EQ (0, test2 ());
     }
     catch (const unittest::UnitTestException& ex)
     {

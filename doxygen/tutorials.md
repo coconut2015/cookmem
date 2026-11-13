@@ -54,6 +54,21 @@ is called, which returns them to the underlying arena.  A context's
 
 \include example_CachedArena.cpp
 
+\section create Creating Objects
+
+`create<T> (args...)` allocates memory for an object from a memory context
+and constructs it, like `new`.  The memory is aligned to `alignof (T)`.
+Unlike `allocate ()`, it throws `std::bad_alloc` when the memory cannot be
+allocated.  `destroy (ptr)` calls the destructor and frees the memory, like
+`delete`, and works through a base class pointer when the destructor is
+virtual.
+
+Objects that own nothing but memory from the context do not need to be
+destroyed one by one: `releaseAll ()`, or destroying the context, frees them
+all at once without calling their destructors.
+
+\include example_create.cpp
+
 \section copying Copying Data Between Memory Pools
 
 cookmem can determine whether a memory pointer is in the address space of a

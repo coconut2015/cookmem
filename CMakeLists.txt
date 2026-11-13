@@ -237,6 +237,13 @@ add_executable(test_cookmem_aligned
 add_test(NAME test_cookmem_aligned
 	COMMAND test_cookmem_aligned)
 
+# .. test_create
+add_executable(test_create
+	tests/test_create.cpp)
+
+add_test(NAME test_create
+	COMMAND test_create)
+
 # .. test_warnings: the headers must compile without warnings, with every
 # warning enabled and treated as an error.
 add_executable(test_warnings
@@ -367,6 +374,11 @@ add_executable(example_child
 	examples/example_child.cpp)
 add_test(NAME example_child
 	COMMAND example_child)
+
+add_executable(example_create
+	examples/example_create.cpp)
+add_test(NAME example_create
+	COMMAND example_create)
 
 add_executable(example_getSize
 	examples/example_getSize.cpp)
