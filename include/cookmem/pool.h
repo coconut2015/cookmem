@@ -35,31 +35,33 @@ namespace cookmem
 {
 
 /// @cond INTERNAL
-// Bit helpers used by the bin maps (from dlmalloc).
+// Bit helpers used by the bin maps (from dlmalloc).  T is unsigned, and
+// ~x + 1 is -x without the overflow of negating INT_MIN as an int.
 template<class T>
 T least_bit(T x)
 {
-    return ((x) & -(static_cast<int>(x)));
+    return x & (~x + 1);
 }
 
 template<class T>
 T left_bits(T x)
 {
-    return ((x << 1) | -static_cast<int>(x << 1));
+    return (x << 1) | (~(x << 1) + 1);
 }
 /// @endcond
 
-/* assign tree index for size S to variable I. Use x86 asm if possible  */
-#if defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
+/* Assign the tree bin index for size S to I.  Use the compiler builtins or
+   intrinsics for the bit scan if possible. */
+#if defined(__GNUC__)
 #define cookmem_getLargeBinIndex(S, I)\
 {\
-  unsigned int X = S >> TREEBIN_SHIFT;\
+  std::size_t X = S >> TREEBIN_SHIFT;\
   if (X == 0)\
     I = 0;\
   else if (X > 0xFFFF)\
     I = NTREEBINS-1;\
   else {\
-    unsigned int K = (unsigned) sizeof(X)*__CHAR_BIT__ - 1 - (unsigned) __builtin_clz(X); \
+    unsigned int K = (unsigned) sizeof(unsigned int)*__CHAR_BIT__ - 1 - (unsigned) __builtin_clz((unsigned int) X); \
     I =  (BinIndexType)((K << 1) + ((S >> (K + (TREEBIN_SHIFT-1)) & 1)));\
   }\
 }
@@ -113,7 +115,7 @@ T left_bits(T x)
 }
 #endif /* GNUC */
 
-#if defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
+#if defined(__GNUC__)
 #define cookmem_bit2treeIndex(X, I)\
 {\
   unsigned int J;\
@@ -855,6 +857,10 @@ public:
     /**
      * This function reallocate a memory.
      *
+     * The memory is resized in place when possible (see resizeInPlace ()).
+     * Otherwise new memory is allocated, the data is copied, and the old
+     * memory is freed.
+     *
      * @param   ptr
      *          the current memory pointer.
      * @param   newUserSize
@@ -868,19 +874,55 @@ public:
     {
         if (ptr == nullptr)
         {
-            return allocate(newUserSize);
+            return allocate (newUserSize);
+        }
+
+        if (resizeInPlace (ptr, newUserSize))
+        {
+            return ptr;
+        }
+
+        // allocate () fails for a request too large to represent.
+        size_type oldUserSize = mem2Chunk (ptr)->getUserSize ();
+        T* newPtr = allocate (newUserSize);
+        if (newPtr)
+        {
+            memcpy (newPtr, ptr, oldUserSize);
+            deallocate (ptr);
+        }
+        return newPtr;
+    }
+
+    /**
+     * Resize memory without moving it, like realloc_in_place in dlmalloc.
+     *
+     * Shrinking always succeeds, and the unused tail is freed.  Growing
+     * succeeds if the memory after the allocation is free and large enough.
+     *
+     * @param   ptr
+     *          the current memory pointer.
+     * @param   newUserSize
+     *          the new size
+     * @return  true if the memory now has the new size at the same address.
+     *          false if it could not be resized in place, or if ptr is
+     *          nullptr; the memory is then unchanged.
+     */
+    bool
+    resizeInPlace (T* ptr, size_type newUserSize)
+    {
+        if (ptr == nullptr)
+        {
+            return false;
         }
 
         MemChunk* chunk = mem2Chunk (ptr);
-        size_type oldUserSize = chunk->getUserSize ();
 
         // The new chunk must also hold the padding, and a request too large
         // to represent must not wrap around to a small chunk size.
         size_type newAllocSize = getMinAllocSize (newUserSize);
         if (newAllocSize >= MAX_REQUEST)
         {
-            m_logger.logAllocation (nullptr, newUserSize, MEM_ALLOC_BIG);
-            return nullptr;
+            return false;
         }
         size_type newChunkSize = (newAllocSize < MIN_REQUEST) ? MIN_CHUNK_SIZE : calcChunkSize (newAllocSize);
 
@@ -889,69 +931,61 @@ public:
         {
             // Grow in place if the next chunk is free and large enough.
             MemChunk* nextChunk = chunk->getNextChunk (chunkSize);
-            if (!nextChunk->isUsed () &&
-                chunkSize + nextChunk->getChunkSize () >= newChunkSize)
+            if (nextChunk->isUsed () ||
+                chunkSize + nextChunk->getChunkSize () < newChunkSize)
             {
-                m_logger.logReallocation (ptr, oldUserSize, newUserSize);
-
-                size_type mergedSize = chunkSize + nextChunk->getChunkSize ();
-                removeChunk (nextChunk);
-
-                // The chunk after nextChunk is in use, since free chunks are
-                // always coalesced, so the remainder does not need merging.
-                size_type remainSize = mergedSize - newChunkSize;
-                if (remainSize >= MIN_CHUNK_SIZE)
-                {
-                    chunk->setFreeChunkSize (newChunkSize);
-                    MemChunk* remainChunk = chunk->getNextChunk (newChunkSize);
-                    remainChunk->setFreeChunkSize (remainSize);
-                    addChunk (remainChunk);
-                }
-                else
-                {
-                    chunk->setFreeChunkSize (mergedSize);
-                }
-                setUsed (chunk, newUserSize);
-                return ptr;
+                return false;
             }
 
-            // Otherwise allocate new memory and copy.
-            T* newPtr = allocate (newUserSize);
-            if (newPtr)
-            {
-                memcpy (newPtr, ptr, oldUserSize);
-                deallocate (ptr);
-            }
-            return newPtr;
-        }
-        else
-        {
-            m_logger.logReallocation (ptr, oldUserSize, newUserSize);
+            m_logger.logReallocation (ptr, chunk->getUserSize (), newUserSize);
 
-            size_type remainSize = chunkSize - newChunkSize;
+            size_type mergedSize = chunkSize + nextChunk->getChunkSize ();
+            removeChunk (nextChunk);
+
+            // The chunk after nextChunk is in use, since free chunks are
+            // always coalesced, so the remainder does not need merging.
+            size_type remainSize = mergedSize - newChunkSize;
             if (remainSize >= MIN_CHUNK_SIZE)
             {
-                MemChunk* remainChunk = (MemChunk*)((char*)chunk + newChunkSize);
-                MemChunk* nextChunk = remainChunk->getNextChunk (remainSize);
-
-                if (!nextChunk->isUsed ())
-                {
-                    removeChunk (nextChunk);
-                    remainSize += nextChunk->getChunkSize ();
-                }
-
                 chunk->setFreeChunkSize (newChunkSize);
-                setUsed (chunk, newUserSize);
+                MemChunk* remainChunk = chunk->getNextChunk (newChunkSize);
                 remainChunk->setFreeChunkSize (remainSize);
                 addChunk (remainChunk);
             }
             else
             {
-                setUsed (chunk, newUserSize);
+                chunk->setFreeChunkSize (mergedSize);
+            }
+            setUsed (chunk, newUserSize);
+            return true;
+        }
+
+        m_logger.logReallocation (ptr, chunk->getUserSize (), newUserSize);
+
+        // Shrink, freeing the unused tail if it is large enough, merged with
+        // the next chunk if that one is free.
+        size_type remainSize = chunkSize - newChunkSize;
+        if (remainSize >= MIN_CHUNK_SIZE)
+        {
+            MemChunk* remainChunk = chunk->getNextChunk (newChunkSize);
+            MemChunk* nextChunk = remainChunk->getNextChunk (remainSize);
+
+            if (!nextChunk->isUsed ())
+            {
+                removeChunk (nextChunk);
+                remainSize += nextChunk->getChunkSize ();
             }
 
-            return ptr;
+            chunk->setFreeChunkSize (newChunkSize);
+            setUsed (chunk, newUserSize);
+            remainChunk->setFreeChunkSize (remainSize);
+            addChunk (remainChunk);
         }
+        else
+        {
+            setUsed (chunk, newUserSize);
+        }
+        return true;
     }
 
     /**
@@ -1210,6 +1244,43 @@ public:
     }
 
     /**
+     * Call a visitor function for every allocation that has not been freed,
+     * like inspect_all in dlmalloc.  This can be used to find memory leaks.
+     *
+     * The allocations are visited segment by segment, in address order
+     * within each segment.  The visitor function must not allocate, free or
+     * resize memory of this pool.
+     *
+     * @param   visitor
+     *          the visitor function: a function, lambda or function object
+     *          called as visitor (ptr, size) for each allocation, where ptr
+     *          is the pointer returned to the user and size is the
+     *          allocation size, as returned by getUserSize ().
+     * @return  the number of allocations visited.
+     */
+    template<class Visitor>
+    size_type
+    forEachAllocation (Visitor visitor) const
+    {
+        size_type count = 0;
+        for (const MemSegment* seg = m_segList; seg != nullptr; seg = seg->getNext ())
+        {
+            const MemChunk* lastChunk = seg->getPastLastChunk ();
+            for (const MemChunk* chunk = seg->getFirstChunk ();
+                 chunk < lastChunk;
+                 chunk = chunk->getNextChunk ())
+            {
+                if (chunk->isUsed ())
+                {
+                    visitor (chunk2Mem (const_cast<MemChunk*> (chunk)), chunk->getUserSize ());
+                    ++count;
+                }
+            }
+        }
+        return count;
+    }
+
+    /**
      * Release all the memory segments held by this MemPool.
      */
     void
@@ -1327,6 +1398,23 @@ public:
     setPaddingByte (std::uint8_t paddingByte)
     {
         m_paddingByte = (char)paddingByte;
+    }
+
+    /**
+     * Get the tree bin that holds free chunks of a given size.  Chunks of
+     * 12 MB and more all go in the last bin.
+     *
+     * @param   chunkSize
+     *          the chunk size, which must be at least the smallest large
+     *          chunk size (256 bytes).
+     * @return  the tree bin index.
+     */
+    static unsigned int
+    getTreeBinIndex (size_type chunkSize)
+    {
+        BinIndexType binIndex;
+        cookmem_getLargeBinIndex (chunkSize, binIndex);
+        return binIndex;
     }
 
     /**
@@ -1550,23 +1638,29 @@ private:
         BinIndexType binIndex;
         cookmem_getLargeBinIndex (size, binIndex);
 
-        // Bins hold increasing sizes, so stop at a bin whose chunks are all
-        // at least the limit.
-        for (; binIndex < NTREEBINS && getTreeBinMinSize (binIndex) < limit; ++binIndex)
+        // Visit only the non-empty bins, starting from the bin of the size,
+        // using the tree map.  Bins hold increasing sizes, so stop at a bin
+        // whose chunks are all at least the limit.
+        BinIndexType bits = m_treeMap & ~(idx2bit (binIndex) - 1);
+        while (bits != 0)
         {
-            PtrTreeType& tree = treeAt (binIndex);
-            if (!tree.isEmpty ())
+            cookmem_bit2treeIndex (least_bit (bits), binIndex);
+            if (getTreeBinMinSize (binIndex) >= limit)
             {
-                chunk = reinterpret_cast<MemChunk*>(tree.remove(actualSize, limit));
-                if (chunk != nullptr)
-                {
-                    if (tree.isEmpty ())
-                    {
-                        clearTreeMap (binIndex);
-                    }
-                    break;
-                }
+                break;
             }
+            PtrTreeType& tree = treeAt (binIndex);
+            COOKMEM_ASSERT (!tree.isEmpty ());
+            chunk = reinterpret_cast<MemChunk*>(tree.remove(actualSize, limit));
+            if (chunk != nullptr)
+            {
+                if (tree.isEmpty ())
+                {
+                    clearTreeMap (binIndex);
+                }
+                break;
+            }
+            bits &= bits - 1;
         }
 
         if (chunk != nullptr)

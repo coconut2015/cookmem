@@ -23,5 +23,6 @@
 #include "cookmem/mmaparena.h"
 #include "cookmem/context.h"
 #include "cookmem/allocator.h"
+#include "cookmem/memresource.h"
 
 #endif  // COOK_MEM_H

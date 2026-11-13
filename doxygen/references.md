@@ -72,3 +72,11 @@ Declare it before containers that use the scoped context so the containers
 are destroyed before the scope ends.
 
 * cookmem::TLSContextScope - scopes a context to a lexical block
+
+### Polymorphic Memory Resource
+
+With C++17, a memory context can also be used through
+`std::pmr::memory_resource`, so that the `std::pmr` containers can allocate
+from it.
+
+* cookmem::MemResource - a `std::pmr::memory_resource` that allocates from a caller owned memory context

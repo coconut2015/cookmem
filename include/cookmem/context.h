@@ -140,6 +140,23 @@ public:
     reallocate (T* ptr, size_type size) { return m_pool.reallocate (ptr, size); }
 
     /**
+     * Resize memory without moving it, like realloc_in_place in dlmalloc.
+     *
+     * Shrinking always succeeds, and the unused tail is freed.  Growing
+     * succeeds if the memory after the allocation is free and large enough.
+     *
+     * @param   ptr
+     *          the current memory pointer.
+     * @param   size
+     *          the new size
+     * @return  true if the memory now has the new size at the same address.
+     *          false if it could not be resized in place, or if ptr is
+     *          nullptr; the memory is then unchanged.
+     */
+    inline bool
+    resizeInPlace (T* ptr, size_type size) { return m_pool.resizeInPlace (ptr, size); }
+
+    /**
      * Allocate n items of certain size.  The memory allocated is zeroed.
      *
      * @param   num
@@ -201,6 +218,25 @@ public:
      */
     inline size_type
     getSize (T* ptr) { return m_pool.getUserSize (ptr); }
+
+    /**
+     * Call a visitor function for every allocation that has not been freed,
+     * like inspect_all in dlmalloc.  This can be used to find memory leaks.
+     *
+     * The allocations are visited segment by segment, in address order
+     * within each segment.  The visitor function must not allocate, free or
+     * resize memory of this context.
+     *
+     * @param   visitor
+     *          the visitor function: a function, lambda or function object
+     *          called as visitor (ptr, size) for each allocation, where ptr
+     *          is the pointer returned to the user and size is the
+     *          allocation size, as returned by getSize ().
+     * @return  the number of allocations visited.
+     */
+    template<class Visitor>
+    inline size_type
+    forEachAllocation (Visitor visitor) const { return m_pool.forEachAllocation (visitor); }
 
     /**
      * Release all the memory segments held by this MemPool.

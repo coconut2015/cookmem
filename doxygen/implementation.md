@@ -115,8 +115,10 @@ Free chunks are kept in bins, as in dlmalloc:
   holds sizes from `2^(k+8)` up to `1.5 * 2^(k+8)`, and bin `2k+1` holds sizes
   from `1.5 * 2^(k+8)` up to `2^(k+9)`.  The last bin also holds everything
   larger, so it starts at 12 MB.  The bin index is computed from the two most
-  significant bits of the size, using a bit-scan instruction where one is
-  available, exactly as in dlmalloc.  A 32-bit map (`m_treeMap`) records
+  significant bits of the size, as in dlmalloc.  It uses the compiler's
+  bit-scan builtin with GCC and Clang (on every architecture, where dlmalloc
+  uses it only on x86) and the bit-scan intrinsic with MSVC, and portable
+  shifts otherwise.  A 32-bit map (`m_treeMap`) records
   which bins are not empty.
 
 Within a tree bin, dlmalloc uses a bitwise trie.  CookMem uses a balanced
@@ -169,7 +171,7 @@ For a large request:
 
 1. **Tree bins.**  The best fit: starting with the bin for the size, the
    smallest chunk that is large enough is taken from the first bin that has
-   one, and split.  As in dlmalloc, if the dv is also large enough, the tree
+   one, and split.  The search skips the empty bins using the tree map.  As in dlmalloc, if the dv is also large enough, the tree
    chunk is only taken if it is smaller than the dv.  The search stops at the
    first bin whose chunks are all at least the size of the dv, and the tree
    search leaves a chunk in place if it is not smaller.
@@ -234,8 +236,24 @@ allocated.
   memory.
 * A new size too large to represent fails, and the old memory is unchanged.
 
+`resizeInPlace (ptr, size)` does only the in-place part, like dlmalloc's
+`realloc_in_place`: it returns `true` if the memory now has the new size at
+the same address, and `false`, with the memory unchanged, if it would have to
+move.  `reallocate ()` calls it first, and allocates and copies only if it
+fails.
+
 `callocate (num, size)` fails if `num * size` overflows, as `calloc` does in
 dlmalloc.
+
+### Walking the Allocations
+
+`forEachAllocation (visitor)` walks the chunks of every segment in address
+order, using the chunk sizes, and calls `visitor (ptr, size)` for each chunk
+in use, with the pointer returned to the user and the size from
+`getSize ()`.  It returns the number of allocations.  It is like dlmalloc's
+`malloc_inspect_all`, except that it skips the free chunks.  The visitor
+function must not allocate, free or resize memory of the context being
+walked, since that changes the chunks while they are walked.
 
 ### Returning Memory to the Arena
 
@@ -352,8 +370,6 @@ memory is freed.  dlmalloc has no equivalent.
   and releases the segment when the allocation is freed (see above).
 * **Merging contiguous segments**, which dlmalloc does when new memory is
   adjacent to an existing segment.
-* **`realloc_in_place`**, which grows or shrinks only if the memory does not
-  move.  `reallocate ()` does grow in place when it can.
 * **Thread safety.**  dlmalloc can lock each mspace (`USE_LOCKS`).  CookMem
   contexts are not thread-safe (see \ref limitations "Limitations").
 * **`FOOTERS` mode**, where each chunk records which mspace it belongs to,
@@ -361,8 +377,8 @@ memory is freed.  dlmalloc has no equivalent.
 * **`independent_calloc`, `independent_comalloc` and `bulk_free`.**
 * **`valloc` and `pvalloc`.**  `allocateAligned ()` covers `memalign` and
   `posix_memalign`.
-* **`mallinfo`, `malloc_stats` and `malloc_inspect_all`.**  Use
-  cookmem::StatsLogger, `getFootprint ()` and `getMaxFootprint ()` instead.
+* **`mallinfo` and `malloc_stats`.**  Use cookmem::StatsLogger,
+  `getFootprint ()` and `getMaxFootprint ()` instead.
 * **`mallopt` tuning.**  The settings that apply have CookMem equivalents:
   the minimum segment size of the arena, the trimming interval and the
   immediate release threshold.

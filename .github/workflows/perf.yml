@@ -1,0 +1,89 @@
+name: Performance
+
+# Compare the performance tests of a branch with another branch, tag or
+# commit (master by default), with both release builds run on the same
+# machine.  The results are in the job summary.
+#
+# Run it from the Actions tab or with
+#   gh workflow run perf.yml --ref <branch> -f arch=arm64
+# or add the "perf" label to a pull request, which compares the pull request
+# with its base branch on arm64.  Manual runs need this file on master.
+
+on:
+  workflow_dispatch:
+    inputs:
+      base:
+        description: Branch, tag or commit to compare with
+        default: master
+      arch:
+        description: Architecture
+        type: choice
+        options: [arm64, x64]
+        default: arm64
+      compiler:
+        description: Compiler
+        type: choice
+        options: [g++, clang++]
+        default: g++
+      rounds:
+        description: Rounds of perftest.sh per build
+        default: '3'
+  pull_request:
+    types: [labeled]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: perf-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  compare:
+    if: github.event_name == 'workflow_dispatch' || github.event.label.name == 'perf'
+    name: Compare with ${{ inputs.base || github.base_ref }} (${{ inputs.compiler || 'g++' }} ${{ inputs.arch || 'arm64' }})
+    runs-on: ${{ (inputs.arch || 'arm64') == 'arm64' && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
+    env:
+      CXX: ${{ inputs.compiler || 'g++' }}
+      ROUNDS: ${{ inputs.rounds || '3' }}
+    steps:
+      - name: Check out the new version
+        uses: actions/checkout@v4
+        with:
+          path: new
+
+      - name: Check out the base version
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.base || github.base_ref }}
+          path: base
+
+      - name: Install tools
+        run: |
+          if ! command -v $CXX > /dev/null || ! command -v cmake > /dev/null; then
+            sudo apt-get update
+            sudo apt-get install -y cmake ${{ inputs.compiler == 'clang++' && 'clang' || 'g++' }}
+          fi
+          $CXX --version
+          cmake --version
+          lscpu | grep -E 'Model name|^CPU\(s\)' || true
+
+      - name: Build
+        run: |
+          for side in base new; do
+            cmake -S $side -B build-$side -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=$CXX
+            cmake --build build-$side --parallel
+          done
+
+      - name: Compare
+        env:
+          BASE_REF: ${{ inputs.base || github.base_ref }}
+          NEW_REF: ${{ github.head_ref || github.ref_name }}
+        run: |
+          {
+            echo "## $NEW_REF compared with $BASE_REF"
+            echo
+            echo "$CXX on $(uname -m), $(lscpu | sed -n 's/^Model name: *//p' | head -1)."
+            echo
+            bash new/perfcompare.sh build-base build-new
+          } | tee -a "$GITHUB_STEP_SUMMARY"

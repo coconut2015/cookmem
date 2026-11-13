@@ -49,9 +49,14 @@ runs arm64 builds and clang-cl on Windows.  Debug builds define
 free of warnings.
 
 Performance: for changes to allocation or deallocation paths, compare with
-`master` using `perftest.sh` on release builds of both, for example
-`DATA_FILE= ./perftest.sh <build dir>` (an empty `DATA_FILE` skips writing
-the chart data).  Times vary by about 10% between runs.  When the results
+`master` on release builds of both with
+`bash perfcompare.sh <master build dir> <branch build dir>`.  It runs
+`perftest.sh` on the two builds alternately and prints the change per test.
+Times vary by about 10% between runs; the dlmalloc column is the same code in
+both builds and shows the noise.  For arm64, run the Performance workflow
+(`.github/workflows/perf.yml`): add the `perf` label to the PR, or once the
+workflow is on `master`, run
+`gh.exe workflow run perf.yml --ref <branch> -f arch=arm64`.  When the results
 change, regenerate the README table and `performances/perfdata.js` with
 `./perftest.sh <build dir>`, and update the summary above the table.
 

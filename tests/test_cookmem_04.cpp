@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2026 Heng Yuan
+ * Copyright (c) 2026 Heng Yuan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// Tests for growing in place on reallocate, preferring the designated victim
+// Tests for resizing in place, preferring the designated victim
 // when it fits better than the tree bins, and releasing large segments as
-// soon as they are freed.
+// soon as they are freed, and the tree bin index of large sizes.
 #include <cstdint>
 #include <cstring>
 #include <iostream>
@@ -117,6 +117,71 @@ testGrowInPlace (std::uint8_t paddingSize)
     newCtx.validate ();
     newCtx.deallocate (f);
     newCtx.validate ();
+    return 0;
+}
+
+/**
+ * resizeInPlace () resizes without moving, and leaves the memory unchanged
+ * when it cannot.
+ */
+template<class TreeType>
+static int
+testResizeInPlace (std::uint8_t paddingSize)
+{
+    cookmem::SimpleMemContext<cookmem::MmapArena, cookmem::NoActionMemLogger, TreeType> memCtx (paddingSize);
+    memCtx.setStoringExactSize (true);
+
+    void* a = memCtx.allocate (1000);
+    void* b = memCtx.allocate (1000);
+    void* c = memCtx.allocate (100);
+    ASSERT_NE (nullptr, c);
+    std::memset (a, 0x5a, 1000);
+
+    // Growing fails while the next chunk is in use.
+    ASSERT_EQ (false, memCtx.resizeInPlace (a, 1500));
+    ASSERT_EQ (1000u, memCtx.getSize (a));
+    ASSERT_EQ (true, isFilled (a, 1000, 0x5a));
+    memCtx.validate ();
+
+    // Shrinking always succeeds, and frees the tail.
+    ASSERT_EQ (true, memCtx.resizeInPlace (a, 100));
+    ASSERT_EQ (100u, memCtx.getSize (a));
+    ASSERT_EQ (true, isFilled (a, 100, 0x5a));
+    memCtx.validate ();
+
+    // Growing back into the freed tail succeeds.
+    ASSERT_EQ (true, memCtx.resizeInPlace (a, 1000));
+    ASSERT_EQ (1000u, memCtx.getSize (a));
+    ASSERT_EQ (true, isFilled (a, 100, 0x5a));
+    std::memset (a, 0x5a, 1000);
+    memCtx.validate ();
+
+    // Growing into a free next chunk succeeds, up to the size of both.
+    memCtx.deallocate (b);
+    std::size_t limit = reinterpret_cast<char*> (c) - reinterpret_cast<char*> (a) -
+                        2 * sizeof (std::size_t) - paddingSize - (paddingSize ? 1 : 0);
+    ASSERT_EQ (false, memCtx.resizeInPlace (a, limit + 1));
+    ASSERT_EQ (1000u, memCtx.getSize (a));
+    ASSERT_EQ (true, memCtx.resizeInPlace (a, limit));
+    ASSERT_EQ (limit, memCtx.getSize (a));
+    ASSERT_EQ (true, isFilled (a, 1000, 0x5a));
+    memCtx.validate ();
+
+    // Shrinking to 0 keeps the memory.
+    ASSERT_EQ (true, memCtx.resizeInPlace (c, 0));
+    ASSERT_EQ (true, memCtx.contains (c, true));
+    ASSERT_EQ (0u, memCtx.getSize (c));
+
+    // nullptr, and sizes too large to represent, fail.
+    ASSERT_EQ (false, memCtx.resizeInPlace (nullptr, 100));
+    ASSERT_EQ (false, memCtx.resizeInPlace (a, ~static_cast<std::size_t> (0)));
+    ASSERT_EQ (false, memCtx.resizeInPlace (a, ~static_cast<std::size_t> (0) - 8));
+    ASSERT_EQ (limit, memCtx.getSize (a));
+
+    // deallocate () checks the padding.
+    memCtx.deallocate (a);
+    memCtx.deallocate (c);
+    memCtx.validate ();
     return 0;
 }
 
@@ -357,6 +422,45 @@ testImmediateRelease ()
     return 0;
 }
 
+/**
+ * Check the tree bin index of large chunk sizes.  Sizes at or just above a
+ * multiple of 1 TB used to be put in a small tree bin with GCC and Clang
+ * on x86_64.
+ */
+static int
+testTreeBinIndex ()
+{
+    typedef cookmem::MemPool<cookmem::MmapArena, cookmem::NoActionMemLogger> Pool;
+    const std::size_t MB = 1024 * 1024;
+
+    // Each bin starts at a power of two, or 1.5 times a power of two.
+    std::size_t binSize = 256;
+    for (unsigned int i = 0; i < 31; i += 2)
+    {
+        ASSERT_EQ (i, Pool::getTreeBinIndex (binSize));
+        ASSERT_EQ (i, Pool::getTreeBinIndex (binSize + binSize / 2 - 1));
+        ASSERT_EQ (i + 1, Pool::getTreeBinIndex (binSize + binSize / 2));
+        ASSERT_EQ (i + 1, Pool::getTreeBinIndex (binSize * 2 - 1));
+        binSize *= 2;
+    }
+    ASSERT_EQ (31u, Pool::getTreeBinIndex (16 * MB));
+    ASSERT_EQ (31u, Pool::getTreeBinIndex (~static_cast<std::size_t> (0)));
+
+    if (sizeof (std::size_t) > 4)
+    {
+        // Shift in two steps to avoid a warning about the shift width on
+        // 32-bit platforms.
+        const std::size_t TB = (static_cast<std::size_t> (1) << 20) << 20;
+        ASSERT_EQ (31u, Pool::getTreeBinIndex (TB - MB));
+        ASSERT_EQ (31u, Pool::getTreeBinIndex (TB));
+        ASSERT_EQ (31u, Pool::getTreeBinIndex (TB + 4096));
+        ASSERT_EQ (31u, Pool::getTreeBinIndex (TB + MB));
+        ASSERT_EQ (31u, Pool::getTreeBinIndex (TB + 16 * MB - 1));
+        ASSERT_EQ (31u, Pool::getTreeBinIndex (2 * TB + MB));
+    }
+    return 0;
+}
+
 int
 main (int argc, const char* argv[])
 {
@@ -365,10 +469,14 @@ main (int argc, const char* argv[])
         ASSERT_EQ (0, testGrowInPlace<cookmem::PtrRBTree> (0));
         ASSERT_EQ (0, testGrowInPlace<cookmem::PtrRBTree> (cookmem::MAX_PADDING_SIZE));
         ASSERT_EQ (0, testGrowInPlace<cookmem::PtrAVLTree> (1));
+        ASSERT_EQ (0, testResizeInPlace<cookmem::PtrRBTree> (0));
+        ASSERT_EQ (0, testResizeInPlace<cookmem::PtrRBTree> (cookmem::MAX_PADDING_SIZE));
+        ASSERT_EQ (0, testResizeInPlace<cookmem::PtrAVLTree> (1));
         ASSERT_EQ (0, testRandomReallocate ());
         ASSERT_EQ (0, testPreferBetterFit<cookmem::PtrRBTree> ());
         ASSERT_EQ (0, testPreferBetterFit<cookmem::PtrAVLTree> ());
         ASSERT_EQ (0, testImmediateRelease ());
+        ASSERT_EQ (0, testTreeBinIndex ());
     }
     catch (const unittest::UnitTestException& ex)
     {

@@ -237,6 +237,21 @@ add_executable(test_cookmem_aligned
 add_test(NAME test_cookmem_aligned
 	COMMAND test_cookmem_aligned)
 
+# .. test_cookmem_walk
+add_executable(test_cookmem_walk
+	tests/test_cookmem_walk.cpp)
+
+add_test(NAME test_cookmem_walk
+	COMMAND test_cookmem_walk)
+
+# .. test_memresource, which needs C++17 for std::pmr
+add_executable(test_memresource
+	tests/test_memresource.cpp)
+set_target_properties(test_memresource PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
+
+add_test(NAME test_memresource
+	COMMAND test_memresource)
+
 # .. test_version
 add_executable(test_version
 	tests/test_version.cpp)
@@ -344,6 +359,17 @@ add_executable(example_getSize
 	examples/example_getSize.cpp)
 add_test(NAME example_getSize
 	COMMAND example_getSize)
+
+add_executable(example_leaks
+	examples/example_leaks.cpp)
+add_test(NAME example_leaks
+	COMMAND example_leaks)
+
+add_executable(example_MemResource
+	examples/example_MemResource.cpp)
+set_target_properties(example_MemResource PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
+add_test(NAME example_MemResource
+	COMMAND example_MemResource)
 
 add_executable(example_footprintLimit
 	examples/example_footprintLimit.cpp)
