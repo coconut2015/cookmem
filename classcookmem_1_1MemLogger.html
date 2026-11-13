@@ -162,8 +162,8 @@ Public Member Functions</h2></td></tr>
 <p>Log the memory allocation.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">userPtr</td><td>the user pointer allocated. </td></tr>
-    <tr><td class="paramname">userSize</td><td>the user requested size. </td></tr>
+    <tr><td class="paramname">userPtr</td><td>the user pointer allocated, or nullptr if the allocation failed. </td></tr>
+    <tr><td class="paramname">userSize</td><td>the size of the allocation, as getSize () reports it: the requested size if the exact size is stored, and otherwise the requested size rounded up to the alignment. If the allocation failed, the requested size. </td></tr>
     <tr><td class="paramname">allocType</td><td>the type of the allocation. </td></tr>
   </table>
   </dd>
@@ -208,7 +208,7 @@ Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">userPtr</td><td>the user pointer allocated. </td></tr>
-    <tr><td class="paramname">userSize</td><td>the user requested size. </td></tr>
+    <tr><td class="paramname">userSize</td><td>the size of the allocation, as getSize () reports it, which is the size its allocation was logged with. </td></tr>
   </table>
   </dd>
 </dl>
@@ -400,12 +400,12 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Log the memory reallocation. This is only called when the new size is smaller than the original size.</p>
+<p>Log a reallocation in place, which grows or shrinks an allocation without moving it. A reallocation that moves the memory is logged as an allocation and a deallocation instead.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">userPtr</td><td>the user pointer allocated. </td></tr>
-    <tr><td class="paramname">oldUserSize</td><td>the old user size. </td></tr>
-    <tr><td class="paramname">newUserSize</td><td>the new user size. </td></tr>
+    <tr><td class="paramname">userPtr</td><td>the user pointer, which does not change. </td></tr>
+    <tr><td class="paramname">oldUserSize</td><td>the size before, as getSize () reported it. </td></tr>
+    <tr><td class="paramname">newUserSize</td><td>the size after, as getSize () reports it. </td></tr>
   </table>
   </dd>
 </dl>
