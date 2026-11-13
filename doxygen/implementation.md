@@ -25,7 +25,8 @@ CookMem is split into layers that are combined through templates:
   exposes the pool to users.
 * A **logger** (cookmem::NoActionMemLogger, cookmem::StatsLogger) receives
   every allocation, deallocation, segment and error event.
-* cookmem::Allocator adapts a context to the STL allocator interface.
+* cookmem::Allocator adapts a context to the STL allocator interface, and
+  cookmem::MemResource to `std::pmr::memory_resource` (C++17).
 
 Arenas and loggers are template parameters, not virtual interfaces, so calls
 to them can be inlined.  With cookmem::NoActionMemLogger, logging costs
@@ -183,6 +184,8 @@ otherwise the whole chunk is used.  Requests too large to represent
 (`MAX_REQUEST`, as in dlmalloc) fail immediately.  A request that would push
 the footprint over the limit set with `setFootprintLimit ()` fails instead of
 obtaining a new segment, like `malloc_set_footprint_limit` in dlmalloc.
+Before failing, the pool releases the segments that have become entirely
+free, since they count toward the footprint until the next trimming pass.
 
 When an allocation fails, the logger is told and `nullptr` is returned.
 
@@ -203,9 +206,11 @@ When an allocation fails, the logger is told and `nullptr` is returned.
    that one is free.
 
 The result is an ordinary chunk, so `deallocate ()`, `getSize ()`, exact
-sizes and padding all work as usual.  cookmem::Allocator calls
-`allocateAligned ()` for types whose alignment is larger than
-cookmem::ALLOCATION_ALIGNMENT.
+sizes and padding all work as usual.  cookmem::Allocator and
+cookmem::MemResource call `allocateAligned ()` for alignments larger than
+cookmem::ALLOCATION_ALIGNMENT, and `create<T> ()` of a context always calls
+it with `alignof (T)`; an alignment up to cookmem::ALLOCATION_ALIGNMENT is
+the same as `allocate ()`.
 
 ### Deallocation and Coalescing
 
@@ -324,7 +329,11 @@ The check is cheap, so it cannot catch every double free:
 
 dlmalloc makes similar checks (`ok_inuse`, `ok_address`) and calls
 `CORRUPTION_ERROR_ACTION` or `USAGE_ERROR_ACTION`, which abort by default.
-CookMem throws exceptions instead.
+CookMem reports the error to `logError ()` of its logger instead.  The
+loggers of CookMem throw cookmem::Exception there, and if a custom logger
+returns, the pool throws cookmem::Exception itself.  The padding check below
+works the same way.  The exact-size check in `getSize ()` throws directly,
+since it cannot reach the logger.
 
 ### Out-of-Bounds Padding Check
 
@@ -354,7 +363,7 @@ memory is freed.  dlmalloc has no equivalent.
   the right bin or is the dv, that free chunks are never adjacent, and that
   the tree bin map matches the trees.  The checks use `COOKMEM_ASSERT`, so they
   only run in debug builds (`COOKMEM_DEBUG`).
-* `print ()` prints every segment and chunk.
+* `getPool ().print ()` prints every segment and chunk to stdout.
 * cookmem::StatsLogger counts allocations by how they were satisfied (small
   bin, tree, dv, new segment or failure), along with segments and errors.
 
@@ -370,6 +379,15 @@ memory is freed.  dlmalloc has no equivalent.
   and releases the segment when the allocation is freed (see above).
 * **Merging contiguous segments**, which dlmalloc does when new memory is
   adjacent to an existing segment.
+* **`mremap` for large reallocations.**  On Linux, dlmalloc grows or
+  shrinks a directly mapped chunk with `mremap` (`HAVE_MREMAP`).  CookMem
+  grows a chunk in place only into a free next chunk, and otherwise copies.
+* **A configurable alignment.**  dlmalloc's `MALLOC_ALIGNMENT` can be
+  raised at compile time.  cookmem::ALLOCATION_ALIGNMENT is fixed at two
+  words; use `allocateAligned ()` for larger alignments.
+* **An explicit trim call.**  dlmalloc's `malloc_trim` releases unused
+  memory on request.  CookMem releases empty segments on its own schedule
+  (see above); `releaseAll ()` releases everything.
 * **Thread safety.**  dlmalloc can lock each mspace (`USE_LOCKS`).  CookMem
   contexts are not thread-safe (see \ref limitations "Limitations").
 * **`FOOTERS` mode**, where each chunk records which mspace it belongs to,
