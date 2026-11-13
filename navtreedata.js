@@ -28,13 +28,14 @@ var NAVTREE =
     [ "Quick Start", "index.html#autotoc_md0", null ],
     [ "Requirements", "index.html#autotoc_md1", null ],
     [ "Performance", "index.html#autotoc_md2", null ],
-    [ "Use Cases", "index.html#autotoc_md3", [
-      [ "Avoiding Synchronization Cost", "index.html#autotoc_md4", null ],
-      [ "Avoiding Individual Frees", "index.html#autotoc_md5", null ],
-      [ "Restricting Memory Usage", "index.html#autotoc_md6", null ],
-      [ "Diagnosing and Debugging", "index.html#autotoc_md7", null ],
-      [ "Links", "index.html#autotoc_md8", null ]
+    [ "Who CookMem Is For", "index.html#autotoc_md3", [
+      [ "Complex Pointer Graphs", "index.html#autotoc_md4", null ],
+      [ "Single-Threaded Performance", "index.html#autotoc_md5", null ],
+      [ "Debugging Where Valgrind Is Impractical", "index.html#autotoc_md6", null ],
+      [ "Limiting Memory Use", "index.html#autotoc_md7", null ],
+      [ "Other Uses", "index.html#autotoc_md8", null ]
     ] ],
+    [ "Links", "index.html#autotoc_md9", null ],
     [ "Installation", "install.html", null ],
     [ "Tutorials", "tutorials.html", [
       [ "FixedArena", "tutorials.html#FixedArena", null ],

@@ -93,9 +93,9 @@ $(document).ready(function(){initNavTree('references.html',''); initResizable();
   <div class="headertitle"><div class="title">References</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h2><a class="anchor" id="autotoc_md40"></a>
+<div class="textblock"><h2><a class="anchor" id="autotoc_md41"></a>
 Core Backend Components</h2>
-<h3><a class="anchor" id="autotoc_md41"></a>
+<h3><a class="anchor" id="autotoc_md42"></a>
 Memory Arenas</h3>
 <p>Memory arena classes are used to obtain large chunks of memory. A memory arena can be shared by multiple memory contexts.</p>
 <p>These classes implement the <a class="el" href="classcookmem_1_1MemArena.html">cookmem::MemArena</a> interface without explicitly inheriting from it. This avoids the overhead of virtual function calls and allows the functions to be inlined.</p>
@@ -105,7 +105,7 @@ Memory Arenas</h3>
 <li><a class="el" href="classcookmem_1_1MmapArena.html">cookmem::MmapArena</a> - Uses <code>mmap</code> / <code>munmap</code> on Unix and <code>VirtualAlloc</code> / <code>VirtualFree</code> on Windows to get a large segment.</li>
 <li><a class="el" href="classcookmem_1_1CachedArena.html">cookmem::CachedArena</a> - Caches released segments for later use rather than discarding them immediately.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md42"></a>
+<h3><a class="anchor" id="autotoc_md43"></a>
 Memory Logger</h3>
 <p>Memory logger classes are used to log memory context activities.</p>
 <p>These classes implement the <a class="el" href="classcookmem_1_1MemLogger.html">cookmem::MemLogger</a> interface without explicitly inheriting from it. This avoids the overhead of virtual function calls and allows the functions to be inlined.</p>
@@ -113,14 +113,14 @@ Memory Logger</h3>
 <li><a class="el" href="classcookmem_1_1NoActionMemLogger.html">cookmem::NoActionMemLogger</a> - Do nothing.</li>
 <li><a class="el" href="classcookmem_1_1StatsLogger.html">cookmem::StatsLogger</a> - Mostly for debugging purposes to gather statistics on memory allocations.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md43"></a>
+<h3><a class="anchor" id="autotoc_md44"></a>
 Memory Pool</h3>
 <p>The memory pool allocates and deallocates smaller chunks of memory within the segments obtained from memory arenas.</p>
 <p>Currently, there is only a single implementation.</p>
 <ul>
 <li><a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a></li>
 </ul>
-<h2><a class="anchor" id="autotoc_md44"></a>
+<h2><a class="anchor" id="autotoc_md45"></a>
 Memory Contexts</h2>
 <p>Memory context classes contain the API that users call to allocate and deallocate memory. They use the backend <a class="el" href="classcookmem_1_1MemArena.html">cookmem::MemArena</a>, <a class="el" href="classcookmem_1_1MemLogger.html">cookmem::MemLogger</a> and <a class="el" href="classcookmem_1_1MemPool.html">cookmem::MemPool</a> to do the actual work.</p>
 <p>The backend components can be mixed and matched to create a suitable memory context.</p>
@@ -129,7 +129,7 @@ Memory Contexts</h2>
 <li><a class="el" href="classcookmem_1_1SimpleMemContext.html">cookmem::SimpleMemContext</a> - Default uses <a class="el" href="classcookmem_1_1MmapArena.html">cookmem::MmapArena</a> + <a class="el" href="classcookmem_1_1NoActionMemLogger.html">cookmem::NoActionMemLogger</a></li>
 <li><a class="el" href="classcookmem_1_1CachedMemContext.html">cookmem::CachedMemContext</a> - Default uses cookmem::CachedArena&lt;cookmem::MmapArena&gt; + <a class="el" href="classcookmem_1_1NoActionMemLogger.html">cookmem::NoActionMemLogger</a></li>
 </ul>
-<h2><a class="anchor" id="autotoc_md45"></a>
+<h2><a class="anchor" id="autotoc_md46"></a>
 STL Allocator</h2>
 <p>There is one STL allocator implementation, <a class="el" href="classcookmem_1_1Allocator.html">cookmem::Allocator</a>. It depends on a memory context provider to provide the <a class="el" href="classcookmem_1_1MemContext.html">cookmem::MemContext</a> instance.</p>
 <ul>
@@ -144,7 +144,7 @@ STL Allocator</h2>
 <ul>
 <li><a class="el" href="classcookmem_1_1TLSContextScope.html">cookmem::TLSContextScope</a> - scopes a context to a lexical block</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md46"></a>
+<h2><a class="anchor" id="autotoc_md47"></a>
 Polymorphic Memory Resource</h2>
 <p>With C++17, a memory context can also be used through <code>std::pmr::memory_resource</code>, so that the <code>std::pmr</code> containers can allocate from it.</p>
 <ul>
