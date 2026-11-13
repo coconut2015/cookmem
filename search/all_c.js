@@ -1,11 +1,7 @@
 var searchData=
 [
-  ['of_20bounds_20padding_20check_0',['Out-of-Bounds Padding Check',['../implementation.html#autotoc_md31',1,'']]],
-  ['operator_21_3d_1',['operator!=',['../classcookmem_1_1MemContextProvider.html#ade5bc76b6d1b5a0ca5f8d78654072efe',1,'cookmem::MemContextProvider::operator!=()'],['../classcookmem_1_1TLSContextProvider.html#aa8a31889faa2dbed5c573276154f05c7',1,'cookmem::TLSContextProvider::operator!=()'],['../classcookmem_1_1Allocator.html#a8ac5fdb16bbd5a1bc35c8867ad4291e4',1,'cookmem::Allocator::operator!=()']]],
-  ['operator_3d_3d_2',['operator==',['../classcookmem_1_1MemContextProvider.html#a264724cf83f30df2e8e68a0e851d723b',1,'cookmem::MemContextProvider::operator==()'],['../classcookmem_1_1TLSContextProvider.html#abc812234606a5ea07de3146476ae5fc4',1,'cookmem::TLSContextProvider::operator==()'],['../classcookmem_1_1Allocator.html#a9d8c72106989803a4463e013b35296f2',1,'cookmem::Allocator::operator==()']]],
-  ['other_3',['other',['../structcookmem_1_1Allocator_1_1rebind.html#a411e4538b24e9decf19dd5cdc543fd37',1,'cookmem::Allocator::rebind']]],
-  ['out_20of_20bounds_20padding_20check_4',['Out-of-Bounds Padding Check',['../implementation.html#autotoc_md31',1,'']]],
-  ['overview_5',['Overview',['../implementation.html#autotoc_md20',1,'']]],
-  ['owned_20stl_20allocator_6',['Caller-owned STL Allocator',['../tutorials.html#callerSTLAlloc',1,'']]],
-  ['ownership_7',['Pointer Ownership',['../behavior.html#autotoc_md14',1,'']]]
+  ['no_20thread_20safety_0',['No Thread Safety',['../limitations.html#autotoc_md17',1,'']]],
+  ['noactionmemlogger_1',['noactionmemlogger',['../classcookmem_1_1NoActionMemLogger.html',1,'cookmem::NoActionMemLogger'],['../classcookmem_1_1NoActionMemLogger.html#a7cf9ee1302b48e74bce77c50b2225ea9',1,'cookmem::NoActionMemLogger::NoActionMemLogger()']]],
+  ['nodetype_2',['NodeType',['../classcookmem_1_1RedBlackTree.html#ae23d43cd5d987ec4cbd52ffd68eefe43',1,'cookmem::RedBlackTree']]],
+  ['not_20implemented_3',['dlmalloc Features That Are Not Implemented',['../implementation.html#autotoc_md34',1,'']]]
 ];

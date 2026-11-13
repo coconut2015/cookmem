@@ -439,6 +439,66 @@ Querying Pointer Information</h1>
 <div class="line"> </div>
 <div class="line">    <span class="keywordflow">return</span> 0;</div>
 <div class="line">}</div>
+</div><!-- fragment --><h1><a class="anchor" id="leaks"></a>
+Finding Memory Leaks</h1>
+<p><code>forEachAllocation ()</code> calls a visitor function, such as a lambda, for every allocation that has not been freed, with its pointer and size, and returns the number of allocations. Calling it before a context is destroyed shows the memory that was never freed. With padding, or with <code>setStoringExactSize (true)</code>, the sizes are the sizes that were requested.</p>
+<p>The visitor function must not allocate, free or resize memory of the context that is being walked, since that changes the allocations while they are visited. It can use other contexts or the global heap, for example to print or to collect the results.</p>
+<div class="fragment"><div class="line"><span class="comment">/*</span></div>
+<div class="line"><span class="comment"> * Copyright (c) 2026 Heng Yuan</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span></div>
+<div class="line"><span class="comment"> * you may not use this file except in compliance with the License.</span></div>
+<div class="line"><span class="comment"> * You may obtain a copy of the License at</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> *     http://www.apache.org/licenses/LICENSE-2.0</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> * Unless required by applicable law or agreed to in writing, software</span></div>
+<div class="line"><span class="comment"> * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span></div>
+<div class="line"><span class="comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></div>
+<div class="line"><span class="comment"> * See the License for the specific language governing permissions and</span></div>
+<div class="line"><span class="comment"> * limitations under the License.</span></div>
+<div class="line"><span class="comment"> */</span></div>
+<div class="line"><span class="preprocessor">#include &lt;iostream&gt;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="preprocessor">#include &lt;cookmem.h&gt;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">int</span></div>
+<div class="line">main (<span class="keywordtype">int</span> argc, <span class="keyword">const</span> <span class="keywordtype">char</span>* argv[])</div>
+<div class="line">{</div>
+<div class="line">    <span class="comment">// Padding stores the exact size of each allocation, so the report shows</span></div>
+<div class="line">    <span class="comment">// the sizes that were requested.</span></div>
+<div class="line">    <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">cookmem::SimpleMemContext&lt;&gt;</a> memCtx (<a class="code hl_variable" href="namespacecookmem.html#adf7ac4a4f06599326987955ec360a2a4">cookmem::MAX_PADDING_SIZE</a>);</div>
+<div class="line"> </div>
+<div class="line">    <span class="keywordtype">void</span>* ptr1 = memCtx.allocate (10);</div>
+<div class="line">    <span class="keywordtype">void</span>* ptr2 = memCtx.allocate (2000);</div>
+<div class="line">    <span class="keywordtype">void</span>* ptr3 = memCtx.allocate (30);</div>
+<div class="line">    memCtx.deallocate (ptr2);</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Print the allocations that were not freed, and add up their sizes.</span></div>
+<div class="line">    std::size_t leakedBytes = 0;</div>
+<div class="line">    <span class="keyword">auto</span> report = [&amp;leakedBytes] (<span class="keywordtype">void</span>* ptr, std::size_t size)</div>
+<div class="line">    {</div>
+<div class="line">        std::cout &lt;&lt; <span class="stringliteral">&quot;Not freed: &quot;</span> &lt;&lt; ptr &lt;&lt; <span class="stringliteral">&quot;, &quot;</span> &lt;&lt; size &lt;&lt; <span class="stringliteral">&quot; bytes&quot;</span> &lt;&lt; std::endl;</div>
+<div class="line">        leakedBytes += size;</div>
+<div class="line">    };</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Expect ptr1 and ptr3, then output 2 allocations, 40 bytes</span></div>
+<div class="line">    std::size_t leaks = memCtx.forEachAllocation (report);</div>
+<div class="line">    std::cout &lt;&lt; leaks &lt;&lt; <span class="stringliteral">&quot; allocations, &quot;</span> &lt;&lt; leakedBytes &lt;&lt; <span class="stringliteral">&quot; bytes&quot;</span> &lt;&lt; std::endl;</div>
+<div class="line">    <span class="keywordtype">bool</span> ok = (leaks == 2 &amp;&amp; leakedBytes == 40);</div>
+<div class="line"> </div>
+<div class="line">    memCtx.deallocate (ptr1);</div>
+<div class="line">    memCtx.deallocate (ptr3);</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Expect output 0 allocations, 0 bytes</span></div>
+<div class="line">    leakedBytes = 0;</div>
+<div class="line">    leaks = memCtx.forEachAllocation (report);</div>
+<div class="line">    std::cout &lt;&lt; leaks &lt;&lt; <span class="stringliteral">&quot; allocations, &quot;</span> &lt;&lt; leakedBytes &lt;&lt; <span class="stringliteral">&quot; bytes&quot;</span> &lt;&lt; std::endl;</div>
+<div class="line">    ok = ok &amp;&amp; leaks == 0;</div>
+<div class="line"> </div>
+<div class="line">    <span class="keywordflow">return</span> ok ? 0 : 1;</div>
+<div class="line">}</div>
+<div class="ttc" id="anamespacecookmem_html_adf7ac4a4f06599326987955ec360a2a4"><div class="ttname"><a href="namespacecookmem.html#adf7ac4a4f06599326987955ec360a2a4">cookmem::MAX_PADDING_SIZE</a></div><div class="ttdeci">const std::uint8_t MAX_PADDING_SIZE</div><div class="ttdef"><b>Definition</b> config.h:60</div></div>
 </div><!-- fragment --><h1><a class="anchor" id="footprint"></a>
 Restricting Memory Usage</h1>
 <p>A memory context can limit the total size of the memory segments it obtains, which is its footprint. An allocation that would need memory beyond the limit fails and returns <code>nullptr</code>, while the context remains usable. This protects long-running programs from accidentally requesting a very large amount of memory.</p>
@@ -696,6 +756,78 @@ Caller-owned STL Allocator</h1>
 <div class="line">    }</div>
 <div class="line"> </div>
 <div class="line">    <span class="keywordflow">return</span> 0;</div>
+<div class="line">}</div>
+</div><!-- fragment --><h1><a class="anchor" id="pmrResource"></a>
+Polymorphic Memory Resource (C++17)</h1>
+<p>With C++17, <a class="el" href="classcookmem_1_1MemResource.html">cookmem::MemResource</a> adapts a context to <code>std::pmr::memory_resource</code>, so that the <code>std::pmr</code> containers, such as <code>std::pmr::vector</code> and <code>std::pmr::string</code>, can allocate from it. Unlike <a class="el" href="classcookmem_1_1Allocator.html">cookmem::Allocator</a>, the container type does not depend on the context type, and nested <code>std::pmr</code> containers, such as the strings in a <code>std::pmr::map&lt;int, std::pmr::string&gt;</code>, use the same resource automatically. A resource can also be the upstream of a standard resource such as <code>std::pmr::monotonic_buffer_resource</code>.</p>
+<p>The application owns the context and the resource, and both must outlive the containers that use them. Requests for a larger alignment use <code>allocateAligned ()</code>, and a request the context cannot satisfy throws <code>std::bad_alloc</code>, as <code>std::pmr::memory_resource</code> requires. Two resources compare equal if they use the same context; without RTTI, a resource is only equal to itself.</p>
+<p><a class="el" href="classcookmem_1_1MemResource.html">cookmem::MemResource</a> is in <code><a class="el" href="cookmem_8h_source.html">cookmem.h</a></code>, but it is only defined when the code is compiled as C++17 or later with a standard library that provides <code>&lt;memory_resource&gt;</code>. <code>COOKMEM_HAS_PMR</code> is then 1. The rest of CookMem still needs only C++11.</p>
+<div class="fragment"><div class="line"><span class="comment">/*</span></div>
+<div class="line"><span class="comment"> * Copyright (c) 2026 Heng Yuan</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span></div>
+<div class="line"><span class="comment"> * you may not use this file except in compliance with the License.</span></div>
+<div class="line"><span class="comment"> * You may obtain a copy of the License at</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> *     http://www.apache.org/licenses/LICENSE-2.0</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> * Unless required by applicable law or agreed to in writing, software</span></div>
+<div class="line"><span class="comment"> * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span></div>
+<div class="line"><span class="comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></div>
+<div class="line"><span class="comment"> * See the License for the specific language governing permissions and</span></div>
+<div class="line"><span class="comment"> * limitations under the License.</span></div>
+<div class="line"><span class="comment"> */</span></div>
+<div class="line"><span class="comment">// This example needs C++17.</span></div>
+<div class="line"><span class="preprocessor">#include &lt;iostream&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;map&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;memory_resource&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="preprocessor">#include &lt;cookmem.h&gt;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">int</span></div>
+<div class="line">main (<span class="keywordtype">int</span> argc, <span class="keyword">const</span> <span class="keywordtype">char</span>* argv[])</div>
+<div class="line">{</div>
+<div class="line">    <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">cookmem::SimpleMemContext&lt;&gt;</a> memCtx;</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// A std::pmr::memory_resource that allocates from memCtx.</span></div>
+<div class="line">    <a class="code hl_class" href="classcookmem_1_1MemContextProvider.html">cookmem::MemResource&lt;cookmem::SimpleMemContext&lt;&gt;</a>&gt; resource (memCtx);</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Adds up the sizes of the allocations in memCtx.</span></div>
+<div class="line">    std::size_t bytes = 0;</div>
+<div class="line">    <span class="keyword">auto</span> addSize = [&amp;bytes] (<span class="keywordtype">void</span>*, std::size_t size)</div>
+<div class="line">    {</div>
+<div class="line">        bytes += size;</div>
+<div class="line">    };</div>
+<div class="line"> </div>
+<div class="line">    {</div>
+<div class="line">        <span class="comment">// The containers, and the strings inside the map, allocate from</span></div>
+<div class="line">        <span class="comment">// memCtx.</span></div>
+<div class="line">        std::pmr::vector&lt;int&gt; numbers ({ 1, 2, 3 }, &amp;resource);</div>
+<div class="line">        std::pmr::map&lt;int, std::pmr::string&gt; names (&amp;resource);</div>
+<div class="line">        names[1] = <span class="stringliteral">&quot;one&quot;</span>;</div>
+<div class="line">        names[2] = <span class="stringliteral">&quot;a string long enough to need memory of its own&quot;</span>;</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// Expect output 3 numbers, 2 names</span></div>
+<div class="line">        std::cout &lt;&lt; numbers.size () &lt;&lt; <span class="stringliteral">&quot; numbers, &quot;</span> &lt;&lt; names.size () &lt;&lt; <span class="stringliteral">&quot; names&quot;</span> &lt;&lt; std::endl;</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// Expect output 1</span></div>
+<div class="line">        std::cout &lt;&lt; memCtx.contains (numbers.data (), <span class="keyword">true</span>) &lt;&lt; std::endl;</div>
+<div class="line"> </div>
+<div class="line">        <span class="comment">// The allocations of the vector, the map nodes and the long string.</span></div>
+<div class="line">        <span class="comment">// The numbers depend on the standard library.</span></div>
+<div class="line">        std::size_t count = memCtx.forEachAllocation (addSize);</div>
+<div class="line">        std::cout &lt;&lt; count &lt;&lt; <span class="stringliteral">&quot; allocations in memCtx, &quot;</span> &lt;&lt; bytes &lt;&lt; <span class="stringliteral">&quot; bytes&quot;</span> &lt;&lt; std::endl;</div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Everything was freed when the containers were destroyed.  Expect</span></div>
+<div class="line">    <span class="comment">// output 0 allocations in memCtx, 0 bytes</span></div>
+<div class="line">    bytes = 0;</div>
+<div class="line">    std::size_t count = memCtx.forEachAllocation (addSize);</div>
+<div class="line">    std::cout &lt;&lt; count &lt;&lt; <span class="stringliteral">&quot; allocations in memCtx, &quot;</span> &lt;&lt; bytes &lt;&lt; <span class="stringliteral">&quot; bytes&quot;</span> &lt;&lt; std::endl;</div>
+<div class="line"> </div>
+<div class="line">    <span class="keywordflow">return</span> (count == 0 &amp;&amp; bytes == 0) ? 0 : 1;</div>
 <div class="line">}</div>
 </div><!-- fragment --><h1><a class="anchor" id="tlsSTLAlloc"></a>
 Thread-local and Scoped Context STL Allocators</h1>

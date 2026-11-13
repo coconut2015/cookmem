@@ -22,6 +22,9 @@ var hierarchy =
     [ "cookmem::MemContextProvider< Context >", "classcookmem_1_1MemContextProvider.html", null ],
     [ "cookmem::MemContextProvider< CachedMemContext<> >", "classcookmem_1_1MemContextProvider.html", null ],
     [ "cookmem::MemLogger", "classcookmem_1_1MemLogger.html", null ],
+    [ "std::pmr::memory_resource", null, [
+      [ "cookmem::MemResource< Context >", "classcookmem_1_1MemResource.html", null ]
+    ] ],
     [ "cookmem::MemPool< Arena, Logger, TreeType, T >", "classcookmem_1_1MemPool.html", null ],
     [ "cookmem::MemPool< Arena, Logger, PtrRBTree, void >", "classcookmem_1_1MemPool.html", null ],
     [ "cookmem::MemPool< CachedArena< MmapArena >, NoActionMemLogger, PtrRBTree, void >", "classcookmem_1_1MemPool.html", null ],

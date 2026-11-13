@@ -9,6 +9,7 @@ var dir_1c142dfed46ce65841a8cf3aca86e5d7 =
     [ "exception.h", "exception_8h_source.html", null ],
     [ "logger.h", "logger_8h_source.html", null ],
     [ "mallocarena.h", "mallocarena_8h_source.html", null ],
+    [ "memresource.h", "memresource_8h_source.html", null ],
     [ "mmaparena.h", "mmaparena_8h_source.html", null ],
     [ "pool.h", "pool_8h_source.html", null ],
     [ "rbtree.h", "rbtree_8h_source.html", null ],

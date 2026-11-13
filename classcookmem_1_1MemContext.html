@@ -141,6 +141,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a27c85a34c96b7ec171ac5203ce6e5986"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a586818a5e1d4ff1c562216beb976a655" id="r_a586818a5e1d4ff1c562216beb976a655"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemContext.html#a586818a5e1d4ff1c562216beb976a655">reallocate</a> (<a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> *<a class="el" href="classcookmem_1_1MemContextProvider.html">ptr</a>, <a class="el" href="classcookmem_1_1MemContext.html#a755605b35d1e22ad5e61f10a08b26e84">size_type</a> size)</td></tr>
 <tr class="separator:a586818a5e1d4ff1c562216beb976a655"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a255562805e132a71edbbe824550522ed" id="r_a255562805e132a71edbbe824550522ed"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemContext.html#a255562805e132a71edbbe824550522ed">resizeInPlace</a> (<a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> *<a class="el" href="classcookmem_1_1MemContextProvider.html">ptr</a>, <a class="el" href="classcookmem_1_1MemContext.html#a755605b35d1e22ad5e61f10a08b26e84">size_type</a> size)</td></tr>
+<tr class="separator:a255562805e132a71edbbe824550522ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7ec4fa5c035ba4d143f5abe8ab41a543" id="r_a7ec4fa5c035ba4d143f5abe8ab41a543"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemContext.html#a7ec4fa5c035ba4d143f5abe8ab41a543">callocate</a> (<a class="el" href="classcookmem_1_1MemContext.html#a755605b35d1e22ad5e61f10a08b26e84">size_type</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">num</a>, <a class="el" href="classcookmem_1_1MemContext.html#a755605b35d1e22ad5e61f10a08b26e84">size_type</a> size)</td></tr>
 <tr class="separator:a7ec4fa5c035ba4d143f5abe8ab41a543"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a56b82d97972ea6d1c8b3cae4a532a6ff" id="r_a56b82d97972ea6d1c8b3cae4a532a6ff"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemContext.html#a56b82d97972ea6d1c8b3cae4a532a6ff">deallocate</a> (<a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> *<a class="el" href="classcookmem_1_1MemContextProvider.html">ptr</a>, <a class="el" href="classcookmem_1_1MemContext.html#a755605b35d1e22ad5e61f10a08b26e84">size_type</a> size=0)</td></tr>
@@ -151,6 +153,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a1f22eb4d92f78a10392b8538246fa1f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1db94dd9bf74e4e3281da3e47e846373" id="r_a1db94dd9bf74e4e3281da3e47e846373"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContext.html#a755605b35d1e22ad5e61f10a08b26e84">size_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemContext.html#a1db94dd9bf74e4e3281da3e47e846373">getSize</a> (<a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> *<a class="el" href="classcookmem_1_1MemContextProvider.html">ptr</a>)</td></tr>
 <tr class="separator:a1db94dd9bf74e4e3281da3e47e846373"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3fc5af7f5ae9f1c986decb5130a83ec1" id="r_a3fc5af7f5ae9f1c986decb5130a83ec1"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">Visitor</a> &gt; </td></tr>
+<tr class="memitem:a3fc5af7f5ae9f1c986decb5130a83ec1"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContext.html#a755605b35d1e22ad5e61f10a08b26e84">size_type</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemContext.html#a3fc5af7f5ae9f1c986decb5130a83ec1">forEachAllocation</a> (<a class="el" href="classcookmem_1_1MemContextProvider.html">Visitor</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">visitor</a>) <a class="el" href="classcookmem_1_1MemContextProvider.html">const</a></td></tr>
+<tr class="separator:a3fc5af7f5ae9f1c986decb5130a83ec1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7ee7fa640486f0a8bddd8a76f4043caf" id="r_a7ee7fa640486f0a8bddd8a76f4043caf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemContext.html#a7ee7fa640486f0a8bddd8a76f4043caf">releaseAll</a> ()</td></tr>
 <tr class="separator:a7ee7fa640486f0a8bddd8a76f4043caf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1931f42371aede291707a423158e69e0" id="r_a1931f42371aede291707a423158e69e0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcookmem_1_1MemContextProvider.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcookmem_1_1MemContext.html#a1931f42371aede291707a423158e69e0">releaseAllToSystem</a> ()</td></tr>
@@ -628,6 +633,45 @@ template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a3fc5af7f5ae9f1c986decb5130a83ec1" name="a3fc5af7f5ae9f1c986decb5130a83ec1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3fc5af7f5ae9f1c986decb5130a83ec1">&#9670;&#160;</a></span>forEachAllocation()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">Arena</a> , <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">Logger</a> , <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">TreeType</a>  = PtrRBTree, <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a>  = void&gt; </div>
+<div class="memtemplate">
+template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">Visitor</a> &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1MemContext.html#a755605b35d1e22ad5e61f10a08b26e84">size_type</a> <a class="el" href="classcookmem_1_1MemContext.html">cookmem::MemContext</a>&lt; <a class="el" href="classcookmem_1_1MemContextProvider.html">Arena</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">Logger</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">TreeType</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> &gt;::forEachAllocation </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcookmem_1_1MemContextProvider.html">Visitor</a>&#160;</td>
+          <td class="paramname"><em>visitor</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Call a visitor function for every allocation that has not been freed, like inspect_all in dlmalloc. This can be used to find memory leaks.</p>
+<p>The allocations are visited segment by segment, in address order within each segment. The visitor function must not allocate, free or resize memory of this context.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">visitor</td><td>the visitor function: a function, lambda or function object called as visitor (ptr, size) for each allocation, where ptr is the pointer returned to the user and size is the allocation size, as returned by getSize (). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the number of allocations visited. </dd></dl>
 
 </div>
 </div>
@@ -1116,6 +1160,54 @@ template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</
 </div><div class="memdoc">
 <p>Release all the memory segments held by this <a class="el" href="classcookmem_1_1MemPool.html">MemPool</a>, then the segments cached by the arena, so that the memory is returned to the system. Every pointer allocated from this context becomes invalid.</p>
 <p>Unlike releaseAll (), this also empties the cache of a <a class="el" href="classcookmem_1_1CachedArena.html">CachedArena</a>, including the segments that other contexts sharing the arena could have reused. </p>
+
+</div>
+</div>
+<a id="a255562805e132a71edbbe824550522ed" name="a255562805e132a71edbbe824550522ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a255562805e132a71edbbe824550522ed">&#9670;&#160;</a></span>resizeInPlace()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;<a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">Arena</a> , <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">Logger</a> , <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">TreeType</a>  = PtrRBTree, <a class="el" href="classcookmem_1_1MemContextProvider.html">class</a> <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a>  = void&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcookmem_1_1MemContextProvider.html">bool</a> <a class="el" href="classcookmem_1_1MemContext.html">cookmem::MemContext</a>&lt; <a class="el" href="classcookmem_1_1MemContextProvider.html">Arena</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">Logger</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">TreeType</a>, <a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> &gt;::resizeInPlace </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcookmem_1_1MemContextProvider.html">T</a> *&#160;</td>
+          <td class="paramname"><em>ptr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classcookmem_1_1MemContext.html#a755605b35d1e22ad5e61f10a08b26e84">size_type</a>&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Resize memory without moving it, like realloc_in_place in dlmalloc.</p>
+<p>Shrinking always succeeds, and the unused tail is freed. Growing succeeds if the memory after the allocation is free and large enough.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ptr</td><td>the current memory pointer. </td></tr>
+    <tr><td class="paramname">size</td><td>the new size </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the memory now has the new size at the same address. false if it could not be resized in place, or if ptr is nullptr; the memory is then unchanged. </dd></dl>
 
 </div>
 </div>

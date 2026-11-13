@@ -148,7 +148,7 @@ Bins</h2>
 <p>Free chunks are kept in bins, as in dlmalloc:</p>
 <ul>
 <li><b>Small bins.</b> 32 bins, 8 bytes apart, hold free chunks smaller than 256 bytes. Each bin is a circular doubly linked list of chunks of exactly one size, and a 32-bit map (<code>m_smallMap</code>) records which bins are not empty. Since chunk sizes are multiples of 16 on 64-bit platforms, only every other small bin is used there. On 32-bit platforms all of them are used.</li>
-<li><b>Tree bins.</b> 32 bins hold free chunks of 256 bytes or more. Bin <code>2k</code> holds sizes from <code>2^(k+8)</code> up to <code>1.5 * 2^(k+8)</code>, and bin <code>2k+1</code> holds sizes from <code>1.5 * 2^(k+8)</code> up to <code>2^(k+9)</code>. The last bin also holds everything larger, so it starts at 12 MB. The bin index is computed from the two most significant bits of the size, using a bit-scan instruction where one is available, exactly as in dlmalloc. A 32-bit map (<code>m_treeMap</code>) records which bins are not empty.</li>
+<li><b>Tree bins.</b> 32 bins hold free chunks of 256 bytes or more. Bin <code>2k</code> holds sizes from <code>2^(k+8)</code> up to <code>1.5 * 2^(k+8)</code>, and bin <code>2k+1</code> holds sizes from <code>1.5 * 2^(k+8)</code> up to <code>2^(k+9)</code>. The last bin also holds everything larger, so it starts at 12 MB. The bin index is computed from the two most significant bits of the size, as in dlmalloc. It uses the compiler's bit-scan builtin with GCC and Clang (on every architecture, where dlmalloc uses it only on x86) and the bit-scan intrinsic with MSVC, and portable shifts otherwise. A 32-bit map (<code>m_treeMap</code>) records which bins are not empty.</li>
 </ul>
 <p>Within a tree bin, dlmalloc uses a bitwise trie. CookMem uses a balanced binary search tree keyed by size instead: a red-black tree (<a class="el" href="namespacecookmem.html#a088496c9a4754628518df63df5689475">cookmem::PtrRBTree</a>, the default) or an AVL tree (<a class="el" href="classcookmem_1_1PtrAVLTree.html">cookmem::PtrAVLTree</a>), chosen with the <code>TreeType</code> template parameter. Free chunks of the same size share one tree node, and the others are kept in a doubly linked list attached to it, as in dlmalloc. Taking a chunk from that list does not rebalance the tree.</p>
 <p>The tree nodes, like the list links of small chunks, are stored inside the free chunks themselves, so the bins need no memory of their own. The second word of a node is the size field of the chunk, so a node takes 7 words, which fits in the smallest large chunk.</p>
@@ -173,7 +173,7 @@ Allocation</h2>
 </ol>
 <p>For a large request:</p>
 <ol type="1">
-<li><b>Tree bins.</b> The best fit: starting with the bin for the size, the smallest chunk that is large enough is taken from the first bin that has one, and split. As in dlmalloc, if the dv is also large enough, the tree chunk is only taken if it is smaller than the dv. The search stops at the first bin whose chunks are all at least the size of the dv, and the tree search leaves a chunk in place if it is not smaller.</li>
+<li><b>Tree bins.</b> The best fit: starting with the bin for the size, the smallest chunk that is large enough is taken from the first bin that has one, and split. The search skips the empty bins using the tree map. As in dlmalloc, if the dv is also large enough, the tree chunk is only taken if it is smaller than the dv. The search stops at the first bin whose chunks are all at least the size of the dv, and the tree search leaves a chunk in place if it is not smaller.</li>
 <li><b>Designated victim</b>, if it is large enough.</li>
 <li><b>New segment</b> from the arena.</li>
 </ol>
@@ -201,8 +201,12 @@ Reallocation</h2>
 <li>Otherwise, growing allocates new memory, copies the data and frees the old memory.</li>
 <li>A new size too large to represent fails, and the old memory is unchanged.</li>
 </ul>
+<p><code>resizeInPlace (ptr, size)</code> does only the in-place part, like dlmalloc's <code>realloc_in_place</code>: it returns <code>true</code> if the memory now has the new size at the same address, and <code>false</code>, with the memory unchanged, if it would have to move. <code>reallocate ()</code> calls it first, and allocates and copies only if it fails.</p>
 <p><code>callocate (num, size)</code> fails if <code>num * size</code> overflows, as <code>calloc</code> does in dlmalloc.</p>
 <h2><a class="anchor" id="autotoc_md29"></a>
+Walking the Allocations</h2>
+<p><code>forEachAllocation (visitor)</code> walks the chunks of every segment in address order, using the chunk sizes, and calls <code>visitor (ptr, size)</code> for each chunk in use, with the pointer returned to the user and the size from <code>getSize ()</code>. It returns the number of allocations. It is like dlmalloc's <code>malloc_inspect_all</code>, except that it skips the free chunks. The visitor function must not allocate, free or resize memory of the context being walked, since that changes the chunks while they are walked.</p>
+<h2><a class="anchor" id="autotoc_md30"></a>
 Returning Memory to the Arena</h2>
 <ul>
 <li>Every <a class="el" href="namespacecookmem.html#a53874591e7f085b60e3dd910711d93b1">cookmem::DEFAULT_TRIM_EMPTY_SEGMENTS_INTERVAL</a> (4095) deallocations, the pool releases every segment that has become entirely free. This is the same idea as dlmalloc's <code>release_unused_segments</code>, which runs on a countdown of 4095 frees (<code>MAX_RELEASE_CHECK_RATE</code>). The interval can be changed with <code>setTrimEmptySegmentsInterval ()</code>.</li>
@@ -221,7 +225,7 @@ User Size</h2>
 </ul>
 <p>The unused space is always less than an alignment unit plus a minimum chunk plus the padding, so it fits in one byte. If <code>getSize ()</code> finds a byte that is not positive, the chunk has been overwritten, and it throws <a class="el" href="classcookmem_1_1Exception.html">cookmem::Exception</a> with <a class="el" href="namespacecookmem.html#a28eece75e72b18dfe29be8366247ec32a48be12240ae74a48197ea215bd298b96" title="padding bytes after an allocation were overwritten">cookmem::MEM_ERROR_PADDING</a>.</p>
 <p>dlmalloc does not store the requested size; <code>malloc_usable_size</code> returns the usable size.</p>
-<h2><a class="anchor" id="autotoc_md30"></a>
+<h2><a class="anchor" id="autotoc_md31"></a>
 Double Free Check</h2>
 <p><code>deallocate ()</code> checks the used bit in the header of the chunk. If it is not set, the chunk is not in use, and <code>deallocate ()</code> throws <a class="el" href="classcookmem_1_1Exception.html">cookmem::Exception</a> with <a class="el" href="namespacecookmem.html#a28eece75e72b18dfe29be8366247ec32ad21efb1b7f9eb60e548d43b860cf2067" title="freeing an already free pointer">cookmem::MEM_ERROR_DOUBLE_FREE</a>. Debug builds (<code>COOKMEM_DEBUG</code>) also check that the header matches the footer kept by the next chunk.</p>
 <p><code>deallocate ()</code> clears the used bit before merging the chunk with its neighbors. If the chunk is merged into the free chunk before it, its header is left inside the merged chunk, and the cleared bit still makes a second free fail.</p>
@@ -231,7 +235,7 @@ Double Free Check</h2>
 <li>A pointer that never came from the context is not detected. Use <code>contains ()</code> to check whether a pointer is inside the segments of a context.</li>
 </ul>
 <p>dlmalloc makes similar checks (<code>ok_inuse</code>, <code>ok_address</code>) and calls <code>CORRUPTION_ERROR_ACTION</code> or <code>USAGE_ERROR_ACTION</code>, which abort by default. CookMem throws exceptions instead.</p>
-<h2><a class="anchor" id="autotoc_md31"></a>
+<h2><a class="anchor" id="autotoc_md32"></a>
 Out-of-Bounds Padding Check</h2>
 <p>A context created with a padding size (1 to <a class="el" href="namespacecookmem.html#adf7ac4a4f06599326987955ec360a2a4">cookmem::MAX_PADDING_SIZE</a>, which is 8) reserves extra bytes after every allocation: </p><pre class="fragment">| header | user data (n bytes) | padding bytes | ... | size byte |
                                ^ filled with the padding byte
@@ -241,25 +245,24 @@ Out-of-Bounds Padding Check</h2>
 <li><code>deallocate ()</code> checks that every padding byte is unchanged, and throws <a class="el" href="classcookmem_1_1Exception.html">cookmem::Exception</a> with <a class="el" href="namespacecookmem.html#a28eece75e72b18dfe29be8366247ec32a48be12240ae74a48197ea215bd298b96" title="padding bytes after an allocation were overwritten">cookmem::MEM_ERROR_PADDING</a> if one was changed. This also happens when <code>reallocate ()</code> moves the memory, since it frees the old memory.</li>
 </ul>
 <p>Padding turns on exact sizes, and they cannot be turned off while padding is on. The check only finds writes that land in the padding, and only when the memory is freed. dlmalloc has no equivalent.</p>
-<h2><a class="anchor" id="autotoc_md32"></a>
+<h2><a class="anchor" id="autotoc_md33"></a>
 Debugging Aids</h2>
 <ul>
 <li><code>validate ()</code> walks every segment from its last chunk to its first through the footers, and checks that the sizes add up, that every free chunk is in the right bin or is the dv, that free chunks are never adjacent, and that the tree bin map matches the trees. The checks use <code>COOKMEM_ASSERT</code>, so they only run in debug builds (<code>COOKMEM_DEBUG</code>).</li>
 <li><code>print ()</code> prints every segment and chunk.</li>
 <li><a class="el" href="classcookmem_1_1StatsLogger.html">cookmem::StatsLogger</a> counts allocations by how they were satisfied (small bin, tree, dv, new segment or failure), along with segments and errors.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md33"></a>
+<h2><a class="anchor" id="autotoc_md34"></a>
 dlmalloc Features That Are Not Implemented</h2>
 <ul>
 <li><b>The top chunk and <code>sbrk</code>.</b> dlmalloc grows a contiguous "top" chunk with <code>MORECORE</code> (usually <code>sbrk</code>) and trims it when it gets too large (<code>malloc_trim</code>, <code>M_TRIM_THRESHOLD</code>). CookMem only uses separate segments from the arena, and has no top chunk.</li>
 <li><b>Direct mmap for large requests.</b> dlmalloc maps requests above <code>M_MMAP_THRESHOLD</code> (256 KB by default) individually, with their own chunk format. CookMem puts a large request in an ordinary segment of its own, and releases the segment when the allocation is freed (see above).</li>
 <li><b>Merging contiguous segments</b>, which dlmalloc does when new memory is adjacent to an existing segment.</li>
-<li>**<code>realloc_in_place</code>**, which grows or shrinks only if the memory does not move. <code>reallocate ()</code> does grow in place when it can.</li>
 <li><b>Thread safety.</b> dlmalloc can lock each mspace (<code>USE_LOCKS</code>). CookMem contexts are not thread-safe (see <a class="el" href="limitations.html">Limitations</a>).</li>
 <li>**<code>FOOTERS</code> mode**, where each chunk records which mspace it belongs to, so that freeing into the wrong mspace is detected.</li>
 <li>**<code>independent_calloc</code>, <code>independent_comalloc</code> and <code>bulk_free</code>.**</li>
 <li>**<code>valloc</code> and <code>pvalloc</code>.** <code>allocateAligned ()</code> covers <code>memalign</code> and <code>posix_memalign</code>.</li>
-<li>**<code>mallinfo</code>, <code>malloc_stats</code> and <code>malloc_inspect_all</code>.** Use <a class="el" href="classcookmem_1_1StatsLogger.html">cookmem::StatsLogger</a>, <code>getFootprint ()</code> and <code>getMaxFootprint ()</code> instead.</li>
+<li>**<code>mallinfo</code> and <code>malloc_stats</code>.** Use <a class="el" href="classcookmem_1_1StatsLogger.html">cookmem::StatsLogger</a>, <code>getFootprint ()</code> and <code>getMaxFootprint ()</code> instead.</li>
 <li>**<code>mallopt</code> tuning.** The settings that apply have CookMem equivalents: the minimum segment size of the arena, the trimming interval and the immediate release threshold. </li>
 </ul>
 </div></div><!-- contents -->

@@ -14,6 +14,7 @@ var annotated_dup =
       [ "MemContextProvider", "classcookmem_1_1MemContextProvider.html", "classcookmem_1_1MemContextProvider" ],
       [ "MemLogger", "classcookmem_1_1MemLogger.html", "classcookmem_1_1MemLogger" ],
       [ "MemPool", "classcookmem_1_1MemPool.html", "classcookmem_1_1MemPool" ],
+      [ "MemResource", "classcookmem_1_1MemResource.html", "classcookmem_1_1MemResource" ],
       [ "MemStatistics", "structcookmem_1_1MemStatistics.html", "structcookmem_1_1MemStatistics" ],
       [ "MmapArena", "classcookmem_1_1MmapArena.html", "classcookmem_1_1MmapArena" ],
       [ "NoActionMemLogger", "classcookmem_1_1NoActionMemLogger.html", "classcookmem_1_1NoActionMemLogger" ],

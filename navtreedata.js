@@ -42,10 +42,12 @@ var NAVTREE =
       [ "CachedArena", "tutorials.html#CachedArena", null ],
       [ "Copying Data Between Memory Pools", "tutorials.html#copying", null ],
       [ "Querying Pointer Information", "tutorials.html#querying", null ],
+      [ "Finding Memory Leaks", "tutorials.html#leaks", null ],
       [ "Restricting Memory Usage", "tutorials.html#footprint", null ],
       [ "Memory Statistics", "tutorials.html#statistics", null ],
       [ "Memory Corruption Detection", "tutorials.html#boundcheck", null ],
       [ "Caller-owned STL Allocator", "tutorials.html#callerSTLAlloc", null ],
+      [ "Polymorphic Memory Resource (C++17)", "tutorials.html#pmrResource", null ],
       [ "Thread-local and Scoped Context STL Allocators", "tutorials.html#tlsSTLAlloc", null ]
     ] ],
     [ "Detailed Behavior", "behavior.html", null ],
@@ -70,7 +72,7 @@ var NAVTREE =
       [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
       [ "Class Members", "functions.html", [
         [ "All", "functions.html", "functions_dup" ],
-        [ "Functions", "functions_func.html", null ],
+        [ "Functions", "functions_func.html", "functions_func" ],
         [ "Variables", "functions_vars.html", null ],
         [ "Typedefs", "functions_type.html", null ]
       ] ]
@@ -88,8 +90,8 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "allocator_8h_source.html",
-"classcookmem_1_1MemLogger.html#a8754b6eb34a4f99ea6df9c72ebd6a179",
-"classcookmem_1_1TLSContextProvider.html#aee37ad73e8faffa846471f7f9b5bda93"
+"classcookmem_1_1MemLogger.html#a7a2145abc5af95b832e7e2c98b6c9108",
+"classcookmem_1_1StatsLogger.html#ae263ecc825cb735494eba54d92429ab4"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

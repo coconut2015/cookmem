@@ -1,9 +1,15 @@
 var searchData=
 [
-  ['unlinkfromlist_0',['unlinkFromList',['../classcookmem_1_1PtrRBNode.html#adaa41bf5a2cb029a12158df3e55100c7',1,'cookmem::PtrRBNode']]],
-  ['usage_1',['usage',['../index.html#autotoc_md6',1,'Restricting Memory Usage'],['../tutorials.html#footprint',1,'Restricting Memory Usage']]],
-  ['use_20cases_2',['Use Cases',['../index.html#autotoc_md3',1,'']]],
-  ['user_20size_3',['User Size',['../implementation.html#impl_user_size',1,'']]],
-  ['using_20cmake_4',['Using CMake',['../install.html#autotoc_md9',1,'']]],
-  ['using_20cmake_20directly_5',['Using CMake Directly',['../build.html#autotoc_md37',1,'']]]
+  ['tests_0',['Performance Tests',['../build.html#autotoc_md39',1,'']]],
+  ['that_20are_20not_20implemented_1',['dlmalloc Features That Are Not Implemented',['../implementation.html#autotoc_md34',1,'']]],
+  ['the_20allocations_2',['Walking the Allocations',['../implementation.html#autotoc_md29',1,'']]],
+  ['the_20arena_3',['Returning Memory to the Arena',['../implementation.html#autotoc_md30',1,'']]],
+  ['the_20designated_20victim_4',['The Designated Victim',['../implementation.html#autotoc_md24',1,'']]],
+  ['thread_20local_20allocators_5',['Thread-Local Allocators',['../behavior.html#autotoc_md16',1,'']]],
+  ['thread_20local_20and_20scoped_20context_20stl_20allocators_6',['Thread-local and Scoped Context STL Allocators',['../tutorials.html#tlsSTLAlloc',1,'']]],
+  ['thread_20safety_7',['No Thread Safety',['../limitations.html#autotoc_md17',1,'']]],
+  ['tlscontextprovider_8',['tlscontextprovider',['../classcookmem_1_1TLSContextProvider.html',1,'cookmem::TLSContextProvider&lt; Context, Tag &gt;'],['../classcookmem_1_1TLSContextProvider.html#a84988914b64e65b46ff3e80b63a649e2',1,'cookmem::TLSContextProvider::TLSContextProvider()']]],
+  ['tlscontextscope_9',['tlscontextscope',['../classcookmem_1_1TLSContextScope.html',1,'cookmem::TLSContextScope&lt; Context, Tag &gt;'],['../classcookmem_1_1TLSContextScope.html#a78622454279ff6ac877ef78e30e40013',1,'cookmem::TLSContextScope::TLSContextScope()'],['../classcookmem_1_1TLSContextScope.html#ad8b580b4a8f07dcda09f269fa6337c7b',1,'cookmem::TLSContextScope::TLSContextScope(bool shareArena)']]],
+  ['to_20the_20arena_10',['Returning Memory to the Arena',['../implementation.html#autotoc_md30',1,'']]],
+  ['tutorials_11',['Tutorials',['../tutorials.html',1,'']]]
 ];

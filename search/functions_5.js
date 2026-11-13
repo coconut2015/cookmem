@@ -5,7 +5,7 @@ var searchData=
   ['getallocationtypename_2',['getAllocationTypeName',['../structcookmem_1_1MemStatistics.html#a4b8e3c2a57ef0d28ca05b6427a909304',1,'cookmem::MemStatistics']]],
   ['getarena_3',['getArena',['../classcookmem_1_1MemContext.html#a1e36c00c180d9c934fc40ccd4c7f9a26',1,'cookmem::MemContext']]],
   ['getchildren_4',['getchildren',['../classcookmem_1_1PtrRBNode.html#a9d07d904c043241766e14cee153277f4',1,'cookmem::PtrRBNode::getChildren()'],['../classcookmem_1_1PtrRBNode.html#aa46b550861f0c6d6340f097ddccd5ec1',1,'cookmem::PtrRBNode::getChildren() const']]],
-  ['getcontext_5',['getcontext',['../classcookmem_1_1TLSContextScope.html#ab09a1569d81809e8f75c0060c73da574',1,'cookmem::TLSContextScope::getContext()'],['../classcookmem_1_1Allocator.html#aecf0ac5dca577377b72536bd7deba02e',1,'cookmem::Allocator::getContext()']]],
+  ['getcontext_5',['getcontext',['../classcookmem_1_1TLSContextScope.html#ab09a1569d81809e8f75c0060c73da574',1,'cookmem::TLSContextScope::getContext()'],['../classcookmem_1_1Allocator.html#aecf0ac5dca577377b72536bd7deba02e',1,'cookmem::Allocator::getContext()'],['../classcookmem_1_1MemResource.html#af1cdabe97d3bb56d7c686427027d83df',1,'cookmem::MemResource::getContext()']]],
   ['getcurrentallocated_6',['getCurrentAllocated',['../structcookmem_1_1MemStatistics.html#a7327cd2bc06c901a043324c6b5f66622',1,'cookmem::MemStatistics']]],
   ['getcurrentsegments_7',['getCurrentSegments',['../structcookmem_1_1MemStatistics.html#acd617fc8554391f872f0848b15bc4e75',1,'cookmem::MemStatistics']]],
   ['getcurrentsegmentsize_8',['getCurrentSegmentSize',['../structcookmem_1_1MemStatistics.html#a2c4b84ed30fa31661390cc64856fe566',1,'cookmem::MemStatistics']]],
@@ -42,7 +42,8 @@ var searchData=
   ['gettotaldeallocated_39',['getTotalDeallocated',['../structcookmem_1_1MemStatistics.html#a28179e30c3617f8ed63c6d5cf794e98a',1,'cookmem::MemStatistics']]],
   ['gettotalfreesegmentsize_40',['getTotalFreeSegmentSize',['../structcookmem_1_1MemStatistics.html#aa6cb56e4f123d4f73a712bd5e52bbef3',1,'cookmem::MemStatistics']]],
   ['gettotalgetsegmentsize_41',['getTotalGetSegmentSize',['../structcookmem_1_1MemStatistics.html#a6b0cb4d172845c7cef16bc0c2030593e',1,'cookmem::MemStatistics']]],
-  ['gettrimemptysegmentsinterval_42',['gettrimemptysegmentsinterval',['../classcookmem_1_1MemContext.html#a177629e9704f57d81ae1f8a931a1ad73',1,'cookmem::MemContext::getTrimEmptySegmentsInterval()'],['../classcookmem_1_1MemPool.html#ae1a0893ec9bea52f8fa14601fd45a70c',1,'cookmem::MemPool::getTrimEmptySegmentsInterval() const']]],
-  ['getusersize_43',['getUserSize',['../classcookmem_1_1MemPool.html#a3229e2814b85151a1e5019c6a56ff002',1,'cookmem::MemPool']]],
-  ['getvalue_44',['getValue',['../classcookmem_1_1PtrRBNode.html#aba77b199100d2da499b4cef928340f13',1,'cookmem::PtrRBNode']]]
+  ['gettreebinindex_42',['getTreeBinIndex',['../classcookmem_1_1MemPool.html#a260a22499d6d88cbbec8fd7320dad7d1',1,'cookmem::MemPool']]],
+  ['gettrimemptysegmentsinterval_43',['gettrimemptysegmentsinterval',['../classcookmem_1_1MemContext.html#a177629e9704f57d81ae1f8a931a1ad73',1,'cookmem::MemContext::getTrimEmptySegmentsInterval()'],['../classcookmem_1_1MemPool.html#ae1a0893ec9bea52f8fa14601fd45a70c',1,'cookmem::MemPool::getTrimEmptySegmentsInterval() const']]],
+  ['getusersize_44',['getUserSize',['../classcookmem_1_1MemPool.html#a3229e2814b85151a1e5019c6a56ff002',1,'cookmem::MemPool']]],
+  ['getvalue_45',['getValue',['../classcookmem_1_1PtrRBNode.html#aba77b199100d2da499b4cef928340f13',1,'cookmem::PtrRBNode']]]
 ];

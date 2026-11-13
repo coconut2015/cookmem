@@ -94,7 +94,7 @@ $(document).ready(function(){initNavTree('build.html',''); initResizable(); });
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p>CookMem is header-only, so building is only needed to run the tests, examples and performance tests, or to generate the documentation. To use CookMem in your own project, see <a class="el" href="install.html">Installation</a>.</p>
-<h2><a class="anchor" id="autotoc_md34"></a>
+<h2><a class="anchor" id="autotoc_md35"></a>
 Prerequisites</h2>
 <ul>
 <li><a href="https://cmake.org/">CMake</a> 3.14 or later.</li>
@@ -104,7 +104,7 @@ Prerequisites</h2>
 </ul>
 <p>On Ubuntu, for example:</p>
 <div class="fragment"><div class="line">sudo apt-get install g++ cmake lcov doxygen graphviz</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md35"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md36"></a>
 Linux</h2>
 <div class="fragment"><div class="line">./make.sh [type]</div>
 </div><!-- fragment --><p><code>type</code> can be one of the following. The default is <code>debug</code>. Each type builds in a directory of the same name.</p>
@@ -117,12 +117,12 @@ Linux</h2>
 <li><code>help</code> - prints the usage.</li>
 </ul>
 <p>To run a single test, use <code>ctest</code> in the build directory, for example <code>cd debug &amp;&amp; ctest -R test_rbtree</code>.</p>
-<h2><a class="anchor" id="autotoc_md36"></a>
+<h2><a class="anchor" id="autotoc_md37"></a>
 Windows</h2>
 <div class="fragment"><div class="line">make.cmd [type]</div>
 </div><!-- fragment --><p><code>type</code> can be <code>debug</code> (the default), <code>release</code> or <code>profiler</code>. It builds with CMake's default generator, normally Visual Studio, and runs the tests. The build directory is named after the type with a <code>win-</code> prefix, such as <code>win-debug</code>, so that it does not clash with the directories of <code>make.sh</code> when the same checkout is built from both Windows and WSL.</p>
 <p>Code coverage, documentation and the performance tests are only available on Linux.</p>
-<h2><a class="anchor" id="autotoc_md37"></a>
+<h2><a class="anchor" id="autotoc_md38"></a>
 Using CMake Directly</h2>
 <p>The scripts are wrappers around CMake. For example:</p>
 <div class="fragment"><div class="line">mkdir build</div>
@@ -131,7 +131,7 @@ Using CMake Directly</h2>
 <div class="line">cmake --build .</div>
 <div class="line">ctest</div>
 </div><!-- fragment --><p>Pass <code>-DCOVERAGE=1</code> for code coverage (with a <code>Debug</code> build) or <code>-DBUILD_DOC=1</code> for documentation.</p>
-<h2><a class="anchor" id="autotoc_md38"></a>
+<h2><a class="anchor" id="autotoc_md39"></a>
 Performance Tests</h2>
 <p>The performance tests compare CookMem with <a href="http://gee.cs.oswego.edu/dl/html/malloc.html">dlmalloc</a>, using both the red-black tree and the AVL tree. They are built by the <code>release</code> type and only run on Linux.</p>
 <div class="fragment"><div class="line">./make.sh release</div>

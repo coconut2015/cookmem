@@ -5,5 +5,6 @@ var searchData=
   ['memcontext_2',['memcontext',['../classcookmem_1_1MemContext.html#af6f56f169ab75f1e7c494df7c6dfc9f6',1,'cookmem::MemContext::MemContext(Arena &amp;arena, Logger &amp;logger, std::uint8_t paddingSize=DEFAULT_PADDING_SIZE)'],['../classcookmem_1_1MemContext.html#abe4e9f425e10164ca0d5271f4df360be',1,'cookmem::MemContext::MemContext(MemCtx &amp;other)']]],
   ['memcontextprovider_3',['MemContextProvider',['../classcookmem_1_1MemContextProvider.html#a162202a3e0d8a52133f1c009f9df83b3',1,'cookmem::MemContextProvider']]],
   ['mempool_4',['MemPool',['../classcookmem_1_1MemPool.html#a98479b71083532ba825c132780c70e51',1,'cookmem::MemPool']]],
-  ['mmaparena_5',['MmapArena',['../classcookmem_1_1MmapArena.html#abece58b7ddeb11ac59519d5dc833bbf7',1,'cookmem::MmapArena']]]
+  ['memresource_5',['MemResource',['../classcookmem_1_1MemResource.html#aa00abc1a691abc584a4bf5dd73954d73',1,'cookmem::MemResource']]],
+  ['mmaparena_6',['MmapArena',['../classcookmem_1_1MmapArena.html#abece58b7ddeb11ac59519d5dc833bbf7',1,'cookmem::MmapArena']]]
 ];
