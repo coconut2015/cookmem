@@ -22,8 +22,8 @@
 
 /// @cond INTERNAL
 // Marks a private field that is intentionally never used, so that compilers
-// do not warn about it.
-#if defined(__GNUC__)
+// do not warn about it.  clang-cl defines __clang__ but not __GNUC__.
+#if defined(__GNUC__) || defined(__clang__)
 #define COOKMEM_UNUSED_FIELD __attribute__ ((unused))
 #else
 #define COOKMEM_UNUSED_FIELD
