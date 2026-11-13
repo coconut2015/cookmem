@@ -27,7 +27,8 @@ space, and may fail under a footprint limit that a normal allocation of the
 same size would fit in.
 
 cookmem::Allocator uses `allocateAligned ()` automatically for types that
-require a larger alignment, such as types declared with `alignas(64)`.
+require a larger alignment, such as types declared with `alignas(64)`, and
+so does cookmem::MemResource for requests with a larger alignment.
 
 ### Best-Effort Error Detection
 

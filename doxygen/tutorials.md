@@ -150,6 +150,31 @@ instances when constructing containers.
 
 \include example_Allocator.cpp
 
+\section pmrResource Polymorphic Memory Resource (C++17)
+
+With C++17, cookmem::MemResource adapts a context to
+`std::pmr::memory_resource`, so that the `std::pmr` containers, such as
+`std::pmr::vector` and `std::pmr::string`, can allocate from it.  Unlike
+cookmem::Allocator, the container type does not depend on the context type,
+and nested `std::pmr` containers, such as the strings in a
+`std::pmr::map<int, std::pmr::string>`, use the same resource automatically.
+A resource can also be the upstream of a standard resource such as
+`std::pmr::monotonic_buffer_resource`.
+
+The application owns the context and the resource, and both must outlive
+the containers that use them.  Requests for a larger alignment use
+`allocateAligned ()`, and a request the context cannot satisfy throws
+`std::bad_alloc`, as `std::pmr::memory_resource` requires.  Two resources
+compare equal if they use the same context; without RTTI, a resource is only
+equal to itself.
+
+cookmem::MemResource is in `cookmem.h`, but it is only defined when the code
+is compiled as C++17 or later with a standard library that provides
+`<memory_resource>`.  `COOKMEM_HAS_PMR` is then 1.  The rest of CookMem
+still needs only C++11.
+
+\include example_MemResource.cpp
+
 \section tlsSTLAlloc Thread-local and Scoped Context STL Allocators
 
 cookmem::TLSContextProvider provides one context per thread for each context
