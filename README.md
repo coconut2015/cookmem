@@ -7,12 +7,15 @@ CookMem is a general-purpose [memory context](https://en.wikipedia.org/wiki/Regi
 and allocator written in C++11. It can be cleaned up quickly by freeing
 segments rather than freeing allocations individually.
 
-Unlike projects such as [nedmalloc](https://www.nedprod.com/programs/portable/nedmalloc/),
-which is intended to replace ```malloc``` / ```free``` in multithreaded
-applications, CookMem focuses on single-thread performance. It is intended
-for use within a thread in an MPP process, avoiding synchronization costs for
-most allocations and deallocations.
-There are other use cases as well.
+CookMem is not intended as a drop-in replacement for `malloc` / `free`, unlike
+[nedmalloc](https://www.nedprod.com/programs/portable/nedmalloc/),
+[jemalloc](https://jemalloc.net/) and
+[mimalloc](https://github.com/microsoft/mimalloc), which replace the
+allocator of a whole multithreaded program.  CookMem targets single-threaded
+use: code allocates from a memory context explicitly, and each context is
+used by one thread at a time, for example one context for each thread of an
+MPP process.  This avoids synchronization for most allocations and
+deallocations.  See "Who CookMem Is For" below.
 
 CookMem separates the logic for obtaining large memory segments, allowing
 users to easily create a version of the memory context for their specific needs.
@@ -105,60 +108,120 @@ in seconds.
 | perf_cookmem_11 | Sliding window (FIFO) of 1024 live blocks, 16-2047 bytes | 0.094661 | 0.117984 | 0.122740 |
 | perf_cookmem_12 | 10k vectors grown in interleaved order | 0.028886 | 0.026630 | 0.028787 |
 
-Use Cases
-=========
+Who CookMem Is For
+==================
 
-Avoiding Synchronization Cost
------------------------------
+CookMem helps most in four kinds of programs.
 
-In multithreaded applications, `malloc` / `free` or `new` / `delete` must
-synchronize on each call. This synchronization cost can be significant.
-nedmalloc exists to reduce the synchronization costs of naive implementations
-and thereby increase performance.
+Complex Pointer Graphs
+----------------------
 
-For performance-critical applications, eliminating much of this synchronization
-cost can be even more beneficial. With CookMem, obtaining large segments using
-calls such as `mmap` may require synchronization, but allocations within those
-segments do not.  See
+Some programs build large structures of objects that point to each other:
+trees, directed acyclic graphs and cycles.  Freeing such a structure one
+object at a time, in an order that never leaves a dangling pointer, is
+error-prone, and every object that is missed leaks.  With CookMem, the
+structure is allocated from a memory context and released all at once, with
+`releaseAll ()` or by destroying the context.
+
+* Compilers and interpreters: abstract syntax trees, symbol tables, type
+  graphs and intermediate representations.
+* Lexers and parsers: JSON, XML and HTML document trees, regular expression
+  automata, and template engines.
+* Database engines: query plans, optimizer search spaces, and the memory of
+  a single query or transaction.
+* Servers that allocate everything for one request and drop it when the
+  request ends.
+* Symbolic math and theorem provers (expression and term graphs), CAD
+  meshes, document layout trees, and game scenes that are loaded and
+  unloaded as a unit.
+
+Unlike simple arena (bump) allocators, a memory context can also free
+individual objects and reuse their memory, so long-lived structures that
+change over time do not keep growing.  See
+[Detailed Behavior](https://coconut2015.github.io/cookmem/behavior.html).
+
+Single-Threaded Performance
+---------------------------
+
+Unless an algorithm is parallel, it runs in one thread.  So does most of
+the work in a multithreaded program: a worker handles one request, one
+partition or one core at a time.  A memory context that is used by one
+thread needs no synchronization.  It also keeps related allocations close
+together in memory, frees them in bulk, and grows an allocation in place
+when the memory after it is free.
+
+* Thread-per-core servers and MPP database executors, with a context for
+  each worker thread.
+* Batch jobs, simulations and game loops that release a context after each
+  batch or frame.
+* Latency-sensitive code, such as audio processing or order books, where a
+  cookmem::FixedArena over a preallocated buffer avoids system calls.
+
+Modern system allocators also avoid locks with per-thread caches, so measure
+with your own workload; the performance results above compare CookMem
+with dlmalloc.  See
 [Thread-local and Scoped Context STL Allocators](https://coconut2015.github.io/cookmem/tutorials.html#tlsSTLAlloc).
 
-Avoiding Individual Frees
--------------------------
+Debugging Where Valgrind Is Impractical
+---------------------------------------
 
-There are two sub-cases.
+[Valgrind](https://valgrind.org/) typically makes a program 20 to 30 times
+slower.  That changes timing, breaks timeouts, and makes long-running
+services or production-sized data impractical to check.  Valgrind does not
+run on Windows, and AddressSanitizer needs a special build and uses much
+more memory.  CookMem's checks are cheap enough to keep on in a normal
+build, for each context separately:
 
-1. Doing individual frees can reduce performance.
-2. A complex pointer graph containing trees or cycles can make it very difficult
-   to free pointers in the correct order. Yet, the memory has to be released to
-   avoid memory leaks.
+* Padding after each allocation detects writes past its end when the
+  allocation is freed.
+* Freeing an allocation twice throws cookmem::Exception.
+* `forEachAllocation ()` lists the allocations that were never freed, for
+  example at the end of each request.
+* cookmem::StatsLogger gathers allocation statistics.
 
-Both cases can be addressed easily by using any of the MemContext classes.
-Destroying a memory context releases all of its memory at once.  See
-[Detailed Behavior](https://coconut2015.github.io/cookmem/behavior.html) for the details.
+CookMem is not a Valgrind replacement: it catches fewer kinds of errors, but
+it runs where Valgrind cannot.  See
+[Memory Corruption Detection](https://coconut2015.github.io/cookmem/tutorials.html#boundcheck),
+[Finding Memory Leaks](https://coconut2015.github.io/cookmem/tutorials.html#leaks) and
+[Memory Statistics](https://coconut2015.github.io/cookmem/tutorials.html#statistics).
 
-Restricting Memory Usage
-------------------------
+Limiting Memory Use
+-------------------
 
-For long-running programs that take user inputs, it is possible that even when all input
-values are validated, edge cases in calculations can still cause the program to
-accidentally request a very large amount of memory and crash. CookMem provides
-several ways to restrict memory usage. One can set a memory footprint limit or
-add code to the segment request logic to restrict large memory requests.
-See [Restricting Memory Usage](https://coconut2015.github.io/cookmem/tutorials.html#footprint).
+A footprint limit caps the memory a context can obtain.  When the limit is
+reached, allocations fail, with `nullptr` or with `std::bad_alloc` through
+the STL adapters, instead of the whole process running out of memory and
+crashing.
 
-Diagnosing and Debugging
-------------------------
+* Third-party libraries that accept custom allocation functions, as many C
+  libraries do: Lua (`lua_newstate`), SQLite (`SQLITE_CONFIG_MALLOC`), zlib
+  (`zalloc` and `zfree`), FreeType, expat, PCRE2 and libpng.  Each can get
+  its own context and limit.
+* Parsers and decoders of untrusted input, such as images, documents and
+  compressed data, where a malicious file could request huge amounts of
+  memory.
+* Multi-tenant services with a memory quota for each tenant or request, and
+  database operators with a memory budget.
 
-CookMem has built-in diagnostic tools that can help gather memory statistics
-and detect difficult-to-catch out-of-bounds writes without significantly
-slowing down the program. It also detects attempts to free an allocation more
-than once. CookMem is not a [Valgrind](https://valgrind.org/) replacement, but
-in many cases it can help catch difficult bugs.  See
-[Memory Statistics](https://coconut2015.github.io/cookmem/tutorials.html#statistics) and
-[Memory Corruption Detection](https://coconut2015.github.io/cookmem/tutorials.html#boundcheck).
+The limit applies only to memory allocated through the context.  Code that
+calls `malloc` or `new` directly bypasses it, so this is not process
+isolation.  See
+[Restricting Memory Usage](https://coconut2015.github.io/cookmem/tutorials.html#footprint).
+
+Other Uses
+----------
+
+* Embedded systems and game consoles: cookmem::FixedArena over a static
+  buffer gives a fixed memory budget without system calls.
+* Memory accounting: with a context for each subsystem, `getFootprint ()`
+  and cookmem::StatsLogger show which part of a program uses the memory.
+* Special memory: a custom arena can supply huge pages, memory local to a
+  NUMA node, or memory locked in RAM.
+* Fast shutdown: short-lived tools can release everything at exit instead
+  of freeing objects one by one.
 
 Links
------
+=====
 
 * Documentation: https://coconut2015.github.io/cookmem/
   * [Tutorials](https://coconut2015.github.io/cookmem/tutorials.html)
