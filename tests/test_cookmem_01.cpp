@@ -451,6 +451,69 @@ test9 ()
     return 0;
 }
 
+/**
+ * Empty segments count toward the footprint until they are released, so an
+ * allocation that would go over the footprint limit must release them
+ * first instead of failing.  This uses the default trimming interval.
+ */
+static int
+test10 ()
+{
+    const std::size_t limit = 1024 * 1024;
+    {
+        cookmem::SimpleMemContext<cookmem::MallocArena> memCtx;
+        memCtx.setFootprintLimit (limit);
+
+        // Blocks below the immediate release threshold, each in a segment
+        // of its own, which stays after the block is freed.
+        void* ptrs[4];
+        for (int i = 0; i < 4; ++i)
+        {
+            ptrs[i] = memCtx.allocate (200 * 1024);
+            ASSERT_NE (nullptr, ptrs[i]);
+        }
+        for (int i = 0; i < 4; ++i)
+        {
+            memCtx.deallocate (ptrs[i]);
+        }
+        ASSERT_EQ (true, memCtx.getFootprint () >= 4 * 200 * 1024);
+
+        // Nothing is in use, so a large block fits once the empty segments
+        // are released.
+        void* big = memCtx.allocate (900 * 1024);
+        ASSERT_NE (nullptr, big);
+        ASSERT_EQ (true, memCtx.getFootprint () <= limit);
+        memCtx.validate ();
+        memCtx.deallocate (big);
+    }
+
+    // A buffer that grows by reallocation moves to a new segment again and
+    // again, leaving empty segments behind.
+    {
+        cookmem::SimpleMemContext<> memCtx;
+        memCtx.setFootprintLimit (limit);
+        void* buffer = nullptr;
+        std::size_t size = 0;
+        for (;;)
+        {
+            void* grown = memCtx.reallocate (buffer, size + 4096);
+            if (grown == nullptr)
+            {
+                break;
+            }
+            buffer = grown;
+            size += 4096;
+        }
+        // Moving needs the old and the new buffer at the same time, so the
+        // buffer can reach about half of the limit.
+        ASSERT_EQ (true, size >= 400 * 1024);
+        ASSERT_EQ (true, memCtx.getFootprint () <= limit);
+        memCtx.validate ();
+        memCtx.deallocate (buffer);
+    }
+    return 0;
+}
+
 int
 main (int argc, const char* argv[])
 {
@@ -465,6 +528,7 @@ main (int argc, const char* argv[])
         ASSERT_EQ (0, test7 ());
         ASSERT_EQ (0, test8 ());
         ASSERT_EQ (0, test9 ());
+        ASSERT_EQ (0, test10 ());
     }
     catch (const unittest::UnitTestException& ex)
     {

@@ -1888,6 +1888,13 @@ private:
         if (m_footprintLimit != 0)
         {
             size_type fp = m_footprint + estSize;
+            if (fp > m_footprint && fp > m_footprintLimit)
+            {
+                // Empty segments count toward the footprint until the next
+                // trimming pass.  Release them before giving up.
+                trimEmptySegments ();
+                fp = m_footprint + estSize;
+            }
             if (fp <= m_footprint || fp > m_footprintLimit)
             {
                 return nullptr;
